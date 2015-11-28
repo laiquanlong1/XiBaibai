@@ -1,0 +1,32 @@
+//
+//  XBB.pch
+//  XBB
+//
+//  Created by Apple on 15/8/26.
+//  Copyright (c) 2015年 marnow. All rights reserved.
+//
+
+#ifndef XBB_XBB_pch
+#define XBB_XBB_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import "UIViewController+MMDrawerController.h"
+#import "NotificationMacro.h"
+#import "UIImageView+WebCache.h"
+#import "UIImageViewOfDesignable.h"
+#import "Masonry.h"
+#import "CustamViewController.h"
+#import "UIImage+ImageScaleSize.h"
+#import "AFNetworking.h"
+#import "JSONKit.h"
+#import "ServiceAPIMacro.h"
+#import "NetworkHelper.h"
+#import "ConstantMacro.h"
+#import "APPMacro.h"
+#import "APPUIMacro.h"
+#import "XBBViewController.h"
+#import "XBBTableViewController.h"
+
+#endif
