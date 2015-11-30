@@ -68,9 +68,13 @@
 }
 
 - (void)login{
+    
     LoginViewController *loginVC=[[LoginViewController alloc] init];
-    [(UINavigationController *)self.mm_drawerController.centerViewController pushViewController:loginVC animated:YES];
-    [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
+    UINavigationController *nv = [[UINavigationController alloc] initWithRootViewController:loginVC];
+    [(UINavigationController *)self.mm_drawerController.centerViewController presentViewController:nv animated:YES completion:nil];
+//    LoginViewController *loginVC=[[LoginViewController alloc] init];
+//    [(UINavigationController *)self.mm_drawerController.centerViewController pushViewController:loginVC animated:YES];
+//    [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
 }
 
 - (void)loginSuccessful:(NSNotification *)sender {

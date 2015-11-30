@@ -36,113 +36,6 @@
 
 #pragma mark 视图呈现
 
-///**
-// * @brief 初始化视图
-// * @detail 初始化视图
-// **/
-//- (void)initView{
-//    
-//    // 初始化 NavigationController
-//    self.view.backgroundColor = kUIColorFromRGB(0xf6f5fa);
-//    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-//    title.text = @"注册";
-//    title.textAlignment = NSTextAlignmentCenter;
-//    title.textColor = [UIColor whiteColor];
-//    title.font = [UIFont boldSystemFontOfSize:20];
-//    self.navigationItem.titleView = title; // 赋值给NavigationBar的title
-//    UIImageView * img_view=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"1@icon_back.png"]];
-//    img_view.layer.masksToBounds=YES;
-//    img_view.userInteractionEnabled=YES;
-//    UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fanhui)];
-//    [img_view addGestureRecognizer:tap];
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:img_view];
-//    
-//    //注册
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"登录" style:UIBarButtonItemStyleBordered target:self action:@selector(NowLogin)];
-//    self.navigationItem.rightBarButtonItem.tintColor = kUIColorFromRGB(0xFFFFFF);
-//    
-//    UIScrollView *mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds))];
-//    mainScrollView.backgroundColor = kUIColorFromRGB(0xf6f5fa);
-//    mainScrollView.contentSize = CGSizeMake(0, CGRectGetHeight(self.view.bounds)-63);
-//    mainScrollView.userInteractionEnabled = YES;
-//    [mainScrollView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(returnkeyboard)]];
-//    [self.view addSubview:mainScrollView];
-//    
-//    UIView *registerView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 101)];
-//    registerView.backgroundColor = kUIColorFromRGB(0xFFFFFF);
-//    [registerView.layer setMasksToBounds:YES];
-//    [registerView.layer setBorderWidth:0.5];
-//    [registerView.layer setBorderColor:kUIColorFromRGB(0xd9d9d9).CGColor];
-//    [mainScrollView addSubview:registerView];
-//    
-//    UIView *lineView = [[UIView  alloc] initWithFrame:CGRectMake(0, 50,  CGRectGetWidth(self.view.bounds), 0.5)];
-//    lineView.backgroundColor = kUIColorFromRGB(0xd9d9d9);
-//    [registerView addSubview:lineView];
-//    
-//    self.txtPhone = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(self.view.bounds)-180, 50)];
-//    self.txtPhone.placeholder = @"请输入手机号码";
-//    self.txtPhone.clearButtonMode = UITextFieldViewModeAlways;
-//    self.txtPhone.keyboardType = UIKeyboardTypeNumberPad;
-//    self.txtPhone.delegate = self;
-//    [registerView addSubview:self.txtPhone];
-//    
-//    self.btnsendCode = [[UIButton alloc] initWithFrame:CGRectMake( CGRectGetWidth(self.view.bounds)-160, 10, 140, 30)];
-//    self.btnsendCode.backgroundColor = kUIColorFromRGB(0xc6c6c6);
-//    [self.btnsendCode addTarget:self action:@selector(sendcode) forControlEvents:UIControlEventTouchUpInside];
-//    [self.btnsendCode setTitle:@"发送验证码" forState:UIControlStateNormal];
-//    [registerView addSubview:self.btnsendCode];
-//    
-//    self.txtCode = [[UITextField alloc] initWithFrame:CGRectMake(10, 51, CGRectGetWidth(self.view.bounds)-20, 50)];
-//    self.txtCode.clearButtonMode = UITextFieldViewModeAlways;
-//    self.txtCode.placeholder = @"请输入验证码";
-//    self.txtCode.delegate = self;
-//    self.txtCode.keyboardType = UIKeyboardTypeNumberPad;
-//    [registerView addSubview:self.txtCode];
-//    
-//    UIView *PWDView = [[UIView alloc] initWithFrame:CGRectMake(0, 140, CGRectGetWidth(self.view.bounds), 101)];
-//    PWDView.backgroundColor = kUIColorFromRGB(0xFFFFFF);
-//    [PWDView.layer setMasksToBounds:YES];
-//    [PWDView.layer setBorderWidth:0.5];
-//    [PWDView.layer setBorderColor:kUIColorFromRGB(0xd9d9d9).CGColor];
-//    [mainScrollView addSubview:PWDView];
-//    
-//    UIView *lineView2 = [[UIView  alloc] initWithFrame:CGRectMake(0, 50,  CGRectGetWidth(self.view.bounds), 0.5)];
-//    lineView2.backgroundColor = kUIColorFromRGB(0xd9d9d9);
-//    [PWDView addSubview:lineView2];
-//    
-//    self.txtPWD = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(self.view.bounds)-20, 50)];
-//    self.txtPWD.placeholder = @"输入密码";
-//    [self.txtPWD setSecureTextEntry:YES];
-//    self.txtPWD.delegate = self;
-//    self.txtPWD.clearButtonMode = UITextFieldViewModeAlways;
-//    [PWDView addSubview:self.txtPWD];
-//    
-//    self.txtPWDOK = [[UITextField alloc] initWithFrame:CGRectMake(10, 51, CGRectGetWidth(self.view.bounds)-20, 50)];
-//    [self.txtPWDOK setSecureTextEntry:YES];
-//    self.txtPWDOK.delegate = self;
-//    self.txtPWDOK.clearButtonMode = UITextFieldViewModeAlways;
-//    self.txtPWDOK.placeholder = @"确认密码";
-//    [PWDView addSubview:self.txtPWDOK];
-//    
-//    [mainScrollView addSubview:PWDView];
-//    
-//    UIButton *registerBtn = [[UIButton alloc] initWithFrame:CGRectMake(10, 260, CGRectGetWidth(self.view.bounds)-20, 50)];
-//    registerBtn.layer.masksToBounds = YES;
-//    registerBtn.layer.cornerRadius = 5;
-//    registerBtn.backgroundColor = kUIColorFromRGB(0xff8e04);
-//    [registerBtn addTarget:self action:@selector(registerOK) forControlEvents:UIControlEventTouchUpInside];
-//    [registerBtn setTitle:@"注册" forState:UIControlStateNormal];
-//    registerBtn.titleLabel.font = [UIFont boldSystemFontOfSize:20];
-//    [mainScrollView addSubview:registerBtn];
-//}
-
-/**
- * @brief 视图加载的时候
- * @detail 视图加载的时候
- **/
-
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initData];
@@ -163,9 +56,9 @@
 - (void)setNavigationBarControl
 {
     self.showNavigation = YES;
-    UIImage *leftImage = [UIImage imageNamed:@"xbb_back_plain"];
+    UIImage *leftImage = [UIImage imageNamed:@"back_xbb"];
     if (XBB_IsIphone6_6s) {
-        leftImage = [UIImage imageNamed:@"xbb_back_6"];
+        leftImage = [UIImage imageNamed:@"back_xbb6"];
     }
     
     UIButton *backButton = [[UIButton alloc] init];
@@ -174,7 +67,7 @@
     [backButton setImage:leftImage forState:UIControlStateNormal];
     [self.xbbNavigationBar addSubview:backButton];
     [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(0.f);
+        make.left.mas_equalTo(5.f);
         make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(9.f);
         make.width.mas_equalTo(50);
         make.height.mas_equalTo(50);

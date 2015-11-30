@@ -15,9 +15,7 @@
 #import <BaiduMapAPI/BMapKit.h>
 #import "VendorMacro.h"
 #import "BPush.h"
-
-#import "RegisterViewController.h"
-//#import "LoginViewController.h"
+#import "XBBHomeViewController.h"
 
 @interface AppDelegate () <BMKGeneralDelegate>
 
@@ -110,11 +108,10 @@
 
     
     
-    LoginViewController *lo = [[LoginViewController alloc] init];
+    XBBHomeViewController *lo = [[XBBHomeViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:lo];
     
-    
-    self.window.rootViewController =  drawerController;
+    self.window.rootViewController =  nav; //drawerController;
     [self.window makeKeyAndVisible];
     return YES;
 }

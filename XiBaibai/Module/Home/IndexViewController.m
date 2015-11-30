@@ -302,16 +302,12 @@
     [self initSearch]; // 初始化搜索
     [self addPresentAreButtonCreate]; // 添加区域button
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserSuccessfulIndex:) name:NotificationUpdateUserSuccessful object:nil];
-    
-    
     // 获取可服务区域
     [NetworkHelper postWithAPI:Lat_Long parameter:nil successBlock:^(id response) {
-        DLog(@"%@",response);
         if (response) {
             NSDictionary *dic = [(NSDictionary*)response objectForKey:@"result"];
             self.dicCoordinates = dic;
         }
-
     } failBlock:^(NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"获取可服务区域失败"];
     }];
@@ -349,11 +345,6 @@
 
 
 - (void)initView{
-    
-    self.view.backgroundColor=[UIColor whiteColor];
-    self.view.backgroundColor = kUIColorFromRGB(0xCCCCCC);
-//    self.navigationController.navigationBar.barTintColor=kUIColorFromRGB(0xdc3733);
-    //self.navigationController.navigationBar.
     
     //导航栏中间
     UIView *titleView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];

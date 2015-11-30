@@ -59,9 +59,9 @@
 - (void)setNavigationBarControl
 {
     self.showNavigation = YES;
-    UIImage *leftImage = [UIImage imageNamed:@"xbb_back_plain"];
+    UIImage *leftImage = [UIImage imageNamed:@"back_xbb"];
     if (XBB_IsIphone6_6s) {
-        leftImage = [UIImage imageNamed:@"xbb_back_6"];
+        leftImage = [UIImage imageNamed:@"back_xbb6"];
     }
     
     UIButton *backButton = [[UIButton alloc] init];
@@ -70,7 +70,7 @@
     [backButton setImage:leftImage forState:UIControlStateNormal];
     [self.xbbNavigationBar addSubview:backButton];
     [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(0.f);
+        make.left.mas_equalTo(5.f);
         make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(9.f);
         make.width.mas_equalTo(50);
         make.height.mas_equalTo(50);

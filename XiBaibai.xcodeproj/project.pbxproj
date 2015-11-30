@@ -209,6 +209,7 @@
 		8E7E49D81BF5AA70008517DC /* OrderPayUserInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E7E49D71BF5AA70008517DC /* OrderPayUserInfoTableViewCell.m */; };
 		8E7E49DB1BF5AA8E008517DC /* OrderPayWayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E7E49DA1BF5AA8E008517DC /* OrderPayWayTableViewCell.m */; };
 		8E8122E81C046D0A00B00911 /* FacialSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E8122E71C046D0A00B00911 /* FacialSelectTableViewController.m */; };
+		8EB548921C0ACA6100FFB086 /* XBBHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB548911C0ACA6100FFB086 /* XBBHomeViewController.m */; };
 		8EEFCC031BEF189300D3D93F /* CarTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC021BEF189300D3D93F /* CarTypeTableViewController.m */; };
 		8EEFCC0D1BEF510600D3D93F /* XBBBaseLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC0C1BEF510600D3D93F /* XBBBaseLabel.m */; };
 		8EEFCC111BEF52B000D3D93F /* XBBListHeadLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC101BEF52B000D3D93F /* XBBListHeadLabel.m */; };
@@ -655,6 +656,8 @@
 		8E7E49DA1BF5AA8E008517DC /* OrderPayWayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderPayWayTableViewCell.m; sourceTree = "<group>"; };
 		8E8122E61C046D0A00B00911 /* FacialSelectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FacialSelectTableViewController.h; path = ../DIY/FacialSelectTableViewController.h; sourceTree = "<group>"; };
 		8E8122E71C046D0A00B00911 /* FacialSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FacialSelectTableViewController.m; path = ../DIY/FacialSelectTableViewController.m; sourceTree = "<group>"; };
+		8EB548901C0ACA6100FFB086 /* XBBHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBHomeViewController.h; path = XBBHomeViewController/XBBHomeViewController.h; sourceTree = "<group>"; };
+		8EB548911C0ACA6100FFB086 /* XBBHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBHomeViewController.m; path = XBBHomeViewController/XBBHomeViewController.m; sourceTree = "<group>"; };
 		8EEFCC011BEF189300D3D93F /* CarTypeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarTypeTableViewController.h; sourceTree = "<group>"; };
 		8EEFCC021BEF189300D3D93F /* CarTypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarTypeTableViewController.m; sourceTree = "<group>"; };
 		8EEFCC0B1BEF510600D3D93F /* XBBBaseLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBBaseLabel.h; path = DIYView/XBBBaseLabel.h; sourceTree = "<group>"; };
@@ -1017,6 +1020,7 @@
 		188D987C1BADCD9A00E68506 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				8EB548931C0ACA6600FFB086 /* XBBHomeViewController */,
 				188D98791BADCD9A00E68506 /* DIY */,
 				8EEFCC171BF07F5100D3D93F /* Facial */,
 				188D987D1BADCD9A00E68506 /* IndexViewController.h */,
@@ -1549,6 +1553,15 @@
 			name = OrderCell;
 			sourceTree = "<group>";
 		};
+		8EB548931C0ACA6600FFB086 /* XBBHomeViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8EB548901C0ACA6100FFB086 /* XBBHomeViewController.h */,
+				8EB548911C0ACA6100FFB086 /* XBBHomeViewController.m */,
+			);
+			name = XBBHomeViewController;
+			sourceTree = "<group>";
+		};
 		8EEFCC041BEF501A00D3D93F /* DIYView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1885,6 +1898,7 @@
 				186A2A671BAEA9A700645069 /* PSTCollectionViewData.m in Sources */,
 				188D99C41BADCD9A00E68506 /* WebViewController.m in Sources */,
 				188D99B71BADCD9A00E68506 /* PayCallbackViewController.m in Sources */,
+				8EB548921C0ACA6100FFB086 /* XBBHomeViewController.m in Sources */,
 				186A2A6C1BAEA9A700645069 /* PSTGridLayoutInfo.m in Sources */,
 				8EEFCC491BF0EBAF00D3D93F /* FacialTableViewCell.m in Sources */,
 				6C09E5CA1BB1411B008A0C5F /* CheckOnderViewController.m in Sources */,

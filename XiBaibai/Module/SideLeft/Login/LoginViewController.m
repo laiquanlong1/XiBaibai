@@ -28,16 +28,12 @@
 
 @implementation LoginViewController
 
-
-
-
 #pragma mark 视图展示区
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShowNotification:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHideNotification:) name:UIKeyboardWillHideNotification object:nil];
     [self setUpUIS]; // 设置ui
-    //    [self initView];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -48,7 +44,6 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-//    [self.navigationController.navigationBar setHidden:NO];
 }
 
 - (void)dealloc
@@ -62,8 +57,32 @@
     [self setUpBgImageView];
     [self setUpControlLayer];
     [self startAnimation];
+    [self backButton];
 }
 
+
+- (void)backButton
+{
+    UIButton *back = [[UIButton alloc] init];
+    
+    UIImage *backimage = nil;
+    if (XBB_IsIphone6_6s) {
+       backimage = [UIImage imageNamed:@"xbb_back_login6"];
+    }else
+    {
+        backimage = [UIImage imageNamed:@"xbb_back_login"];
+    }
+    
+    [back setImage:backimage forState:UIControlStateNormal];
+    [self.view addSubview:back];
+    [back addTarget:self action:@selector(fanhui) forControlEvents:UIControlEventTouchUpInside];
+    [back mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.mas_equalTo(10.f);
+        make.top.mas_equalTo(20.f);
+        make.width.mas_equalTo(50.f);
+        make.height.mas_equalTo(50.f);
+    }];
+}
 - (void)setNavigation
 {
     [self.navigationController.navigationBar setHidden:YES];
@@ -87,9 +106,9 @@
         make.center.mas_equalTo(self.view);
     }];
 }
+
 - (void)setUpControlLayer
 {
-    
     _controlScrollView = [[UIScrollView alloc] init];
     _controlScrollView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_controlScrollView];
@@ -101,9 +120,6 @@
   
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(taptoloseFristResponse:)];
     [_controlScrollView addGestureRecognizer:tap];
-    
-    
-    
     [self setUpIconsUI];
     [self setUpControlArea];
 }
@@ -126,8 +142,16 @@
     [_controlScrollView addSubview:_iconsImageView];
     [_iconsImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(_controlScrollView);
-            make.top.mas_equalTo(_controlScrollView.mas_topMargin).mas_offset(XBB_Size_w_h(133.f));
+        make.top.mas_equalTo(_controlScrollView.mas_topMargin).mas_offset(XBB_Size_w_h(133.f));
     }];
+    _iconsImageView.transform = CGAffineTransformScale(_iconsImageView.transform, 0.1, 0.1);
+  
+    _iconsImageView.alpha = 0;
+    
+    [UIView animateKeyframesWithDuration:.2 delay:.1 options:0 animations:^{
+       _iconsImageView.transform = CGAffineTransformScale(_iconsImageView.transform, 9., 9.);
+        _iconsImageView.alpha = 1.;
+    } completion:nil];
 }
 
 - (void)setUpControlArea
@@ -376,9 +400,7 @@
     }
     [SVProgressHUD show];
     if ([self.txtLogin.text length] == 11) {
-        
-        
-        if ([self.txtPWD.text length]>=6) {
+        if ([self.txtPWD.text length] >= 6) {
             [NetworkHelper postWithAPI:Login_API parameter:@{@"iphone":self.txtLogin.text,@"pwd":self.txtPWD.text} successBlock:^(id response) {
                 if ([response[@"code"] integerValue] == 1) {
                     [SVProgressHUD showSuccessWithStatus:@"登录成功"];
@@ -386,7 +408,9 @@
                     [isLogin setObject:[[response objectForKey:@"result"] objectForKey:@"iphone"] forKey:@"iphone"];
                     [isLogin setObject:[[response objectForKey:@"result"] objectForKey:@"id"] forKey:@"userid"];
                     [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginSuccessful object:nil];
+                    
                     [self.navigationController popViewControllerAnimated:YES];
+                    [self dismissViewControllerAnimated:YES completion:nil];
                 } else {
                     [SVProgressHUD showErrorWithStatus:response[@"msg"]];
                 }
@@ -423,20 +447,12 @@
 
 - (void)fanhui{
     [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    [self.txtLogin resignFirstResponder];
-    [self.txtPWD resignFirstResponder];
-}
-- (void)returnkeyboard{
-    [self.txtLogin resignFirstResponder];
-    [self.txtPWD resignFirstResponder];
 }
 
 #pragma mark textFieldDelegate

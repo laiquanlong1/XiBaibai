@@ -20,7 +20,6 @@
 //#define ImgDomain @"http://192.168.1.113/xbb"
 
 
-
 //查询用户资料
 #define Select_user_API [NSString stringWithFormat:@"%@/user_msg_select", APIDomain]
 
