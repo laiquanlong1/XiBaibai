@@ -23,7 +23,6 @@
 #define XBB_IsIphone6_6s  ((XBB_Screen_bounds.size.width == 375.f && XBB_Screen_bounds.size.height == 667.f)? YES : NO)
 #define XBB_IsIphone6P_6SPlus  ((XBB_Screen_bounds.size.width == 414.f && XBB_Screen_bounds.size.height == 736.f)? YES : NO)
 
-
 #define XBB_NavBar_Color kUIColorFromRGB(0x106ab1)
 #define XBB_Bg_Color kUIColorFromRGB(0xffffff)
 #define XBB_NavBar_Font [UIFont systemFontOfSize:18.f]

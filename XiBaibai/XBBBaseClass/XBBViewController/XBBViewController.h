@@ -10,7 +10,7 @@
 
 @interface XBBViewController : UIViewController
 
-
+@property (nonatomic, strong, nullable) UIScrollView *backgroundScrollView;
 @property (nonatomic, copy, nullable) NSString *navigationTitle;
 @property (nullable, nonatomic, strong) UIView *xbbNavigationBar;
 @property (nonatomic, assign) BOOL showNavigation;

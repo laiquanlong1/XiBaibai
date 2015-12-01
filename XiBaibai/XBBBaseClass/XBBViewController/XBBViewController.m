@@ -18,7 +18,6 @@
 
 @implementation XBBViewController
 
-
 #pragma mark BaseView
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -30,8 +29,11 @@
 {
     [super viewWillDisappear:animated];
 }
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self initBackScrollView];
     self.view.backgroundColor = XBB_Bg_Color;
     self.haveConnection = NO;
     reachability = [Reachability reachabilityForInternetConnection];
@@ -61,6 +63,12 @@
     }];
 }
 
+- (void)initBackScrollView
+{
+    self.backgroundScrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    [self.backgroundScrollView setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:self.backgroundScrollView];
+}
 - (void)setShowNavigation:(BOOL)showNavigation
 {
     if (_showNavigation!=showNavigation) {

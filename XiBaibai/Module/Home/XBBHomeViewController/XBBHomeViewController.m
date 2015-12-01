@@ -7,8 +7,20 @@
 //
 
 #import "XBBHomeViewController.h"
+#import "XBBBannerView.h"
+
+@interface XBBHomeViewController() <UIScrollViewDelegate>
+{
+    UIScrollView  *_bannerScrollView;
+//    BOOL isOk;
+//    float ok;
+    
+}
+@property (nonatomic, strong) UIPageControl *pageControl;
+@end
 
 @implementation XBBHomeViewController
+
 
 #pragma mark main entry
 
@@ -24,6 +36,62 @@
 - (void)initUIs
 {
     [self setNavigationBarControl];
+//    [self setUpBanner];
+    [self setBanner];
+
+}
+- (void)setBanner
+{
+    XBBBannerView *banner = [[XBBBannerView alloc] initWithFrame:CGRectMake(0, self.xbbNavigationBar.frame.size.height, XBB_Screen_width, 200) imagesNames:@[@"dsd",@"dsd",@"dssd",@"dsds",@"dasdas"]];
+    [self.backgroundScrollView addSubview:banner];
+}
+- (IBAction)one:(id)sender
+{
+    
+}
+- (void)setUpBanner
+{
+    _bannerScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.xbbNavigationBar.frame.size.height, XBB_Screen_width, 300)];
+    _bannerScrollView.contentSize = CGSizeMake(XBB_Screen_width * 6, 0);
+    for (int i = 0; i < 5; i ++) {
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(i * XBB_Screen_width, 0, XBB_Screen_width, _bannerScrollView.frame.size.height)];
+        switch (i) {
+            case 0:
+            {
+                button.backgroundColor = [UIColor blueColor];
+            }
+                break;
+            case 1:
+            {
+                 button.backgroundColor = [UIColor orangeColor];
+            }
+                break;
+            case 2:
+            {
+                 button.backgroundColor = [UIColor grayColor];
+            }
+                break;
+            case 3:
+            {
+                 button.backgroundColor = [UIColor redColor];
+            }
+                break;
+            case 4:
+            {
+                 button.backgroundColor = [UIColor blueColor];
+            }
+                break;
+            default:
+                break;
+        }
+        [_bannerScrollView addSubview:button];
+    }
+    _bannerScrollView.pagingEnabled = YES;
+    _bannerScrollView.showsHorizontalScrollIndicator = NO;
+    _bannerScrollView.showsVerticalScrollIndicator = NO;
+    _bannerScrollView.delegate = self;
+    [self.backgroundScrollView addSubview:_bannerScrollView];
+
 }
 
 - (void)setNavigationBarControl
@@ -41,8 +109,6 @@
     [leftButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(5.f);
         make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(9.f);
-//        make.width.mas_equalTo(30.);
-//        make.height.mas_equalTo(30.);
     }];
     
     UIButton *titleButton = [[UIButton alloc] init];

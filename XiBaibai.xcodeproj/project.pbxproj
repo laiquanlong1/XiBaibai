@@ -210,6 +210,7 @@
 		8E7E49DB1BF5AA8E008517DC /* OrderPayWayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E7E49DA1BF5AA8E008517DC /* OrderPayWayTableViewCell.m */; };
 		8E8122E81C046D0A00B00911 /* FacialSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E8122E71C046D0A00B00911 /* FacialSelectTableViewController.m */; };
 		8EB548921C0ACA6100FFB086 /* XBBHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB548911C0ACA6100FFB086 /* XBBHomeViewController.m */; };
+		8EB548961C0D7C1000FFB086 /* XBBBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB548951C0D7C1000FFB086 /* XBBBannerView.m */; };
 		8EEFCC031BEF189300D3D93F /* CarTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC021BEF189300D3D93F /* CarTypeTableViewController.m */; };
 		8EEFCC0D1BEF510600D3D93F /* XBBBaseLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC0C1BEF510600D3D93F /* XBBBaseLabel.m */; };
 		8EEFCC111BEF52B000D3D93F /* XBBListHeadLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC101BEF52B000D3D93F /* XBBListHeadLabel.m */; };
@@ -658,6 +659,8 @@
 		8E8122E71C046D0A00B00911 /* FacialSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FacialSelectTableViewController.m; path = ../DIY/FacialSelectTableViewController.m; sourceTree = "<group>"; };
 		8EB548901C0ACA6100FFB086 /* XBBHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBHomeViewController.h; path = XBBHomeViewController/XBBHomeViewController.h; sourceTree = "<group>"; };
 		8EB548911C0ACA6100FFB086 /* XBBHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBHomeViewController.m; path = XBBHomeViewController/XBBHomeViewController.m; sourceTree = "<group>"; };
+		8EB548941C0D7C1000FFB086 /* XBBBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBBannerView.h; path = XBBHomeViewController/XBBBannerView.h; sourceTree = "<group>"; };
+		8EB548951C0D7C1000FFB086 /* XBBBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBBannerView.m; path = XBBHomeViewController/XBBBannerView.m; sourceTree = "<group>"; };
 		8EEFCC011BEF189300D3D93F /* CarTypeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarTypeTableViewController.h; sourceTree = "<group>"; };
 		8EEFCC021BEF189300D3D93F /* CarTypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarTypeTableViewController.m; sourceTree = "<group>"; };
 		8EEFCC0B1BEF510600D3D93F /* XBBBaseLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBBaseLabel.h; path = DIYView/XBBBaseLabel.h; sourceTree = "<group>"; };
@@ -1558,6 +1561,8 @@
 			children = (
 				8EB548901C0ACA6100FFB086 /* XBBHomeViewController.h */,
 				8EB548911C0ACA6100FFB086 /* XBBHomeViewController.m */,
+				8EB548941C0D7C1000FFB086 /* XBBBannerView.h */,
+				8EB548951C0D7C1000FFB086 /* XBBBannerView.m */,
 			);
 			name = XBBHomeViewController;
 			sourceTree = "<group>";
@@ -1978,6 +1983,7 @@
 				188D99B81BADCD9A00E68506 /* PayTableViewController.m in Sources */,
 				188D99B31BADCD9A00E68506 /* MyOrderViewController.m in Sources */,
 				188D9A191BADCD9A00E68506 /* UIImage+ImageScaleSize.m in Sources */,
+				8EB548961C0D7C1000FFB086 /* XBBBannerView.m in Sources */,
 				188D99C01BADCD9A00E68506 /* SetCarAddsInfoViewController.m in Sources */,
 				8EEFCC541BF1B3CB00D3D93F /* XBBDIYImageView.m in Sources */,
 				8EEFCC1A1BF07FA900D3D93F /* DIYSelectTableViewController.m in Sources */,
