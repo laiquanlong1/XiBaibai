@@ -33,9 +33,7 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        
     }
-    
     return self;
 }
 
@@ -47,6 +45,4 @@
     totalHeight += [self.labContent sizeThatFits:size].height;
     return CGSizeMake(size.width, totalHeight);
 }
-
-
 @end

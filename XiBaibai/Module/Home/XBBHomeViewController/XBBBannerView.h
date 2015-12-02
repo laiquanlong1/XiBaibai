@@ -17,8 +17,6 @@
 @end
 
 @interface XBBBannerView : UIView
-@property (nonatomic) NSTimeInterval timerInterval;
-@property (nonatomic) NSTimeInterval animationInterval;
 
 @property (weak,nonatomic) id <XBBBannerViewDelegate> xbbDelegate;
 @property (nonatomic, strong) NSMutableArray *buttons;

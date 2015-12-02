@@ -211,6 +211,11 @@
 		8E8122E81C046D0A00B00911 /* FacialSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E8122E71C046D0A00B00911 /* FacialSelectTableViewController.m */; };
 		8EB548921C0ACA6100FFB086 /* XBBHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB548911C0ACA6100FFB086 /* XBBHomeViewController.m */; };
 		8EB548961C0D7C1000FFB086 /* XBBBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB548951C0D7C1000FFB086 /* XBBBannerView.m */; };
+		8EB5489B1C0EA37200FFB086 /* AddOrderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB548991C0EA37200FFB086 /* AddOrderTableViewCell.m */; };
+		8EB5489C1C0EA37200FFB086 /* AddOrderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB5489A1C0EA37200FFB086 /* AddOrderTableViewCell.xib */; };
+		8EB548A01C0EBD7900FFB086 /* AddOrderDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB5489E1C0EBD7900FFB086 /* AddOrderDetailTableViewCell.m */; };
+		8EB548A11C0EBD7900FFB086 /* AddOrderDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB5489F1C0EBD7900FFB086 /* AddOrderDetailTableViewCell.xib */; };
+		8EB548A41C0ED34300FFB086 /* XBBOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB548A31C0ED34300FFB086 /* XBBOrder.m */; };
 		8EEFCC031BEF189300D3D93F /* CarTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC021BEF189300D3D93F /* CarTypeTableViewController.m */; };
 		8EEFCC0D1BEF510600D3D93F /* XBBBaseLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC0C1BEF510600D3D93F /* XBBBaseLabel.m */; };
 		8EEFCC111BEF52B000D3D93F /* XBBListHeadLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC101BEF52B000D3D93F /* XBBListHeadLabel.m */; };
@@ -389,8 +394,8 @@
 		188D988C1BADCD9A00E68506 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		188D988E1BADCD9A00E68506 /* MyCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCenterViewController.h; sourceTree = "<group>"; };
 		188D988F1BADCD9A00E68506 /* MyCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCenterViewController.m; sourceTree = "<group>"; };
-		188D98911BADCD9A00E68506 /* AddOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddOrderViewController.h; sourceTree = "<group>"; };
-		188D98921BADCD9A00E68506 /* AddOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddOrderViewController.m; sourceTree = "<group>"; };
+		188D98911BADCD9A00E68506 /* AddOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddOrderViewController.h; path = ../SideLeft/Order/AddOrderViewController.h; sourceTree = "<group>"; };
+		188D98921BADCD9A00E68506 /* AddOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddOrderViewController.m; path = ../SideLeft/Order/AddOrderViewController.m; sourceTree = "<group>"; };
 		188D98931BADCD9A00E68506 /* AddPlanOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPlanOrderViewController.h; sourceTree = "<group>"; };
 		188D98941BADCD9A00E68506 /* AddPlanOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPlanOrderViewController.m; sourceTree = "<group>"; };
 		188D98951BADCD9A00E68506 /* CommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentViewController.h; sourceTree = "<group>"; };
@@ -661,6 +666,14 @@
 		8EB548911C0ACA6100FFB086 /* XBBHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBHomeViewController.m; path = XBBHomeViewController/XBBHomeViewController.m; sourceTree = "<group>"; };
 		8EB548941C0D7C1000FFB086 /* XBBBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBBannerView.h; path = XBBHomeViewController/XBBBannerView.h; sourceTree = "<group>"; };
 		8EB548951C0D7C1000FFB086 /* XBBBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBBannerView.m; path = XBBHomeViewController/XBBBannerView.m; sourceTree = "<group>"; };
+		8EB548981C0EA37200FFB086 /* AddOrderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddOrderTableViewCell.h; path = XBBOrderTableViewController/AddOrderTableViewCell.h; sourceTree = "<group>"; };
+		8EB548991C0EA37200FFB086 /* AddOrderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddOrderTableViewCell.m; path = XBBOrderTableViewController/AddOrderTableViewCell.m; sourceTree = "<group>"; };
+		8EB5489A1C0EA37200FFB086 /* AddOrderTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AddOrderTableViewCell.xib; path = XBBOrderTableViewController/AddOrderTableViewCell.xib; sourceTree = "<group>"; };
+		8EB5489D1C0EBD7900FFB086 /* AddOrderDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddOrderDetailTableViewCell.h; path = XBBOrderTableViewController/AddOrderDetailTableViewCell.h; sourceTree = "<group>"; };
+		8EB5489E1C0EBD7900FFB086 /* AddOrderDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddOrderDetailTableViewCell.m; path = XBBOrderTableViewController/AddOrderDetailTableViewCell.m; sourceTree = "<group>"; };
+		8EB5489F1C0EBD7900FFB086 /* AddOrderDetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AddOrderDetailTableViewCell.xib; path = XBBOrderTableViewController/AddOrderDetailTableViewCell.xib; sourceTree = "<group>"; };
+		8EB548A21C0ED34300FFB086 /* XBBOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBOrder.h; path = XBBOrderTableViewController/XBBOrder.h; sourceTree = "<group>"; };
+		8EB548A31C0ED34300FFB086 /* XBBOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBOrder.m; path = XBBOrderTableViewController/XBBOrder.m; sourceTree = "<group>"; };
 		8EEFCC011BEF189300D3D93F /* CarTypeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarTypeTableViewController.h; sourceTree = "<group>"; };
 		8EEFCC021BEF189300D3D93F /* CarTypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarTypeTableViewController.m; sourceTree = "<group>"; };
 		8EEFCC0B1BEF510600D3D93F /* XBBBaseLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBBaseLabel.h; path = DIYView/XBBBaseLabel.h; sourceTree = "<group>"; };
@@ -1023,6 +1036,7 @@
 		188D987C1BADCD9A00E68506 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				8EB548971C0EA22800FFB086 /* XBBDownOrder */,
 				8EB548931C0ACA6600FFB086 /* XBBHomeViewController */,
 				188D98791BADCD9A00E68506 /* DIY */,
 				8EEFCC171BF07F5100D3D93F /* Facial */,
@@ -1077,8 +1091,6 @@
 		188D98901BADCD9A00E68506 /* Order */ = {
 			isa = PBXGroup;
 			children = (
-				188D98911BADCD9A00E68506 /* AddOrderViewController.h */,
-				188D98921BADCD9A00E68506 /* AddOrderViewController.m */,
 				188D98931BADCD9A00E68506 /* AddPlanOrderViewController.h */,
 				188D98941BADCD9A00E68506 /* AddPlanOrderViewController.m */,
 				188D98951BADCD9A00E68506 /* CommentViewController.h */,
@@ -1567,6 +1579,23 @@
 			name = XBBHomeViewController;
 			sourceTree = "<group>";
 		};
+		8EB548971C0EA22800FFB086 /* XBBDownOrder */ = {
+			isa = PBXGroup;
+			children = (
+				188D98911BADCD9A00E68506 /* AddOrderViewController.h */,
+				188D98921BADCD9A00E68506 /* AddOrderViewController.m */,
+				8EB548981C0EA37200FFB086 /* AddOrderTableViewCell.h */,
+				8EB548991C0EA37200FFB086 /* AddOrderTableViewCell.m */,
+				8EB5489A1C0EA37200FFB086 /* AddOrderTableViewCell.xib */,
+				8EB5489D1C0EBD7900FFB086 /* AddOrderDetailTableViewCell.h */,
+				8EB5489E1C0EBD7900FFB086 /* AddOrderDetailTableViewCell.m */,
+				8EB5489F1C0EBD7900FFB086 /* AddOrderDetailTableViewCell.xib */,
+				8EB548A21C0ED34300FFB086 /* XBBOrder.h */,
+				8EB548A31C0ED34300FFB086 /* XBBOrder.m */,
+			);
+			name = XBBDownOrder;
+			sourceTree = "<group>";
+		};
 		8EEFCC041BEF501A00D3D93F /* DIYView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1742,6 +1771,7 @@
 				188D99EA1BADCD9A00E68506 /* addMoren@2x.png in Resources */,
 				188D99E91BADCD9A00E68506 /* addMoren.png in Resources */,
 				188D99E01BADCD9A00E68506 /* 1@icon_youhuiquan.png in Resources */,
+				8EB5489C1C0EA37200FFB086 /* AddOrderTableViewCell.xib in Resources */,
 				188D9A031BADCD9A00E68506 /* xbb_diygogounselected.png in Resources */,
 				188D9A081BADCD9A00E68506 /* AlipaySDK.bundle in Resources */,
 				188D99D31BADCD9A00E68506 /* 1@icon_32.png in Resources */,
@@ -1760,6 +1790,7 @@
 				188D99EE1BADCD9A00E68506 /* close@2x.png in Resources */,
 				188D99F31BADCD9A00E68506 /* map_fast_2@2x.png in Resources */,
 				188D99DC1BADCD9A00E68506 /* 1@icon_starhui.png in Resources */,
+				8EB548A11C0EBD7900FFB086 /* AddOrderDetailTableViewCell.xib in Resources */,
 				188D9A1D1BADCDBE00E68506 /* Main.storyboard in Resources */,
 				188D99FF1BADCD9A00E68506 /* sline.png in Resources */,
 				188D99E11BADCD9A00E68506 /* 1@icon_youhuiquanCell.png in Resources */,
@@ -1899,9 +1930,11 @@
 				188D99AE1BADCD9A00E68506 /* MyCenterViewController.m in Sources */,
 				186A2A6F1BAEA9A700645069 /* PSTGridLayoutSection.m in Sources */,
 				188D99A21BADCD9A00E68506 /* SystemMsgModel.m in Sources */,
+				8EB548A01C0EBD7900FFB086 /* AddOrderDetailTableViewCell.m in Sources */,
 				188D99A81BADCD9A00E68506 /* MyDrawerController.m in Sources */,
 				186A2A671BAEA9A700645069 /* PSTCollectionViewData.m in Sources */,
 				188D99C41BADCD9A00E68506 /* WebViewController.m in Sources */,
+				8EB548A41C0ED34300FFB086 /* XBBOrder.m in Sources */,
 				188D99B71BADCD9A00E68506 /* PayCallbackViewController.m in Sources */,
 				8EB548921C0ACA6100FFB086 /* XBBHomeViewController.m in Sources */,
 				186A2A6C1BAEA9A700645069 /* PSTGridLayoutInfo.m in Sources */,
@@ -1909,6 +1942,7 @@
 				6C09E5CA1BB1411B008A0C5F /* CheckOnderViewController.m in Sources */,
 				8EEFCC0D1BEF510600D3D93F /* XBBBaseLabel.m in Sources */,
 				188D99A51BADCD9A00E68506 /* AllCommentViewController.m in Sources */,
+				8EB5489B1C0EA37200FFB086 /* AddOrderTableViewCell.m in Sources */,
 				188D99A71BADCD9A00E68506 /* IndexViewController.m in Sources */,
 				188D99C91BADCD9A00E68506 /* MyWallViewController.m in Sources */,
 				188D9A1A1BADCD9A00E68506 /* JSONKit.m in Sources */,

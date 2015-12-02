@@ -204,7 +204,7 @@
         if ([vc isKindOfClass:[MyWallViewController class]]) {
             [vc removeFromParentViewController];
             AddOrderViewController *addOrder = [[AddOrderViewController alloc] init];
-            addOrder.selectCouponWashDic = dic;
+//            addOrder.selectCouponWashDic = dic;
             [self.navigationController pushViewController:addOrder animated:YES];
             return;
         }

@@ -108,10 +108,10 @@
 
     
     
-    XBBHomeViewController *lo = [[XBBHomeViewController alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:lo];
+//    XBBHomeViewController *lo = [[XBBHomeViewController alloc] init];
+//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:lo];
     
-    self.window.rootViewController =  nav; //drawerController;
+    self.window.rootViewController =  drawerController;
     [self.window makeKeyAndVisible];
     return YES;
 }

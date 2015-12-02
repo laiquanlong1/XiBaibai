@@ -20,13 +20,16 @@
 #import "BPush.h"
 #import "MyCarTableViewController.h"
 
+#import "XBBBannerView.h"
+
+
 
 //// 获取服务起止时间
 //#define START_TIME @"reserve_start_time"
 //#define END_TIME @"reserve_end_time"
 
 
-@interface IndexViewController ()<BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate,UIScrollViewDelegate,UIAlertViewDelegate,BMKOverlay ,BMKSuggestionSearchDelegate>{
+@interface IndexViewController ()<BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate,UIScrollViewDelegate,UIAlertViewDelegate,BMKOverlay ,BMKSuggestionSearchDelegate,XBBBannerViewDelegate>{
     
     /**
      * @brief 百度地图相关信息
@@ -112,10 +115,17 @@
 @implementation IndexViewController
 
 
+#pragma markXbbBannerViewDelegate
+
+- (void)xbbBanner:(id)sender
+{
+    DLog(@"")
+}
+
 #pragma mark NetAbserver
 - (void)changeNetStatusHaveDisconnection
 {
-    DLog(@"/////////")
+   
 }
 - (void)changeNetStatusHaveConnection
 {
@@ -291,26 +301,44 @@
 
 
 #pragma mark view disposed
+- (void)initUI
+{
+    [self initView]; // 初始化视图
+    [self addBanner];
+}
 
+
+
+- (void)addBanner
+{
+    XBBBannerView *banner = [[XBBBannerView alloc] initWithFrame:CGRectMake(0, self.xbbNavigationBar.frame.size.height, XBB_Screen_width, 200) imagesNames:@[@"ds",@"dsf",@"dsds"]];
+    banner.xbbDelegate = self;
+    [self.backgroundScrollView addSubview:banner];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-    bmlocation = [[BMKUserLocation alloc] init];  // 百度地图位置
-    floag = false; // 是否标记
-    [self initMapView]; // 初始化地图
-    [self initView]; // 初始化视图
-    [self initMylocationView]; // 初始化我的位置视图
-    [self initSearch]; // 初始化搜索
-    [self addPresentAreButtonCreate]; // 添加区域button
+    [self initUI];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserSuccessfulIndex:) name:NotificationUpdateUserSuccessful object:nil];
+    
+    
+//    bmlocation = [[BMKUserLocation alloc] init];  // 百度地图位置
+    
+//    floag = false; // 是否标记
+//    [self initMapView]; // 初始化地图
+   
+//    [self initMylocationView]; // 初始化我的位置视图
+//    [self initSearch]; // 初始化搜索
+//    [self addPresentAreButtonCreate]; // 添加区域button
+    
     // 获取可服务区域
-    [NetworkHelper postWithAPI:Lat_Long parameter:nil successBlock:^(id response) {
-        if (response) {
-            NSDictionary *dic = [(NSDictionary*)response objectForKey:@"result"];
-            self.dicCoordinates = dic;
-        }
-    } failBlock:^(NSError *error) {
-        [SVProgressHUD showErrorWithStatus:@"获取可服务区域失败"];
-    }];
+//    [NetworkHelper postWithAPI:Lat_Long parameter:nil successBlock:^(id response) {
+//        if (response) {
+//            NSDictionary *dic = [(NSDictionary*)response objectForKey:@"result"];
+//            self.dicCoordinates = dic;
+//        }
+//    } failBlock:^(NSError *error) {
+//        [SVProgressHUD showErrorWithStatus:@"获取可服务区域失败"];
+//    }];
     
     // 版本更新
     [self checkVerison];
@@ -343,7 +371,10 @@
     _locService.delegate = nil;
 }
 
-
+- (IBAction)tao:(id)sender
+{
+    [self addOrderNow];
+}
 - (void)initView{
     
     //导航栏中间
@@ -404,39 +435,42 @@
     labHao.text=[NSString stringWithFormat:@"_   _"];
     labHao.font = [UIFont systemFontOfSize:15];
     [rightView addSubview:labHao];
+    labHao.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tao = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tao:)];
+    [labHao addGestureRecognizer:tao];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightView];
-    
-    //左边快速定位
-    UIView *locationView=[[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetHeight(self.view.bounds)-180, 50, 140)];
-    
-    /**
-     * @brief 家庭住址
-     **/
-    UIButton *homeLocationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    homeLocationBtn.frame = CGRectMake(0, 0, 30, 30);
-    [homeLocationBtn setImage:[UIImage imageNamed:@"xbb_808"] forState:UIControlStateNormal];
-    [homeLocationBtn addTarget:self action:@selector(moveToHomeLocation) forControlEvents:UIControlEventTouchUpInside];
-    [locationView addSubview:homeLocationBtn];
-    
-    
-    /**
-     * @brief 公司地址按钮
-     **/
-    UIButton *companyLocationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    companyLocationBtn.frame = CGRectMake(0, 45, 30, 30);
-    [companyLocationBtn setImage:[UIImage imageNamed:@"xbb_807"] forState:UIControlStateNormal];
-    [companyLocationBtn addTarget:self action:@selector(moveToCompanyLocation) forControlEvents:UIControlEventTouchUpInside];
-    [locationView addSubview:companyLocationBtn];
-    
-    /**
-     * @brief 当前位置按钮
-     **/
-    UIButton *currentLocationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    currentLocationBtn.frame = CGRectMake(0, 90, 30, 30);
-    [currentLocationBtn setImage:[UIImage imageNamed:@"map_fast_3"] forState:UIControlStateNormal];
-    [currentLocationBtn addTarget:self action:@selector(here) forControlEvents:UIControlEventTouchUpInside];
-    [locationView addSubview:currentLocationBtn];
-    [self.view addSubview:locationView];
+//    
+//    //左边快速定位
+//    UIView *locationView=[[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetHeight(self.view.bounds)-180, 50, 140)];
+//    
+////    /**
+//     * @brief 家庭住址
+//     **/
+//    UIButton *homeLocationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    homeLocationBtn.frame = CGRectMake(0, 0, 30, 30);
+//    [homeLocationBtn setImage:[UIImage imageNamed:@"xbb_808"] forState:UIControlStateNormal];
+//    [homeLocationBtn addTarget:self action:@selector(moveToHomeLocation) forControlEvents:UIControlEventTouchUpInside];
+//    [locationView addSubview:homeLocationBtn];
+//    
+//    
+//    /**
+//     * @brief 公司地址按钮
+//     **/
+//    UIButton *companyLocationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    companyLocationBtn.frame = CGRectMake(0, 45, 30, 30);
+//    [companyLocationBtn setImage:[UIImage imageNamed:@"xbb_807"] forState:UIControlStateNormal];
+//    [companyLocationBtn addTarget:self action:@selector(moveToCompanyLocation) forControlEvents:UIControlEventTouchUpInside];
+//    [locationView addSubview:companyLocationBtn];
+//    
+//    /**
+//     * @brief 当前位置按钮
+//     **/
+//    UIButton *currentLocationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    currentLocationBtn.frame = CGRectMake(0, 90, 30, 30);
+//    [currentLocationBtn setImage:[UIImage imageNamed:@"map_fast_3"] forState:UIControlStateNormal];
+//    [currentLocationBtn addTarget:self action:@selector(here) forControlEvents:UIControlEventTouchUpInside];
+//    [locationView addSubview:currentLocationBtn];
+//    [self.view addSubview:locationView];
 }
 
 
@@ -661,7 +695,7 @@
         //请求个人头像
         NSMutableDictionary *dicMine=[NSMutableDictionary dictionary];
         [dicMine setObject:[UserObj shareInstance].uid forKey:@"uid"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
         [NetworkHelper postWithAPI:Select_user_API parameter:dicMine successBlock:^(id response) {
             if ([response[@"code"] integerValue] == 1) {
                 UserObj *user=[UserObj shareInstance];
@@ -1055,17 +1089,17 @@
     if (IsLogin)
     {
         // 定位失败
-        if (!location_lg || !location_lt) {
-            [SVProgressHUD showErrorWithStatus:@"定位失败"];
-            return;
-        }
+//        if (!location_lg || !location_lt) {
+//            [SVProgressHUD showErrorWithStatus:@"定位失败"];
+//            return;
+//        }
         // 设置默认车辆
-        UserObj *user=[UserObj shareInstance];
-        if ([user.c_id integerValue]== 0 ||[user.c_id integerValue] == 1 ) {
-            UIAlertView *alert = [CustamViewController createAlertViewTitleStr:@"请设置默认车辆" withMsg:nil widthDelegate:self withCancelBtn:@"取消" withbtns:@"去设置"];
-            [alert show];
-            return;
-        }
+//        UserObj *user=[UserObj shareInstance];
+//        if ([user.c_id integerValue]== 0 ||[user.c_id integerValue] == 1 ) {
+//            UIAlertView *alert = [CustamViewController createAlertViewTitleStr:@"请设置默认车辆" withMsg:nil widthDelegate:self withCancelBtn:@"取消" withbtns:@"去设置"];
+//            [alert show];
+//            return;
+//        }
         
         [self toPush:NO]; // 下单
     }
