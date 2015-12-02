@@ -48,7 +48,6 @@
         }else if([[timeArray firstObject] isEqualToString:@"今天"]) {
             dateSelectedIndex = 0;
         }
-        
         [self dateBtnOnTouch:_dateBtnArr[dateSelectedIndex]];
     }
 }
@@ -116,7 +115,7 @@
 
     
     //全局滚动视图
-    UIScrollView *mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds))];
+    UIScrollView *mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds))];
     mainScrollView.userInteractionEnabled = YES;
     mainScrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.bounds),705);
     [mainScrollView setDelegate:self];
@@ -276,7 +275,14 @@
     [self.view endEditing:YES];
 }
 
-
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self.navigationController.navigationBar setHidden:NO];
+}
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self.navigationController.navigationBar setHidden:YES];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initView];
