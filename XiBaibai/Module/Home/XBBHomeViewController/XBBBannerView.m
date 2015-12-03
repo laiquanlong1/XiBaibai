@@ -7,6 +7,8 @@
 //
 
 #import "XBBBannerView.h"
+#import "XBBBannerObject.h"
+
 
 #define timerInterval 6.0
 #define animationTime 0.3
@@ -18,7 +20,7 @@
     NSInteger count;
     UIPageControl *controlPage;
     UIScrollView *backScrollView;
-    NSTimer *timer;
+    
 }
 
 @end
@@ -44,8 +46,8 @@
         scrollView.contentOffset = CGPointMake(0, 0);
     }
     offsetX = scrollView.contentOffset.x;
-    [timer invalidate];
-    timer = [NSTimer scheduledTimerWithTimeInterval:timerInterval target:self selector:@selector(scrollViewScroll:) userInfo:nil repeats:YES];
+    [self.timer invalidate];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:timerInterval target:self selector:@selector(scrollViewScroll:) userInfo:nil repeats:YES];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -63,8 +65,8 @@
             controlPage.currentPage = 0;
         }
     }
-    [timer invalidate];
-    timer = [NSTimer scheduledTimerWithTimeInterval:timerInterval target:self selector:@selector(scrollViewScroll:) userInfo:nil repeats:YES];
+    [self.timer invalidate];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:timerInterval target:self selector:@selector(scrollViewScroll:) userInfo:nil repeats:YES];
 }
 
 
@@ -87,57 +89,24 @@
 {
     count = imageNames.count;
     for (int i = 0; i < imageNames.count+1; i++) {
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width * i, 0, XBB_Screen_width, self.bounds.size.height)];
-        [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-        button.tag = i;
+        XBBBannerObject *bannerOb = nil;
         if (i == imageNames.count) {
-            button.tag = 0;
+            bannerOb = imageNames[0];
+        }else
+        {
+            bannerOb = imageNames[i];
         }
-        switch (i) {
-            case 0:
-            {
-                button.backgroundColor = [UIColor blueColor];
-            }
-                break;
-            case 1:
-            {
-                button.backgroundColor = [UIColor orangeColor];
-            }
-                break;
-            case 2:
-            {
-                button.backgroundColor = [UIColor grayColor];
-            }
-                break;
-            case 3:
-            {
-                button.backgroundColor = [UIColor redColor];
-            }
-                break;
-            case 4:
-            {
-                button.backgroundColor = [UIColor blackColor];
-            }
-                break;
-            case 5:
-            {
-                button.backgroundColor = [UIColor blueColor];
-            }
-                break;
-            default:
-                break;
-        }
-        if (i == imageNames.count) {
-             button.backgroundColor = [UIColor blueColor];
-        }
-        [backScrollView setZoomScale:1.3 animated:YES];
+        UIImageView *button = [[UIImageView alloc] initWithFrame:CGRectMake(XBB_Screen_width * i, 0, XBB_Screen_width, self.bounds.size.height)];
+        [button sd_setImageWithURL:[NSURL URLWithString:bannerOb.imageUrl] completed:nil];
+        button.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(buttonAction:)];
+        [button addGestureRecognizer:tap];
+        button.tag = [bannerOb.oid integerValue];
         backScrollView.pagingEnabled = YES;
         backScrollView.showsHorizontalScrollIndicator = NO;
         backScrollView.showsVerticalScrollIndicator = NO;
         backScrollView.delegate = self;
         [backScrollView addSubview:button];
-        [self.buttons addObject:button];
-        
     }
     backScrollView.contentSize = CGSizeMake(XBB_Screen_width*(count+1), 0);
     controlPage = [[UIPageControl alloc] initWithFrame:CGRectMake(XBB_Screen_width/2-50, self.bounds.size.height - self.bounds.size.height/6, 100, 20)];
@@ -145,10 +114,14 @@
     controlPage.currentPage = 0;
     controlPage.userInteractionEnabled = NO;
     [self addSubview:controlPage];
-    timer = [NSTimer scheduledTimerWithTimeInterval:timerInterval target:self selector:@selector(scrollViewScroll:) userInfo:nil repeats:YES];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:timerInterval target:self selector:@selector(scrollViewScroll:) userInfo:nil repeats:YES];
 }
 
-
+- (void)dealloc
+{
+    [self.timer invalidate];
+    self.timer = nil;
+}
 
 #pragma mark action
 - (IBAction)scrollViewScroll:(id)sender
@@ -168,9 +141,8 @@
 }
 - (IBAction)buttonAction:(id)sender
 {
-    [timer invalidate];
-    UIButton *button = sender;
-    DLog(@"%d",button.tag);
+    [self.timer invalidate];
+    UITapGestureRecognizer *button = sender;
     if ([self.xbbDelegate respondsToSelector:@selector(xbbBanner:)]) {
         [self.xbbDelegate xbbBanner:button];
     }

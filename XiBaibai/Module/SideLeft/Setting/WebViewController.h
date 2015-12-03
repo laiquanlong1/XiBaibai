@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WebViewController : UIViewController
+@interface WebViewController : XBBViewController
 
 @property (copy, nonatomic) NSString *urlString;
 

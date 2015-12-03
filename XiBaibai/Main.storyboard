@@ -1899,10 +1899,10 @@
             </objects>
             <point key="canvasLocation" x="1580.9999999999998" y="496"/>
         </scene>
-        <!--Index View Controller-->
+        <!--Home View Controller-->
         <scene sceneID="eg5-0b-cEq">
             <objects>
-                <viewController id="HKD-AC-JLG" customClass="IndexViewController" sceneMemberID="viewController">
+                <viewController id="HKD-AC-JLG" customClass="XBBHomeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aBJ-iD-h9Q"/>
                         <viewControllerLayoutGuide type="bottom" id="Xal-8U-zmZ"/>
@@ -2317,7 +2317,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="D01F8E2B-EA51-46B7-A5F8-834B8E93755C" translatesAutoresizingMaskIntoConstraints="NO" id="BUy-ot-H3c">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="81D1E116-6782-4DCC-8288-CF222B9DF132" translatesAutoresizingMaskIntoConstraints="NO" id="BUy-ot-H3c">
                                             <rect key="frame" x="15" y="10" width="30" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="30" id="0EI-1j-WWN"/>
@@ -2481,7 +2481,7 @@
         <image name="1@shezhi_14_p.png" width="16" height="15"/>
         <image name="1@shezhi_17.png" width="15" height="12"/>
         <image name="1@shezhi_17_p.png" width="16" height="14"/>
-        <image name="D01F8E2B-EA51-46B7-A5F8-834B8E93755C" width="421" height="421">
+        <image name="81D1E116-6782-4DCC-8288-CF222B9DF132" width="421" height="421">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

@@ -9,7 +9,7 @@
 #ifndef XBB_mach_h
 #define XBB_mach_h
 #import "MyCenterViewController.h"
-#import "IndexViewController.h"
+#import "XBBHomeViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import <BaiduMapAPI/BMapKit.h>//引入所有的头文件
 #import "UIImageView+WebCache.h"

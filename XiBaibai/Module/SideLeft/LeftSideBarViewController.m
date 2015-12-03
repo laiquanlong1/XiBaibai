@@ -7,7 +7,7 @@
 //
 
 #import "LeftSideBarViewController.h"
-#import "IndexViewController.h"
+#import "XBBHomeViewController.h"
 #import "MyCenterViewController.h"
 #import "MyWallViewController.h"
 #import "UserObj.h"
@@ -33,7 +33,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccessful:) name:NotificationLoginSuccessful object:nil];
-     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:NotificationLoginFailed object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:NotificationLoginFailed object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserSuccessful:) name:NotificationUpdateUserSuccessful object:nil];
 }
 

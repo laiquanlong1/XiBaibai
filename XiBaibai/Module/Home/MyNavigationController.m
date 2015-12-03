@@ -17,7 +17,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationBar.barTintColor = XBB_NavBar_Color;
-    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {

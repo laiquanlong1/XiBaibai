@@ -60,7 +60,7 @@ static NSString *identifier_2 = @"tit1cell";
 
 @implementation AddOrderViewController
 
-#pragma mark data
+#pragma mark dataDispose
 
 - (void)initDatas
 {
@@ -125,7 +125,6 @@ static NSString *identifier_2 = @"tit1cell";
     
     XBBOrder *time_2 = [[XBBOrder alloc] init];
     time_2.title = @"预约上门";
-//    time_2.timeString = @"今天 9:00 - 10:00";
     time_2.selectImage = [UIImage imageNamed:@"noselectImage"];
     [o_6.xbbOrders addObject:time_2];
     [self initUpdateData];
@@ -257,11 +256,7 @@ static NSString *identifier_2 = @"tit1cell";
 }
 
 
-#pragma mark  memory
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+
 
 
 #pragma mark tableViewDelegate
@@ -376,8 +371,7 @@ static NSString *identifier_2 = @"tit1cell";
             
         }
     }
-   
-    
+
     if ([object isEqual:[[self.dataArray lastObject] xbbOrders][0]]||[object isEqual:[[self.dataArray lastObject] xbbOrders][1]]) {
         AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         if (cell.tag == 11) {
@@ -452,13 +446,13 @@ static NSString *identifier_2 = @"tit1cell";
         };
         [self.navigationController pushViewController:diy animated:YES];
     }
+    
     if ([object isEqual:self.dataArray[2]]) {
         FaicalSelectTableViewController *faical = [[FaicalSelectTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
         faical.selectCarType = 1;
         faical.washType = washType;
         faical.diyServers = ^(id mode){
-            selectDIYPrice = [mode[@"price"] floatValue];
-            DLog(@"%@",mode);
+            selectFaicalPrice = [mode[@"price"] floatValue];
             [self addAllPrice];
             NSArray *array = mode[@"noWash"];
             NSArray *twoArray = mode[@"wax"];
@@ -494,8 +488,8 @@ static NSString *identifier_2 = @"tit1cell";
             [self initUpdateData];
         };
         [self.navigationController pushViewController:faical animated:YES];
-        
     }
+    
     if ([object isEqual:self.dataArray[3]]) {
         
     }
@@ -504,5 +498,9 @@ static NSString *identifier_2 = @"tit1cell";
     }
 }
 
-
+#pragma mark  memory
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 @end

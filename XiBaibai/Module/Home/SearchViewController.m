@@ -36,8 +36,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell" forIndexPath:indexPath];
-    UILabel *titleLabel = (UILabel *)[cell.contentView viewWithTag:9];
-    UILabel *summaryLabel = (UILabel *)[cell.contentView viewWithTag:10];
+//    UILabel *titleLabel = (UILabel *)[cell.contentView viewWithTag:9];
+//    UILabel *summaryLabel = (UILabel *)[cell.contentView viewWithTag:10];
     return cell;
 }
 

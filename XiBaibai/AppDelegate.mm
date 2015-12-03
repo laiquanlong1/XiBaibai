@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "IndexViewController.h"
+#import "XBBHomeViewController.h"
 #import "LeftSideBarViewController.h"
 #import "MMDrawerController.h"
 #import "RechargeHelper.h"

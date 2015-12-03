@@ -1,13 +1,15 @@
 //
-//  XBBHomeViewController.h
-//  XiBaibai
+//  IndexViewController.h
+//  XBB
 //
-//  Created by HoTia on 15/11/29.
-//  Copyright © 2015年 Mingle. All rights reserved.
+//  Created by Daniel on 15/8/4.
+//  Copyright (c) 2015年 marnow. All rights reserved.
 //
+
 
 #import "XBBViewController.h"
 
 @interface XBBHomeViewController : XBBViewController
+
 
 @end

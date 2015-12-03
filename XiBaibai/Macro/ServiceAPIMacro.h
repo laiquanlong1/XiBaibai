@@ -10,7 +10,7 @@
 #define XBB_ServiceAPIMacro_h
 
 
-#define APIDomain @"http://captainoak.cn/Api/Indextwo"
+#define APIDomain @"http://captainoak.cn/Api/V3"
 #define ImgDomain @"http://captainoak.cn"
 
 //#define APIDomain @"http://xbbwx.marnow.com/Api/Indextwo"
@@ -18,6 +18,10 @@
 
 //#define APIDomain @"http://xbbwx.marnow.com/Api/index"
 //#define ImgDomain @"http://192.168.1.113/xbb"
+
+
+
+#define XBB_Banner_roop [NSString stringWithFormat:@"%@/lunbo", APIDomain]
 
 
 //查询用户资料

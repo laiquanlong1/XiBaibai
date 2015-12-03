@@ -7,7 +7,7 @@
 //
 
 #import "MyDrawerController.h"
-#import "IndexViewController.h"
+#import "XBBHomeViewController.h"
 #import "LeftSideBarViewController.h"
 
 @interface MyDrawerController ()
