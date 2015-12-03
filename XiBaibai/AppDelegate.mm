@@ -77,15 +77,7 @@
      **/
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
-    // Override point for customization after application launch.
-    //    UINavigationController *centerNav = [[UINavigationController alloc] initWithRootViewController:[[IndexViewController alloc] init]];
-    //    centerNav.view.backgroundColor = [UIColor whiteColor];
-    //    centerNav.navigationBar.barTintColor=kUIColorFromRGB(0xdc3733);
-    //    NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
-    //    centerNav.navigationBar.titleTextAttributes = dict;
-    ////    centerNav.navigationBarHidden = YES;
-    //    MMDrawerController *drawerController = [[MMDrawerController alloc] initWithCenterViewController:centerNav leftDrawerViewController:[[LeftSideBarViewController alloc] init]];
-    
+ 
     /**
      * @brief 设置状态栏风格
      * @detail 设置状态栏风格
@@ -93,24 +85,11 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
-    
-    /**
-     * @brief 初始化抽屉控制器
-     * @detail 初始化抽屉控制器，有个左视图控制器（在storyboard里面可以拿到）
-     **/
     MMDrawerController *drawerController = [[MMDrawerController alloc] initWithCenterViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MyNavigationController"] leftDrawerViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"LeftSideBarViewController"]];
     drawerController.maximumLeftDrawerWidth = 240.;
     drawerController.showsShadow = NO;
     drawerController.closeDrawerGestureModeMask = MMCloseDrawerGestureModeAll;
     drawerController.shouldStretchDrawer = NO;
-    
-    
-
-    
-    
-//    XBBHomeViewController *lo = [[XBBHomeViewController alloc] init];
-//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:lo];
-    
     self.window.rootViewController =  drawerController;
     [self.window makeKeyAndVisible];
     return YES;

@@ -128,13 +128,17 @@
     [self feachDatas];
     [self initUI];
     [self addNotification];
+    if (IsLogin) {
+        UserObj *us = [UserObj shareInstance];
+        us.uid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userid"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationUpdateUserSuccessful object:nil];
+    }
     
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NotificationUpdateUserSuccessful object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -240,6 +244,7 @@
 //更新用户头像信息
 - (void)updateUserSuccessfulIndex:(NSNotification *)sender{
     UserObj *userObj = [UserObj shareInstance];
+    DLog(@"%@",userObj.uid);
     [leftNavigationBotton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", ImgDomain, userObj.imgstring]] placeholderImage:[UIImage imageNamed:@"nav1"]];
 }
 

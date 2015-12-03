@@ -84,7 +84,7 @@
     [self.nameLabel setHidden:NO];
     UserObj *userInfo = [UserObj shareInstance];
     if([userInfo.imgstring  isKindOfClass:[NSNull class]]){
-          self.avatarImageView.image=[UIImage imageNamed:@"nav1.png"];
+        self.avatarImageView.image=[UIImage imageNamed:@"nav1.png"];
     }else{
         [self.avatarImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", ImgDomain, userInfo.imgstring]]];
     }
