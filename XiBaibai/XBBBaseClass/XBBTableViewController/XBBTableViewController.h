@@ -1,21 +1,15 @@
 //
 //  XBBTableViewController.h
-//  xbb
+//  XiBaibai
 //
-//  Created by HoTia on 15/11/26.
-//  Copyright © 2015年 *. All rights reserved.
+//  Created by HoTia on 15/12/4.
+//  Copyright © 2015年 Mingle. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "XBBViewController.h"
 
-@interface XBBTableViewController : UITableViewController
+@interface XBBTableViewController : XBBViewController <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, copy, nullable) NSString *navigationTitle;
-@property (nullable, nonatomic, strong) UIView *xbbNavigationBar;
-@property (nonatomic, assign) BOOL showNavigation;
-@property (nonatomic, assign) BOOL haveConnection;
-
-- (void)changeNetStatusHaveConnection;
-- (void)changeNetStatusHaveDisconnection;
+@property (nonatomic, strong) UITableView *tableView;
 
 @end

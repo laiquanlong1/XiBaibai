@@ -23,6 +23,8 @@
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="2Ce-ll-QYy"/>
                             <constraint firstAttribute="width" constant="160" id="HAW-Uc-ozd"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="160" id="lth-tK-bHL"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="pV5-vD-mpA"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>

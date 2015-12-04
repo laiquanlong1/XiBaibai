@@ -19,4 +19,9 @@
 - (void)changeNetStatusHaveConnection;
 - (void)changeNetStatusHaveDisconnection;
 
+- (void)initViewWillAppearDatas;
+- (void)disposeWillUI;
+- (void)initViewDidLoadDatas;
+- (void)disposeDidLoadUI;
+
 @end

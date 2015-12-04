@@ -20,8 +20,18 @@
 //#define ImgDomain @"http://192.168.1.113/xbb"
 
 
-
+// 轮播
 #define XBB_Banner_roop [NSString stringWithFormat:@"%@/lunbo", APIDomain]
+
+// DIY
+#define XBB_DIY_Pro [NSString stringWithFormat:@"%@/diyPro", APIDomain]
+
+// 美容
+#define XBB_Facial_Pro [NSString stringWithFormat:@"%@/diyCospro", APIDomain]
+
+
+
+
 
 
 //查询用户资料

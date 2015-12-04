@@ -22,15 +22,19 @@
 #import "XBBBannerView.h"
 #import "XBBBannerObject.h"
 #import "WebViewController.h"
+#import "XBBMapViewController.h"
 
-@interface XBBHomeViewController ()<XBBBannerViewDelegate>{
+
+
+@interface XBBHomeViewController ()<XBBBannerViewDelegate,UITableViewDelegate,UITableViewDataSource>{
+    UIView         *headView;
     UIImageView    *leftNavigationBotton;
     UIButton       *titleCityButton;
     XBBBannerView  *banner;
     NSArray        *bannerArrayData;
     
 }
-
+@property (nonatomic, strong) UITableView *tableView;
 
 @end
 
@@ -41,8 +45,69 @@
 - (void)feachDatas
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+       
     });
 }
+
+
+- (void)initData{
+    NSUserDefaults *isLogin = [NSUserDefaults standardUserDefaults];
+    NSString *userid = [isLogin objectForKey:@"userid"];
+    [UserObj shareInstance].uid = userid;
+    if (IsLogin) {
+        //请求个人头像
+        NSMutableDictionary *dicMine=[NSMutableDictionary dictionary];
+        [dicMine setObject:[UserObj shareInstance].uid forKey:@"uid"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
+        [NetworkHelper postWithAPI:Select_user_API parameter:dicMine successBlock:^(id response) {
+            if ([response[@"code"] integerValue] == 1) {
+                UserObj *user=[UserObj shareInstance];
+                user.ads_id=[[response objectForKey:@"result"] objectForKey:@"ads_id"];
+                user.age=[[response objectForKey:@"result"] objectForKey:@"age"] ;
+                user.c_id=[[response objectForKey:@"result"] objectForKey:@"c_id"] ;
+                user.email=[[response objectForKey:@"result"] objectForKey:@"email"];
+                user.iphone=[[response objectForKey:@"result"] objectForKey:@"iphone"];
+                user.profession=[[response objectForKey:@"result"] objectForKey:@"profession"];
+                user.QQ=[[response objectForKey:@"result"] objectForKey:@"qq"];
+                user.imgstring=[[response objectForKey:@"result"] objectForKey:@"u_img"];
+                user.sex=[[response objectForKey:@"result"] objectForKey:@"sex"];
+                user.uid=[[response objectForKey:@"result"] objectForKey:@"uid"];
+                user.uname=[[response objectForKey:@"result"] objectForKey:@"uname"];
+                user.weixin=[[response objectForKey:@"result"] objectForKey:@"weixin"];
+                user.imgstring = [[response objectForKey:@"result"] objectForKey:@"u_img"];
+                //                [BPush setTag:user.uid withCompleteHandler:^(id result, NSError *error) {
+                //                }];
+                NSString *channelId = [BPush getChannelId];
+                if (channelId)
+                    [NetworkHelper postWithAPI:API_ChannelIdInsert parameter:@{@"uid": user.uid, @"channelid": channelId} successBlock:^(id response) {
+                        if ([response[@"code"] integerValue] == 1) {
+                            NSLog(@"channelid设置成功");
+                        } else {
+                            NSLog(@"channelid设置失败");
+                        }
+                    } failBlock:^(NSError *error) {
+                        NSLog(@"channelid设置失败");
+                    }];
+                if ([[[response objectForKey:@"result"] objectForKey:@"u_img"] isKindOfClass:[NSNull class]]) {
+                    leftNavigationBotton.image=[UIImage imageNamed:@"nav1.png"];
+                }else{
+                    [leftNavigationBotton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", ImgDomain,[[response objectForKey:@"result"] objectForKey:@"u_img"]]] placeholderImage:[UIImage imageNamed:@"nav1"]];
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginSuccessful object:nil];
+            } else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
+            }
+        } failBlock:^(NSError *error) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
+        }];
+ 
+    }else{
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
+    }
+}
+
+
 - (void)feachBannerData
 {
     [NetworkHelper postWithAPI:XBB_Banner_roop parameter:nil successBlock:^(id response) {
@@ -59,6 +124,7 @@
                 ob.title = dic_1[@"title"];
                 [objects addObject:ob];
             }
+          
             bannerArrayData = [objects copy];
             [self addBannerWithModels:bannerArrayData];
         }else
@@ -103,11 +169,11 @@
 
 - (void)changeNetStatusHaveDisconnection
 {
-   
+   DLog(@"")
 }
 - (void)changeNetStatusHaveConnection
 {
-   
+   DLog(@"")
 }
 
 #pragma mark notifaction
@@ -125,16 +191,66 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self addTableViewHomes];
     [self feachDatas];
     [self initUI];
     [self addNotification];
-    if (IsLogin) {
-        UserObj *us = [UserObj shareInstance];
-        us.uid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userid"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationUpdateUserSuccessful object:nil];
-    }
+ 
     
 }
+- (void)addTableViewHomes
+{
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, XBB_Screen_height-64) style:UITableViewStyleGrouped];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    [self.view addSubview:self.tableView];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 198.;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    headView = [[UIView alloc] init];
+    headView.backgroundColor = XBB_Bg_Color;
+    
+    UIImage *image = [UIImage imageNamed:@"xbb_twoBai"];
+   
+    UIImage *buttonImage = [UIImage imageNamed:@"xbb_One_Button"];
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height)];
+    button.center = CGPointMake(XBB_Screen_width/2, XBB_Size_w_h(346.));
+    UIImageView *imageV = [[UIImageView alloc] initWithFrame:CGRectMake(button.bounds.size.width - image.size.width-XBB_Size_w_h(10), -image.size.height+button.bounds.size.height+XBB_Size_w_h(5), image.size.width, image.size.height)];
+    imageV.image = image;
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setTitle:@"一键洗车" forState:UIControlStateNormal];
+    [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [button addSubview:imageV];
+    [button setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    [headView addSubview:button];
+    [button addTarget:self action:@selector(toAddDownOrder:) forControlEvents:UIControlEventTouchUpInside];
+    [headView bringSubviewToFront:button];
+    return headView;
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
+// Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
+// Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+    }
+    
+    return cell;
+}
+
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -146,6 +262,7 @@
     [super viewWillAppear:animated];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self feachBannerData];
+        [self initData];
     });
   
 }
@@ -207,9 +324,13 @@
 
 - (void)addBannerWithModels:(NSArray *)arr
 {
-    banner= [[XBBBannerView alloc] initWithFrame:CGRectMake(0,44, XBB_Screen_width, 200) imagesNames:arr];
+    if (banner != nil) {
+        [banner removeFromSuperview];
+        banner = nil;
+    }
+    banner = [[XBBBannerView alloc] initWithFrame:CGRectMake(0,0, XBB_Screen_width, XBB_Size_w_h(300.)) imagesNames:arr];
     banner.xbbDelegate = self;
-    [self.backgroundScrollView addSubview:banner];
+    [headView insertSubview:banner atIndex:0];
 }
 - (void)removeBanner
 {
@@ -243,9 +364,8 @@
 
 //更新用户头像信息
 - (void)updateUserSuccessfulIndex:(NSNotification *)sender{
-    UserObj *userObj = [UserObj shareInstance];
-    DLog(@"%@",userObj.uid);
-    [leftNavigationBotton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", ImgDomain, userObj.imgstring]] placeholderImage:[UIImage imageNamed:@"nav1"]];
+    UserObj *userInfo = [UserObj shareInstance];
+    [leftNavigationBotton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", ImgDomain, userInfo.imgstring]] placeholderImage:[UIImage imageNamed:@"nav1"]];
 }
 
 
@@ -265,13 +385,19 @@
 }
 
 #pragma mark action
-
+- (IBAction)toAddDownOrder:(id)sender
+{
+     [self addOrder];
+}
 - (IBAction)titleAction:(id)sender
 {
     DLog(@"")
+   
 }
 - (IBAction)leftButtonAction:(id)sender
 {
+    
+
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
         
     }];
@@ -279,7 +405,13 @@
 
 - (IBAction)rightButtonAction:(id)sender
 {
-     [self addOrder];
+    
+    XBBMapViewController *map = [[XBBMapViewController alloc] init];
+    map.navigationTitle = @"地图";
+        [self presentViewController:map animated:YES completion:nil];
+//    [self.navigationController pushViewController:map animated:YES];
+    return;
+    
 }
 
 

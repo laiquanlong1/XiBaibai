@@ -1,114 +1,65 @@
 //
 //  XBBTableViewController.m
-//  xbb
+//  XiBaibai
 //
-//  Created by HoTia on 15/11/26.
-//  Copyright © 2015年 *. All rights reserved.
+//  Created by HoTia on 15/12/4.
+//  Copyright © 2015年 Mingle. All rights reserved.
 //
 
 #import "XBBTableViewController.h"
-#import "Reachability.h"
 
-@interface XBBTableViewController ()
-{
-    Reachability *reachability;
-}
+@interface XBBTableViewController () 
+
 @end
 
 @implementation XBBTableViewController
 
-#pragma mark BaseView
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = XBB_Bg_Color;
-    self.haveConnection = NO;
-    reachability = [Reachability reachabilityForInternetConnection];
-    NetworkStatus status = [reachability currentReachabilityStatus];
-    if (status != NotReachable) {
-        [self changeNetStatusHaveConnection];
-        self.haveConnection = YES;
-    }else
-    {
-        self.haveConnection = NO;
-        [self changeNetStatusHaveDisconnection];
-    }
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netWorkchange:) name:kReachabilityChangedNotification object:nil];
-    [reachability startNotifier];
-    
-}
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self.navigationController.navigationBar setHidden:YES];
+    [self addTabelView];
 }
 
-- (void)addNavigationBar
+- (void)addTabelView
 {
-    _xbbNavigationBar = [[UIView alloc] init];
-    _xbbNavigationBar.backgroundColor = XBB_NavBar_Color;
-//    _xbbNavigationBar.layer.opacity = 0.8;
-//    _xbbNavigationBar.layer.masksToBounds = YES;
-//    _xbbNavigationBar.layer.shadowOffset = CGSizeMake(20, 20);
-//    _xbbNavigationBar.layer.shadowColor = [UIColor blackColor].CGColor;
-    [self.view insertSubview:_xbbNavigationBar atIndex:1];
-    [_xbbNavigationBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
-        make.left.mas_equalTo(0);
-        make.right.mas_equalTo(XBB_Screen_width);
-        make.height.mas_equalTo(64.);
-    }];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, XBB_Screen_height-64)];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.view addSubview:self.tableView];
 }
 
-- (void)setShowNavigation:(BOOL)showNavigation
-{
-    if (_showNavigation!=showNavigation) {
-        _showNavigation = showNavigation;
-    }
-    if (showNavigation) {
-        [self addNavigationBar];
-    }
-}
 
-#pragma mark NetNotification
-
-- (IBAction)netWorkchange:(id)sender
-{
-    NetworkStatus status = [reachability currentReachabilityStatus];
-    switch (status) {
-        case NotReachable:
-        {
-            self.haveConnection = NO;
-            [self changeNetStatusHaveDisconnection];
-        }
-            break;
-        default:
-        {
-             self.haveConnection = YES;
-            [self changeNetStatusHaveConnection];
-        }
-            break;
-    }
-}
-
-- (void)changeNetStatusHaveConnection
-{
-    
-}
-- (void)changeNetStatusHaveDisconnection
-{
-    
-}
-
-#pragma mark SetNULL
-- (void)dealloc
-{
-    [reachability stopNotifier];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
-    reachability = nil;
-}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
+
+#pragma mark tableViewDelegate
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 0;
+}
+
+// Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
+// Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        
+    }
+    return cell;
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
 
 @end

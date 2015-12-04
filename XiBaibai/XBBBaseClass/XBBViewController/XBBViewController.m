@@ -18,11 +18,39 @@
 
 @implementation XBBViewController
 
+
+#pragma mark baseDatas
+- (void)initViewWillAppearDatas
+{
+    
+}
+- (void)initViewDidLoadDatas
+{
+    
+}
+
 #pragma mark BaseView
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:YES];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+         [self initViewWillAppearDatas];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self disposeWillUI];
+        });
+    });
+    
+   
+}
+
+- (void)disposeDidLoadUI
+{
+    
+}
+- (void)disposeWillUI
+{
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -33,6 +61,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self initViewDidLoadDatas];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self disposeDidLoadUI];
+        });
+    });
     [self initBackScrollView];
     self.view.backgroundColor = XBB_Bg_Color;
     self.haveConnection = NO;

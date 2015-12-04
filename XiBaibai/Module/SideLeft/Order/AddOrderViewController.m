@@ -26,6 +26,11 @@
 #import "AddOrderTableViewCell.h"
 #import "XBBOrder.h"
 
+#import "XBBFacialViewController.h"
+#import "XBBDIYViewController.h"
+#import "XBBDiyObject.h"
+
+
 #define START_TIME @"reserve_start_time"
 #define END_TIME @"reserve_end_time"
 
@@ -53,6 +58,7 @@ static NSString *identifier_2 = @"tit1cell";
 
 @property (nonatomic, copy) NSArray *selectFacialArray;
 
+@property (nonatomic, copy) NSHashTable *selectDiyHashTable;
 
 @end
 
@@ -281,7 +287,7 @@ static NSString *identifier_2 = @"tit1cell";
         }
         cell.titleLabel.text = object.title;
         cell.indicationImage.alpha = object.hasIndication?1.:0.;
-        cell.detailLabel.text = [object.detailString length]>0?object.detailString:@"";
+        cell.detailLabel.text = [object.detailString length] > 0?object.detailString:@"";
         cell.headImageView.image = object.iconImage;
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         
@@ -420,7 +426,41 @@ static NSString *identifier_2 = @"tit1cell";
     }
     
     if ([object isEqual:self.dataArray[1]]) {
-        DIYSelectTableViewController *diy = [[DIYSelectTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        
+        XBBDIYViewController *diy_1 = [[XBBDIYViewController alloc] init];
+        diy_1.selectCarType = carType;
+        diy_1.washType = washType;
+        diy_1.selectArray = object.xbbOrders;
+        diy_1.selectObjectsBlock = ^(NSHashTable *selectHashObject){
+            NSMutableArray *arr = [NSMutableArray array];
+            selectDIYPrice = 0;
+            for (XBBDiyObject *obj in selectHashObject) {
+                XBBOrder *order = [[XBBOrder alloc] init];
+                order.title = obj.proName;
+                if (carType == 1) {
+                   
+                    order.price = obj.price1;
+                    
+                }else
+                {
+                     order.price = obj.price2;
+                }
+                selectDIYPrice += order.price;
+                order.xbbid = obj.pid;
+                [arr addObject:order];
+            }
+            [self addAllPrice];
+            object.xbbOrders = arr;
+            
+            [self initUpdateData];
+            
+        };
+        [self presentViewController:diy_1 animated:YES completion:nil];
+        
+
+        return;
+        
+        DIYSelectTableViewController *diy = [[DIYSelectTableViewController alloc] init];
         diy.selectCarType = 1;
         diy.washType = washType;
         diy.diyServers = ^(id mode){
@@ -448,7 +488,13 @@ static NSString *identifier_2 = @"tit1cell";
     }
     
     if ([object isEqual:self.dataArray[2]]) {
-        FaicalSelectTableViewController *faical = [[FaicalSelectTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        
+        XBBFacialViewController *fa = [[XBBFacialViewController alloc] init];
+        [self presentViewController:fa animated:YES completion:nil];
+        return;
+        
+        
+        FaicalSelectTableViewController *faical = [[FaicalSelectTableViewController alloc]init];
         faical.selectCarType = 1;
         faical.washType = washType;
         faical.diyServers = ^(id mode){

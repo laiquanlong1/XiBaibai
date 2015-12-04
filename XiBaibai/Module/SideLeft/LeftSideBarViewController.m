@@ -93,7 +93,6 @@
         userInfo.uname = @"洗白白";
     }
      self.nameLabel.text = userInfo.uname;
-   
 }
 
 - (void)updateUserSuccessful:(NSNotification *)sender{

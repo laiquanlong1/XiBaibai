@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @interface XBBOrder : NSObject
+
+@property (nonatomic, copy) NSString *xbbid;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, strong) UIImage *iconImage;
 @property (nonatomic, assign) BOOL hasIndication;
