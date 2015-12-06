@@ -19,6 +19,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="xbb_left_bg" translatesAutoresizingMaskIntoConstraints="NO" id="1p4-to-UeX">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="569"/>
+                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eS3-jp-MLI">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="116"/>
                                 <subviews>
@@ -209,6 +212,8 @@
                             <constraint firstItem="oI8-Vw-Jrz" firstAttribute="leading" secondItem="qjp-xq-5su" secondAttribute="leading" id="HCz-Ec-EH6"/>
                             <constraint firstAttribute="trailing" secondItem="eS3-jp-MLI" secondAttribute="trailing" id="Izy-rO-NCQ"/>
                             <constraint firstAttribute="trailing" secondItem="HCl-eA-45H" secondAttribute="trailing" id="Ltf-X9-xCc"/>
+                            <constraint firstAttribute="trailing" secondItem="1p4-to-UeX" secondAttribute="trailing" id="RyP-Dg-Z8M"/>
+                            <constraint firstItem="1p4-to-UeX" firstAttribute="leading" secondItem="qjp-xq-5su" secondAttribute="leading" id="Sgt-vv-bO4"/>
                             <constraint firstItem="eS3-jp-MLI" firstAttribute="top" secondItem="qjp-xq-5su" secondAttribute="top" id="Tdl-Dd-NFw"/>
                             <constraint firstItem="a0a-H2-fpb" firstAttribute="leading" secondItem="qjp-xq-5su" secondAttribute="leading" id="TvP-US-f6f"/>
                             <constraint firstItem="QvM-Gw-QQC" firstAttribute="leading" secondItem="qjp-xq-5su" secondAttribute="leading" id="W8F-o2-eiJ"/>
@@ -226,7 +231,9 @@
                             <constraint firstItem="CmV-Yo-uOc" firstAttribute="leading" secondItem="qjp-xq-5su" secondAttribute="leading" id="uSH-Xj-aK1"/>
                             <constraint firstAttribute="trailing" secondItem="a0a-H2-fpb" secondAttribute="trailing" id="vN4-gO-MFo"/>
                             <constraint firstAttribute="trailing" secondItem="QvM-Gw-QQC" secondAttribute="trailing" id="wex-eW-hMF"/>
+                            <constraint firstAttribute="bottom" secondItem="1p4-to-UeX" secondAttribute="bottom" id="wpm-hn-68t"/>
                             <constraint firstItem="CmV-Yo-uOc" firstAttribute="top" secondItem="zor-ci-Soi" secondAttribute="bottom" constant="17" id="x5b-ET-ZpW"/>
+                            <constraint firstItem="1p4-to-UeX" firstAttribute="top" secondItem="qjp-xq-5su" secondAttribute="top" id="zJ0-Qn-tNt"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
@@ -2317,7 +2324,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="EC014AFF-0933-4FA3-8C42-92210301BF9C" translatesAutoresizingMaskIntoConstraints="NO" id="BUy-ot-H3c">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="78C9E910-0AA4-4364-AD74-38F61D887F46" translatesAutoresizingMaskIntoConstraints="NO" id="BUy-ot-H3c">
                                             <rect key="frame" x="15" y="10" width="30" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="30" id="0EI-1j-WWN"/>
@@ -2481,7 +2488,7 @@
         <image name="1@shezhi_14_p.png" width="16" height="15"/>
         <image name="1@shezhi_17.png" width="15" height="12"/>
         <image name="1@shezhi_17_p.png" width="16" height="14"/>
-        <image name="EC014AFF-0933-4FA3-8C42-92210301BF9C" width="421" height="421">
+        <image name="78C9E910-0AA4-4364-AD74-38F61D887F46" width="421" height="421">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -14355,6 +14362,7 @@ AABCAAAAAAAAAAAAAAAAAArbxw
         <image name="xbb_200" width="17" height="18"/>
         <image name="xbb_87" width="77" height="78"/>
         <image name="xbb_90" width="12" height="16"/>
+        <image name="xbb_left_bg" width="320" height="568"/>
         <image name="xi1.png" width="120" height="120"/>
     </resources>
 </document>

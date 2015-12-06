@@ -23,6 +23,9 @@
 // 轮播
 #define XBB_Banner_roop [NSString stringWithFormat:@"%@/lunbo", APIDomain]
 
+// 下单页洗车和优惠券
+#define XBB_Wash2Coupons [NSString stringWithFormat:@"%@/washCoupons", APIDomain]
+
 // DIY
 #define XBB_DIY_Pro [NSString stringWithFormat:@"%@/diyPro", APIDomain]
 

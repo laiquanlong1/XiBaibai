@@ -376,6 +376,7 @@
     if (IsLogin)
     {
         AddOrderViewController *diy = [[AddOrderViewController alloc] init];
+        diy.navigationTitle = @"一键洗车";
         [self.navigationController pushViewController:diy animated:YES];
     }
     else

@@ -13,9 +13,11 @@
 #import "XBBDIYTableViewCell.h"
 #import "AddOrderDetailTableViewCell.h"
 #import "XBBOrder.h"
+#import "WebViewController.h"
 
 @interface XBBDIYViewController ()
 {
+    UIView *barView;
     float allPrice;
     XBBListHeadLabel *priceTotalTitle;
    
@@ -99,6 +101,7 @@
             
         }
         [self inita];
+        [self alphaToOne];
         [self.tableView reloadData];
     } failBlock:^(NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"DIY查询网络错误"];
@@ -133,7 +136,19 @@
 
 #pragma mark viewdisposed
 
-
+- (void)alphatoZero
+{
+    barView.alpha = 0;
+    self.tableView.alpha = 0.;
+}
+- (void)alphaToOne
+{
+    [UIView animateWithDuration:0.25 animations:^{
+        barView.alpha = 1;
+        self.tableView.alpha = 1.;
+    }];
+    
+}
 - (void)initUI
 {
     [self setNavigationBarControl];
@@ -176,7 +191,7 @@
 }
 - (void)addTabBar
 {
-    UIView *barView = [[UIView alloc] initWithFrame:CGRectMake(0, XBB_Screen_height-44., XBB_Screen_width, 44.)];
+    barView = [[UIView alloc] initWithFrame:CGRectMake(0, XBB_Screen_height-44., XBB_Screen_width, 44.)];
     [self.view addSubview:barView];
     barView.backgroundColor = XBB_Bg_Color;
     barView.layer.borderWidth = 0.5;
@@ -196,6 +211,7 @@
     [button setTitleColor:XBB_Bg_Color forState:UIControlStateNormal];
     [barView addSubview:button];
     self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, XBB_Screen_width, XBB_Screen_height-64.-barView.frame.size.height);
+    [self alphatoZero];
     
 }
 - (void)addAllPrice
@@ -208,6 +224,7 @@
     [super viewDidLoad];
     [self initUI];
     
+    [self.tableView setSeparatorColor:[UIColor groupTableViewBackgroundColor]];
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBDIYTableViewCell" bundle:nil] forCellReuseIdentifier:@"diycell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"AddOrderDetailTableViewCell" bundle:nil] forCellReuseIdentifier:@"txt1"];
     // Do any additional setup after loading the view.
@@ -216,6 +233,21 @@
 
 #pragma mark actions
 
+- (IBAction)tapLabel:(id)sender
+{
+    UITapGestureRecognizer *tap = (UITapGestureRecognizer *)sender;
+    UILabel *label = (UILabel *)tap.view;
+    if (label.tag != 11111) {
+        NSString *urlString = [NSString stringWithFormat:@"http://xbbwx.marnow.com/Weixin/Diy/index?p_id=%ld",label.tag];
+        WebViewController *web = [[WebViewController alloc] init];
+        web.navigationTitle = label.text;
+        web.urlString = urlString;
+        [self presentViewController:web animated:YES completion:nil];
+    }
+    
+
+    DLog(@"")
+}
 - (IBAction)submit:(id)sender
 {
     self.selectObjectsBlock(self.selectObjects);
@@ -237,6 +269,10 @@
 
 #pragma mark tableViewDataSource
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60.;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -264,12 +300,13 @@
             if (cell == nil) {
                 cell = [[XBBDIYTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"diycell"];
             }
+            
             cell.tag = 1;
             cell.selectionStyle =  UITableViewCellSelectionStyleNone;
             cell.priceLabel.alpha = 1;
             cell.selectImageView.alpha = 1;
-            
             cell.nameLabel.text = ob.proName;
+            cell.nameLabel.tag = 11111;
             cell.priceLabel.alpha = 0;
             cell.selectImageView.alpha = 0;
             cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
@@ -303,7 +340,13 @@
                 cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",ob.price2];
             }
             
+            cell.titleLabel.userInteractionEnabled = YES;
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapLabel:)];
+            [cell.titleLabel addGestureRecognizer:tap];
+            
+            
             cell.titleLabel.text = ob.proName;
+            cell.titleLabel.tag = [ob.pid integerValue];
             cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
             
             NSEnumerator *enumerator = [self.selectObjects objectEnumerator];
@@ -330,6 +373,10 @@
         if (cell == nil) {
             cell = [[XBBDIYTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"diycell"];
         }
+        cell.nameLabel.tag = [ob.pid integerValue];
+        cell.nameLabel.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapLabel:)];
+        [cell.nameLabel addGestureRecognizer:tap];
         cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
         cell.nameLabel.text = ob.proName;
         if (self.selectCarType == 1) {

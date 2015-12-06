@@ -11,9 +11,11 @@
 #import "XBBDiyObject.h"
 #import "XBBDIYTableViewCell.h"
 #import "AddOrderDetailTableViewCell.h"
+#import "XBBOrder.h"
 
 @interface XBBFacialViewController ()
 {
+    UIView *barView;
     XBBListHeadLabel *priceTotalTitle;
     float allPrice;
     NSHashTable *selectHashTable;
@@ -28,6 +30,23 @@
 
 #pragma mark datas
 
+- (void)haveSelectObjectDatas
+{
+    if (selectHashTable == nil) {
+        selectHashTable = [NSHashTable weakObjectsHashTable];
+    }
+    for (XBBOrder *order in self.selectFacialArray) {
+        for (NSArray *arr in self.dataSource) {
+            for (XBBDiyObject *object in arr) {
+                if ([object.proName isEqualToString:order.title]) {
+                    [selectHashTable addObject:object];
+                }
+            }
+        }
+    }
+    DLog(@"%@",selectHashTable);
+}
+
 - (void)initViewDidLoadDatas
 {
    [NetworkHelper postWithAPI:XBB_Facial_Pro parameter:nil successBlock:^(id response) {
@@ -40,6 +59,7 @@
            for (NSDictionary *resultDic  in resultArray) {
                XBBDiyObject *facialObject = [[XBBDiyObject alloc] init];
                facialObject.proName = resultDic[@"p_name"];
+               facialObject.pid = resultDic[@"id"];
                facialObject.price1 = [resultDic[@"p_price"] floatValue];
                facialObject.price2 = [resultDic[@"p_price2"] floatValue];
                [proArray addObject:facialObject];
@@ -68,6 +88,8 @@
            [temp addObject:onon];
            self.dataSource = [temp mutableCopy];
            DLog(@"%@",self.dataSource);
+           [self alphaToOne];
+           [self haveSelectObjectDatas];
            [self.tableView reloadData];
       
        }
@@ -79,6 +101,19 @@
 
 #pragma mark viewdisposed
 
+- (void)alphatoZero
+{
+    barView.alpha = 0;
+    self.tableView.alpha = 0.;
+}
+- (void)alphaToOne
+{
+    [UIView animateWithDuration:0.25 animations:^{
+        barView.alpha = 1;
+        self.tableView.alpha = 1.;
+    }];
+    
+}
 
 - (void)initUI
 {
@@ -123,7 +158,7 @@
 
 - (void)addTabBar
 {
-    UIView *barView = [[UIView alloc] initWithFrame:CGRectMake(0, XBB_Screen_height-44., XBB_Screen_width, 44.)];
+    barView = [[UIView alloc] initWithFrame:CGRectMake(0, XBB_Screen_height-44., XBB_Screen_width, 44.)];
     [self.view addSubview:barView];
     barView.backgroundColor = XBB_Bg_Color;
     barView.layer.borderWidth = 0.5;
@@ -144,21 +179,19 @@
     [barView addSubview:button];
     
     self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, XBB_Screen_width, XBB_Screen_height-64.-barView.frame.size.height);
-    
+    [self alphatoZero];
 }
 - (void)addAllPrice
 {
-    
     priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",allPrice>0?allPrice:0.00];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor groupTableViewBackgroundColor];
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBDIYTableViewCell" bundle:nil] forCellReuseIdentifier:@"diycell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"AddOrderDetailTableViewCell" bundle:nil] forCellReuseIdentifier:@"txt1"];
     [self initUI];
-    
-    // Do any additional setup after loading the view.
 }
 
 
@@ -167,6 +200,12 @@
 - (IBAction)submit:(id)sender
 {
     DLog(@"")
+    
+    self.facialBlock(selectHashTable);
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
+    
+    
 }
 - (IBAction)backViewController:(id)sender
 {
@@ -183,6 +222,11 @@
 }
 
 #pragma mark tableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60.;
+}
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -224,7 +268,26 @@
         cell.selectImageView.alpha = 1.;
         cell.nameLabel.text = object.proName;
         cell.priceLabel.text =[NSString stringWithFormat:@"¥ %.2f",object.price1];
-         cell.selectionStyle =  UITableViewCellSelectionStyleGray;
+        cell.selectionStyle =  UITableViewCellSelectionStyleGray;
+        
+        NSEnumerator *enumera = [selectHashTable objectEnumerator];
+        XBBDiyObject *facial = nil;
+        allPrice = 0;
+        while (facial = [enumera nextObject]) {
+            if ([facial isEqual:object]) {
+                cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                cell.tag = 2;
+            }
+            if (self.selectCarType == 1)
+            {
+                allPrice += facial.price1;
+            }else{
+                allPrice += facial.price2;
+            }
+            
+        }
+        
+        
         return cell;
     }else
     {
@@ -232,7 +295,7 @@
         if (cell == nil) {
             cell = [[AddOrderDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"txt1"];
         }
-         cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+        cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
         cell.tag = 1;
         cell.titleLabel.text = object.proName;
         cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",object.price1];
@@ -241,12 +304,48 @@
             if (indexPath.row == 2) {
                 cell.selectionStyle =  UITableViewCellSelectionStyleNone;
                 cell.contentView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+                
+            
+
+              
+                
+            }else if(indexPath.row == 1)
+            {
+                NSEnumerator *enumera = [selectHashTable objectEnumerator];
+                XBBDiyObject *facial = nil;
+                allPrice = 0;
+                while (facial = [enumera nextObject]) {
+                    if (facial.price1 == object.price1) {
+                        cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                        cell.tag = 2;
+                    }
+                    allPrice += facial.price1;
+                }
+                [self addAllPrice];
+
             }
         }else
         {
             if (indexPath.row == 1) {
                 cell.selectionStyle =  UITableViewCellSelectionStyleNone;
                 cell.contentView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+                
+                
+                
+            }else
+            {
+                
+                NSEnumerator *enumera = [selectHashTable objectEnumerator];
+                XBBDiyObject *facial = nil;
+                allPrice = 0;
+                while (facial = [enumera nextObject]) {
+                    if (facial.price2 == object.price1) {
+                        cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                        cell.tag = 2;
+                    }
+                    allPrice += facial.price2;
+                }
+                [self addAllPrice];
             }
         }
         return cell;

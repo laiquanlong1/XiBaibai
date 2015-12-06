@@ -49,6 +49,8 @@ static NSString *identifier_2 = @"tit1cell";
     NSInteger washType;
     NSInteger carType;
     BOOL isJust;
+    BOOL haveSelectWash;
+    NSString *planTime;
 }
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
@@ -58,7 +60,8 @@ static NSString *identifier_2 = @"tit1cell";
 
 @property (nonatomic, copy) NSArray *selectFacialArray;
 
-@property (nonatomic, copy) NSHashTable *selectDiyHashTable;
+@property (nonatomic, strong) XBBOrder *selectWashOrderObject;
+
 
 @end
 
@@ -68,8 +71,60 @@ static NSString *identifier_2 = @"tit1cell";
 
 #pragma mark dataDispose
 
+- (void)initViewDidLoadDatas
+{
+    [NetworkHelper postWithAPI:XBB_Wash2Coupons parameter:@{@"uid":[UserObj shareInstance].uid} successBlock:^(id response) {
+        
+        NSDictionary *resposeDic = response;
+        if ([resposeDic[@"code"] integerValue] == 1) {
+            NSDictionary *dic_ro = resposeDic[@"result"];
+            NSDictionary *washDic = dic_ro[@"wash"];
+            NSDictionary *outDic = washDic[@"out"];
+            XBBOrder *order_1 = [[XBBOrder alloc] init];
+            order_1.title = outDic[@"p_name"];
+            if (carType == 1) {
+                order_1.price = [outDic[@"p_price"] floatValue];
+            }else
+            {
+                order_1.price = [outDic[@"p_price2"] floatValue];
+            }
+            order_1.xbbid = outDic[@"id"];
+
+            NSDictionary *outinDic  = washDic[@"outin"];
+            
+            XBBOrder *order_2 = [[XBBOrder alloc] init];
+            order_2.title = outinDic[@"p_name"];
+            if (carType == 1) {
+                order_2.price = [outinDic[@"p_price"] floatValue];
+            }else
+            {
+                order_2.price = [outinDic[@"p_price2"] floatValue];
+            }
+            order_2.xbbid = outinDic[@"id"];
+            
+            XBBOrder *order = self.dataArray[0];
+            NSMutableArray *arr = [NSMutableArray array];
+            [arr addObject:order_1];
+            [arr addObject:order_2];
+            order.xbbOrders = arr;
+            [self initUpdateData];
+            DLog(@"%@  \n %@",outDic,outinDic);
+            
+ 
+        }else
+        {
+            [SVProgressHUD showErrorWithStatus:resposeDic[@"msg"]];
+        }
+        DLog(@"%@",response);
+        
+    } failBlock:^(NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"获取洗车方式和优惠券网络错误"];
+    }];
+}
+
 - (void)initDatas
 {
+    haveSelectWash = NO;
     self.dataArray = [NSMutableArray array];
     self.dataSource = [NSMutableArray array];
     
@@ -80,14 +135,14 @@ static NSString *identifier_2 = @"tit1cell";
     [self.dataArray addObject:o_1];
     
     XBBOrder *o_1_1 = [[XBBOrder alloc] init];
-    o_1_1.title = @"外观清洗";
-    o_1_1.price = 25.;
+    o_1_1.title = @"外1";
+    o_1_1.price = 21.;
     o_1_1.selectImage = [UIImage imageNamed:@"noselectImage"];
     [o_1.xbbOrders addObject:o_1_1];
     
     XBBOrder *o_1_2 = [[XBBOrder alloc] init];
-    o_1_2.title = @"外观清洗 + 内饰清洗";
-    o_1_2.price = 40.;
+    o_1_2.title = @"外1 + 内饰清洗";
+    o_1_2.price = 41.;
     o_1_2.selectImage = [UIImage imageNamed:@"noselectImage"];
     [o_1.xbbOrders addObject:o_1_2];
     
@@ -120,7 +175,6 @@ static NSString *identifier_2 = @"tit1cell";
     XBBOrder *o_6 = [[XBBOrder alloc] init];
     o_6.title = @"服务时间";
     o_6.hasIndication = NO;
-    o_6.detailString = @"请选择";
     o_6.iconImage = [UIImage imageNamed:@"timerIcon"];
     [self.dataArray addObject:o_6];
     
@@ -241,6 +295,7 @@ static NSString *identifier_2 = @"tit1cell";
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+   
     [self initUIs];
     [self initDatas];
 
@@ -258,7 +313,8 @@ static NSString *identifier_2 = @"tit1cell";
 
 - (void)submit:(id)sender
 {
-    DLog(@"")
+    
+    DLog(@"%@\n%@\n%@\n",self.selectWashOrderObject,self.selectDIYArray,self.selectFacialArray);
 }
 
 
@@ -267,7 +323,10 @@ static NSString *identifier_2 = @"tit1cell";
 
 #pragma mark tableViewDelegate
 
-
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60.;
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -279,7 +338,7 @@ static NSString *identifier_2 = @"tit1cell";
 {
   
     XBBOrder *object = self.dataSource[indexPath.row];
-    
+
     if (object.iconImage) {
         AddOrderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         if (cell == nil) {
@@ -299,30 +358,90 @@ static NSString *identifier_2 = @"tit1cell";
     {
         AddOrderDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier_2];
         cell.tag = 11;
-      
         if (cell == nil) {
             cell = [[AddOrderDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier_2];
         }
+        cell.priceLabel.alpha = 1.f;
+        cell.selectImageView.alpha = 1.f;
         cell.titleLabel.text = object.title;
-        if (object.price) {
-            cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",object.price];
+        if ([object isEqual:(XBBOrder *)[[[self.dataArray lastObject]xbbOrders]lastObject]]) {
+            cell.priceLabel.text = planTime?planTime:@"";
+        }else if ([[self.dataArray lastObject] xbbOrders][0]){
+            cell.priceLabel.text = @"";
         }else
         {
-            cell.priceLabel.text = object.timeString?object.timeString:@"";
+            cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",object.price];
         }
-    
-        cell.selectImageView.image = object.selectImage;
-        if ([object isEqual:[self.dataArray[0] xbbOrders][0]]) {
-            cell.tag = 22;
-            washType = 11;
-            cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
-            selectWashPrice = object.price;
-            [self addAllPrice];
+        cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+        if ([[self.dataArray[1] xbbOrders] count] > 0) {
+            for (XBBOrder *ob_1 in [self.dataArray[1] xbbOrders]) {
+                if ([object isEqual:ob_1]) {
+                    cell.selectImageView.alpha = 0;
+                }
+            }
         }
-        if ([object isEqual:[[self.dataArray lastObject] xbbOrders][0]]) {
-            cell.tag = 22;
-            isJust = YES;
-            cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+        if ([[self.dataArray[2] xbbOrders] count] > 0) {
+            for (XBBOrder *ob_1 in [self.dataArray[2] xbbOrders]) {
+                if ([object isEqual:ob_1]) {
+                    cell.selectImageView.alpha = 0;
+                }
+            }
+        }
+        
+        if (haveSelectWash == NO) {
+            if ([object isEqual:[self.dataArray[0] xbbOrders][0]]) {
+                cell.tag = 22;
+                washType = 11;
+                cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                selectWashPrice = object.price;
+                [self addAllPrice];
+                self.selectWashOrderObject = object;
+                
+                
+            }else if ([object isEqual:[self.dataArray[0] xbbOrders][1]])
+            {
+                cell.tag = 11;
+                cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+            }
+        }else
+        {
+            
+            if (self.selectWashOrderObject != nil && [self.selectWashOrderObject isEqual: object]) {
+                if ([object isEqual:[self.dataArray[0] xbbOrders][0]]) {
+                    cell.tag = 22;
+                    washType = 11;
+                    cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                    selectWashPrice = object.price;
+                    [self addAllPrice];
+                    
+                    
+                }else if ([object isEqual:[self.dataArray[0] xbbOrders][1]])
+                {
+                    cell.tag = 22;
+                    washType = 22;
+                    cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                    selectWashPrice = object.price;
+                    [self addAllPrice];
+                }
+                
+            }
+            
+        }
+
+        if ([planTime length]==0|| planTime == nil) {
+            if ([object isEqual:[[self.dataArray lastObject] xbbOrders][0]]) {
+                cell.tag = 22;
+                isJust = YES;
+                cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+            }
+            
+        }else
+        {
+            if ([object isEqual:[[self.dataArray lastObject] xbbOrders][1]]) {
+                cell.tag = 22;
+                isJust = NO;
+                cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+            }
         }
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         return cell;
@@ -340,15 +459,17 @@ static NSString *identifier_2 = @"tit1cell";
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     XBBOrder *object = self.dataSource[indexPath.row];
+    
 
+    
     if ([object isEqual:[self.dataArray[0] xbbOrders][0]]||[object isEqual:[self.dataArray[0] xbbOrders][1]]) {
-       AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        haveSelectWash = YES;
+        AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+       
         if (cell.tag == 11) {
             cell.tag = 22;
             selectWashPrice = object.price;
             [self addAllPrice];
-            [priceTotalTitle setText:[NSString stringWithFormat:@"合计: ¥ %.2f",selectAllPrice>0?selectAllPrice:0.00]];
-            
             cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
             if (indexPath.row == 1) {
                 washType = 11;
@@ -356,6 +477,8 @@ static NSString *identifier_2 = @"tit1cell";
                 AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath_1];
                 cell.tag = 11;
                 cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                self.selectWashOrderObject = object;
+                
                 
             }else
             {
@@ -364,15 +487,16 @@ static NSString *identifier_2 = @"tit1cell";
                 AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath_1];
                 cell.tag = 11;
                 cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                self.selectWashOrderObject = object;
             }
         }
         else
         {
+            self.selectWashOrderObject = nil;
             cell.tag = 11;
             washType = 0;
             selectWashPrice = 0;
             [self addAllPrice];
-            [priceTotalTitle setText:[NSString stringWithFormat:@"合计: ¥ %.2f",selectAllPrice>0?selectAllPrice:0.00]];
             cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
             
         }
@@ -402,8 +526,9 @@ static NSString *identifier_2 = @"tit1cell";
             isJust = NO;
             AddPlanOrderViewController *plan = [[AddPlanOrderViewController alloc] init];
             plan.planTime = ^(NSString *time){
+                planTime = time;
                 cell.priceLabel.text = time;
-                object.timeString = time;
+//                object.timeString = time;
                 if (time==nil|| time.length==0) {
                     cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
                     cell.tag = 11;
@@ -418,6 +543,7 @@ static NSString *identifier_2 = @"tit1cell";
             };
             [self.navigationController pushViewController:plan animated:YES];
         }else{
+            planTime = @"";
             isJust = YES;
             NSIndexPath *indexPath_1 = [NSIndexPath indexPathForRow:self.dataSource.count-1 inSection:indexPath.section];
             AddOrderDetailTableViewCell *cell_1 = [tableView cellForRowAtIndexPath:indexPath_1];
@@ -451,7 +577,7 @@ static NSString *identifier_2 = @"tit1cell";
             }
             [self addAllPrice];
             object.xbbOrders = arr;
-            
+            self.selectDIYArray = arr;
             [self initUpdateData];
             
         };
@@ -481,6 +607,7 @@ static NSString *identifier_2 = @"tit1cell";
                 o_o.price = price;
                 [arr addObject:o_o];
             }
+            [self addAllPrice];
             object.xbbOrders = arr;
             [self initUpdateData];
         };
@@ -490,7 +617,36 @@ static NSString *identifier_2 = @"tit1cell";
     if ([object isEqual:self.dataArray[2]]) {
         
         XBBFacialViewController *fa = [[XBBFacialViewController alloc] init];
+        fa.washType = washType;
+        fa.selectCarType = carType;
+        fa.selectFacialArray = object.xbbOrders;
+        fa.facialBlock = ^(NSHashTable *selectHashObject){
+            NSMutableArray *arr = [NSMutableArray array];
+            selectFaicalPrice = 0;
+            for (XBBDiyObject *object in selectHashObject) {
+                XBBOrder *order = [[XBBOrder alloc] init];
+                order.title = object.proName;
+                order.xbbid = object.pid;
+                if (carType == 1) {
+                    order.price = object.price1;
+                }
+                else
+                {
+                    order.price = object.price2;
+                }
+                selectFaicalPrice += order.price;
+                [arr addObject:order];
+                
+            }
+            [self addAllPrice];
+            object.xbbOrders = arr;
+            self.selectFacialArray = arr;
+            [self initUpdateData];
+        };
         [self presentViewController:fa animated:YES completion:nil];
+        
+        
+        
         return;
         
         

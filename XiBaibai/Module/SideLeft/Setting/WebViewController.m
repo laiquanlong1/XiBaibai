@@ -19,7 +19,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
-    
 }
 - (void)initUI
 {
@@ -71,12 +70,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-- (void)initView {
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"1@icon_back"] style:UIBarButtonItemStylePlain target:self action:@selector(backOnClick:)];
-    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
-    }
-
 
 
 

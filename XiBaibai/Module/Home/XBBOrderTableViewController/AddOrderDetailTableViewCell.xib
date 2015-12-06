@@ -31,7 +31,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="外观设置" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s31-dg-Gon">
-                        <rect key="frame" x="58" y="11" width="160" height="21"/>
+                        <rect key="frame" x="48" y="11" width="160" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="160" id="03r-2G-my7"/>
                             <constraint firstAttribute="height" constant="21" id="BJ3-B6-kOo"/>
@@ -46,11 +46,11 @@
                     <constraint firstItem="otQ-lB-DSj" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Lte-iA-qRF"/>
                     <constraint firstItem="sQO-34-SSJ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="THn-nY-NLJ"/>
                     <constraint firstAttribute="trailingMargin" secondItem="sQO-34-SSJ" secondAttribute="trailing" constant="20" id="TxJ-0m-dwQ"/>
-                    <constraint firstItem="s31-dg-Gon" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="50" id="bzK-rK-LOQ"/>
+                    <constraint firstItem="s31-dg-Gon" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="40" id="bzK-rK-LOQ"/>
                     <constraint firstItem="sQO-34-SSJ" firstAttribute="leading" secondItem="otQ-lB-DSj" secondAttribute="trailing" constant="25" id="gnJ-Jl-gQC"/>
                 </constraints>
             </tableViewCellContentView>
-            <inset key="separatorInset" minX="55" minY="0.0" maxX="0.0" maxY="0.0"/>
+            <inset key="separatorInset" minX="43" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
                 <outlet property="priceLabel" destination="otQ-lB-DSj" id="4Dx-SU-aEE"/>
                 <outlet property="selectImageView" destination="sQO-34-SSJ" id="eT5-5K-xoQ"/>

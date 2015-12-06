@@ -18,6 +18,7 @@
 
 
 @interface FacialDIYTableViewCell : UITableViewCell
+
 @property(weak,nonatomic) id <FacialDIYTableViewCellDelegate> delegate;
 - (void)configCell:(NSArray *)dataArr andWashType:(NSInteger)type andSelectPids:(NSArray *)ids;
 
