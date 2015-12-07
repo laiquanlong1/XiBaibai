@@ -2324,7 +2324,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="78C9E910-0AA4-4364-AD74-38F61D887F46" translatesAutoresizingMaskIntoConstraints="NO" id="BUy-ot-H3c">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="EC894351-16F2-4B29-B323-1D9BC41205D1" translatesAutoresizingMaskIntoConstraints="NO" id="BUy-ot-H3c">
                                             <rect key="frame" x="15" y="10" width="30" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="30" id="0EI-1j-WWN"/>
@@ -2488,7 +2488,7 @@
         <image name="1@shezhi_14_p.png" width="16" height="15"/>
         <image name="1@shezhi_17.png" width="15" height="12"/>
         <image name="1@shezhi_17_p.png" width="16" height="14"/>
-        <image name="78C9E910-0AA4-4364-AD74-38F61D887F46" width="421" height="421">
+        <image name="EC894351-16F2-4B29-B323-1D9BC41205D1" width="421" height="421">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

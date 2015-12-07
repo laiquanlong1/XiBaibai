@@ -16,20 +16,12 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="noselectImage" translatesAutoresizingMaskIntoConstraints="NO" id="sQO-34-SSJ">
-                        <rect key="frame" x="282" y="17" width="10" height="10"/>
-                    </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="¥ 100.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="otQ-lB-DSj">
-                        <rect key="frame" x="97" y="11.5" width="160" height="21"/>
+                        <rect key="frame" x="276" y="16" width="11" height="11"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="21" id="2Ce-ll-QYy"/>
-                            <constraint firstAttribute="width" constant="160" id="HAW-Uc-ozd"/>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="160" id="lth-tK-bHL"/>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="pV5-vD-mpA"/>
+                            <constraint firstAttribute="width" constant="11" id="Kso-Qe-V2W"/>
+                            <constraint firstAttribute="height" constant="11" id="zNe-N9-xLh"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="外观设置" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s31-dg-Gon">
                         <rect key="frame" x="48" y="11" width="160" height="21"/>
                         <constraints>
@@ -40,14 +32,24 @@
                         <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="¥ 100.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="otQ-lB-DSj">
+                        <rect key="frame" x="91" y="11" width="160" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="Mua-Gk-lOH"/>
+                            <constraint firstAttribute="width" constant="160" id="fgO-SK-TNg"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="s31-dg-Gon" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="5Q8-dT-QSs"/>
-                    <constraint firstItem="otQ-lB-DSj" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Lte-iA-qRF"/>
-                    <constraint firstItem="sQO-34-SSJ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="THn-nY-NLJ"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="sQO-34-SSJ" secondAttribute="trailing" constant="20" id="TxJ-0m-dwQ"/>
+                    <constraint firstItem="sQO-34-SSJ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="PLZ-A0-Liv"/>
+                    <constraint firstItem="sQO-34-SSJ" firstAttribute="leading" secondItem="otQ-lB-DSj" secondAttribute="trailing" constant="25" id="QlY-0z-z8W"/>
+                    <constraint firstItem="otQ-lB-DSj" firstAttribute="centerY" secondItem="sQO-34-SSJ" secondAttribute="centerY" id="XdI-zY-Hw4"/>
                     <constraint firstItem="s31-dg-Gon" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="40" id="bzK-rK-LOQ"/>
-                    <constraint firstItem="sQO-34-SSJ" firstAttribute="leading" secondItem="otQ-lB-DSj" secondAttribute="trailing" constant="25" id="gnJ-Jl-gQC"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="sQO-34-SSJ" secondAttribute="trailing" constant="25" id="dnY-Kv-sQR"/>
                 </constraints>
             </tableViewCellContentView>
             <inset key="separatorInset" minX="43" minY="0.0" maxX="0.0" maxY="0.0"/>

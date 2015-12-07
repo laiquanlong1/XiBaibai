@@ -23,8 +23,12 @@
 #import "XBBBannerObject.h"
 #import "WebViewController.h"
 #import "XBBMapViewController.h"
+#import "XBBHomeFacialTableViewCell.h"
+#import "XBBHomeFacialOneTableViewCell.h"
+#import "XBBProObject.h"
 
-
+static NSString *identifier_facial = @"facial_cell";
+static NSString *identifier_diy = @"diy";
 
 @interface XBBHomeViewController ()<XBBBannerViewDelegate,UITableViewDelegate,UITableViewDataSource>{
     UIView         *headView;
@@ -32,9 +36,21 @@
     UIButton       *titleCityButton;
     XBBBannerView  *banner;
     NSArray        *bannerArrayData;
+    UILabel        *areaFirstTitileLabel;
+    UILabel        *areaLastTitleLabel;
+    
+    
+    
+    
+    UILabel        *inSpaNameLabel;
+    UILabel        *inSpaPriceLabel;
+    UILabel        *oilNameLabel;
+    UILabel        *oilPriceLabel;
+    
     
 }
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, copy) NSMutableArray *dataSource;
 
 @end
 
@@ -42,10 +58,53 @@
 
 
 #pragma mark featchData
+
+- (void)feachProDatas
+{
+    [NetworkHelper postWithAPI:XBB_Index_Pro parameter:nil successBlock:^(id response) {
+        if (response == nil) {
+            return ;
+        }
+        
+        if ([response[@"code"] integerValue] == 1) {
+        
+            if (self.dataSource) {
+                [self.dataSource removeAllObjects];
+            }else
+            {
+                self.dataSource = [NSMutableArray array];
+            }
+            NSMutableArray *arr = [NSMutableArray array];
+            NSArray *proArray = response[@"result"];
+            for (NSDictionary *proDic in proArray) {
+                XBBProObject *object = [[XBBProObject alloc] init];
+                object.p_id = proDic[@"id"];
+                object.p_name = proDic[@"p_name"];
+                object.p_info = proDic[@"p_info"];
+                object.price_1 = [proDic[@"p_price"] floatValue];
+                object.price_2 = [proDic[@"p_price2"] floatValue];
+                object.imageURL = proDic[@"thumb_url"];
+                object.urlString = proDic[@"detailurl"];
+                [arr addObject:object];
+            }
+            self.dataSource = arr;
+            [self.tableView reloadData];
+            
+        }else
+        {
+            [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+        }
+        
+        DLog(@"%@",response);
+    } failBlock:^(NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"产品信息获取失败"];
+    }];
+}
+
 - (void)feachDatas
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-       
+        [self feachProDatas];
     });
 }
 
@@ -162,7 +221,6 @@
         webView.urlString = object.url;
         [self presentViewController:webView animated:YES completion:nil];
     }
-   
 }
 
 #pragma mark NetAbserver
@@ -173,6 +231,14 @@
 }
 - (void)changeNetStatusHaveConnection
 {
+    
+    
+//    if (banner == nil) {
+//        [self feachBannerData];
+//    }
+//    if (self.dataSource == nil) {
+//        [self feachDatas];
+//    }
    DLog(@"")
 }
 
@@ -189,6 +255,19 @@
 }
 #pragma mark view disposed
 
+- (void)alphaToZone
+{
+    self.tableView.alpha = 0.;
+}
+
+- (void)alphaToOne
+{
+    [UIView animateWithDuration:0.25 animations:^{
+        self.tableView.alpha = 1.;
+    }];
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self addTableViewHomes];
@@ -204,54 +283,11 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
+    self.tableView.separatorColor = [UIColor groupTableViewBackgroundColor];
+    [self.tableView registerNib:[UINib nibWithNibName:@"XBBHomeFacialTableViewCell" bundle:nil] forCellReuseIdentifier:identifier_diy];
+      [self.tableView registerNib:[UINib nibWithNibName:@"XBBHomeFacialOneTableViewCell" bundle:nil] forCellReuseIdentifier:identifier_facial];
+    [self alphaToZone];
 }
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 198.;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    headView = [[UIView alloc] init];
-    headView.backgroundColor = XBB_Bg_Color;
-    
-    UIImage *image = [UIImage imageNamed:@"xbb_twoBai"];
-   
-    UIImage *buttonImage = [UIImage imageNamed:@"xbb_One_Button"];
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height)];
-    button.center = CGPointMake(XBB_Screen_width/2, XBB_Size_w_h(346.));
-    UIImageView *imageV = [[UIImageView alloc] initWithFrame:CGRectMake(button.bounds.size.width - image.size.width-XBB_Size_w_h(10), -image.size.height+button.bounds.size.height+XBB_Size_w_h(5), image.size.width, image.size.height)];
-    imageV.image = image;
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button setTitle:@"一键洗车" forState:UIControlStateNormal];
-    [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [button addSubview:imageV];
-    [button setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    [headView addSubview:button];
-    [button addTarget:self action:@selector(toAddDownOrder:) forControlEvents:UIControlEventTouchUpInside];
-    [headView bringSubviewToFront:button];
-    return headView;
-}
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 1;
-}
-
-// Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
-// Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-    }
-    
-    return cell;
-}
-
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -264,7 +300,7 @@
         [self feachBannerData];
         [self initData];
     });
-  
+    
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
@@ -276,6 +312,8 @@
 {
     [self setNavigationBarControl];
 }
+
+
 
 - (void)setNavigationBarControl
 {
@@ -331,6 +369,7 @@
     banner = [[XBBBannerView alloc] initWithFrame:CGRectMake(0,0, XBB_Screen_width, XBB_Size_w_h(300.)) imagesNames:arr];
     banner.xbbDelegate = self;
     [headView insertSubview:banner atIndex:0];
+    [self alphaToOne];
 }
 - (void)removeBanner
 {
@@ -339,6 +378,207 @@
     [banner removeFromSuperview];
     banner = nil;
     bannerArrayData = nil;
+}
+
+
+#pragma mark tableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    switch (section) {
+        case 0:
+        {
+           return 243.;
+        }
+            break;
+        case 1:
+        {
+            return 43.;
+        }
+            break;
+        default:
+            break;
+    }
+    return 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (indexPath.section) {
+        case 0:
+        {
+            return 200.;
+        }
+            break;
+        case 1:
+        {
+            return 135.;
+        }
+            break;
+            
+        default:
+            break;
+    }
+    return 0;
+}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    
+    return 1;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    
+    switch (section) {
+        case 0:
+        {
+            if (headView) {
+                return headView;
+            }
+            headView = [[UIView alloc] init];
+            headView.backgroundColor = XBB_Bg_Color;
+            UIImage *image = [UIImage imageNamed:@"xbb_twoBai"];
+            UIImage *buttonImage = [UIImage imageNamed:@"xbb_One_Button"];
+            UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height)];
+            button.center = CGPointMake(XBB_Screen_width/2, XBB_Size_w_h(346.));
+            UIImageView *imageV = [[UIImageView alloc] initWithFrame:CGRectMake(button.bounds.size.width - image.size.width-XBB_Size_w_h(10), -image.size.height+button.bounds.size.height+XBB_Size_w_h(5), image.size.width, image.size.height)];
+            imageV.image = image;
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [button setTitle:@"一键洗车" forState:UIControlStateNormal];
+            [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
+            [button addSubview:imageV];
+            [button setBackgroundImage:buttonImage forState:UIControlStateNormal];
+            [headView addSubview:button];
+            [button addTarget:self action:@selector(toAddDownOrder:) forControlEvents:UIControlEventTouchUpInside];
+            [headView bringSubviewToFront:button];
+            
+            UIView *backGou = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height+button.frame.origin.y+10., XBB_Screen_width, 210.-(button.frame.size.height+button.frame.origin.y+10.))];
+            backGou.backgroundColor = [UIColor colorWithRed:241./255. green:242/255. blue:243/255. alpha:1.];
+            [headView addSubview:backGou];
+            UIImage *linImage = [UIImage imageNamed:@"xbb_line_index"];
+            UIImageView *lineImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,button.frame.size.height+button.frame.origin.y+20., XBB_Screen_width, linImage.size.height)];
+            lineImageView.image = linImage;
+            [headView addSubview:lineImageView];
+            
+            
+            areaFirstTitileLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, button.frame.size.height+button.frame.origin.y+20., XBB_Screen_width, 40.)];
+            areaFirstTitileLabel.backgroundColor = XBB_Bg_Color;
+            [headView addSubview:areaFirstTitileLabel];
+            
+            [areaFirstTitileLabel setFont:[UIFont systemFontOfSize:15.]];
+            areaFirstTitileLabel.text = @"      深度美容";
+            [areaFirstTitileLabel setTextColor:XBB_NavBar_Color];
+            
+            return headView;
+
+        }
+            break;
+        case 1:
+        {
+            
+            UIView *back = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, 44.)];
+            back.backgroundColor = [UIColor colorWithRed:241./255. green:242/255. blue:243/255. alpha:1.];
+            areaLastTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0., XBB_Screen_width, 40.)];
+            NSString *format = @"      DIY组合    需要选择洗车哦";
+            NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:format];
+            [string addAttributes:@{NSForegroundColorAttributeName:XBB_NavBar_Color,NSFontAttributeName:[UIFont systemFontOfSize:15.]} range:NSMakeRange(0, [format length]-9)];
+            [string addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.],NSForegroundColorAttributeName:XBB_NavBar_Color} range:NSMakeRange([format length]-9,9)];
+            areaLastTitleLabel.attributedText = string;
+            areaLastTitleLabel.backgroundColor = [UIColor whiteColor];
+            [back addSubview:areaLastTitleLabel];
+            
+            return back;
+        }
+            break;
+            
+        default:
+            break;
+    }
+    return nil;
+  }
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    switch (section) {
+        case 0:
+        {
+            return 1;
+        }
+            break;
+        case 1:
+        {
+            return self.dataSource.count;
+        }
+            break;
+            
+        default:
+            break;
+    }
+    return 0;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    switch (indexPath.section) {
+        case 0:
+        {
+            
+            XBBHomeFacialOneTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier_facial];
+            if (cell == nil) {
+                cell = [[XBBHomeFacialOneTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier_diy];
+            }
+
+            return cell;
+        }
+            break;
+        case 1:
+        {
+            XBBHomeFacialTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier_diy];
+            if (cell == nil) {
+                cell = [[XBBHomeFacialTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier_diy];
+            }
+            XBBProObject *object = self.dataSource[indexPath.row];
+            [cell.headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ImgDomain,object.imageURL]] placeholderImage:nil];
+            cell.pInfoLabel.text = object.p_info;
+            cell.pNameLabel.text = object.p_name;
+            cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",object.price_1];
+            return cell;
+
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+   
+    return nil;
+
+  
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.section == 1) {
+        XBBProObject *object = self.dataSource[indexPath.row];
+        WebViewController *web = [[WebViewController alloc] init];
+        web.navigationTitle = object.p_name;
+        web.urlString = object.urlString;
+        [self presentViewController:web animated:YES completion:nil];
+        
+        
+        
+    }
+    
 }
 
 - (void)dealloc

@@ -39,6 +39,7 @@ static NSString *identifier_2 = @"tit1cell";
 
 @interface AddOrderViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
+    UIView *barView;
     XBBListHeadLabel *priceTotalTitle;
     float selectWashPrice;
     float selectDIYPrice;
@@ -74,7 +75,6 @@ static NSString *identifier_2 = @"tit1cell";
 - (void)initViewDidLoadDatas
 {
     [NetworkHelper postWithAPI:XBB_Wash2Coupons parameter:@{@"uid":[UserObj shareInstance].uid} successBlock:^(id response) {
-        
         NSDictionary *resposeDic = response;
         if ([resposeDic[@"code"] integerValue] == 1) {
             NSDictionary *dic_ro = resposeDic[@"result"];
@@ -108,15 +108,11 @@ static NSString *identifier_2 = @"tit1cell";
             [arr addObject:order_2];
             order.xbbOrders = arr;
             [self initUpdateData];
-            DLog(@"%@  \n %@",outDic,outinDic);
-            
- 
+            [self alphaToOne];
         }else
         {
             [SVProgressHUD showErrorWithStatus:resposeDic[@"msg"]];
         }
-        DLog(@"%@",response);
-        
     } failBlock:^(NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"获取洗车方式和优惠券网络错误"];
     }];
@@ -208,17 +204,31 @@ static NSString *identifier_2 = @"tit1cell";
             }
         }
     }
+    
     [self.tableView reloadData];
 }
 
 #pragma mark viewdisposed
 
-
+- (void)alphatoZero
+{
+    barView.alpha = 0;
+    self.tableView.alpha = 0.;
+}
+- (void)alphaToOne
+{
+    [UIView animateWithDuration:0.25 animations:^{
+        barView.alpha = 1;
+        self.tableView.alpha = 1.;
+    }];
+    
+}
 - (void)initUIs
 {
     [self setNavigationBarControl];
     [self addTabBar];
     [self addtabview];
+    [self alphatoZero];
 }
 - (void)setNavigationBarControl
 {
@@ -256,7 +266,7 @@ static NSString *identifier_2 = @"tit1cell";
 }
 - (void)addTabBar
 {
-    UIView *barView = [[UIView alloc] initWithFrame:CGRectMake(0, XBB_Screen_height-44., XBB_Screen_width, 44.)];
+    barView = [[UIView alloc] initWithFrame:CGRectMake(0, XBB_Screen_height-44., XBB_Screen_width, 44.)];
     [self.view addSubview:barView];
     barView.backgroundColor = XBB_Bg_Color;
     barView.layer.borderWidth = 0.5;
@@ -314,7 +324,7 @@ static NSString *identifier_2 = @"tit1cell";
 - (void)submit:(id)sender
 {
     
-    DLog(@"%@\n%@\n%@\n",self.selectWashOrderObject,self.selectDIYArray,self.selectFacialArray);
+    DLog(@"%@\n%@\n%@\n%@",self.selectWashOrderObject,self.selectDIYArray,self.selectFacialArray,planTime);
 }
 
 
@@ -361,12 +371,14 @@ static NSString *identifier_2 = @"tit1cell";
         if (cell == nil) {
             cell = [[AddOrderDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier_2];
         }
+        
+        
         cell.priceLabel.alpha = 1.f;
         cell.selectImageView.alpha = 1.f;
         cell.titleLabel.text = object.title;
         if ([object isEqual:(XBBOrder *)[[[self.dataArray lastObject]xbbOrders]lastObject]]) {
             cell.priceLabel.text = planTime?planTime:@"";
-        }else if ([[self.dataArray lastObject] xbbOrders][0]){
+        }else if ([object isEqual:[[self.dataArray lastObject] xbbOrders][0]]){
             cell.priceLabel.text = @"";
         }else
         {
@@ -444,6 +456,19 @@ static NSString *identifier_2 = @"tit1cell";
             }
         }
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        for (XBBOrder *ooo in [self.dataArray[1] xbbOrders]) {
+            if ([ooo isEqual:object]) {
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+        }
+        for (XBBOrder *ooo in [self.dataArray[2] xbbOrders]) {
+            if ([ooo isEqual:object]) {
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+        }
+        
+        
+        
         return cell;
     }
     return nil;
@@ -543,7 +568,7 @@ static NSString *identifier_2 = @"tit1cell";
             };
             [self.navigationController pushViewController:plan animated:YES];
         }else{
-            planTime = @"";
+            planTime = nil;
             isJust = YES;
             NSIndexPath *indexPath_1 = [NSIndexPath indexPathForRow:self.dataSource.count-1 inSection:indexPath.section];
             AddOrderDetailTableViewCell *cell_1 = [tableView cellForRowAtIndexPath:indexPath_1];
@@ -616,40 +641,38 @@ static NSString *identifier_2 = @"tit1cell";
     
     if ([object isEqual:self.dataArray[2]]) {
         
-        XBBFacialViewController *fa = [[XBBFacialViewController alloc] init];
-        fa.washType = washType;
-        fa.selectCarType = carType;
-        fa.selectFacialArray = object.xbbOrders;
-        fa.facialBlock = ^(NSHashTable *selectHashObject){
-            NSMutableArray *arr = [NSMutableArray array];
-            selectFaicalPrice = 0;
-            for (XBBDiyObject *object in selectHashObject) {
-                XBBOrder *order = [[XBBOrder alloc] init];
-                order.title = object.proName;
-                order.xbbid = object.pid;
-                if (carType == 1) {
-                    order.price = object.price1;
-                }
-                else
-                {
-                    order.price = object.price2;
-                }
-                selectFaicalPrice += order.price;
-                [arr addObject:order];
-                
-            }
-            [self addAllPrice];
-            object.xbbOrders = arr;
-            self.selectFacialArray = arr;
-            [self initUpdateData];
-        };
-        [self presentViewController:fa animated:YES completion:nil];
-        
-        
-        
-        return;
-        
-        
+//        XBBFacialViewController *fa = [[XBBFacialViewController alloc] init];
+//        fa.washType = washType;
+//        fa.selectCarType = carType;
+//        fa.selectFacialArray = object.xbbOrders;
+//        fa.facialBlock = ^(NSHashTable *selectHashObject){
+//            NSMutableArray *arr = [NSMutableArray array];
+//            selectFaicalPrice = 0;
+//            for (XBBDiyObject *object in selectHashObject) {
+//                XBBOrder *order = [[XBBOrder alloc] init];
+//                order.title = object.proName;
+//                order.xbbid = object.pid;
+//                if (carType == 1) {
+//                    order.price = object.price1;
+//                }
+//                else
+//                {
+//                    order.price = object.price2;
+//                }
+//                selectFaicalPrice += order.price;
+//                [arr addObject:order];
+//                
+//            }
+//            [self addAllPrice];
+//            object.xbbOrders = arr;
+//            self.selectFacialArray = arr;
+//            [self initUpdateData];
+//        };
+//        [self presentViewController:fa animated:YES completion:nil];
+//        
+//        
+//        
+//        return;
         FaicalSelectTableViewController *faical = [[FaicalSelectTableViewController alloc]init];
         faical.selectCarType = 1;
         faical.washType = washType;
@@ -687,6 +710,7 @@ static NSString *identifier_2 = @"tit1cell";
             }
 
             object.xbbOrders = arr;
+            self.selectFacialArray = arr;
             [self initUpdateData];
         };
         [self.navigationController pushViewController:faical animated:YES];

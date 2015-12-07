@@ -199,6 +199,8 @@
 		189393301BAF0EE900AF5E01 /* CarBrandModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1893932F1BAF0EE900AF5E01 /* CarBrandModel.m */; };
 		6C09E5C71BB11F59008A0C5F /* ForgetPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C09E5C61BB11F59008A0C5F /* ForgetPwdViewController.m */; };
 		6C09E5CA1BB1411B008A0C5F /* CheckOnderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C09E5C91BB1411B008A0C5F /* CheckOnderViewController.m */; };
+		8E1CC4F61C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E1CC4F41C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.m */; };
+		8E1CC4F71C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E1CC4F51C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.xib */; };
 		8E488B2C1C069F1B007FC881 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E488B2B1C069F1B007FC881 /* Reachability.m */; };
 		8E488B621C06B212007FC881 /* XBBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E488B601C06B211007FC881 /* XBBViewController.m */; };
 		8E6FEF561C117E5900F71BD3 /* XBBDIYTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E6FEF541C117E5900F71BD3 /* XBBDIYTableViewCell.m */; };
@@ -209,6 +211,8 @@
 		8E7E49D81BF5AA70008517DC /* OrderPayUserInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E7E49D71BF5AA70008517DC /* OrderPayUserInfoTableViewCell.m */; };
 		8E7E49DB1BF5AA8E008517DC /* OrderPayWayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E7E49DA1BF5AA8E008517DC /* OrderPayWayTableViewCell.m */; };
 		8E8122E81C046D0A00B00911 /* FacialSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E8122E71C046D0A00B00911 /* FacialSelectTableViewController.m */; };
+		8E91F4FE1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E91F4FC1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.m */; };
+		8E91F4FF1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E91F4FD1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.xib */; };
 		8EAA96BF1C1039A600B83CA7 /* XBBHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EAA96BE1C1039A600B83CA7 /* XBBHomeViewController.m */; };
 		8EAA96C21C10472B00B83CA7 /* XBBBannerObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EAA96C11C10472B00B83CA7 /* XBBBannerObject.m */; };
 		8EAA96C61C112A0B00B83CA7 /* XBBMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EAA96C51C112A0B00B83CA7 /* XBBMapViewController.m */; };
@@ -222,6 +226,7 @@
 		8EB548A01C0EBD7900FFB086 /* AddOrderDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB5489E1C0EBD7900FFB086 /* AddOrderDetailTableViewCell.m */; };
 		8EB548A11C0EBD7900FFB086 /* AddOrderDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB5489F1C0EBD7900FFB086 /* AddOrderDetailTableViewCell.xib */; };
 		8EB548A41C0ED34300FFB086 /* XBBOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB548A31C0ED34300FFB086 /* XBBOrder.m */; };
+		8ECE5B201C15CF5C00208998 /* XBBProObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ECE5B1F1C15CF5C00208998 /* XBBProObject.m */; };
 		8EEFCC031BEF189300D3D93F /* CarTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC021BEF189300D3D93F /* CarTypeTableViewController.m */; };
 		8EEFCC0D1BEF510600D3D93F /* XBBBaseLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC0C1BEF510600D3D93F /* XBBBaseLabel.m */; };
 		8EEFCC111BEF52B000D3D93F /* XBBListHeadLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC101BEF52B000D3D93F /* XBBListHeadLabel.m */; };
@@ -648,6 +653,9 @@
 		6C09E5C61BB11F59008A0C5F /* ForgetPwdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgetPwdViewController.m; sourceTree = "<group>"; };
 		6C09E5C81BB1411B008A0C5F /* CheckOnderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckOnderViewController.h; sourceTree = "<group>"; };
 		6C09E5C91BB1411B008A0C5F /* CheckOnderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CheckOnderViewController.m; sourceTree = "<group>"; };
+		8E1CC4F31C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBHomeFacialTableViewCell.h; path = XBBHomeViewController/XBBHomeFacialTableViewCell.h; sourceTree = "<group>"; };
+		8E1CC4F41C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBHomeFacialTableViewCell.m; path = XBBHomeViewController/XBBHomeFacialTableViewCell.m; sourceTree = "<group>"; };
+		8E1CC4F51C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XBBHomeFacialTableViewCell.xib; path = XBBHomeViewController/XBBHomeFacialTableViewCell.xib; sourceTree = "<group>"; };
 		8E488B2A1C069F1B007FC881 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		8E488B2B1C069F1B007FC881 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		8E488B5F1C06B211007FC881 /* XBBViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBBViewController.h; sourceTree = "<group>"; };
@@ -667,6 +675,9 @@
 		8E7E49DA1BF5AA8E008517DC /* OrderPayWayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderPayWayTableViewCell.m; sourceTree = "<group>"; };
 		8E8122E61C046D0A00B00911 /* FacialSelectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FacialSelectTableViewController.h; path = ../DIY/FacialSelectTableViewController.h; sourceTree = "<group>"; };
 		8E8122E71C046D0A00B00911 /* FacialSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FacialSelectTableViewController.m; path = ../DIY/FacialSelectTableViewController.m; sourceTree = "<group>"; };
+		8E91F4FB1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBHomeFacialOneTableViewCell.h; path = XBBHomeViewController/XBBHomeFacialOneTableViewCell.h; sourceTree = "<group>"; };
+		8E91F4FC1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBHomeFacialOneTableViewCell.m; path = XBBHomeViewController/XBBHomeFacialOneTableViewCell.m; sourceTree = "<group>"; };
+		8E91F4FD1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XBBHomeFacialOneTableViewCell.xib; path = XBBHomeViewController/XBBHomeFacialOneTableViewCell.xib; sourceTree = "<group>"; };
 		8EAA96BD1C1039A600B83CA7 /* XBBHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBHomeViewController.h; path = XBBHomeViewController/XBBHomeViewController.h; sourceTree = "<group>"; };
 		8EAA96BE1C1039A600B83CA7 /* XBBHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBHomeViewController.m; path = XBBHomeViewController/XBBHomeViewController.m; sourceTree = "<group>"; };
 		8EAA96C01C10472B00B83CA7 /* XBBBannerObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBBannerObject.h; path = XBBHomeViewController/XBBBannerObject.h; sourceTree = "<group>"; };
@@ -691,6 +702,8 @@
 		8EB5489F1C0EBD7900FFB086 /* AddOrderDetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AddOrderDetailTableViewCell.xib; path = XBBOrderTableViewController/AddOrderDetailTableViewCell.xib; sourceTree = "<group>"; };
 		8EB548A21C0ED34300FFB086 /* XBBOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBOrder.h; path = XBBOrderTableViewController/XBBOrder.h; sourceTree = "<group>"; };
 		8EB548A31C0ED34300FFB086 /* XBBOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBOrder.m; path = XBBOrderTableViewController/XBBOrder.m; sourceTree = "<group>"; };
+		8ECE5B1E1C15CF5C00208998 /* XBBProObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBBProObject.h; sourceTree = "<group>"; };
+		8ECE5B1F1C15CF5C00208998 /* XBBProObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBBProObject.m; sourceTree = "<group>"; };
 		8EEFCC011BEF189300D3D93F /* CarTypeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarTypeTableViewController.h; sourceTree = "<group>"; };
 		8EEFCC021BEF189300D3D93F /* CarTypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarTypeTableViewController.m; sourceTree = "<group>"; };
 		8EEFCC0B1BEF510600D3D93F /* XBBBaseLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBBaseLabel.h; path = DIYView/XBBBaseLabel.h; sourceTree = "<group>"; };
@@ -1605,10 +1618,18 @@
 			children = (
 				8EAA96BD1C1039A600B83CA7 /* XBBHomeViewController.h */,
 				8EAA96BE1C1039A600B83CA7 /* XBBHomeViewController.m */,
+				8E1CC4F31C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.h */,
+				8E1CC4F41C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.m */,
+				8E1CC4F51C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.xib */,
+				8E91F4FB1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.h */,
+				8E91F4FC1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.m */,
+				8E91F4FD1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.xib */,
 				8EB548941C0D7C1000FFB086 /* XBBBannerView.h */,
 				8EB548951C0D7C1000FFB086 /* XBBBannerView.m */,
 				8EAA96C01C10472B00B83CA7 /* XBBBannerObject.h */,
 				8EAA96C11C10472B00B83CA7 /* XBBBannerObject.m */,
+				8ECE5B1E1C15CF5C00208998 /* XBBProObject.h */,
+				8ECE5B1F1C15CF5C00208998 /* XBBProObject.m */,
 			);
 			name = XBBHomeViewController;
 			path = Home;
@@ -1835,6 +1856,7 @@
 				188D99FF1BADCD9A00E68506 /* sline.png in Resources */,
 				188D99E11BADCD9A00E68506 /* 1@icon_youhuiquanCell.png in Resources */,
 				188D980D1BADCD6100E68506 /* Assets.xcassets in Resources */,
+				8E1CC4F71C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.xib in Resources */,
 				188D99FD1BADCD9A00E68506 /* park_fast_1.png in Resources */,
 				188D99F81BADCD9A00E68506 /* nav1.png in Resources */,
 				188D99CC1BADCD9A00E68506 /* 1@icon_09.png in Resources */,
@@ -1843,6 +1865,7 @@
 				188D99D91BADCD9A00E68506 /* 1@icon_myorder@2x.png in Resources */,
 				188D9A011BADCD9A00E68506 /* sounds2.png in Resources */,
 				188D99DE1BADCD9A00E68506 /* 1@icon_starredhui.png in Resources */,
+				8E91F4FF1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.xib in Resources */,
 				188D99FC1BADCD9A00E68506 /* NowLocation@3x.png in Resources */,
 				188D99DB1BADCD9A00E68506 /* 1@icon_set@2x.png in Resources */,
 				188D99F11BADCD9A00E68506 /* logo@2x.png in Resources */,
@@ -2051,6 +2074,7 @@
 				188D99A31BADCD9A00E68506 /* UserObj.m in Sources */,
 				8EAA96CC1C11526300B83CA7 /* XBBDIYViewController.m in Sources */,
 				188D9A171BADCD9A00E68506 /* DMLineView.m in Sources */,
+				8E91F4FE1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.m in Sources */,
 				188D99951BADCD9A00E68506 /* SystemMsgTableViewCell.m in Sources */,
 				188D99961BADCD9A00E68506 /* XBBAnnotation.m in Sources */,
 				188D998D1BADCD9A00E68506 /* DIYTableViewCell.m in Sources */,
@@ -2062,11 +2086,13 @@
 				188D9A191BADCD9A00E68506 /* UIImage+ImageScaleSize.m in Sources */,
 				8EB548961C0D7C1000FFB086 /* XBBBannerView.m in Sources */,
 				188D99C01BADCD9A00E68506 /* SetCarAddsInfoViewController.m in Sources */,
+				8ECE5B201C15CF5C00208998 /* XBBProObject.m in Sources */,
 				8EEFCC541BF1B3CB00D3D93F /* XBBDIYImageView.m in Sources */,
 				8EEFCC1A1BF07FA900D3D93F /* DIYSelectTableViewController.m in Sources */,
 				188D9A101BADCD9A00E68506 /* DataVerifier.m in Sources */,
 				186A2A751BAEA9C000645069 /* DACircularProgressView.m in Sources */,
 				1893932D1BAF0C9B00AF5E01 /* CarListTableViewController.m in Sources */,
+				8E1CC4F61C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.m in Sources */,
 				188D99C51BADCD9A00E68506 /* SystemMsgViewController.m in Sources */,
 				8EAA96F21C115A4100B83CA7 /* XBBFacialViewController.m in Sources */,
 				186A2A401BAEA98600645069 /* MWPhoto.m in Sources */,

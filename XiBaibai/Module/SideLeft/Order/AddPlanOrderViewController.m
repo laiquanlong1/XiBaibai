@@ -83,6 +83,40 @@
 #pragma mark 初始化视图
 
 
+- (void)setNavigationBarControl
+{
+    self.showNavigation = YES;
+    UIImage *leftImage = [UIImage imageNamed:@"back_xbb"];
+    if (XBB_IsIphone6_6s) {
+        leftImage = [UIImage imageNamed:@"back_xbb6"];
+    }
+    
+    UIButton *backButton = [[UIButton alloc] init];
+    backButton.userInteractionEnabled = YES;
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setImage:leftImage forState:UIControlStateNormal];
+    [self.xbbNavigationBar addSubview:backButton];
+    [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(5.f);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(9.f);
+        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(50);
+    }];
+    
+    UILabel *titelLabel = [[UILabel alloc] init];
+    [titelLabel setTextColor:[UIColor whiteColor]];
+    [titelLabel setBackgroundColor:[UIColor clearColor]];
+    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"DIY"];
+    [titelLabel setFont:XBB_NavBar_Font];
+    [titelLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.xbbNavigationBar addSubview:titelLabel];
+    [titelLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(30.);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(10.f);
+        make.left.mas_equalTo(50);
+        make.width.mas_equalTo(XBB_Screen_width-100);
+    }];
+}
 
 /**
  * @brief 初始化
@@ -93,25 +127,25 @@
     self.title = @"预约时间";
     self.view.backgroundColor = kUIColorFromRGB(0xf4f4f4);
     
-    //返回
-    UIImageView * img_view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"1@icon_back.png"]];
-    img_view.layer.masksToBounds = YES;
-    img_view.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(back)];
-    [img_view addGestureRecognizer:tap];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:img_view];
-    
-    UIButton *barBut = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-    [barBut.titleLabel setTextColor:[UIColor whiteColor]];
-    [barBut setTitle:@"确定" forState:UIControlStateNormal];
-    [barBut.titleLabel setFont:[UIFont systemFontOfSize:16]];
-    [barBut setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -50)];
-    [barBut setBackgroundColor:[UIColor clearColor]];
-    
-    [barBut addTarget:self action:@selector(sure:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *barBut_1 = [[UIBarButtonItem alloc] initWithCustomView:barBut];
-    self.navigationItem.rightBarButtonItem = barBut_1;
+//    //返回
+//    UIImageView * img_view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"1@icon_back.png"]];
+//    img_view.layer.masksToBounds = YES;
+//    img_view.userInteractionEnabled = YES;
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(back)];
+//    [img_view addGestureRecognizer:tap];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:img_view];
+//    
+//    UIButton *barBut = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+//    [barBut.titleLabel setTextColor:[UIColor whiteColor]];
+//    [barBut setTitle:@"确定" forState:UIControlStateNormal];
+//    [barBut.titleLabel setFont:[UIFont systemFontOfSize:16]];
+//    [barBut setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -50)];
+//    [barBut setBackgroundColor:[UIColor clearColor]];
+//    
+//    [barBut addTarget:self action:@selector(sure:) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    UIBarButtonItem *barBut_1 = [[UIBarButtonItem alloc] initWithCustomView:barBut];
+//    self.navigationItem.rightBarButtonItem = barBut_1;
 
     
     //全局滚动视图
@@ -275,17 +309,12 @@
     [self.view endEditing:YES];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [self.navigationController.navigationBar setHidden:NO];
-}
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [self.navigationController.navigationBar setHidden:YES];
-}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initView];
+    [self setNavigationBarControl];
     [self initTimeSelect]; // 选择的时间
     [self initData];
 }
@@ -294,29 +323,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-
-
-////分段按钮时间选择
-//-(void)selected:(id)sender{
-//    UISegmentedControl* control = (UISegmentedControl*)sender;
-//    
-//    switch (control.selectedSegmentIndex) {
-//        case 0:
-//            NSLog(@"当天");
-//            
-//            break;
-//        case 1:
-//            NSLog(@"明天");
-//            break;
-//            
-//        case 2:
-//             NSLog(@"后天");
-//            break;
-//        default:
-//            break;
-//    }
-//}
 
 
 #pragma mark - collectionView delegate
@@ -337,8 +343,6 @@
 
     return CGSizeMake((self.view.frame.size.width - 1.5) * 0.25, 55);
 }
-
-
 
 // 选择
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath{

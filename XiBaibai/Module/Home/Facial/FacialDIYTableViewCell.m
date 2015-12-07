@@ -305,8 +305,6 @@
 - (IBAction)tapP:(id)sender
 {
     DLog(@"%@",sender);
-    
-   
     UITapGestureRecognizer *tap = sender;
     UIView *view = tap.view;
     NSArray *subViews = [view subviews];
@@ -329,26 +327,20 @@
                         }];
                     }else
                     {
-                    DLog(@"----")
-                    NSDictionary *dic = _dataArr[view.tag];
-                    [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", ImgDomain, dic[@"p_wimg"]]]  completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                        imageView.image = image;
-                    }];
+                        DLog(@"----")
+                        NSDictionary *dic = _dataArr[view.tag];
+                        [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", ImgDomain, dic[@"p_wimg"]]]  completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                            imageView.image = image;
+                        }];
                     }
                 } ];
             }
-            
-            
-         
         }
     }
 }
 - (IBAction)longp:(id)sender
 {
-   
-   
     UILongPressGestureRecognizer *tap = sender;
-    
     switch (tap.state) {
         case UIGestureRecognizerStateBegan:
         {
@@ -362,10 +354,6 @@
         default:
             break;
     }
-    
-    
- 
- 
 }
 
 @end

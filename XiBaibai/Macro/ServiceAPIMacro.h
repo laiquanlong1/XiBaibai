@@ -32,7 +32,8 @@
 // 美容
 #define XBB_Facial_Pro [NSString stringWithFormat:@"%@/diyCospro", APIDomain]
 
-
+// 首页产品
+#define XBB_Index_Pro [NSString stringWithFormat:@"%@/indexProList", APIDomain]
 
 
 

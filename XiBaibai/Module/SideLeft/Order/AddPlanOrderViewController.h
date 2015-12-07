@@ -11,7 +11,7 @@
 
 
 typedef void(^AddPlanTime)(NSString *time);
-@interface AddPlanOrderViewController : UIViewController
+@interface AddPlanOrderViewController : XBBViewController
 @property (nonatomic, copy) AddPlanTime planTime;  // 返回的block
 @property (nonatomic, copy) NSString *timePlan;//预约时间
 
