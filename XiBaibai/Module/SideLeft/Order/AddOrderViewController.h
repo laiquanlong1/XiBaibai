@@ -12,4 +12,8 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
+@property (nonatomic, copy) NSArray *selectArray;
+
+@property (nonatomic, assign) BOOL hasLocation;
+
 @end

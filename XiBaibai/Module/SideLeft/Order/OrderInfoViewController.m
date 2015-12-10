@@ -10,6 +10,9 @@
 #import "StarView.h"
 #import "DMLineView.h"
 #import "PayTableViewController.h"
+#import "MyCarModel.h"
+
+
 
 @interface OrderInfoViewController (){
     UIView *viewOrderPay;
@@ -562,12 +565,15 @@
         NSInteger cartype = [self.orderDitailDic[@"c_type"] integerValue];
 
         // 获取车信息
-        NSMutableDictionary *carInfoDic = [NSMutableDictionary dictionary];
-        [carInfoDic setObject:self.orderDitailDic[@"c_brand"] forKey:@"c_brand"];
-        [carInfoDic setObject:self.orderDitailDic[@"c_color"] forKey:@"c_color"];
-        [carInfoDic setObject:self.orderDitailDic[@"c_ids"] forKey:@"c_ids"];
-        [carInfoDic setObject:self.orderDitailDic[@"c_plate_num"] forKey:@"c_plate_num"];
-        [carInfoDic setObject:self.orderDitailDic[@"c_type"] forKey:@"c_type"];
+        
+        
+        MyCarModel *carmodel = [[MyCarModel alloc] init];
+        carmodel.c_brand = self.orderDitailDic[@"c_brand"];
+        carmodel.c_color = self.orderDitailDic[@"c_color"];
+        carmodel.carId = [self.orderDitailDic[@"c_ids"] integerValue];
+        carmodel.c_plate_num = self.orderDitailDic[@"c_plate_num"];
+        carmodel.c_type = cartype;
+        
         
         // 获取产品信息
         NSMutableArray *proArr = [NSMutableArray array];
@@ -577,7 +583,6 @@
             }];
         }
         
-        
         PayTableViewController *viewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"PayTableViewController"];
         viewController.orderNO = self.labOrder_numX.text;
         viewController.price = [[self.labMoney.text substringFromIndex:1] doubleValue];
@@ -586,7 +591,7 @@
         viewController.location = self.orderDitailDic[@"location"];
         viewController.carType = cartype;
         viewController.pro_Dics = proArr;
-        viewController.carInfo = carInfoDic;
+        viewController.carModels =@[ carmodel];
         
         
         [self.navigationController pushViewController:viewController animated:YES];

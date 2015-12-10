@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface CarportTableViewController : UITableViewController
+
 @property (weak, nonatomic) IBOutlet UILabel *labHomeCommon;
 @property (weak, nonatomic) IBOutlet UILabel *labHomeInfo;
 @property (weak, nonatomic) IBOutlet UILabel *labComp;

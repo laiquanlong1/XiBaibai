@@ -127,7 +127,8 @@
 - (IBAction)allCommentOnClick:(id)sender {
     if (IsLogin) {
         AllCommentViewController *commentVC = [[AllCommentViewController alloc] init];
-        [(UINavigationController *)self.mm_drawerController.centerViewController pushViewController:commentVC animated:YES];
+        [self presentViewController:commentVC animated:YES completion:nil];
+//        [(UINavigationController *)self.mm_drawerController.centerViewController pushViewController:commentVC animated:YES];
         [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
     }else{
         [self login];
@@ -157,7 +158,8 @@
 
 - (void)centerPushWithIdentifier:(NSString *)identifier {
     UINavigationController *navigation = (UINavigationController *)self.mm_drawerController.centerViewController;
-    [navigation pushViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:identifier] animated:YES];
+    [self presentViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:identifier] animated:YES completion:nil];
+//    [navigation pushViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:identifier] animated:YES];
     [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
 }
 

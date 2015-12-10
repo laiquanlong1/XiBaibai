@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 typedef void(^DIYServer)(id);
-@interface FaicalSelectTableViewController : XBBTableViewController
+@interface FaicalSelectTableViewController : XBBViewController
 
 @property (nonatomic, assign) NSInteger washType; // 11为外观 22为整车 0.没有选择洗车
 @property (nonatomic, assign) NSInteger selectCarType; // 1 轿车

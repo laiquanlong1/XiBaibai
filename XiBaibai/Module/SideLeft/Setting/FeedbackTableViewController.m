@@ -10,21 +10,60 @@
 #import "UserObj.h"
 
 @interface FeedbackTableViewController () <UITextViewDelegate>
-
+@property (nonatomic, strong) UIView *xbbNavigationBar;
 @property (weak, nonatomic) IBOutlet UILabel *placeholderLabel;
 @property (weak, nonatomic) IBOutlet UITextView *inputTextView;
 @end
 
 @implementation FeedbackTableViewController
 
+- (void)setNavigationBarControl
+{
+    self.xbbNavigationBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, 64.)];
+    self.xbbNavigationBar.backgroundColor = XBB_NavBar_Color;
+    [self.view addSubview:self.xbbNavigationBar];
+    UIImage *leftImage = [UIImage imageNamed:@"back_xbb"];
+    if (XBB_IsIphone6_6s) {
+        leftImage = [UIImage imageNamed:@"back_xbb6"];
+    }
+    
+    UIButton *backButton = [[UIButton alloc] init];
+    backButton.userInteractionEnabled = YES;
+    [backButton addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setImage:leftImage forState:UIControlStateNormal];
+    [self.xbbNavigationBar addSubview:backButton];
+    [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(5.f);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(9.f);
+        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(50);
+    }];
+    
+    UILabel *titelLabel = [[UILabel alloc] init];
+    [titelLabel setTextColor:[UIColor whiteColor]];
+    [titelLabel setBackgroundColor:[UIColor clearColor]];
+    [titelLabel setText:@"意见反馈"];
+    [titelLabel setFont:XBB_NavBar_Font];
+    [titelLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.xbbNavigationBar addSubview:titelLabel];
+    [titelLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(30.);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(10.f);
+        make.left.mas_equalTo(50);
+        make.width.mas_equalTo(XBB_Screen_width-100);
+    }];
+}
+
+- (IBAction)back:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.inputTextView.layer.cornerRadius = 5.;
+    self.inputTextView.layer.masksToBounds = YES;
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self setNavigationBarControl];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -54,6 +93,7 @@
 }
 
 - (void)commitFeedbackToWeb:(void (^)())callback {
+    [self.inputTextView resignFirstResponder];
     [NetworkHelper postWithAPI:Advice_Insert_API parameter:@{@"uid": [UserObj shareInstance].uid, @"content": self.inputTextView.text} successBlock:^(id response) {
         if (callback) {
             callback();

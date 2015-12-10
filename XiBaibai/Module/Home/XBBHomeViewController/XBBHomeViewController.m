@@ -50,14 +50,47 @@ static NSString *identifier_diy = @"diy";
     
 }
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, copy) NSMutableArray *dataSource;
-
+@property (nonatomic, copy) NSArray *dataSource;
+@property (nonatomic, copy) NSArray *proArray;
 @end
 
 @implementation XBBHomeViewController
 
 
 #pragma mark featchData
+
+- (void)feachFacialDatas
+{
+    [NetworkHelper postWithAPI:XBB_Facial_Pro parameter:nil successBlock:^(id response) {
+        DLog(@"%@",response)
+        if ([response[@"code"] integerValue] == 1) {
+            NSArray *resultArray = response[@"result"];
+            NSMutableArray *arr = [NSMutableArray array];
+            for (NSDictionary *resultDic in resultArray) {
+                XBBProObject *object = [[XBBProObject alloc] init];
+                object.p_wash_free = [resultDic[@"p_wash_free"] integerValue];
+                object.urlString = resultDic[@"detailurl"];
+                object.p_id = resultDic[@"id"];
+                object.p_name = resultDic[@"p_name"];
+                object.price_1 = [resultDic[@"p_price"] floatValue];
+                object.price_2 = [resultDic[@"p_price2"]floatValue];
+                object.sort = [resultDic[@"sort"]integerValue];
+                [arr addObject:object];
+            }
+            self.proArray = arr;
+            [self alphaToOne];
+            [self.tableView reloadData];
+        }else
+        {
+            [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+        }
+        
+        [self.tableView reloadData];
+    } failBlock:^(NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"获取美容信息网络错误"];
+    }];
+}
+
 
 - (void)feachProDatas
 {
@@ -68,12 +101,6 @@ static NSString *identifier_diy = @"diy";
         
         if ([response[@"code"] integerValue] == 1) {
         
-            if (self.dataSource) {
-                [self.dataSource removeAllObjects];
-            }else
-            {
-                self.dataSource = [NSMutableArray array];
-            }
             NSMutableArray *arr = [NSMutableArray array];
             NSArray *proArray = response[@"result"];
             for (NSDictionary *proDic in proArray) {
@@ -88,7 +115,8 @@ static NSString *identifier_diy = @"diy";
                 [arr addObject:object];
             }
             self.dataSource = arr;
-            [self.tableView reloadData];
+//            [self.tableView reloadData];
+            [self feachFacialDatas];
             
         }else
         {
@@ -147,6 +175,29 @@ static NSString *identifier_diy = @"diy";
                     } failBlock:^(NSError *error) {
                         NSLog(@"channelid设置失败");
                     }];
+                
+                
+                
+                [NetworkHelper postWithAPI:XBB_Car_select parameter:@{@"uid":[UserObj shareInstance].uid} successBlock:^(id response) {
+                    if ([response[@"code"] integerValue] == 1) {
+                        NSArray *resultArray = response[@"result"];
+                        for (NSDictionary *carDic in resultArray) {
+                            if ([carDic[@"default"] integerValue] == 1) {
+                                [UserObj shareInstance].c_id = carDic[@"id"];
+                            }
+                        }
+                    }else
+                    {
+                        [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+                    }
+                    
+                    
+                    DLog(@"%@",response)
+                } failBlock:^(NSError *error) {
+                    [SVProgressHUD showErrorWithStatus:@"获取车辆信息失败"];
+                }];
+                
+                
                 if ([[[response objectForKey:@"result"] objectForKey:@"u_img"] isKindOfClass:[NSNull class]]) {
                     leftNavigationBotton.image=[UIImage imageNamed:@"nav1.png"];
                 }else{
@@ -274,8 +325,6 @@ static NSString *identifier_diy = @"diy";
     [self feachDatas];
     [self initUI];
     [self addNotification];
- 
-    
 }
 - (void)addTableViewHomes
 {
@@ -285,7 +334,8 @@ static NSString *identifier_diy = @"diy";
     [self.view addSubview:self.tableView];
     self.tableView.separatorColor = [UIColor groupTableViewBackgroundColor];
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBHomeFacialTableViewCell" bundle:nil] forCellReuseIdentifier:identifier_diy];
-      [self.tableView registerNib:[UINib nibWithNibName:@"XBBHomeFacialOneTableViewCell" bundle:nil] forCellReuseIdentifier:identifier_facial];
+    [self.tableView registerNib:[UINib nibWithNibName:@"XBBHomeFacialOneTableViewCell" bundle:nil] forCellReuseIdentifier:identifier_facial];
+    self.tableView.alpha = 0;
     [self alphaToZone];
 }
 - (void)viewDidAppear:(BOOL)animated
@@ -369,7 +419,7 @@ static NSString *identifier_diy = @"diy";
     banner = [[XBBBannerView alloc] initWithFrame:CGRectMake(0,0, XBB_Screen_width, XBB_Size_w_h(300.)) imagesNames:arr];
     banner.xbbDelegate = self;
     [headView insertSubview:banner atIndex:0];
-    [self alphaToOne];
+//    [self alphaToOne];
 }
 - (void)removeBanner
 {
@@ -523,7 +573,20 @@ static NSString *identifier_diy = @"diy";
     }
     return 0;
 }
+- (IBAction)inSPAButtonAction:(id)sender
+{
+    UIButton *button = sender;
+    XBBProObject *object = self.proArray[button.tag];
+    object.type = 2;
+    WebViewController *web = [[WebViewController alloc] init];
+    web.urlString = object.urlString;
+    web.navigationTitle = object.p_name;
+    web.proObject = object;
+    [self.navigationController pushViewController:web animated:YES];
+//    [self presentViewController:web animated:YES completion:nil];
 
+    DLog(@"%ld",button.tag)
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -535,6 +598,78 @@ static NSString *identifier_diy = @"diy";
             if (cell == nil) {
                 cell = [[XBBHomeFacialOneTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier_diy];
             }
+            
+            for (int i = 0;i < self.proArray.count;i ++) {
+                XBBProObject *object = self.proArray[i];
+                switch (object.sort) {
+                    case 1:
+                    {
+                        cell.inSPAButton.tag = i;
+                        cell.inSPANameLabel.text = object.p_name;
+                        NSString *string =[NSString stringWithFormat:@"%.2f 起",object.price_1];
+                        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:string];
+                        [attrS addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:10.]} range:NSMakeRange([string length]-1, 1)];
+                        cell.inSPAPriceLabel.attributedText = attrS;
+                    }
+                        break;
+                    case 2:
+                    {
+                        NSString *string =[NSString stringWithFormat:@"%.2f 起",object.price_1];
+                        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:string];
+                        [attrS addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:10.]} range:NSMakeRange([string length]-1, 1)];
+                        cell.crystalOilPriceLabel.attributedText = attrS;
+                        cell.crysalButton.tag = i;
+                        cell.crystalOilNameLabel.text = object.p_name;
+                    }
+                        break;
+                    case 3:
+                    {
+                        cell.engineButton.tag = i;
+                        cell.engineNameLabel.text = object.p_name;
+                        NSString *string =[NSString stringWithFormat:@"%.2f 起",object.price_1];
+                        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:string];
+                        [attrS addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:10.]} range:NSMakeRange([string length]-1, 1)];
+                        cell.enginePriceLabel.attributedText = attrS;
+
+                    }
+                        break;
+                    case 4:
+                    {
+                        cell.cuirButton.tag = i;
+                        cell.cuirNameLabel.text = object.p_name;
+                        NSString *string =[NSString stringWithFormat:@"%.2f 起",object.price_1];
+                        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:string];
+                        [attrS addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:10.]} range:NSMakeRange([string length]-1, 1)];
+                        cell.cuirPriceLabel.attributedText = attrS;
+
+                    }
+                        break;
+                    case 5:
+                    {
+                        cell.naturalButton.tag = i;
+                        cell.naturalNameLabel.text = object.p_name;
+                        NSString *string =[NSString stringWithFormat:@"%.2f 起",object.price_1];
+                        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:string];
+                        [attrS addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:10.]} range:NSMakeRange([string length]-1, 1)];
+                        
+                        cell.naturalPriceLabel.attributedText = attrS;
+
+                    }
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            
+          
+  
+            
+            [cell.inSPAButton addTarget:self action:@selector(inSPAButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.crysalButton addTarget:self action:@selector(inSPAButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.naturalButton addTarget:self action:@selector(inSPAButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.engineButton addTarget:self action:@selector(inSPAButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.cuirButton addTarget:self action:@selector(inSPAButtonAction:) forControlEvents:UIControlEventTouchUpInside];
 
             return cell;
         }
@@ -551,18 +686,13 @@ static NSString *identifier_diy = @"diy";
             cell.pNameLabel.text = object.p_name;
             cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",object.price_1];
             return cell;
-
         }
             break;
             
         default:
             break;
     }
-    
-   
     return nil;
-
-  
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -570,15 +700,14 @@ static NSString *identifier_diy = @"diy";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 1) {
         XBBProObject *object = self.dataSource[indexPath.row];
+        object.type = 1;
         WebViewController *web = [[WebViewController alloc] init];
         web.navigationTitle = object.p_name;
         web.urlString = object.urlString;
-        [self presentViewController:web animated:YES completion:nil];
-        
-        
-        
+        web.proObject = object;
+         [self.navigationController pushViewController:web animated:YES];
+//        [self presentViewController:web animated:YES completion:nil];
     }
-    
 }
 
 - (void)dealloc
@@ -649,8 +778,8 @@ static NSString *identifier_diy = @"diy";
     
     XBBMapViewController *map = [[XBBMapViewController alloc] init];
     map.navigationTitle = @"地图";
-        [self presentViewController:map animated:YES completion:nil];
-//    [self.navigationController pushViewController:map animated:YES];
+//        [self presentViewController:map animated:YES completion:nil];
+    [self.navigationController pushViewController:map animated:YES];
     return;
     
 }

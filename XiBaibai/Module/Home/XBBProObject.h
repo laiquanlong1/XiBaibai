@@ -16,4 +16,9 @@
 @property (nonatomic, copy) NSString *urlString;
 @property (nonatomic, copy) NSString *p_info;
 @property (nonatomic, copy) NSString *imageURL;
+@property (nonatomic, assign) NSInteger p_wash_free;
+@property (nonatomic, assign) NSInteger sort;
+
+@property (nonatomic, assign) NSInteger type; // 1是diy 2是facial
+
 @end

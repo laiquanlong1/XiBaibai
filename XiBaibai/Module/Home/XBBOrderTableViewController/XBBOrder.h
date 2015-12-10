@@ -20,6 +20,7 @@
 @property (nonatomic, strong) UIImage *selectImage;
 @property (nonatomic, strong) NSString *selectTime;
 
+@property (nonatomic, assign) NSInteger p_wash_free;
 @property (nonatomic, strong) NSMutableArray *xbbOrders;
 
 @end

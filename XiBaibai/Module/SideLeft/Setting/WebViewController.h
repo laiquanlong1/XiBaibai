@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "XBBProObject.h"
 
 @interface WebViewController : XBBViewController
 
+@property (nonatomic, assign) NSInteger selectCarType;
 @property (copy, nonatomic) NSString *urlString;
+@property (nonatomic,strong) XBBProObject *proObject;
+
 
 @end

@@ -19,14 +19,14 @@
 #import "MyCarTableViewController.h"
 #import "BPush.h"
 #import "MyCarTableViewController.h"
-
+#import "AddOrderViewController.h"
 
 //// 获取服务起止时间
 //#define START_TIME @"reserve_start_time"
 //#define END_TIME @"reserve_end_time"
 
 
-@interface XBBMapViewController ()<BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate,UIScrollViewDelegate,UIAlertViewDelegate,BMKOverlay ,BMKSuggestionSearchDelegate>{
+@interface XBBMapViewController ()<BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate,UIScrollViewDelegate,UIAlertViewDelegate,BMKOverlay ,BMKSuggestionSearchDelegate,UITextFieldDelegate>{
     
     /**
      * @brief 百度地图相关信息
@@ -49,7 +49,7 @@
 
 //  BMKPoiSearch *search;
     BMKGeoCodeSearch *_geoCodeSearch;//地里编码
-    UIView *myLocationView;//当前位置显示
+   
     UILabel *labNowLoaction;
     
 
@@ -82,11 +82,25 @@
     UIButton *lab_prompt; // 提示
     
     
-    NSString *startReminderTime; // 提示开始时间
-    NSString *endReminderTime; // 提示结束时间
     
     BMKPolygon *polygon;  // 多形遮罩
 //    UIView *_coverView; // 蒙板层
+    
+    
+    UIView *markBackView;
+    UIView *markBackControlView;
+    UITextView    *textView;
+    UIButton *cannelbutton;
+    BOOL ismark;
+    UILabel *markLabel;
+    
+    
+    BOOL isSearch;
+    UITextField  *searchField;
+    UIView *seachBar;
+    UITableView *searchTableView;
+    
+    
 }
 
 // 底部滚动条 背景
@@ -100,9 +114,6 @@
 @property (assign, nonatomic) int selectedIndex;
 @property (copy, nonatomic)   NSString *cityName;
 
-
-
-
 @property (nonatomic, copy) NSDictionary *dicCoordinates;
 
 @property (nonatomic, copy) NSDictionary *defaultCarDic;
@@ -110,6 +121,121 @@
 @end
 
 @implementation XBBMapViewController
+
+- (void)hiddenSearchBar:(BOOL)isHidden
+{
+    
+    if (isSearch) {
+      
+    }
+    
+    [UIView beginAnimations:@"hiddenSearchBar" context:nil];
+    [UIView setAnimationDuration:0.3];
+    
+    if (isHidden) {
+        searchTableView.alpha = 0;
+        seachBar.frame = CGRectMake(20., 65+10, XBB_Screen_width - 40., 44.);
+        self.xbbNavigationBar.alpha = 1.;
+    
+    }else
+    {
+        searchTableView.alpha = 0.7;
+        CGRect frame = seachBar.frame;
+        frame.origin.y = 20.;
+        frame.origin.x = 0.;
+        frame.size.width = XBB_Screen_width;
+        seachBar.frame = frame;
+        self.xbbNavigationBar.alpha = 0.;
+    }
+    [UIView setAnimationDelay:0.];
+    [UIView commitAnimations];
+    
+}
+- (void)addAddressSeachBar
+{
+  
+    seachBar = [[UIView alloc] initWithFrame:CGRectMake(20., 65+10, XBB_Screen_width - 40., 44.)];
+    seachBar.layer.cornerRadius = 5.;
+    seachBar.layer.borderColor = [UIColor groupTableViewBackgroundColor].CGColor;
+    seachBar.layer.borderWidth = 0.5;
+    seachBar.layer.masksToBounds = YES;
+    seachBar.backgroundColor = [UIColor whiteColor];
+    
+    [self.view addSubview:seachBar];
+    UIImage *seachImage = [UIImage imageNamed:@"搜索"];
+    UIImageView *searchImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, CGRectGetHeight(seachBar.bounds)/2-seachImage.size.height/2, seachImage.size.width, seachImage.size.height)];
+    searchImageView.image = seachImage;
+    [seachBar addSubview:searchImageView];
+    searchField = [[UITextField alloc] initWithFrame:CGRectMake(searchImageView.frame.origin.x+searchImageView.frame.size.width+10, 0, seachBar.bounds.size.width - (searchImageView.frame.origin.x+searchImageView.frame.size.width+10), 44.)];
+    searchField.backgroundColor = [UIColor clearColor];
+    searchField.font = [UIFont systemFontOfSize:13.];
+    searchField.textColor = [UIColor grayColor];
+    searchField.delegate = self;
+    [seachBar addSubview:searchField];
+    
+    searchTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 65, XBB_Screen_width, XBB_Screen_height - 65)];
+    searchTableView.userInteractionEnabled = YES;
+    searchTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapMarkControl:)];
+    [searchTableView addGestureRecognizer:tap];
+    
+    
+    [self.view addSubview:searchTableView];
+    searchTableView.alpha  = 0;
+    [self hiddenSearchBar:YES];
+}
+- (void)addMarkView
+{
+    markBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, XBB_Screen_height)];
+    markBackView.backgroundColor = [UIColor blackColor];
+    markBackView.alpha = 0.7;
+    [self.view addSubview:markBackView];
+    markBackControlView = [[UIView alloc] initWithFrame:markBackView.bounds];
+    [markBackView addSubview:markBackControlView];
+    textView = [[UITextView alloc] initWithFrame:CGRectMake(20., XBB_Screen_height - 400., XBB_Screen_width-40., 200.)];
+    
+    textView.layer.cornerRadius = 5;
+    textView.layer.masksToBounds = YES;
+    [markBackControlView addSubview:textView];
+    
+    UIImage *buttonImage = [UIImage imageNamed:@"X"];
+    cannelbutton = [[UIButton alloc] initWithFrame:CGRectMake(textView.frame.size.width + textView.frame.origin.x -30.-buttonImage.size.width, textView.frame.origin.y - buttonImage.size.height/2, buttonImage.size.width, buttonImage.size.height)];
+    [cannelbutton setImage:buttonImage forState:UIControlStateNormal];
+    [cannelbutton addTarget:self action:@selector(toClose) forControlEvents:UIControlEventTouchUpInside];
+    [markBackControlView addSubview:cannelbutton];
+    
+    UIImage *image = [UIImage imageNamed:@"确定"];
+    UIButton *markButton = [[UIButton alloc] initWithFrame:CGRectMake(20., XBB_Screen_height - 150., XBB_Screen_width-40., 44.)];
+    [markButton setTitle:@"提交" forState:UIControlStateNormal];
+    [markButton addTarget:self action:@selector(smitMark) forControlEvents:UIControlEventTouchUpInside];
+    [markButton setBackgroundImage:image forState:UIControlStateNormal];
+    [markBackControlView addSubview:markButton];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapMarkControl:)];
+    [markBackControlView addGestureRecognizer:tap];
+    markBackView.alpha = 0;
+    [self hiddenMarkViews:YES];
+   
+}
+- (void)hiddenMarkViews:(BOOL)hidden
+{
+    if (hidden) {
+        [UIView animateWithDuration:0.25 animations:^{
+            markBackView.alpha = 0;
+            cannelbutton.transform = CGAffineTransformRotate(cannelbutton.transform, -M_PI);
+            
+        }];
+        
+    }else
+    {
+        [UIView animateWithDuration:0.25 animations:^{
+            markBackView.alpha = 0.7;
+            cannelbutton.transform = CGAffineTransformRotate(cannelbutton.transform, M_PI);
+        }];
+        
+    }
+}
+
 
 
 #pragma mark NetAbserver
@@ -273,7 +399,6 @@
 - (void)tempViewControllerPushFunction
 {
     
-    
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(200, 300, 50, 50)];
     button.backgroundColor = [UIColor redColor];
     [self.view addSubview:button];
@@ -312,7 +437,7 @@
     UILabel *titelLabel = [[UILabel alloc] init];
     [titelLabel setTextColor:[UIColor whiteColor]];
     [titelLabel setBackgroundColor:[UIColor clearColor]];
-    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"注册"];
+    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"地图"];
     [titelLabel setFont:XBB_NavBar_Font];
     [titelLabel setTextAlignment:NSTextAlignmentCenter];
     [self.xbbNavigationBar addSubview:titelLabel];
@@ -322,46 +447,115 @@
         make.left.mas_equalTo(50);
         make.width.mas_equalTo(XBB_Screen_width-100);
     }];
+    
+    UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width - 55., 28, 50, 30)];
+    [rightButton setTitle:@"确定" forState:UIControlStateNormal];
+    [rightButton.titleLabel setFont:[UIFont systemFontOfSize:14.]];
+    [self.xbbNavigationBar addSubview:rightButton];
+    [rightButton addTarget:self action:@selector(sureCommit:) forControlEvents:UIControlEventTouchUpInside];
+    
 }
 
 #pragma mark view disposed
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    bmlocation = [[BMKUserLocation alloc] init];  // 百度地图位置
-    floag = false; // 是否标记
-    [self initMapView]; // 初始化地图
-//    [self initView]; // 初始化视图
-    [self setNavigationBarControl];
-    [self initMylocationView]; // 初始化我的位置视图
-    [self initSearch]; // 初始化搜索
-    [self addPresentAreButtonCreate]; // 添加区域button
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserSuccessfulIndex:) name:NotificationUpdateUserSuccessful object:nil];
-    
-    
-    // 获取可服务区域
+- (void)featchAableArea
+{
     [NetworkHelper postWithAPI:Lat_Long parameter:nil successBlock:^(id response) {
         DLog(@"%@",response);
         if (response) {
             NSDictionary *dic = [(NSDictionary*)response objectForKey:@"result"];
             self.dicCoordinates = dic;
         }
-
+        
     } failBlock:^(NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"获取可服务区域失败"];
     }];
+
+}
+
+- (void)initData
+{
+    [self featchAableArea];
+    [UserObj shareInstance].currentAddressDetail = @"";
+}
+- (void)initAll
+{
+    bmlocation = [[BMKUserLocation alloc] init];  // 百度地图位置
+    [self initSearch]; // 初始化搜索
+}
+
+
+- (void)initUI
+{
+   
+    [self initMapView];
+    [self setNavigationBarControl];
+    [self initView];
+    [self addPresentAreButtonCreate]; // 添加区域button
+    [self initMylocationView]; // 初始化我的位置视图
+    [self addAddressSeachBar];
+    [self addMarkView];
+   
+}
+- (void)viewDidLoad {
     
-    // 版本更新
-    [self checkVerison];
-    //      _checkVersionTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(checkVerison) userInfo:nil repeats:YES];
+    [super viewDidLoad];
+    [self initData];
+    [self initAll];
+    [self initUI];
+    
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [self initData];
 }
+
+- (void)keyboardWillShow
+{
+    if (ismark) {
+        [UIView animateWithDuration:0.25 animations:^{
+            CGRect frame = markBackControlView.frame;
+            
+            if (XBB_IsIphone4s) {
+                frame.origin.y = -60;
+                cannelbutton.transform = CGAffineTransformRotate(cannelbutton.transform,M_PI);
+            }
+            else
+            {
+                frame.origin.y = -100;
+                cannelbutton.transform = CGAffineTransformRotate(cannelbutton.transform, M_PI);
+            }
+            
+            markBackControlView.frame = frame;
+        }];
+    }
+    if (isSearch) {
+        [self hiddenSearchBar:NO];
+    }
+}
+- (void)keyboardWillHide
+{
+    if (ismark) {
+        [UIView animateWithDuration:0.25 animations:^{
+            CGRect frame = markBackControlView.frame;
+            frame.origin.y = 0.;
+            cannelbutton.transform = CGAffineTransformRotate(cannelbutton.transform,-M_PI);
+            markBackControlView.frame = frame;
+        }];
+        
+    }
+    if (isSearch) {
+        [self hiddenSearchBar:YES];
+        isSearch = NO;
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+    
 //    [self.navigationController.navigationBar setHidden:NO];
     
     
@@ -376,83 +570,18 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-//    [self.navigationController.navigationBar setHidden:NO];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [map viewWillDisappear];
     map.delegate = nil; // 不用时，置nil
     _locService.delegate = nil;
+    _suggestionSearch.delegate = nil;
 }
 
-- (IBAction)backViewController:(id)sender{
-    [self.navigationController popViewControllerAnimated:YES];
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
+
 - (void)initView{
     
-    self.view.backgroundColor=[UIColor whiteColor];
-    self.view.backgroundColor = kUIColorFromRGB(0xCCCCCC);
-//    self.navigationController.navigationBar.barTintColor=kUIColorFromRGB(0xdc3733);
-    //self.navigationController.navigationBar.
-    
-    //导航栏中间
-    UIView *titleView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-    
-    UIImageView *imgTitleView = [[UIImageView alloc] initWithFrame:CGRectMake(21.5, 5, 57, 18.5)];
-    UIImage *imgtitle = [UIImage imageNamed:@"logo.png"];
-    imgTitleView.image = imgtitle;
-    [titleView addSubview:imgTitleView];
-    
-    UIView *addcarview = [[UIView alloc] initWithFrame:CGRectMake(0, 15, 100, 22)];
-    addcarview.userInteractionEnabled = YES;
-    UITapGestureRecognizer *addtap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addcar)];
-    [addcarview addGestureRecognizer:addtap];
-    add = [[UIImageView alloc] initWithFrame:CGRectMake(20, 10, 11.5, 11.5)];
-    add.image = [UIImage imageNamed:@"add_car.png"];
-    [addcarview addSubview:add];
-    labCar = [[UILabel alloc] initWithFrame:CGRectMake(8, 10, titleView.frame.size.width, 13)];
-    labCar.textColor = [UIColor whiteColor];
-    labCar.textAlignment = NSTextAlignmentCenter;
-    labCar.text = @"默认车辆";
-    labCar.font = [UIFont boldSystemFontOfSize:10];
-    
-    UIImageView *imgViewAdd = [[UIImageView alloc] initWithFrame:CGRectMake(25, 25, 54, 4)];
-    imgViewAdd.userInteractionEnabled = YES;
-    imgViewAdd.image = [UIImage imageNamed:@"addMoren.png"];
-    imgViewAdd.center = CGPointMake(titleView.frame.size.width * 0.5f, imgViewAdd.center.y);
-    [imgViewAdd addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addcar)]];
-    
-    [addcarview addSubview:imgViewAdd];
-    [addcarview addSubview:labCar];
-    [titleView addSubview:addcarview];
-    self.navigationItem.titleView=titleView;
-    
-    
-    //导航栏左边
-    img_view=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-    img_view.layer.masksToBounds=YES;
-    img_view.layer.cornerRadius=15;
-    img_view.image=[UIImage imageNamed:@"nav1.png"];
-    img_view.userInteractionEnabled=YES;
-    UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickLeftButton)];
-    [img_view addGestureRecognizer:tap];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:img_view];
-    
-    //导航栏右边
-    UIView *rightView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
-    UILabel *labright=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 22)];
-    labright.textColor=[UIColor whiteColor];
-    labright.textAlignment=NSTextAlignmentCenter;
-    labright.text=@"限行尾号";
-    labright.font = [UIFont systemFontOfSize:15];
-    [rightView addSubview:labright];
-    
-    labHao=[[UILabel alloc] initWithFrame:CGRectMake(0, 22, 60, 22)];
-    labHao.textColor=[UIColor whiteColor];
-    labHao.textAlignment=NSTextAlignmentCenter;
-    labHao.text=[NSString stringWithFormat:@"_   _"];
-    labHao.font = [UIFont systemFontOfSize:15];
-    [rightView addSubview:labHao];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightView];
-    
+
     //左边快速定位
     UIView *locationView=[[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetHeight(self.view.bounds)-180, 50, 140)];
     
@@ -484,6 +613,7 @@
     [currentLocationBtn addTarget:self action:@selector(here) forControlEvents:UIControlEventTouchUpInside];
     [locationView addSubview:currentLocationBtn];
     [self.view addSubview:locationView];
+    [self.view bringSubviewToFront:locationView];
 }
 
 
@@ -496,7 +626,10 @@
  **/
 - (void)onGetSuggestionResult:(BMKSuggestionSearch*)searcher result:(BMKSuggestionResult*)result errorCode:(BMKSearchErrorCode)error
 {
-    DLog(@"%@",result.keyList);
+    NSArray *arr = result.ptList;
+    for (NSValue *st in arr) {
+    }
+    
 }
 
 //根据overlay生成对应的View
@@ -545,6 +678,9 @@
 
 - (void)initMapView{
     map= [[BMKMapView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds))]; // 初始化地图
+    map.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toucheMap:)];
+    [map addGestureRecognizer:tap];
     map.baiduHeatMapEnabled = NO;
     map.zoomLevel=18; // 设置地图比例
     map.delegate=self; // 地图代理
@@ -617,76 +753,61 @@
 
 
 - (void)initMylocationView{
-    myLocationView=[[UIView alloc] init];
-    myLocationView.backgroundColor=kUIColorFromRGB(0xFFFFFF);
-    
-    [myLocationView.layer setMasksToBounds:YES];
-    [myLocationView.layer setCornerRadius:10.0];
-    [self.view addSubview:myLocationView];
-    
-    imgViewCurrent=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mark"]];
+
+    imgViewCurrent=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"泡泡"]];
     [self.view addSubview:imgViewCurrent];
     [imgViewCurrent mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(map);
-        make.centerY.mas_equalTo(map).mas_offset(-20);
+        make.centerY.mas_equalTo(map).mas_offset(-60.);
+        make.width.mas_equalTo(XBB_Screen_width-160.);
+        make.height.mas_equalTo(120.);
+        
     }];
     
-    
-    lab_prompt = [[UIButton alloc] initWithFrame:CGRectMake(100, 10, 200, 60)];
-    [myLocationView addSubview:lab_prompt];
-    [lab_prompt setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [lab_prompt setTitle: @"点击申请开通此城市" forState:UIControlStateNormal];
-    lab_prompt.titleLabel.textAlignment = NSTextAlignmentCenter;
-    [lab_prompt.titleLabel setFont:[UIFont systemFontOfSize:18]];
-    lab_prompt.alpha = 0;
-    [lab_prompt addTarget:self action:@selector(toTouchAppleButton:) forControlEvents:UIControlEventTouchUpInside];
-    [lab_prompt mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(myLocationView.mas_top).mas_offset(25);
-        make.height.mas_equalTo(60);
-        make.width.mas_equalTo(200);
-        make.centerX.mas_equalTo(myLocationView);
-    }];
-    
-    
-    
-    /**
-     * @brief 即刻上门
-     **/
-    imgView_now  =[[UIImageView alloc] initWithFrame:CGRectMake(100, 10, 60, 60)];
-    imgView_now.userInteractionEnabled=YES;
-    UITapGestureRecognizer *nowTap=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addOrderNow)];
-    [imgView_now addGestureRecognizer:nowTap];
-    imgView_now.image=[UIImage imageNamed:@"xi1.png"];
-    [myLocationView addSubview:imgView_now];
-    
-    lab_now =[[UILabel alloc] initWithFrame:CGRectMake(100, 75, 60, 20)];
-    lab_now.textAlignment=NSTextAlignmentCenter;
-    lab_now.text=@"立即下单";
-    lab_now.font=[UIFont systemFontOfSize:14.0];
-    [myLocationView addSubview:lab_now];
-   
-    viewxian =[[UIView alloc] initWithFrame:CGRectMake(10, 105, 240, 0.5)];
-    viewxian.backgroundColor=kUIColorFromRGB(0xCCCCCC);
-    [myLocationView addSubview:viewxian];
-    UIButton *labMylocation = [[UIButton alloc] initWithFrame:CGRectMake(80, 115, 100, 20)];
+    UIButton *labMylocation = [[UIButton alloc] initWithFrame:CGRectMake(0, 10, XBB_Screen_width-160, 20)];
     [labMylocation.titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [labMylocation setTitle:@"我的位置" forState:UIControlStateNormal];
+    [labMylocation setTitle:@"选择位置" forState:UIControlStateNormal];
     [labMylocation setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [labMylocation.titleLabel setFont:[UIFont systemFontOfSize:16]];
     labMylocation.userInteractionEnabled = YES;
-    [labMylocation addTarget:self action:@selector(toPOISerch:) forControlEvents:UIControlEventTouchUpInside];
-    [myLocationView addSubview:labMylocation];
-
-    
-    labNowLoaction = [[UILabel alloc] initWithFrame:CGRectMake(0, 135, 260, 20)];
+//    [labMylocation addTarget:self action:@selector(toPOISerch:) forControlEvents:UIControlEventTouchUpInside];
+    [imgViewCurrent addSubview:labMylocation];
+    labNowLoaction = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, XBB_Screen_width-169, 40)];
     labNowLoaction.textAlignment=NSTextAlignmentCenter;
     [labNowLoaction setTextColor:[UIColor lightGrayColor]];
     labNowLoaction.font =[UIFont systemFontOfSize:14.0];
+    labNowLoaction.numberOfLines = 2;
     
     [self.view bringSubviewToFront:imgViewCurrent];
-    [myLocationView addSubview:labNowLoaction];
+    [imgViewCurrent addSubview:labNowLoaction];
+    
+    imgViewCurrent.userInteractionEnabled = YES;
+    
+
+    UIImage *maekButtonimage = [UIImage imageNamed:@"备注"];
+    UIButton *markButton = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width - 160 - 10 - maekButtonimage.size.width , labNowLoaction.frame.origin.y+labNowLoaction.frame.size.height +5, maekButtonimage.size.width, maekButtonimage.size.height)];
+    
+//    markButton.backgroundColor = [UIColor blackColor];
+    [markButton setBackgroundImage:maekButtonimage forState:UIControlStateNormal];
+    [markButton setTitle:@"备注" forState:UIControlStateNormal];
+    [markButton.titleLabel setFont:[UIFont systemFontOfSize:12.]];
+    [markButton addTarget:self action:@selector(markAction:) forControlEvents:UIControlEventTouchUpInside];
+    [imgViewCurrent addSubview:markButton];
+    
+    markLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, markButton.frame.origin.y, XBB_Screen_width-174-markButton.frame.size.width, markButton.frame.size.height)];
+    markLabel.font = [UIFont systemFontOfSize:14.0];
+    markLabel.textColor = [UIColor lightGrayColor];
+    [markLabel setTextAlignment:NSTextAlignmentCenter];
+    [imgViewCurrent addSubview:markLabel];
+    
+    
+    
+    imgViewCurrent.alpha = 0;
     
 }
+
+
+
 
 - (void)myLocationOnTouch:(UITapGestureRecognizer *)sender {
     if (IsLogin) {
@@ -700,102 +821,140 @@
 
 #pragma mark Data
 
-- (void)initData{
-    NSUserDefaults *isLogin = [NSUserDefaults standardUserDefaults];
-    NSString *userid = [isLogin objectForKey:@"userid"];
-    [UserObj shareInstance].uid = userid;
-    if (IsLogin) {
-        //请求个人头像
-        NSMutableDictionary *dicMine=[NSMutableDictionary dictionary];
-        [dicMine setObject:[UserObj shareInstance].uid forKey:@"uid"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
-        [NetworkHelper postWithAPI:Select_user_API parameter:dicMine successBlock:^(id response) {
-            if ([response[@"code"] integerValue] == 1) {
-                UserObj *user=[UserObj shareInstance];
-                user.ads_id=[[response objectForKey:@"result"] objectForKey:@"ads_id"];
-                user.age=[[response objectForKey:@"result"] objectForKey:@"age"] ;
-                user.c_id=[[response objectForKey:@"result"] objectForKey:@"c_id"] ;
-                user.email=[[response objectForKey:@"result"] objectForKey:@"email"];
-                user.iphone=[[response objectForKey:@"result"] objectForKey:@"iphone"];
-                user.profession=[[response objectForKey:@"result"] objectForKey:@"profession"];
-                user.QQ=[[response objectForKey:@"result"] objectForKey:@"qq"];
-                user.imgstring=[[response objectForKey:@"result"] objectForKey:@"u_img"];
-                user.sex=[[response objectForKey:@"result"] objectForKey:@"sex"];
-                user.uid=[[response objectForKey:@"result"] objectForKey:@"uid"];
-                user.uname=[[response objectForKey:@"result"] objectForKey:@"uname"];
-                user.weixin=[[response objectForKey:@"result"] objectForKey:@"weixin"];
-                user.imgstring = [[response objectForKey:@"result"] objectForKey:@"u_img"];
-                //                [BPush setTag:user.uid withCompleteHandler:^(id result, NSError *error) {
-                //                }];
-                NSString *channelId = [BPush getChannelId];
-                if (channelId)
-                    [NetworkHelper postWithAPI:API_ChannelIdInsert parameter:@{@"uid": user.uid, @"channelid": channelId} successBlock:^(id response) {
-                        if ([response[@"code"] integerValue] == 1) {
-                            NSLog(@"channelid设置成功");
-                        } else {
-                            NSLog(@"channelid设置失败");
-                        }
-                    } failBlock:^(NSError *error) {
-                        NSLog(@"channelid设置失败");
-                    }];
-                //                NSString *channelId = [BPush getChannelId];
-                //                [BPush bindChannelWithCompleteHandler:^(id result, NSError *error) {
-                //                }];
-                if ([[[response objectForKey:@"result"] objectForKey:@"u_img"] isKindOfClass:[NSNull class]]) {
-                    img_view.image=[UIImage imageNamed:@"nav1.png"];
-                }else{
-                    [img_view sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", ImgDomain,[[response objectForKey:@"result"] objectForKey:@"u_img"]]] placeholderImage:[UIImage imageNamed:@"nav1"]];
-                }
-                [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginSuccessful object:nil];
-                [self fetchAddressFromWeb:nil];
-            } else {
-                [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
-            }
-        } failBlock:^(NSError *error) {
-            //            [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"%@",error]];
-            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
-        }];
-        
-        //请求默认车辆
-        NSMutableDictionary *dicCar=[NSMutableDictionary dictionary];
-        [dicCar setValue:[UserObj shareInstance].uid forKey:@"uid"];
-        [NetworkHelper postWithAPI:car_select parameter:dicCar successBlock:^(id response) {
-            NSLog(@"车辆dics%@",response);
-            if ([response[@"code"] integerValue] == 1) {
-                NSDictionary *result=[response objectForKey:@"result"];
-                NSString *default_id=[result objectForKey:@"default"];
-                NSArray *arrCar=[result objectForKey:@"list"];
-                if (arrCar.count == 0) {
-                    labCar.frame = CGRectMake(8, 10, 100, 13);
-                    add.hidden = NO;
-                    labCar.text = @"默认车辆";
-                }else
-                {
-                    for (NSDictionary *dic in arrCar) {
-                        if ([default_id isEqualToString:[dic objectForKey:@"id"]]) {
-                            
-                            self.defaultCarDic = dic;
-                            labCar.text=[dic objectForKey:@"c_plate_num"];
-                            add.hidden=YES;
-                            labCar.center = CGPointMake(labCar.superview.frame.size.width * 0.5, labCar.center.y);
-                        }
-                    }
-                }
-            } else {
-                labCar.frame = CGRectMake(8, 10, 100, 13);
-                add.hidden = NO;
-                labCar.text = @"默认车辆";
-            }
-        } failBlock:^(NSError *error) {
-            
-        }];
-        
-    }else{
-        labCar.text = @"默认车辆";
-        img_view.image=[UIImage imageNamed:@"nav1.png"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
+
+#pragma mark datas
+
+- (void)initViewWillAppearDatas
+{
+    if (([[UserObj shareInstance] homeAddress].length== 0 ||[[UserObj shareInstance] homeAddress]==nil) && ([[UserObj shareInstance] companyAddress].length== 0||[[UserObj shareInstance] companyAddress]==nil)) {
+        [self fetchAddressFromWeb:nil];
     }
 }
+
+- (void)fetchAddressFromWeb:(void (^)())callback {
+    [SVProgressHUD show];
+    [NetworkHelper postWithAPI:API_AddressSelect parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
+        if ([response[@"code"] integerValue] == 1) {
+            [SVProgressHUD dismiss];
+            NSArray *result = response[@"result"][@"list"];
+            for (NSDictionary *temp in result) {
+                if ([temp[@"address_type"] integerValue] == 0) {
+                    [UserObj shareInstance].homeAddress = temp[@"address"];                    [UserObj shareInstance].homeDetailAddress = temp[@"address_info"];
+                    [UserObj shareInstance].homeCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);
+                } else if ([temp[@"address_type"] integerValue] == 1) {
+                    
+                    
+                    [UserObj shareInstance].companyAddress = temp[@"address"];
+                    [UserObj shareInstance].companyDetailAddress = temp[@"address_info"];
+                    [UserObj shareInstance].companyCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);
+                }
+            }
+        } else {
+            [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+        }
+    } failBlock:^(NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"查询失败"];
+    }];
+}
+
+
+
+//- (void)initData{
+//    NSUserDefaults *isLogin = [NSUserDefaults standardUserDefaults];
+//    NSString *userid = [isLogin objectForKey:@"userid"];
+//    [UserObj shareInstance].uid = userid;
+//    if (IsLogin) {
+//        //请求个人头像
+//        NSMutableDictionary *dicMine=[NSMutableDictionary dictionary];
+//        [dicMine setObject:[UserObj shareInstance].uid forKey:@"uid"];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
+//        [NetworkHelper postWithAPI:Select_user_API parameter:dicMine successBlock:^(id response) {
+//            if ([response[@"code"] integerValue] == 1) {
+//                UserObj *user=[UserObj shareInstance];
+//                user.ads_id=[[response objectForKey:@"result"] objectForKey:@"ads_id"];
+//                user.age=[[response objectForKey:@"result"] objectForKey:@"age"] ;
+//                user.c_id=[[response objectForKey:@"result"] objectForKey:@"c_id"] ;
+//                user.email=[[response objectForKey:@"result"] objectForKey:@"email"];
+//                user.iphone=[[response objectForKey:@"result"] objectForKey:@"iphone"];
+//                user.profession=[[response objectForKey:@"result"] objectForKey:@"profession"];
+//                user.QQ=[[response objectForKey:@"result"] objectForKey:@"qq"];
+//                user.imgstring=[[response objectForKey:@"result"] objectForKey:@"u_img"];
+//                user.sex=[[response objectForKey:@"result"] objectForKey:@"sex"];
+//                user.uid=[[response objectForKey:@"result"] objectForKey:@"uid"];
+//                user.uname=[[response objectForKey:@"result"] objectForKey:@"uname"];
+//                user.weixin=[[response objectForKey:@"result"] objectForKey:@"weixin"];
+//                user.imgstring = [[response objectForKey:@"result"] objectForKey:@"u_img"];
+//                //                [BPush setTag:user.uid withCompleteHandler:^(id result, NSError *error) {
+//                //                }];
+//                NSString *channelId = [BPush getChannelId];
+//                if (channelId)
+//                    [NetworkHelper postWithAPI:API_ChannelIdInsert parameter:@{@"uid": user.uid, @"channelid": channelId} successBlock:^(id response) {
+//                        if ([response[@"code"] integerValue] == 1) {
+//                            NSLog(@"channelid设置成功");
+//                        } else {
+//                            NSLog(@"channelid设置失败");
+//                        }
+//                    } failBlock:^(NSError *error) {
+//                        NSLog(@"channelid设置失败");
+//                    }];
+//                //                NSString *channelId = [BPush getChannelId];
+//                //                [BPush bindChannelWithCompleteHandler:^(id result, NSError *error) {
+//                //                }];
+//                if ([[[response objectForKey:@"result"] objectForKey:@"u_img"] isKindOfClass:[NSNull class]]) {
+//                    img_view.image=[UIImage imageNamed:@"nav1.png"];
+//                }else{
+//                    [img_view sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", ImgDomain,[[response objectForKey:@"result"] objectForKey:@"u_img"]]] placeholderImage:[UIImage imageNamed:@"nav1"]];
+//                }
+//                [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginSuccessful object:nil];
+//                [self fetchAddressFromWeb:nil];
+//            } else {
+//                [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
+//            }
+//        } failBlock:^(NSError *error) {
+//            //            [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"%@",error]];
+//            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
+//        }];
+//        
+//        //请求默认车辆
+//        NSMutableDictionary *dicCar=[NSMutableDictionary dictionary];
+//        [dicCar setValue:[UserObj shareInstance].uid forKey:@"uid"];
+//        [NetworkHelper postWithAPI:car_select parameter:dicCar successBlock:^(id response) {
+//            NSLog(@"车辆dics%@",response);
+//            if ([response[@"code"] integerValue] == 1) {
+//                NSDictionary *result=[response objectForKey:@"result"];
+//                NSString *default_id=[result objectForKey:@"default"];
+//                NSArray *arrCar=[result objectForKey:@"list"];
+//                if (arrCar.count == 0) {
+//                    labCar.frame = CGRectMake(8, 10, 100, 13);
+//                    add.hidden = NO;
+//                    labCar.text = @"默认车辆";
+//                }else
+//                {
+//                    for (NSDictionary *dic in arrCar) {
+//                        if ([default_id isEqualToString:[dic objectForKey:@"id"]]) {
+//                            
+//                            self.defaultCarDic = dic;
+//                            labCar.text=[dic objectForKey:@"c_plate_num"];
+//                            add.hidden=YES;
+//                            labCar.center = CGPointMake(labCar.superview.frame.size.width * 0.5, labCar.center.y);
+//                        }
+//                    }
+//                }
+//            } else {
+//                labCar.frame = CGRectMake(8, 10, 100, 13);
+//                add.hidden = NO;
+//                labCar.text = @"默认车辆";
+//            }
+//        } failBlock:^(NSError *error) {
+//            
+//        }];
+//        
+//    }else{
+//        labCar.text = @"默认车辆";
+//        img_view.image=[UIImage imageNamed:@"nav1.png"];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
+//    }
+//}
 
 
 
@@ -847,32 +1006,32 @@
     }
 }
 
-
-#pragma mark 即刻上门
-//即刻上门
-- (void)addOrderNow{
-    if (IsLogin)
-    {
-        // 定位失败
-        if (!location_lg || !location_lt) {
-            [SVProgressHUD showErrorWithStatus:@"定位失败"];
-            return;
-        }
-        // 设置默认车辆
-        UserObj *user=[UserObj shareInstance];
-        if ([user.c_id integerValue]== 0 ||[user.c_id integerValue] == 1 ) {
-            UIAlertView *alert = [CustamViewController createAlertViewTitleStr:@"请设置默认车辆" withMsg:nil widthDelegate:self withCancelBtn:@"取消" withbtns:@"去设置"];
-            [alert show];
-            return;
-        }
-        
-        [self toPush:NO]; // 下单
-    }
-    else
-    {
-        GoToLogin(self);
-    }
-}
+//
+//#pragma mark 即刻上门
+////即刻上门
+//- (void)addOrderNow{
+//    if (IsLogin)
+//    {
+//        // 定位失败
+//        if (!location_lg || !location_lt) {
+//            [SVProgressHUD showErrorWithStatus:@"定位失败"];
+//            return;
+//        }
+//        // 设置默认车辆
+//        UserObj *user=[UserObj shareInstance];
+//        if ([user.c_id integerValue]== 0 ||[user.c_id integerValue] == 1 ) {
+//            UIAlertView *alert = [CustamViewController createAlertViewTitleStr:@"请设置默认车辆" withMsg:nil widthDelegate:self withCancelBtn:@"取消" withbtns:@"去设置"];
+//            [alert show];
+//            return;
+//        }
+//        
+//        [self toPush:NO]; // 下单
+//    }
+//    else
+//    {
+//        GoToLogin(self);
+//    }
+//}
 
 #pragma 没有订单或者车辆时alert
 
@@ -942,18 +1101,18 @@
     [_locService stopUserLocationService];
     bmlocation=userLocation;
  
-    CGPoint point=[map convertCoordinate:map.centerCoordinate toPointToView:map];
+//    CGPoint point=[map convertCoordinate:map.centerCoordinate toPointToView:map];
     [map updateLocationData:userLocation];
-    [myLocationView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(260, 170));
-        make.left.mas_equalTo(point.x - 130);
-        make.top.mas_equalTo(point.y - 210);
-    }];
+
+    
     [UserObj shareInstance].currentCoordinate = userLocation.location.coordinate;
     [map setCenterCoordinate:userLocation.location.coordinate animated:YES];
 }
 
-
+- (void)onGetGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
+{
+    DLog(@"%@",result.address)
+}
 
 /**
  *返回反地理编码搜索结果
@@ -968,19 +1127,17 @@
      * @detail 设置开通城市
      **/
     [self setWindStyleWithopenCity:[self hasOpenServerCityWithCityName:self.cityName]];
-    [NetworkHelper getWithAPI:API_CityLimit parameter:@{@"city_name": [NSString stringWithFormat:@"%@", self.cityName]} successBlock:^(id response) {
-        if ([response[@"code"] integerValue] == 1) {
-            if ([response[@"result"][@"tail_number"] length])
-                labHao.text = response[@"result"][@"tail_number"];
-            else {
-                labHao.text = @"今日不限行";
-                labHao.adjustsFontSizeToFitWidth = YES;
-            }
-        }
-    } failBlock:^(NSError *error) {
-        
-    }];
+
+
+    
     labNowLoaction.text=result.address;
+    if (imgViewCurrent.alpha < 1) {
+        [UIView beginAnimations:@"imageAlpha" context:nil];
+        [UIView setAnimationDuration:0.25];
+        imgViewCurrent.alpha = 1.;
+        [UIView commitAnimations];
+    }
+    
     address_chose=result.address;
     [UserObj shareInstance].currentAddress = result.address;
     location_lg = [NSString stringWithFormat:@"%lf",result.location.longitude];
@@ -993,7 +1150,8 @@
  *@param animated 是否动画
  */
 - (void)mapView:(BMKMapView *)mapView regionWillChangeAnimated:(BOOL)animated{
-    myLocationView.hidden=YES;
+//    myLocationView.hidden=YES;
+//     imgViewCurrent.hidden = YES;
 }
 
 /**
@@ -1002,7 +1160,8 @@
  *@param animated 是否动画
  */
 - (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
-    myLocationView.hidden=NO;
+//    myLocationView.hidden=NO;
+//    imgViewCurrent.hidden = NO;
     //将大头针坐标转化为地理坐标
     
     //需要逆地理编码的坐标位置
@@ -1020,34 +1179,98 @@
         
     }];
 }
+#pragma mark textFieldDelegate
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    isSearch = YES;
+    [self hiddenSearchBar:NO];
+    
+    return YES;
+}
 
-- (void)fetchAddressFromWeb:(void (^)())callback {
-    [NetworkHelper postWithAPI:API_AddressSelect parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
-        if ([response[@"code"] integerValue] == 1) {
-            [SVProgressHUD dismiss];
-            NSArray *result = response[@"result"][@"list"];
-            for (NSDictionary *temp in result) {
-                if ([temp[@"address_type"] integerValue] == 0) {
-                    // 家
-                    [UserObj shareInstance].homeAddress = temp[@"address"];
-                    [UserObj shareInstance].homeDetailAddress = temp[@"address_info"];
-                    [UserObj shareInstance].homeCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);
-                } else if ([temp[@"address_type"] integerValue] == 1) {
-                    //公司
-                    [UserObj shareInstance].companyAddress = temp[@"address"];
-                    [UserObj shareInstance].companyDetailAddress = temp[@"address_info"];
-                    [UserObj shareInstance].companyCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);
-                }
-            }
-        } else {
-            [SVProgressHUD showErrorWithStatus:response[@"msg"]];
-        }
-    } failBlock:^(NSError *error) {
-        [SVProgressHUD showErrorWithStatus:@"查询失败"];
-    }];
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSString *string_one = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    BMKGeoCodeSearchOption * option = [[BMKGeoCodeSearchOption alloc] init];
+    option.city = self.cityName;
+    option.address = string_one;
+    [_geoCodeSearch geoCode:option];
+    
+//    BMKSuggestionSearchOption *opting = [[BMKSuggestionSearchOption alloc] init];
+//    opting.keyword = string_one;
+//    opting.cityname = self.cityName;
+//    [_suggestionSearch suggestionSearch:opting];
+    return YES;
 }
 
 #pragma mark action
+
+- (IBAction)backViewController:(id)sender{
+    if ([self.superController isEqualToString:@"XBBAddressSelectViewController"]) {
+        self.selectAddress(NO);
+    }
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+- (IBAction)sureCommit:(id)sender
+{
+    //
+    DLog(@"")
+    if ([self.superController isEqualToString:@"XBBAddressSelectViewController"]) {
+        self.selectAddress(YES);
+        [self.navigationController popViewControllerAnimated:YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }else
+    {
+        AddOrderViewController *order = [[AddOrderViewController alloc] init];
+        order.hasLocation = YES;
+        [self.navigationController pushViewController:order animated:YES];
+    }
+    
+    
+    
+    
+    
+}
+- (IBAction)toucheMap:(id)sender
+{
+    ismark = NO;
+    [textView resignFirstResponder];
+    [searchField resignFirstResponder];
+}
+
+- (void)toClose
+{
+    ismark = NO;
+    [textView resignFirstResponder];
+    [self hiddenMarkViews:YES];
+}
+- (void)smitMark
+{
+    ismark = NO;
+    [textView resignFirstResponder];
+    markLabel.text = textView.text;
+    [UserObj shareInstance].currentAddressDetail = textView.text;
+    [self hiddenMarkViews:YES];
+}
+
+
+- (IBAction)tapMarkControl:(id)sender
+{
+    [textView resignFirstResponder];
+    [searchField resignFirstResponder];
+}
+
+- (IBAction)markAction:(id)sender
+{
+//    [self addMarkView];
+    ismark = YES;
+    [textView becomeFirstResponder];
+    textView.text = [UserObj shareInstance].currentAddressDetail;
+    [self hiddenMarkViews:NO];
+}
+
 - (IBAction)toTouchAppleButton:(id)sender
 {
     if (self.haveConnection == NO) {

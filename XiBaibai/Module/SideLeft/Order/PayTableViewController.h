@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MyCarModel.h"
 
-@interface PayTableViewController : UITableViewController
+
+@interface PayTableViewController : XBBViewController
 
 
 // 有订单的时候跳转支付页面 （订单号，订单名称，订单id）
@@ -26,11 +28,15 @@
 
 @property (nonatomic, assign) NSInteger carType; // 车类型(必须传参数)
 
-@property (nonatomic, copy) NSDictionary *carInfo; // 车信息
+@property (nonatomic, strong) NSArray *carModels; // 车信息
 
 @property (nonatomic, copy) NSString *location; // 地址信息
 
 @property (nonatomic, assign) double couponprice; // 优惠价(必传)
+
+
+@property (nonatomic, copy) NSString *planTime; // 预约时间
+
 
 // 语音参数数据
 @property (nonatomic, strong) NSData *data;

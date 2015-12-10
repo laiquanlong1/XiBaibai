@@ -11,18 +11,19 @@
 @implementation MyCarModel
 
 
+
 - (NSString *)typeString {
     //1微型2小型3紧凑型4中型5中大型6大型7suv8mpv9跑车10皮卡11微面12电动车
     NSString *typeStr;
     switch (self.c_type) {
         case 1:
-            typeStr = @"微型";
+            typeStr = @"轿车";
             break;
         case 2:
-            typeStr = @"小型";
+            typeStr = @"SUV";
             break;
         case 3:
-            typeStr = @"紧凑型";
+            typeStr = @"MPV";
             break;
         case 4:
             typeStr = @"中型";

@@ -227,6 +227,11 @@
 		8EB548A11C0EBD7900FFB086 /* AddOrderDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB5489F1C0EBD7900FFB086 /* AddOrderDetailTableViewCell.xib */; };
 		8EB548A41C0ED34300FFB086 /* XBBOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB548A31C0ED34300FFB086 /* XBBOrder.m */; };
 		8ECE5B201C15CF5C00208998 /* XBBProObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ECE5B1F1C15CF5C00208998 /* XBBProObject.m */; };
+		8ECE5B771C17D0D400208998 /* XBBAddressSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ECE5B751C17D0D400208998 /* XBBAddressSelectViewController.m */; };
+		8ECE5B7A1C17D58900208998 /* XBBOne.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8ECE5B791C17D58900208998 /* XBBOne.storyboard */; };
+		8ECE5B7D1C17E0C500208998 /* XBBAddressAddTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ECE5B7C1C17E0C500208998 /* XBBAddressAddTableViewCell.m */; };
+		8ECE5B831C17E11000208998 /* XBBAddressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ECE5B821C17E11000208998 /* XBBAddressTableViewCell.m */; };
+		8ECE5B861C18038F00208998 /* XBBAddressModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ECE5B851C18038F00208998 /* XBBAddressModel.m */; };
 		8EEFCC031BEF189300D3D93F /* CarTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC021BEF189300D3D93F /* CarTypeTableViewController.m */; };
 		8EEFCC0D1BEF510600D3D93F /* XBBBaseLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC0C1BEF510600D3D93F /* XBBBaseLabel.m */; };
 		8EEFCC111BEF52B000D3D93F /* XBBListHeadLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC101BEF52B000D3D93F /* XBBListHeadLabel.m */; };
@@ -704,6 +709,15 @@
 		8EB548A31C0ED34300FFB086 /* XBBOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBOrder.m; path = XBBOrderTableViewController/XBBOrder.m; sourceTree = "<group>"; };
 		8ECE5B1E1C15CF5C00208998 /* XBBProObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBBProObject.h; sourceTree = "<group>"; };
 		8ECE5B1F1C15CF5C00208998 /* XBBProObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBBProObject.m; sourceTree = "<group>"; };
+		8ECE5B741C17D0D400208998 /* XBBAddressSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBAddressSelectViewController.h; path = AdressSelect/XBBAddressSelectViewController.h; sourceTree = "<group>"; };
+		8ECE5B751C17D0D400208998 /* XBBAddressSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBAddressSelectViewController.m; path = AdressSelect/XBBAddressSelectViewController.m; sourceTree = "<group>"; };
+		8ECE5B791C17D58900208998 /* XBBOne.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = XBBOne.storyboard; sourceTree = "<group>"; };
+		8ECE5B7B1C17E0C500208998 /* XBBAddressAddTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBAddressAddTableViewCell.h; path = AdressSelect/XBBAddressAddTableViewCell.h; sourceTree = "<group>"; };
+		8ECE5B7C1C17E0C500208998 /* XBBAddressAddTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBAddressAddTableViewCell.m; path = AdressSelect/XBBAddressAddTableViewCell.m; sourceTree = "<group>"; };
+		8ECE5B811C17E11000208998 /* XBBAddressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBAddressTableViewCell.h; path = AdressSelect/XBBAddressTableViewCell.h; sourceTree = "<group>"; };
+		8ECE5B821C17E11000208998 /* XBBAddressTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBAddressTableViewCell.m; path = AdressSelect/XBBAddressTableViewCell.m; sourceTree = "<group>"; };
+		8ECE5B841C18038F00208998 /* XBBAddressModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBAddressModel.h; path = AdressSelect/XBBAddressModel.h; sourceTree = "<group>"; };
+		8ECE5B851C18038F00208998 /* XBBAddressModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBAddressModel.m; path = AdressSelect/XBBAddressModel.m; sourceTree = "<group>"; };
 		8EEFCC011BEF189300D3D93F /* CarTypeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarTypeTableViewController.h; sourceTree = "<group>"; };
 		8EEFCC021BEF189300D3D93F /* CarTypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarTypeTableViewController.m; sourceTree = "<group>"; };
 		8EEFCC0B1BEF510600D3D93F /* XBBBaseLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBBaseLabel.h; path = DIYView/XBBBaseLabel.h; sourceTree = "<group>"; };
@@ -888,6 +902,7 @@
 				188D98071BADCD6100E68506 /* ViewController.m */,
 				188D980C1BADCD6100E68506 /* Assets.xcassets */,
 				188D9A1C1BADCDBE00E68506 /* Main.storyboard */,
+				8ECE5B791C17D58900208998 /* XBBOne.storyboard */,
 				188D980E1BADCD6100E68506 /* LaunchScreen.storyboard */,
 				188D98111BADCD6100E68506 /* Info.plist */,
 				188D98001BADCD6100E68506 /* Supporting Files */,
@@ -1034,6 +1049,7 @@
 		188D98751BADCD9A00E68506 /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				8ECE5B731C17D04F00208998 /* AddressSelect */,
 				8EEFCC171BF07F5100D3D93F /* FacialViewController */,
 				188D98791BADCD9A00E68506 /* DIYViewController */,
 				8EAA96C31C1128C300B83CA7 /* XBBMapViewController */,
@@ -1653,6 +1669,21 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		8ECE5B731C17D04F00208998 /* AddressSelect */ = {
+			isa = PBXGroup;
+			children = (
+				8ECE5B741C17D0D400208998 /* XBBAddressSelectViewController.h */,
+				8ECE5B751C17D0D400208998 /* XBBAddressSelectViewController.m */,
+				8ECE5B7B1C17E0C500208998 /* XBBAddressAddTableViewCell.h */,
+				8ECE5B7C1C17E0C500208998 /* XBBAddressAddTableViewCell.m */,
+				8ECE5B811C17E11000208998 /* XBBAddressTableViewCell.h */,
+				8ECE5B821C17E11000208998 /* XBBAddressTableViewCell.m */,
+				8ECE5B841C18038F00208998 /* XBBAddressModel.h */,
+				8ECE5B851C18038F00208998 /* XBBAddressModel.m */,
+			);
+			name = AddressSelect;
+			sourceTree = "<group>";
+		};
 		8EEFCC041BEF501A00D3D93F /* DIYView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1885,6 +1916,7 @@
 				188D99921BADCD9A00E68506 /* OrderTopView.xib in Resources */,
 				188D99F51BADCD9A00E68506 /* mark@2x.png in Resources */,
 				188D99D71BADCD9A00E68506 /* 1@icon_jifen.png in Resources */,
+				8ECE5B7A1C17D58900208998 /* XBBOne.storyboard in Resources */,
 				188D9A041BADCD9A00E68506 /* xbb_diygogounselected@2x.png in Resources */,
 				188D9A071BADCD9A00E68506 /* xi2.png in Resources */,
 				188D99D11BADCD9A00E68506 /* 1@icon_19.png in Resources */,
@@ -1977,6 +2009,7 @@
 				188D99CA1BADCD9A00E68506 /* CustamViewController.m in Sources */,
 				186A2A3E1BAEA98600645069 /* MWGridCell.m in Sources */,
 				8EAA96BF1C1039A600B83CA7 /* XBBHomeViewController.m in Sources */,
+				8ECE5B861C18038F00208998 /* XBBAddressModel.m in Sources */,
 				188D9A0A1BADCD9A00E68506 /* APAuthV2Info.m in Sources */,
 				188D999F1BADCD9A00E68506 /* MyCouponsModel.m in Sources */,
 				188D99AC1BADCD9A00E68506 /* LeftSideBarViewController.m in Sources */,
@@ -2009,6 +2042,7 @@
 				188D99C91BADCD9A00E68506 /* MyWallViewController.m in Sources */,
 				188D9A1A1BADCD9A00E68506 /* JSONKit.m in Sources */,
 				188D98081BADCD6100E68506 /* ViewController.m in Sources */,
+				8ECE5B7D1C17E0C500208998 /* XBBAddressAddTableViewCell.m in Sources */,
 				188D99BF1BADCD9A00E68506 /* MyCarTableViewController.m in Sources */,
 				188D9A141BADCD9A00E68506 /* RSADataSigner.m in Sources */,
 				186A2A6A1BAEA9A700645069 /* PSTCollectionViewLayout.m in Sources */,
@@ -2024,6 +2058,7 @@
 				188D99B91BADCD9A00E68506 /* PersonLocationViewController.m in Sources */,
 				188D99C31BADCD9A00E68506 /* UpdateCarInfoTableViewController.m in Sources */,
 				188D99BE1BADCD9A00E68506 /* FeedbackTableViewController.m in Sources */,
+				8ECE5B771C17D0D400208998 /* XBBAddressSelectViewController.m in Sources */,
 				188D9A0F1BADCD9A00E68506 /* DataSigner.m in Sources */,
 				188D9A111BADCD9A00E68506 /* MD5DataSigner.m in Sources */,
 				188D99901BADCD9A00E68506 /* MyOrderTableViewCell.m in Sources */,
@@ -2057,6 +2092,7 @@
 				188D99911BADCD9A00E68506 /* OrderTopView.m in Sources */,
 				188D99971BADCD9A00E68506 /* AFHelperViewController.m in Sources */,
 				188D99881BADCD9A00E68506 /* ZWIntroductionViewController.m in Sources */,
+				8ECE5B831C17E11000208998 /* XBBAddressTableViewCell.m in Sources */,
 				8E7996BE1BFB29DA00A25D87 /* CouponsUseRuleViewController.m in Sources */,
 				8E7E49DB1BF5AA8E008517DC /* OrderPayWayTableViewCell.m in Sources */,
 				186A2A791BAEBB4A00645069 /* ReserveViewController.m in Sources */,

@@ -30,6 +30,8 @@
 }
 
 #pragma mark BaseView
+
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -40,8 +42,6 @@
             [self disposeWillUI];
         });
     });
-    
-   
 }
 
 - (void)disposeDidLoadUI

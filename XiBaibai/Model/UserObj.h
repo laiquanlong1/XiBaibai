@@ -24,7 +24,7 @@
 @property (copy, nonatomic) NSString *weixin;
 
 //保存其他一些用户信息
-@property (copy, nonatomic) NSString *homeAddress, *homeDetailAddress, *companyAddress, *companyDetailAddress,*currentAddress;
+@property (copy, nonatomic) NSString *homeAddress, *homeDetailAddress, *companyAddress, *companyDetailAddress,*currentAddress,*currentAddressDetail;
 @property (assign, nonatomic) CLLocationCoordinate2D homeCoordinate, companyCoordinate, currentCoordinate;
 
 + (instancetype)shareInstance;

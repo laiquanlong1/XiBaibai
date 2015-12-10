@@ -7,9 +7,20 @@
 //
 
 #import "WebViewController.h"
+#import "XBBListHeadLabel.h"
+#import "XBBDiyObject.h"
+#import "XBBDIYViewController.h"
+#import "AddOrderViewController.h"
+#import "XBBFacialViewController.h"
+#import "XBBOrder.h"
+
 
 @interface WebViewController ()
-
+{
+    XBBListHeadLabel *priceTotalTitle;
+    UIView *barView;
+    float allPrice;
+}
 @property (strong, nonatomic) UIWebView *webView;
 
 @end
@@ -59,9 +70,152 @@
         make.width.mas_equalTo(XBB_Screen_width-100);
     }];
 }
+
+- (void)addAllPrice
+{
+    
+    priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",allPrice>0?allPrice:0.00];
+}
+
+- (void)setUpUIPriceBar
+{
+    UIView *barView_back = [[UIView alloc] initWithFrame:CGRectMake(0, 64., XBB_Screen_width, 70.)];
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(20., 10, 120, 30.)];
+    nameLabel.text = self.proObject.p_name;
+    
+    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(XBB_Screen_width - 200, 10, 185, 30.)];
+    priceLabel.text = [NSString stringWithFormat:@"轿车 ¥ %.2f",self.proObject.price_1];
+    [priceLabel setTextAlignment:NSTextAlignmentRight];
+    
+    
+    UILabel *priceLabel_1 = [[UILabel alloc] initWithFrame:CGRectMake(XBB_Screen_width - 200, 10+30, 185, 30.)];
+    priceLabel_1.text = [NSString stringWithFormat:@"SUV/MPV ¥ %.2f",self.proObject.price_2];
+    [barView_back addSubview:priceLabel_1];
+    [priceLabel_1 setTextAlignment:NSTextAlignmentRight];
+    
+    [priceLabel setFont:[UIFont systemFontOfSize:14.]];
+    [priceLabel_1 setFont:[UIFont systemFontOfSize:14.]];
+    [barView_back addSubview:priceLabel];
+    [barView_back addSubview:nameLabel];
+    
+
+    [self.view addSubview:barView_back];
+}
+
+- (void)addTabBar
+{
+    barView = [[UIView alloc] initWithFrame:CGRectMake(0, XBB_Screen_height-44., XBB_Screen_width, 44.)];
+    [self.view addSubview:barView];
+    barView.backgroundColor = XBB_Bg_Color;
+    barView.layer.borderWidth = 0.5;
+    barView.layer.borderColor = XBB_NavBar_Color.CGColor;
+    
+//    priceTotalTitle = [[XBBListHeadLabel alloc] initWithFrame:CGRectMake(0, 0, (XBB_Screen_width/2) , barView.bounds.size.height)];
+//    [priceTotalTitle setTextColor:XBB_NavBar_Color];
+//    [priceTotalTitle setFont:[UIFont boldSystemFontOfSize:16.]];
+//    [barView addSubview:priceTotalTitle];
+//    [priceTotalTitle setTextAlignment:NSTextAlignmentCenter];
+//    [self addAllPrice];
+//    priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",allPrice>0?allPrice:0.00];
+    
+    UIButton *button_1 = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, (XBB_Screen_width/2) , barView.bounds.size.height)];
+    [button_1 addTarget:self action:@selector(submit:) forControlEvents:UIControlEventTouchUpInside];
+    button_1.tag = 1;
+    button_1.backgroundColor = [UIColor colorWithRed:101./255. green:157./255. blue:25./255. alpha:1.0f]; //XBB_NavBar_Color;
+    [button_1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button_1 setTitle:@"继续选择" forState:UIControlStateNormal];
+    [button_1 setTitleColor:XBB_Bg_Color forState:UIControlStateNormal];
+    [barView addSubview:button_1];
+
+    
+    
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width- XBB_Screen_width/2, 0, XBB_Screen_width/2, barView.bounds.size.height)];
+    [button addTarget:self action:@selector(submit:) forControlEvents:UIControlEventTouchUpInside];
+    button.tag = 2;
+    button.backgroundColor = XBB_NavBar_Color;
+    [button setTitle:@"选择" forState:UIControlStateNormal];
+    [button setTitleColor:XBB_Bg_Color forState:UIControlStateNormal];
+    [barView addSubview:button];
+
+}
+
+- (void)submit:(id)sender
+{
+    
+    UIButton *button = sender;
+    switch (button.tag) {
+        case 1:
+        {
+            XBBOrder *oder = [[XBBOrder alloc] init];
+            oder.xbbid = self.proObject.p_id;
+            oder.title = self.proObject.p_name;
+            if (self.selectCarType == 1) {
+                oder.price = self.proObject.price_1;
+
+            }else
+            {
+                oder.price = self.proObject.price_2;
+
+            }
+            if (self.proObject.type == 1)
+            {
+                XBBDIYViewController *diy = [[XBBDIYViewController alloc] init];
+                diy.washType = 11;
+                diy.selectCarType = self.selectCarType;
+                diy.selectArray = @[oder];
+                
+                 [self.navigationController pushViewController:diy animated:YES];
+//                [self presentViewController:diy animated:YES completion:nil];
+                
+            }else if (self.proObject.type == 2)
+            {
+                XBBFacialViewController *fa = [[XBBFacialViewController alloc] init];
+                fa.selectFacialArray = @[oder];
+                fa.selectCarType = self.selectCarType;
+                 [self.navigationController pushViewController:fa animated:YES];
+//                [self presentViewController:fa animated:YES completion:nil];
+            }
+            
+            
+            
+        }
+            break;
+        case 2:
+        {
+            XBBDiyObject *object = [[XBBDiyObject alloc] init];
+            object.proName = self.proObject.p_name;
+            object.price1 = self.proObject.price_1;
+            object.price2 = self.proObject.price_2;
+            object.pid = self.proObject.p_id;
+            object.type = self.proObject.type;
+            NSArray *arr = @[object];
+            AddOrderViewController *order = [[AddOrderViewController alloc] init];
+            order.selectArray = arr;
+             [self.navigationController pushViewController:order animated:YES];
+//            [self presentViewController:order animated:YES completion:nil];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    DLog(@"")
+}
+
 - (void)initWeb
 {
-    self.webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 64., XBB_Screen_width, XBB_Screen_height-64.)];
+    if (self.proObject) {
+        self.webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 64.+70., XBB_Screen_width, XBB_Screen_height-64 - 70. - 44.)];
+        [self addTabBar];
+        [self setUpUIPriceBar];
+        
+        
+    }else
+    {
+        self.webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 64., XBB_Screen_width, XBB_Screen_height - 64.)];
+    }
+    
     [self.view addSubview:self.webView];
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlString]]];
 

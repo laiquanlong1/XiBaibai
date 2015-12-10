@@ -63,6 +63,7 @@
 - (void)back{
     self.planTime(nil);
     [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 /**
@@ -77,6 +78,7 @@
     }
     self.planTime(selectTime);
     [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -116,6 +118,18 @@
         make.left.mas_equalTo(50);
         make.width.mas_equalTo(XBB_Screen_width-100);
     }];
+    
+    
+
+    UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width - 55., 28, 50, 30)];
+    [rightButton setTitle:@"确定" forState:UIControlStateNormal];
+    [rightButton.titleLabel setFont:[UIFont systemFontOfSize:14.]];
+    [self.xbbNavigationBar addSubview:rightButton];
+    [rightButton addTarget:self action:@selector(sure:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    
+    
 }
 
 /**
@@ -127,27 +141,7 @@
     self.title = @"预约时间";
     self.view.backgroundColor = kUIColorFromRGB(0xf4f4f4);
     
-//    //返回
-//    UIImageView * img_view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"1@icon_back.png"]];
-//    img_view.layer.masksToBounds = YES;
-//    img_view.userInteractionEnabled = YES;
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(back)];
-//    [img_view addGestureRecognizer:tap];
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:img_view];
-//    
-//    UIButton *barBut = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-//    [barBut.titleLabel setTextColor:[UIColor whiteColor]];
-//    [barBut setTitle:@"确定" forState:UIControlStateNormal];
-//    [barBut.titleLabel setFont:[UIFont systemFontOfSize:16]];
-//    [barBut setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -50)];
-//    [barBut setBackgroundColor:[UIColor clearColor]];
-//    
-//    [barBut addTarget:self action:@selector(sure:) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    UIBarButtonItem *barBut_1 = [[UIBarButtonItem alloc] initWithCustomView:barBut];
-//    self.navigationItem.rightBarButtonItem = barBut_1;
-
-    
+ 
     //全局滚动视图
     UIScrollView *mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds))];
     mainScrollView.userInteractionEnabled = YES;

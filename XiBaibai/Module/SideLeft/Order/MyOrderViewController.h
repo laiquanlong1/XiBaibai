@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MyOrderViewController : UIViewController
+@interface MyOrderViewController : XBBViewController
 
 @end

@@ -25,6 +25,7 @@
 
 #define XBB_NavBar_Color kUIColorFromRGB(0x106ab1)
 #define XBB_Bg_Color kUIColorFromRGB(0xffffff)
+#define XBB_Bg_Color_2 kUIColorFromRGB(0xcccccc)
 #define XBB_NavBar_Font [UIFont systemFontOfSize:18.f]
 #define XBB_Prompt_Font [UIFont systemFontOfSize:16.f]
 

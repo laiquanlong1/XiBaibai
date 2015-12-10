@@ -7,15 +7,22 @@
 //
 
 #import "FacialSelectTableViewController.h"
-#import "FacialTableViewCell.h"
+//#import "FacialTableViewCell.h"
+#import "XBBListHeadLabel.h"
+#import "AddOrderDetailTableViewCell.h"
 
 
-
-@interface FaicalSelectTableViewController ()
+@interface FaicalSelectTableViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     UILabel         *_totalPriceLabel;
-    float     _totalPrice; // 总共的价格
+    float           _totalPrice; // 总共的价格
+    UIView          *barView;
+    XBBListHeadLabel  *priceTotalTitle;
+    
 }
+
+@property (nonatomic, strong) UITableView *tableView;
+
 @property (nonatomic, copy) NSArray *waxArr; // 打蜡
 @property (nonatomic, copy) NSArray *noWashArr; // 不需要洗车
 
@@ -60,6 +67,7 @@
                 NSDictionary *resultDic = dic[@"result"];
                 self.waxArr = resultDic[@"wax"][@"result"];
                 self.noWashArr = resultDic[@"notwash"][@"result"];
+                [self alphaToOne];
                 [self.tableView reloadData];
             } else {
                 [SVProgressHUD showErrorWithStatus:response[@"msg"]];
@@ -72,12 +80,68 @@
 
 #pragma mark view
 
+- (void)alphatoZero
+{
+    barView.alpha = 0;
+    self.tableView.alpha = 0.;
+}
+- (void)alphaToOne
+{
+    [UIView animateWithDuration:0.25 animations:^{
+        barView.alpha = 1;
+        self.tableView.alpha = 1.;
+    }];
+    
+}
+
+- (void)addTabBar
+{
+    barView = [[UIView alloc] initWithFrame:CGRectMake(0, XBB_Screen_height-44., XBB_Screen_width, 44.)];
+    [self.view addSubview:barView];
+    barView.backgroundColor = XBB_Bg_Color;
+    barView.layer.borderWidth = 0.5;
+    barView.layer.borderColor = XBB_NavBar_Color.CGColor;
+    
+    priceTotalTitle = [[XBBListHeadLabel alloc] initWithFrame:CGRectMake(0, 0, (XBB_Screen_width/3)*2 , barView.bounds.size.height)];
+    [priceTotalTitle setTextColor:XBB_NavBar_Color];
+    [priceTotalTitle setFont:[UIFont boldSystemFontOfSize:16.]];
+    [barView addSubview:priceTotalTitle];
+    [priceTotalTitle setTextAlignment:NSTextAlignmentCenter];
+    [self addAllPrice];
+
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width- XBB_Screen_width/3, 0, XBB_Screen_width/3, barView.bounds.size.height)];
+    [button addTarget:self action:@selector(submit:) forControlEvents:UIControlEventTouchUpInside];
+    button.backgroundColor = XBB_NavBar_Color;
+    [button setTitle:@"提交" forState:UIControlStateNormal];
+    [button setTitleColor:XBB_Bg_Color forState:UIControlStateNormal];
+    [barView addSubview:button];
+    
+    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, XBB_Screen_width, XBB_Screen_height-64.-barView.frame.size.height);
+    [self alphatoZero];
+}
+- (void)addAllPrice
+{
+    priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",_totalPrice>0?_totalPrice:0.00];
+}
+
+
+- (void)addtabview
+{
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,64., XBB_Screen_width, XBB_Screen_height-64.-44.) style:UITableViewStyleGrouped];
+    self.tableView.backgroundColor = XBB_Bg_Color;
+ 
+    [self.tableView registerNib:[UINib nibWithNibName:@"AddOrderDetailTableViewCell" bundle:nil] forCellReuseIdentifier:@"facial"];
+    self.tableView.separatorColor = kUIColorFromRGB(0xdddddd);
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.view addSubview:self.tableView];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self addtabview];
+    [self addTabBar];
     [self setNavigationBarControl];
-    [self.tableView registerNib:[UINib nibWithNibName:@"FacialTableViewCell" bundle:nil] forCellReuseIdentifier:@"facial"];
-    
-    [self initView]; // 初始化视图
     [self initData]; //  初始化数据
     [self hasDataToPre]; // 有数据的情况
     [self fetchData]; // 获取数据
@@ -129,21 +193,6 @@
 
 
 
-// 初始化视图
-- (void)initView
-{
-    self.title = self.naviTitle?self.naviTitle:@"美容";
-    //返回
-    UIImageView * img_view=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"1@icon_back.png"]];
-    img_view.layer.masksToBounds=YES;
-    img_view.userInteractionEnabled=YES;
-    UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backAction:)];
-    [img_view addGestureRecognizer:tap];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:img_view];
-    self.view.backgroundColor = kUIColorFromRGB(0xf4f4f4);
-    self.tableView.backgroundColor = kUIColorFromRGB(0xf4f4f4);
-}
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -151,44 +200,6 @@
 
 #pragma mark - Table view data source
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if (self.noWashArr) {
-        
-        
-        if (section == 1) {
-            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 100)];
-            view.backgroundColor = [UIColor clearColor];
-            
-            
-            UILabel *label_1 = [[UILabel alloc] initWithFrame:CGRectMake(25, 20, 100, 30)];
-            label_1.text = @"美容总价:";
-            label_1.font = [UIFont systemFontOfSize:14];
-            [view addSubview:label_1];
-            
-            _totalPriceLabel = [[UILabel alloc] initWithFrame:CGRectMake(150 , 20, 100, 30)];
-            _totalPriceLabel.textColor = [UIColor redColor];
-            _totalPriceLabel.text = [NSString stringWithFormat:@"%.2f",_totalPrice];
-            _totalPriceLabel.font = [UIFont systemFontOfSize:20.];
-            [view addSubview:_totalPriceLabel];
-            
-            
-            UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 65, view.bounds.size.width, 44)];
-            [button addTarget:self action:@selector(submit:) forControlEvents:UIControlEventTouchUpInside];
-            [button setBackgroundColor:[UIColor colorWithRed:253/255. green:122/255. blue:10/255. alpha:1]];
-            [button setTintColor:[UIColor whiteColor]];
-            [button setTitle:@"确定" forState:UIControlStateNormal];
-            [view addSubview:button];
-            button.alpha = 0.95;
-            
-            
-            
-            return view;
-        }
-        
-    }
-    return nil;
-}
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (self.noWashArr) {
@@ -261,9 +272,9 @@
         case 0:
         {
             static NSString *identity = @"facial";
-            FacialTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identity];
+            AddOrderDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identity];
             if (!cell) {
-                cell = [[FacialTableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier:identity];
+                cell = [[AddOrderDetailTableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier:identity];
             }
             cell.tag = 11;
             
@@ -287,35 +298,41 @@
             switch (self.selectCarType) {
                 case 1:
                 {
-                    NSString *string_1 = dic[@"p_info"];
-                    NSMutableAttributedString *attrI =[[NSMutableAttributedString alloc] initWithString:string_1] ;
+                    NSString *string_1 = dic[@"p_name"];
+                    cell.titleLabel.text = string_1;
+                    
+//                    NSMutableAttributedString *attrI =[[NSMutableAttributedString alloc] initWithString:string_1] ;
                     //            [attrI addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [string_1 length])];
-                    [attrI addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, [string_1 length])];
+//                    [attrI addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, [string_1 length])];
                     
                     NSString *string_2 = [NSString stringWithFormat:@"      %@",dic[@"p_price"]];
-                    NSMutableAttributedString *attrS =[[NSMutableAttributedString alloc] initWithString:string_2] ;
-                    [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [string_2 length])];
-                    [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, [string_2 length])];
-                    
-                    [attrI appendAttributedString:attrS];
-                    cell.facialNameLabel.attributedText = attrI;
+//                    NSMutableAttributedString *attrS =[[NSMutableAttributedString alloc] initWithString:string_2] ;
+//                    [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [string_2 length])];
+//                    [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, [string_2 length])];
+//                    
+//                    [attrI appendAttributedString:attrS];
+                    cell.priceLabel.text = string_2;
                 }
                     break;
                     
                 default:
                 {
-                    NSString *string_1 = dic[@"p_info"];
-                    NSMutableAttributedString *attrI =[[NSMutableAttributedString alloc] initWithString:string_1] ;
+//                    NSString *string_1 = dic[@"p_info"];
+//                    NSMutableAttributedString *attrI =[[NSMutableAttributedString alloc] initWithString:string_1] ;
+                    
+                    NSString *string_1 = dic[@"p_name"];
+                    cell.titleLabel.text = string_1;
                     //            [attrI addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [string_1 length])];
-                    [attrI addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, [string_1 length])];
+//                    [attrI addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, [string_1 length])];
                     
                     NSString *string_2 = [NSString stringWithFormat:@"      %@",dic[@"p_price2"]];
-                    NSMutableAttributedString *attrS =[[NSMutableAttributedString alloc] initWithString:string_2] ;
-                    [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [string_2 length])];
-                    [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, [string_2 length])];
-                    
-                    [attrI appendAttributedString:attrS];
-                    cell.facialNameLabel.attributedText = attrI;
+//                    NSMutableAttributedString *attrS =[[NSMutableAttributedString alloc] initWithString:string_2] ;
+//                    [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [string_2 length])];
+//                    [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, [string_2 length])];
+//                    
+//                    [attrI appendAttributedString:attrS];
+//                    cell.facialNameLabel.attributedText = attrI;
+                    cell.priceLabel.text = string_2;
                 }
                     break;
             }
@@ -341,9 +358,9 @@
         {
             
             static NSString *identity = @"facial";
-            FacialTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identity];
+            AddOrderDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identity];
             if (!cell) {
-                cell = [[FacialTableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier:@"facial"];
+                cell = [[AddOrderDetailTableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier:@"facial"];
             }
             cell.tag = 11;
             UIImageView *imageV = cell.selectImageView;
@@ -364,34 +381,37 @@
             switch (self.selectCarType) {
                 case 1:
                 {
-                    NSString *string_1 = dic[@"p_info"];
-                    NSMutableAttributedString *attrI =[[NSMutableAttributedString alloc] initWithString:string_1] ;
-                    [attrI addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, [string_1 length])];
+//                    NSString *string_1 = dic[@"p_info"];
+//                    NSMutableAttributedString *attrI =[[NSMutableAttributedString alloc] initWithString:string_1] ;
+//                    [attrI addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, [string_1 length])];
                     
                     NSString *string_2 = [NSString stringWithFormat:@"      %@",dic[@"p_price"]];
-                    NSMutableAttributedString *attrS =[[NSMutableAttributedString alloc] initWithString:string_2] ;
-                    [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [string_2 length])];
-                    [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, [string_2 length])];
                     
-                    [attrI appendAttributedString:attrS];
-                    cell.facialNameLabel.attributedText = attrI;
+//                    NSMutableAttributedString *attrS =[[NSMutableAttributedString alloc] initWithString:string_2] ;
+//                    [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [string_2 length])];
+//                    [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, [string_2 length])];
+                    
+//                    [attrI appendAttributedString:attrS];
+//                    cell.facialNameLabel.attributedText = attrI;
+                    cell.priceLabel.text = string_2;
                 }
                     break;
                     
                 default:
                 {
-                    NSString *string_1 = dic[@"p_info"];
-                    NSMutableAttributedString *attrI =[[NSMutableAttributedString alloc] initWithString:string_1] ;
-                    [attrI addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, [string_1 length])];
-                    
+//                    NSString *string_1 = dic[@"p_info"];
+//                    NSMutableAttributedString *attrI =[[NSMutableAttributedString alloc] initWithString:string_1] ;
+//                    [attrI addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, [string_1 length])];
+//                    
                     NSString *string_2 = [NSString stringWithFormat:@"      %@",dic[@"p_price2"]];
-                    NSMutableAttributedString *attrS =[[NSMutableAttributedString alloc] initWithString:string_2] ;
-                    [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [string_2 length])];
-                    [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, [string_2 length])];
+//                    NSMutableAttributedString *attrS =[[NSMutableAttributedString alloc] initWithString:string_2] ;
+//                    [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [string_2 length])];
+//                    [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, [string_2 length])];
+//                    
+//                    [attrI appendAttributedString:attrS];
                     
-                    [attrI appendAttributedString:attrS];
-                    
-                    cell.facialNameLabel.attributedText = attrI;
+//                    cell.facialNameLabel.attributedText = attrI;
+                    cell.priceLabel.text = string_2;
                 }
                     break;
             }
@@ -408,6 +428,7 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     switch (indexPath.section) {
             
             /**
@@ -417,7 +438,7 @@
         case 0:
         {
             
-            FacialTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             if (self.washType == 0 && cell.tag == 11) {
                 
                 [SVProgressHUD showErrorWithStatus:@"此项目必须洗车"];
@@ -427,7 +448,7 @@
             
             for (int i = 0; i < self.waxArr.count; i++) {
                 NSIndexPath *inde = [NSIndexPath indexPathForRow:i inSection:0];
-                FacialTableViewCell *cell_1 = [tableView cellForRowAtIndexPath:inde];
+                AddOrderDetailTableViewCell *cell_1 = [tableView cellForRowAtIndexPath:inde];
                 // 选择的不是同一个产品
                 if (![cell_1 isEqual:cell]) {
                     cell_1.tag = 11;
@@ -503,6 +524,7 @@
                 DLog(@"%@",self.selectwaxArray);
             }
             [_totalPriceLabel setText:[NSString stringWithFormat:@"%.2f",_totalPrice]];
+            [self addAllPrice];
         }
             break;
       
@@ -513,7 +535,7 @@
              **/
         case 1:
         {
-            FacialTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             
             
             if (cell.tag == 22) {
@@ -585,6 +607,7 @@
                 }
             }
             [_totalPriceLabel setText:[NSString stringWithFormat:@"%.2f",_totalPrice]];
+            [self addAllPrice];
             DLog(@"%f   %@",_totalPrice,_totalPriceLabel.text);
             DLog(@"%@",self.selectnoWashArr);
         }

@@ -29,11 +29,19 @@
 // DIY
 #define XBB_DIY_Pro [NSString stringWithFormat:@"%@/diyPro", APIDomain]
 
-// 美容
+// 首页美容
 #define XBB_Facial_Pro [NSString stringWithFormat:@"%@/diyCospro", APIDomain]
 
 // 首页产品
 #define XBB_Index_Pro [NSString stringWithFormat:@"%@/indexProList", APIDomain]
+
+// 美容接口
+#define API_SelectWax  [NSString stringWithFormat:@"%@/product_info", APIDomain]
+
+//请求用户车辆(12.10)
+#define XBB_Car_select [NSString stringWithFormat:@"%@/userCars", APIDomain]
+
+
 
 
 
@@ -107,8 +115,7 @@
 //DIY
 #define API_selectDIY [NSString stringWithFormat:@"%@/diy_select", APIDomain]
 
-// 美容接口
-#define API_SelectWax  [NSString stringWithFormat:@"%@/product_info", APIDomain]
+
 
 // 获取洗车方式和优惠券
 #define API_Washinfo [NSString stringWithFormat:@"%@/washinfo", APIDomain]

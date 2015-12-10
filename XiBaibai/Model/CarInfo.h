@@ -22,6 +22,7 @@
 @property (strong,nonatomic) NSString *c_remark;
 @property (strong,nonatomic) NSString *c_type;
 @property (strong,nonatomic) NSString *c_id;
+@property (strong,nonatomic) NSString *c_brand;
 
 + (NSString *)carType:(NSInteger)c_type;
 

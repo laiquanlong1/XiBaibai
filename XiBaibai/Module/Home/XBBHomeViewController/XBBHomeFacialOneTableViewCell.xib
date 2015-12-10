@@ -48,7 +48,7 @@
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$ 158" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FiM-eP-C4R">
                         <rect key="frame" x="30" y="48" width="92" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -75,7 +75,7 @@
                             <constraint firstAttribute="width" constant="105" id="0XM-HE-q3q"/>
                             <constraint firstAttribute="height" constant="21" id="5w6-Qg-snI"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -118,19 +118,19 @@
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="¥ 19" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fdB-QQ-btQ">
                         <rect key="frame" x="-10.5" y="139" width="90" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="¥29" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ca8-4f-4cg">
                         <rect key="frame" x="113" y="139" width="90" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="29¥" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HJf-yD-Ktf">
                         <rect key="frame" x="224.5" y="139" width="90" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -219,18 +219,23 @@
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.92941176470588238" green="0.93725490196078431" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
             <connections>
+                <outlet property="crysalButton" destination="ulg-eF-hoD" id="w3O-Hn-0tc"/>
                 <outlet property="crystalImgeLabel" destination="O42-FY-Nof" id="dPd-Oa-uoX"/>
                 <outlet property="crystalOilNameLabel" destination="Oz8-Dk-roo" id="TeA-C5-UsI"/>
                 <outlet property="crystalOilPriceLabel" destination="0z7-3c-pK0" id="0pe-fm-REv"/>
+                <outlet property="cuirButton" destination="evX-X4-V0d" id="Hz0-OE-9IF"/>
                 <outlet property="cuirImageVeiw" destination="t2o-RX-mOD" id="VOK-bJ-UKR"/>
                 <outlet property="cuirNameLabel" destination="W6S-33-CD2" id="c1y-lx-car"/>
                 <outlet property="cuirPriceLabel" destination="Ca8-4f-4cg" id="W5I-n4-r0M"/>
+                <outlet property="engineButton" destination="9Qz-nc-mqF" id="l94-ln-cck"/>
                 <outlet property="engineImgeView" destination="gXe-CP-uU6" id="S8x-Xd-Fcd"/>
                 <outlet property="engineNameLabel" destination="EXI-Nq-Cd7" id="ckG-NW-4kg"/>
                 <outlet property="enginePriceLabel" destination="fdB-QQ-btQ" id="cfx-xT-LhL"/>
+                <outlet property="inSPAButton" destination="lBG-Ez-ZhE" id="Y79-Jc-u5e"/>
                 <outlet property="inSPAImageView" destination="LNX-Kp-W8m" id="dwW-TL-aoK"/>
                 <outlet property="inSPANameLabel" destination="PAv-MC-lza" id="Mw7-xZ-iiu"/>
                 <outlet property="inSPAPriceLabel" destination="FiM-eP-C4R" id="I0W-5E-A7V"/>
+                <outlet property="naturalButton" destination="3pC-2D-HM6" id="Led-2F-3uh"/>
                 <outlet property="naturalImageView" destination="Taj-SH-wlM" id="iyb-lR-dDN"/>
                 <outlet property="naturalNameLabel" destination="3xR-6T-3oU" id="51A-MP-BXT"/>
                 <outlet property="naturalPriceLabel" destination="HJf-yD-Ktf" id="6Ta-ai-QFk"/>

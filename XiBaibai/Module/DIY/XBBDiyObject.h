@@ -18,4 +18,10 @@
 @property (nonatomic, copy) NSString *labelName;
 @property (nonatomic, copy) NSMutableArray *proArray;
 
+@property (nonatomic, copy) NSString *urlString;
+@property (nonatomic, assign) NSInteger sort;
+@property (nonatomic, assign) NSInteger p_wash_free;
+
+@property (nonatomic, assign) NSInteger type;
+@property (nonatomic, assign) NSInteger isWaxTag; 
 @end

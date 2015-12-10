@@ -14,6 +14,7 @@
 #import "AddOrderDetailTableViewCell.h"
 #import "XBBOrder.h"
 #import "WebViewController.h"
+#import "AddOrderViewController.h"
 
 @interface XBBDIYViewController ()
 {
@@ -23,9 +24,6 @@
    
 }
 @property (nonatomic, copy) NSMutableArray *dataSource;// 全部数据
-//@property (nonatomic, copy) NSMutableArray *commonProSocurce; // 对象些
-//@property (nonatomic, copy) NSMutableArray *groupProSource; // 对象
-
 
 @end
 
@@ -96,9 +94,7 @@
             for (XBBDiyObject *ob in self.dataSource) {
                 DLog(@"%@",ob);
             }
-            
             DLog(@"%@",self.dataSource);
-            
         }
         [self inita];
         [self alphaToOne];
@@ -197,14 +193,14 @@
     barView.layer.borderWidth = 0.5;
     barView.layer.borderColor = XBB_NavBar_Color.CGColor;
     
-    priceTotalTitle = [[XBBListHeadLabel alloc] initWithFrame:CGRectMake(0, 0, (XBB_Screen_width/3)*2 , barView.bounds.size.height)];
+    priceTotalTitle = [[XBBListHeadLabel alloc] initWithFrame:CGRectMake(0, 0, (XBB_Screen_width/2) , barView.bounds.size.height)];
     [priceTotalTitle setTextColor:XBB_NavBar_Color];
     [priceTotalTitle setFont:[UIFont boldSystemFontOfSize:16.]];
     [barView addSubview:priceTotalTitle];
     [priceTotalTitle setTextAlignment:NSTextAlignmentCenter];
     [self addAllPrice];
     priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",allPrice>0?allPrice:0.00];
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width- XBB_Screen_width/3, 0, XBB_Screen_width/3, barView.bounds.size.height)];
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width- XBB_Screen_width/2, 0, XBB_Screen_width/2, barView.bounds.size.height)];
     [button addTarget:self action:@selector(submit:) forControlEvents:UIControlEventTouchUpInside];
     button.backgroundColor = XBB_NavBar_Color;
     [button setTitle:@"提交" forState:UIControlStateNormal];
@@ -250,6 +246,28 @@
 }
 - (IBAction)submit:(id)sender
 {
+ 
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    DLog(@"%@",viewControllers)
+    BOOL isWeb = NO;
+    for (id viewControll in viewControllers) {
+        if ([viewControll isKindOfClass:[WebViewController class]]) {
+            isWeb = YES;
+        }
+    }
+    if (isWeb) {
+        isWeb = NO;
+        NSMutableArray *arr = [NSMutableArray array];
+        for (XBBDiyObject *object in self.selectObjects) {
+            object.type = 1;
+            [arr addObject:object];
+        }
+        AddOrderViewController *ader = [[AddOrderViewController alloc] init];
+        ader.selectArray = arr;
+        [self.navigationController pushViewController:ader animated:YES];
+        return;
+    }
+    
     self.selectObjectsBlock(self.selectObjects);
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:YES];

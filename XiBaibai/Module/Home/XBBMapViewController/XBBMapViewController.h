@@ -9,6 +9,10 @@
 #import "mach.h"
 #import "XBBViewController.h"
 
+typedef void(^Select)(BOOL);
 @interface XBBMapViewController : XBBViewController
+
+@property (nonatomic, copy) Select selectAddress;
+@property (nonatomic, copy) NSString *superController;
 
 @end
