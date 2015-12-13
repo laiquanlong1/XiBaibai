@@ -8,30 +8,38 @@
 
 #import "LeftSideBarViewController.h"
 #import "XBBHomeViewController.h"
-#import "MyCenterViewController.h"
-#import "MyWallViewController.h"
 #import "UserObj.h"
-#import "MyOrderViewController.h"
 #import "AllCommentViewController.h"
-#import "LoginViewController.h"
+#import "XBBMyCenterViewController.h"
+#import "MyCarTableViewController.h"
+#import "MyLiCouponViewController.h"
+#import "WebViewController.h"
+#import "MyCouponsViewController.h"
+#import "FeedbackTableViewController.h"
+#import "CarportTableViewController.h"
+#import "XBBAddressViewController.h"
+
+
 
 @interface LeftSideBarViewController () <UIActionSheetDelegate>
-{
-    UserObj *user;
-}
 
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *summaryLabel;
 @property (weak, nonatomic) IBOutlet UIButton *myOrderButton;
-@property (strong, nonatomic) UIButton *loginBtn;
+@property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 
 @end
 
 @implementation LeftSideBarViewController
 
+
+#pragma mark systemSetup
+
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
+    [self setVersionString];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccessful:) name:NotificationLoginSuccessful object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:NotificationLoginFailed object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserSuccessful:) name:NotificationUpdateUserSuccessful object:nil];
@@ -43,42 +51,22 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
+
+#pragma mark Personal Center
 
 - (IBAction)goMyCenterWhenTapHeader:(UIGestureRecognizer *)sender {
-    MyCenterViewController *centerVC = [[MyCenterViewController alloc] init];
+    
+    XBBMyCenterViewController *centerVC = [[XBBMyCenterViewController alloc] init];
     [(UINavigationController *)self.mm_drawerController.centerViewController pushViewController:centerVC animated:YES];
-    [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
-}
-
-- (void)loginFailed:(NSNotification *)sender {
-   
-    [self.avatarImageView setHidden:YES];
-    [self.summaryLabel setHidden:YES];
-    [self.nameLabel setHidden:YES];
     
-    if (!self.loginBtn) {
-        self.loginBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 35, 100, 50)];
-        self.loginBtn.backgroundColor = kUIColorFromRGB(0xCCCCCC);
-        [self.loginBtn setTitle:@"登录" forState:UIControlStateNormal];
-        [self.loginBtn addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
-    }
-    [self.view addSubview:self.loginBtn];
-}
+    [self.mm_drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
 
-- (void)login{
-    
-    LoginViewController *loginVC=[[LoginViewController alloc] init];
-    UINavigationController *nv = [[UINavigationController alloc] initWithRootViewController:loginVC];
-    [(UINavigationController *)self.mm_drawerController.centerViewController presentViewController:nv animated:YES completion:nil];
-//    LoginViewController *loginVC=[[LoginViewController alloc] init];
-//    [(UINavigationController *)self.mm_drawerController.centerViewController pushViewController:loginVC animated:YES];
-//    [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
+        
+    }];
 }
 
 - (void)loginSuccessful:(NSNotification *)sender {
-    [self.loginBtn removeFromSuperview];
     [self.avatarImageView setHidden:NO];
     [self.summaryLabel setHidden:NO];
     [self.nameLabel setHidden:NO];
@@ -95,6 +83,12 @@
      self.nameLabel.text = userInfo.uname;
 }
 
+- (void)loginFailed:(NSNotification *)sender {
+    [self.avatarImageView setHidden:YES];
+    [self.summaryLabel setHidden:YES];
+    [self.nameLabel setHidden:YES];
+}
+
 - (void)updateUserSuccessful:(NSNotification *)sender{
     UserObj *userInfo = [UserObj shareInstance];
     [self.avatarImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", ImgDomain, userInfo.imgstring]]];
@@ -102,87 +96,102 @@
     self.nameLabel.text = userInfo.uname;
 }
 
+
+#pragma mark order
+
 - (IBAction)myOrderOnClick:(id)sender {
    
     if (IsLogin) {
          [self centerPushWithIdentifier:@"MyOrderViewController"];
     }else{
-        [self login];
     }
    
 }
-
-- (IBAction)myWalletOnClick:(id)sender {
-   
-    if (IsLogin) {
-        MyWallViewController *mywallVC=[[MyWallViewController alloc] init];
-        [(UINavigationController *)self.mm_drawerController.centerViewController pushViewController:mywallVC animated:YES];
-        [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
-    }else{
-        [self login];
-    }
-   
-}
-
-- (IBAction)allCommentOnClick:(id)sender {
-    if (IsLogin) {
-        AllCommentViewController *commentVC = [[AllCommentViewController alloc] init];
-        [self presentViewController:commentVC animated:YES completion:nil];
-//        [(UINavigationController *)self.mm_drawerController.centerViewController pushViewController:commentVC animated:YES];
-        [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
-    }else{
-        [self login];
-    }
-    
-
-}
-
-- (IBAction)systemMsgOnClick:(id)sender {
-    if (IsLogin) {
-        [self centerPushWithIdentifier:@"SystemMsgViewController"];
-    } else {
-        GoToLogin(self);
-    }
-}
-
-- (IBAction)settingOnClick:(id)sender {
-   
-    if (IsLogin) {
-        [self centerPushWithIdentifier:@"SettingTableViewController"];
-    }else{
-        [self login];
-    }
-    
-}
-
-
 - (void)centerPushWithIdentifier:(NSString *)identifier {
     UINavigationController *navigation = (UINavigationController *)self.mm_drawerController.centerViewController;
-    [self presentViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:identifier] animated:YES completion:nil];
-//    [navigation pushViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:identifier] animated:YES];
+    [navigation pushViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:identifier] animated:YES];
+    [self.mm_drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
+    }];
+}
+
+
+#pragma mark setCars
+
+- (IBAction)setCars:(UIButton *)sender {
+    MyCarTableViewController *car =  [[MyCarTableViewController alloc] init];//[self.storyboard instantiateViewControllerWithIdentifier:@"MyCarTableViewController"];
+    UINavigationController *nav = (UINavigationController *)self.mm_drawerController.centerViewController;
+    [nav  pushViewController:car animated:YES];
+    [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
+    
+}
+
+
+#pragma mark setAddress
+
+- (IBAction)address:(UIButton *)sender {
+    
+    XBBAddressViewController *cap = [[UIStoryboard storyboardWithName:@"XBBOne" bundle:nil] instantiateViewControllerWithIdentifier:@"XBBAddressViewController"];
+    
+//    CarportTableViewController *cap = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"CarportTableViewController"];//[[CarportTableViewController alloc] init];
+    UINavigationController *nav = (UINavigationController *)self.mm_drawerController.centerViewController;
+    [nav pushViewController:cap animated:YES];
+    [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
+
+}
+
+
+#pragma mark MyCoupons
+
+- (IBAction)myLicoupon:(id)sender {
+    MyCouponsViewController *myCouponsVC = [[MyCouponsViewController alloc] init];
+    UINavigationController *nav = (UINavigationController *)self.mm_drawerController.centerViewController;
+    [nav pushViewController:myCouponsVC animated:YES];
     [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
 }
 
 
-#pragma mark 联系客服
+#pragma mark FeedBack
+
+- (IBAction)fankui:(id)sender {
+    
+    FeedbackTableViewController *feed = [[UIStoryboard storyboardWithName:@"XBBOne" bundle:nil] instantiateViewControllerWithIdentifier:@"FeedbackTableViewController"];//[[FeedbackTableViewController alloc] init];
+    UINavigationController *nav = (UINavigationController *)self.mm_drawerController.centerViewController;
+    [nav pushViewController:feed animated:YES];
+    [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
+}
+
+
+#pragma mark Connection We
 
 - (IBAction)connectionCompany:(UIButton *)sender {
-    //    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"联系客服" message:@"400-0960-787" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-    //    [alertView show];
-    //
-    UIActionSheet *sheetView = [[UIActionSheet alloc] initWithTitle:@"联系客服" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"400-0960-787" otherButtonTitles:nil, nil];
+    NSString *phoneString = [[SystemObjct shareSystem] servicePhoneString]?[[SystemObjct shareSystem] servicePhoneString]:@"4000960787";
+    if ([phoneString length] == 10 && [[phoneString substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"4"]) {
+        NSMutableString *pS = [NSMutableString string];
+        [pS appendFormat:@"%@-%@-%@",[phoneString substringWithRange:NSMakeRange(0, 3)],[phoneString substringWithRange:NSMakeRange(3, 4)],[phoneString substringWithRange:NSMakeRange([phoneString length]-3, 3)]];
+        phoneString = pS;
+    }else if([phoneString length]==11 && [[phoneString substringWithRange:NSMakeRange(0, 2)] isEqualToString:@"02"])
+    {
+        NSMutableString *pS = [NSMutableString string];
+        [pS appendFormat:@"%@-%@",[phoneString substringWithRange:NSMakeRange(0, 3)],[phoneString substringWithRange:NSMakeRange(3, [phoneString length]-3)]];
+        phoneString = pS;
+    }else
+    {
+        NSMutableString *pS = [NSMutableString string];
+        [pS appendFormat:@"%@-%@",[phoneString substringWithRange:NSMakeRange(0, 4)],[phoneString substringWithRange:NSMakeRange(4, [phoneString length]-4)]];
+        phoneString = pS;
+    }
+    UIActionSheet *sheetView = [[UIActionSheet alloc] initWithTitle:@"联系客服" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:phoneString otherButtonTitles:nil, nil];
     
     [sheetView showInView:self.view];
     
 }
-
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     switch (buttonIndex) {
         case 0:
         {
-            [self callPhone:@"4000960787"];
+            [self callPhone:[[SystemObjct shareSystem]servicePhoneString]?[[SystemObjct shareSystem] servicePhoneString]:@"4000960787"];
         }
             break;
             
@@ -191,7 +200,6 @@
     }
 }
 
-#pragma mark 实现打电话功能
 - (void)callPhone:(NSString *)number
 {
     
@@ -200,13 +208,84 @@
     
 }
 
-#pragma mark - Navigation
-/*
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+
+#pragma mark About
+
+- (IBAction)guanyu:(id)sender {
+    WebViewController *viewController = [[WebViewController alloc] init];
+    viewController.navigationTitle = @"关于洗车APP";
+    viewController.urlString =([[SystemObjct shareSystem] aboutUrlString])? [[SystemObjct shareSystem] aboutUrlString]:@"http://mp.weixin.qq.com/s?__biz=MzAxMTY4ODEyOQ==&mid=207988342&izdx=1&sn=a011a2b05c04d12fadc4eae58d404353&scene=18#rd";
+    UINavigationController *nav = (UINavigationController *)self.mm_drawerController.centerViewController;
+    [nav pushViewController:viewController animated:YES];
+    [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
 }
-*/
+
+
+#pragma mark get-version
+
+- (void)setVersionString
+{
+    self.versionLabel.text = [NSString stringWithFormat:@"版本 : %@",[self getVerisonString]];
+}
+- (NSString *)getVerisonString {
+    NSDictionary *appInfo = [[NSBundle mainBundle] infoDictionary];
+    return appInfo[@"CFBundleShortVersionString"];
+}
+
+
+
+//- (void)login{
+//
+//    LoginViewController *loginVC=[[LoginViewController alloc] init];
+//    UINavigationController *nv = [[UINavigationController alloc] initWithRootViewController:loginVC];
+//    [(UINavigationController *)self.mm_drawerController.centerViewController presentViewController:nv animated:YES completion:nil];
+//}
+
+//#pragma mark wall
+//- (IBAction)myWalletOnClick:(id)sender {
+//   
+//    if (IsLogin) {
+//        MyWallViewController *mywallVC=[[MyWallViewController alloc] init];
+//        [(UINavigationController *)self.mm_drawerController.centerViewController pushViewController:mywallVC animated:YES];
+//        [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
+//    }else{
+//    }
+//   
+//}
+
+//#pragma mark allComment
+//
+//- (IBAction)allCommentOnClick:(id)sender {
+//    if (IsLogin) {
+//        AllCommentViewController *commentVC = [[AllCommentViewController alloc] init];
+//        [self presentViewController:commentVC animated:YES completion:nil];
+////        [(UINavigationController *)self.mm_drawerController.centerViewController pushViewController:commentVC animated:YES];
+//        [self.mm_drawerController closeDrawerAnimated:YES completion:nil];
+//    }else{
+//    }
+//    
+//
+//}
+
+//#pragma mark systemMsg
+//
+//- (IBAction)systemMsgOnClick:(id)sender {
+//    if (IsLogin) {
+//        [self centerPushWithIdentifier:@"SystemMsgViewController"];
+//    } else {
+//    }
+//}
+
+//#pragma mark Setting
+//
+//- (IBAction)settingOnClick:(id)sender {
+//   
+//    if (IsLogin) {
+//        [self centerPushWithIdentifier:@"SettingTableViewController"];
+//    }else{
+//    }
+//    
+//}
+
 
 @end

@@ -10,8 +10,11 @@
 #import "UserObj.h"
 #import "CarInfo.h"
 #import "MyCarModel.h"
-#import "UpdateCarInfoTableViewController.h"
+
 #import "MJExtension.h"
+#import "XBBMyCenterInfoTableViewCell.h"
+
+
 
 @interface MyCenterViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate, UITextFieldDelegate,UIPickerViewDelegate>{
     UserObj *userInfo;
@@ -26,56 +29,61 @@
     UITableView *carTableView;//车辆信息
     
     
+    UIImage *headImage;
+    
     NSArray *pickerArray;//年龄选择
     UIView *viewPicker;
     
     //创建全局滚动视图
     UIScrollView *mainScrollView;
     UIView *contentView;
+    
+    UIImageView *headImageView;
+    
    
 }
 
+
 @property (strong, nonatomic) NSMutableArray *carArr;
+@property (strong, nonatomic) UITableView *tableView;
 
 @end
+
+
+
+static NSString *identifier_1 = @"cell_1";
 
 @implementation MyCenterViewController
 
 
 - (void)initView{
-    self.view.backgroundColor = [UIColor whiteColor];
-//    self.navigationController.navigationBar.barTintColor=kUIColorFromRGB(0xdc3733);
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-    title.text = @"我的信息";
-    title.textAlignment = NSTextAlignmentCenter;
-    title.font = [UIFont boldSystemFontOfSize:20];
-    title.textColor = [UIColor whiteColor];
-    self.navigationItem.titleView = title;
-    //返回
-
-     UIImageView * img_view=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"1@icon_back.png"]];
-    img_view.layer.masksToBounds=YES;
-    img_view.userInteractionEnabled=YES;
-    UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fanhui)];
-    [img_view addGestureRecognizer:tap];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:img_view];
-
-    //创建全局滚动视图
-//    mainScrollView=[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    mainScrollView = [UIScrollView new];
-    mainScrollView.backgroundColor=kUIColorFromRGB(0xf6f5fa);
-    [self.view addSubview:mainScrollView];
-    
-    [mainScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    }];
-//     contentView = UIView.new;
-//    [mainScrollView addSubview:contentView];
+//    self.view.backgroundColor = [UIColor whiteColor];
+////    self.navigationController.navigationBar.barTintColor=kUIColorFromRGB(0xdc3733);
+//    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+//    title.text = @"我的信息";
+//    title.textAlignment = NSTextAlignmentCenter;
+//    title.font = [UIFont boldSystemFontOfSize:20];
+//    title.textColor = [UIColor whiteColor];
+//    self.navigationItem.titleView = title;
+//    //返回
+//
+//     UIImageView * img_view=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"1@icon_back.png"]];
+//    img_view.layer.masksToBounds=YES;
+//    img_view.userInteractionEnabled=YES;
+//    UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fanhui)];
+//    [img_view addGestureRecognizer:tap];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:img_view];
+//
+//    //创建全局滚动视图
+////    mainScrollView=[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+//    mainScrollView = [UIScrollView new];
+//    mainScrollView.backgroundColor=kUIColorFromRGB(0xf6f5fa);
+//    [self.view addSubview:mainScrollView];
 //    
-//    [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.edges.equalTo(mainScrollView);
-//        make.width.equalTo(mainScrollView);
+//    [mainScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.edges.equalTo(self.view);
 //    }];
+
 
     
 #pragma --mark 个人信息视图
@@ -392,10 +400,71 @@
     [self.view addSubview:viewPicker];
 }
 
+
+- (IBAction)backViewController:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)setNavigationBarControl
+{
+    self.showNavigation = YES;
+    UIImage *leftImage = [UIImage imageNamed:@"back_xbb"];
+    if (XBB_IsIphone6_6s) {
+        leftImage = [UIImage imageNamed:@"back_xbb6"];
+    }
+    
+    UIButton *backButton = [[UIButton alloc] init];
+    backButton.userInteractionEnabled = YES;
+    [backButton addTarget:self action:@selector(backViewController:) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setImage:leftImage forState:UIControlStateNormal];
+    [self.xbbNavigationBar addSubview:backButton];
+    [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(5.f);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(9.f);
+        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(50);
+    }];
+    
+    UILabel *titelLabel = [[UILabel alloc] init];
+    [titelLabel setTextColor:[UIColor whiteColor]];
+    [titelLabel setBackgroundColor:[UIColor clearColor]];
+    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"我的账户"];
+    [titelLabel setFont:XBB_NavBar_Font];
+    [titelLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.xbbNavigationBar addSubview:titelLabel];
+    [titelLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(30.);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(10.f);
+        make.left.mas_equalTo(50);
+        make.width.mas_equalTo(XBB_Screen_width-100);
+    }];
+}
+
+- (void)addTableViewUI
+{
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64., XBB_Screen_width, XBB_Screen_height - 64.) style:UITableViewStyleGrouped];
+    [self.view addSubview:self.tableView];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.backgroundColor = XBB_Bg_Color;
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"XBBMyCenterInfoTableViewCell" bundle:nil] forCellReuseIdentifier:identifier_1];
+    
+    
+    
+}
+- (void)setUpUI
+
+{
+    [self setNavigationBarControl];
+    [self addTableViewUI];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setUpUI];
     // Do any additional setup after loading the view.
-    [self initView];
+//    [self initView];
     [self initData];
     [self initPicker];
     
@@ -416,7 +485,9 @@
 }
 
 - (void)fanhui{
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    [self removeFromParentViewController];
+//    [self.navigationController popViewControllerAnimated:YES];
     
 }
 
@@ -715,7 +786,13 @@
     //得到图片路径
     NSString * path = [NSString stringWithFormat:@"%@/newimage.jpg",[self documentFolderPath]];
     //指定显示图片
-    [imgView_head setImage:[UIImage imageWithContentsOfFile:path]];
+    
+    
+    NSIndexPath *ind = [NSIndexPath indexPathForRow:0 inSection:0];
+    XBBMyCenterInfoTableViewCell *cell = [self.tableView cellForRowAtIndexPath:ind];
+//    [cell.headImageView setImage:[UIImage imageWithContentsOfFile:path]];
+   
+    
     
 }
 
@@ -841,15 +918,7 @@
     return [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 #pragma --mark tableview的delegate方法
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -857,24 +926,45 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [self.carArr count];
+    return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *identity=@"cell";
-    UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:identity];
+
+    XBBMyCenterInfoTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:identifier_1];
     if (!cell) {
-        cell=[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identity];
+        cell=[[XBBMyCenterInfoTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier_1];
     }
-    cell.selectionStyle=UITableViewCellSelectionStyleNone;
-    cell.accessoryType =UITableViewCellAccessoryDisclosureIndicator;
-    [CustamViewController setUpCellLayoutMargins:cell];
+//    cell.headImageView.hidden = YES;
+    switch (indexPath.row) {
+        case 0:
+        {
+
+//     
+        }
+            break;
+        case 1:
+        {
+            
+        }
+            break;
+        case 2:
+        {
+            
+        }
+            break;
+        case 3:
+        {
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
     
-    MyCarModel *carinfo=[self.carArr  objectAtIndex:indexPath.row];
-    cell.textLabel.text=[NSString stringWithFormat:@"%@ %@ %@", carinfo.c_brand, carinfo.c_color, carinfo.c_plate_num];
-    cell.detailTextLabel.text=carinfo.c_plate_num;
-    cell.detailTextLabel.font=[UIFont systemFontOfSize:15];
-    cell.detailTextLabel.textColor=kUIColorFromRGB(0x999999);
+    
+
     return cell;
 }
 
@@ -887,16 +977,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    UpdateCarInfoTableViewController *viewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"UpdateCarInfoTableViewController"];
-    viewController.carModel = self.carArr[indexPath.row];
-    [self.navigationController pushViewController:viewController animated:YES];
+
 }
 
-///*改变删除按钮的title*/
-//-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return @"删除";
-//}
 /*删除用到的函数*/
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {

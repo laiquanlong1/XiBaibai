@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "XBBTableViewController.h"
 
-@interface MyCarTableViewController : UITableViewController
+@interface MyCarTableViewController : XBBTableViewController
 
 @end

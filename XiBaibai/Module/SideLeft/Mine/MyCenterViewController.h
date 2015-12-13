@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "mach.h"
+#import "XBBViewController.h"
+
 
 @protocol SideBarSelectDelegate ;
 
-@interface MyCenterViewController : UIViewController
+@interface MyCenterViewController : XBBViewController
 
 @property (assign,nonatomic)id<SideBarSelectDelegate>delegate;
 

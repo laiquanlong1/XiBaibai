@@ -12,4 +12,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
+- (void)addTabelView:(UITableViewStyle)style;
+
+
 @end

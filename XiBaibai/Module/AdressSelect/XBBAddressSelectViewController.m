@@ -21,13 +21,30 @@
 
 - (void)initViewDidLoadDatas
 {
-    [self fetchAddressFromWeb:nil];
+    if ([[UserObj shareInstance] homeAddress] == nil || [[UserObj shareInstance] companyAddress] == nil) {
+        [self fetchAddressFromWeb:nil];
+    }
+}
+
+- (void)hiddenTableView:(BOOL)hidden
+{
+    [UIView beginAnimations:@"alphaAniamation" context:nil];
+    [UIView setAnimationDuration:0.25];
+    if (hidden) {
+        self.tableView.alpha = 0;
+    }else
+    {
+        self.tableView.alpha = 1;
+    }
+    [UIView commitAnimations];
 }
 
 #pragma mark datas
 - (void)fetchAddressFromWeb:(void (^)())callback {
     [SVProgressHUD show];
+    [self hiddenTableView:YES];
     [NetworkHelper postWithAPI:API_AddressSelect parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
+        [self hiddenTableView:NO];
         if ([response[@"code"] integerValue] == 1) {
             [SVProgressHUD dismiss];
             NSArray *result = response[@"result"][@"list"];
@@ -36,8 +53,6 @@
                     [UserObj shareInstance].homeAddress = temp[@"address"];                    [UserObj shareInstance].homeDetailAddress = temp[@"address_info"];
                     [UserObj shareInstance].homeCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);
                 } else if ([temp[@"address_type"] integerValue] == 1) {
-           
-        
                     [UserObj shareInstance].companyAddress = temp[@"address"];
                     [UserObj shareInstance].companyDetailAddress = temp[@"address_info"];
                     [UserObj shareInstance].companyCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);
@@ -88,7 +103,7 @@
     
     if (indexPath.section == 0) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"adressCell" forIndexPath:indexPath];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }else
     {
@@ -107,7 +122,7 @@
             cell.labelHeadView.image = [UIImage imageNamed:@"备注5"];
             cell.labelLabel.text = [[UserObj shareInstance] companyDetailAddress];
         }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     
@@ -116,6 +131,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
         XBBMapViewController *map = [[XBBMapViewController alloc] init];
         map.superController = NSStringFromClass([self class]);
@@ -190,7 +206,7 @@
     UILabel *titelLabel = [[UILabel alloc] init];
     [titelLabel setTextColor:[UIColor whiteColor]];
     [titelLabel setBackgroundColor:[UIColor clearColor]];
-    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"美容"];
+    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"Navigation"];
     [titelLabel setFont:XBB_NavBar_Font];
     [titelLabel setTextAlignment:NSTextAlignmentCenter];
     [self.xbbNavigationBar addSubview:titelLabel];
@@ -207,6 +223,7 @@
 - (void)initUI
 {
     [self setNavigationBarControl];
+    self.tableView.backgroundColor = XBB_Bg_Color;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -214,7 +231,11 @@
     
     // Do any additional setup after loading the view from its nib.
 }
-
+- (void)dismisController:(id)sender
+{
+    DLog(@"")
+    [self dismissViewControllerAnimated:NO completion:nil];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

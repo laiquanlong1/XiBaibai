@@ -33,6 +33,62 @@
 
 @implementation SetCarAddsViewController
 
+
+- (void)setNavigationBarControl
+{
+    self.showNavigation = YES;
+    UIImage *leftImage = [UIImage imageNamed:@"back_xbb"];
+    if (XBB_IsIphone6_6s) {
+        leftImage = [UIImage imageNamed:@"back_xbb6"];
+    }
+    
+    UIButton *backButton = [[UIButton alloc] init];
+    backButton.userInteractionEnabled = YES;
+    [backButton addTarget:self action:@selector(backViewController:) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setImage:leftImage forState:UIControlStateNormal];
+    [self.xbbNavigationBar addSubview:backButton];
+    [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(5.f);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(9.f);
+        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(50);
+    }];
+    
+    UILabel *titelLabel = [[UILabel alloc] init];
+    [titelLabel setTextColor:[UIColor whiteColor]];
+    [titelLabel setBackgroundColor:[UIColor clearColor]];
+    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"地图"];
+    [titelLabel setFont:XBB_NavBar_Font];
+    [titelLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.xbbNavigationBar addSubview:titelLabel];
+    [titelLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(30.);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(10.f);
+        make.left.mas_equalTo(50);
+        make.width.mas_equalTo(XBB_Screen_width-100);
+    }];
+    
+        UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width - 55., 28, 50, 30)];
+    //    if (self.isHomeControllerto) {
+    //        [rightButton setTitle:@"下单" forState:UIControlStateNormal];
+    //    }else
+        {
+            [rightButton setTitle:@"确定" forState:UIControlStateNormal];
+        }
+    
+        [rightButton.titleLabel setFont:[UIFont systemFontOfSize:14.]];
+        [self.xbbNavigationBar addSubview:rightButton];
+        [rightButton addTarget:self action:@selector(okAdds) forControlEvents:UIControlEventTouchUpInside];
+    
+}
+
+- (IBAction)backViewController:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+
 - (void)initMapView{
     mapset= [[BMKMapView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds))];
     mapset.zoomLevel=17;
@@ -147,10 +203,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+   
     // Do any additional setup after loading the view.
     [self initMapView];
     [self initSearch];
     [self initView];
+    [self setNavigationBarControl];
     [self initMylocationView];
     [mapset setCenterCoordinate:_locService.userLocation.location.coordinate animated:YES];
 }

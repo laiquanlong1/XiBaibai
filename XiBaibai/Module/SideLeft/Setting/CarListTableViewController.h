@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "CarBrandModel.h"
+#import "XBBViewController.h"
 
 typedef void(^CarBrandSelectBlock)(id param);
 
-@interface CarListTableViewController : UITableViewController
+@interface CarListTableViewController : XBBViewController
 
 @property (copy, nonatomic) CarBrandSelectBlock brandSelectedCallback;
 

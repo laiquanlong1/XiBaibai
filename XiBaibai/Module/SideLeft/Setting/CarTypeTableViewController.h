@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "XBBTableViewController.h"
 
 typedef void(^CarType)(NSDictionary *type);
-@interface CarTypeTableViewController : UITableViewController
+@interface CarTypeTableViewController : XBBTableViewController
 
 @property (nonatomic, copy) CarType carType;
 

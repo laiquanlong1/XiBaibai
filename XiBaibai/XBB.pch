@@ -26,6 +26,7 @@
 #import "ConstantMacro.h"
 #import "APPMacro.h"
 #import "APPUIMacro.h"
+#import "SystemObjct.h"
 #import "XBBViewController.h"
 #import "XBBTableViewController.h"
 

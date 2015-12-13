@@ -9,8 +9,32 @@
 #import "MyCarModel.h"
 
 @implementation MyCarModel
+//@property (assign, nonatomic) NSInteger carId;
+//@property (assign, nonatomic) NSInteger uid;
+//@property (assign, nonatomic) NSInteger c_type;//1 轿车  2 SUV 3MPV
+//@property (assign, nonatomic) NSInteger add_time;
+//@property (copy, nonatomic) NSString *c_img;
+//@property (copy, nonatomic) NSString *c_plate_num;
+//@property (copy, nonatomic) NSString *c_color;
+//@property (copy, nonatomic) NSString *c_remark;
+//@property (assign, nonatomic) NSInteger defaultID;//默认车辆
+//@property (copy, nonatomic) NSString *c_brand;
 
-
+- (id)copyWithZone:(nullable NSZone *)zone
+{
+    MyCarModel *model = [[[self class] alloc] init];
+    model.carId = self.carId;
+    model.uid = self.uid;
+    model.c_type = self.c_type;
+    model.add_time = self.add_time;
+    model.c_img = self.c_img;
+    model.c_plate_num = self.c_plate_num;
+    model.c_color = self.c_color;
+    model.c_remark = self.c_remark;
+    model.defaultID = self.defaultID;
+    model.c_brand = self.c_brand;
+    return model;
+}
 
 - (NSString *)typeString {
     //1微型2小型3紧凑型4中型5中大型6大型7suv8mpv9跑车10皮卡11微面12电动车

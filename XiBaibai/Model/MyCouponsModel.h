@@ -18,6 +18,8 @@
 @property (copy, nonatomic) NSString *coupons_name;
 @property (copy, nonatomic) NSString *coupons_price;
 @property (copy, nonatomic) NSString *coupons_remark;
-
+@property (copy, nonatomic) NSString *type;
+@property (copy, nonatomic) NSString *effective_time;
+@property (copy, nonatomic) NSString *expired_time;
 
 @end

@@ -10,9 +10,12 @@
 #import "UserObj.h"
 
 @interface FeedbackTableViewController () <UITextViewDelegate>
-@property (nonatomic, strong) UIView *xbbNavigationBar;
+
 @property (weak, nonatomic) IBOutlet UILabel *placeholderLabel;
 @property (weak, nonatomic) IBOutlet UITextView *inputTextView;
+@property (weak, nonatomic) IBOutlet UILabel *lenthLabel;
+
+
 @end
 
 @implementation FeedbackTableViewController
@@ -56,12 +59,18 @@
 
 - (IBAction)back:(id)sender
 {
+    [self.navigationController popViewControllerAnimated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.inputTextView.layer.cornerRadius = 5.;
+    
+    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)]];
+    
+    self.inputTextView.layer.cornerRadius = 10.;
     self.inputTextView.layer.masksToBounds = YES;
+    self.inputTextView.layer.borderColor = XBB_NavBar_Color.CGColor;
+    self.inputTextView.layer.borderWidth = 1.0;
     
     [self setNavigationBarControl];
 }
@@ -70,7 +79,10 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+- (IBAction)tapAction:(id)sender
+{
+    [self.inputTextView resignFirstResponder];
+}
 - (IBAction)backOnClick:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -84,7 +96,18 @@
     }
 }
 
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    NSString *strings = [textView.text stringByReplacingCharactersInRange:range withString:text];
+    if ([strings length]>400) {
+        return NO;
+    }
+    
+    return YES;
+}
 - (void)textViewDidChange:(UITextView *)textView {
+    self.lenthLabel.text = [NSString stringWithFormat:@"%ld/400",[textView.text length]];
     if (textView.text.length) {
         self.placeholderLabel.hidden = YES;
     } else {

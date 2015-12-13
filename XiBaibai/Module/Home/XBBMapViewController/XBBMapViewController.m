@@ -241,14 +241,10 @@
 #pragma mark NetAbserver
 - (void)changeNetStatusHaveDisconnection
 {
-    DLog(@"/////////")
 }
 - (void)changeNetStatusHaveConnection
 {
-   
 }
-
-
 #pragma mark 区域展示
 - (void)addPresentAreButtonCreate
 {
@@ -263,7 +259,6 @@
 - (void)presentArea:(UIButton *)sender
 {
     switch (sender.tag) {
-        // 呈现
         case 0:
         {
             _presentAreabutton.tag = 1;
@@ -272,8 +267,6 @@
         
         }
             break;
-            
-        // 不呈现
         case 1:
         {
             _presentAreabutton.tag = 0;
@@ -449,7 +442,13 @@
     }];
     
     UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width - 55., 28, 50, 30)];
-    [rightButton setTitle:@"确定" forState:UIControlStateNormal];
+    if (self.isHomeControllerto) {
+        [rightButton setTitle:@"下单" forState:UIControlStateNormal];
+    }else
+    {
+        [rightButton setTitle:@"确定" forState:UIControlStateNormal];
+    }
+    
     [rightButton.titleLabel setFont:[UIFont systemFontOfSize:14.]];
     [self.xbbNavigationBar addSubview:rightButton];
     [rightButton addTarget:self action:@selector(sureCommit:) forControlEvents:UIControlEventTouchUpInside];
@@ -486,11 +485,10 @@
 
 - (void)initUI
 {
-   
     [self initMapView];
     [self setNavigationBarControl];
     [self initView];
-    [self addPresentAreButtonCreate]; // 添加区域button
+//    [self addPresentAreButtonCreate]; // 添加区域button
     [self initMylocationView]; // 初始化我的位置视图
     [self addAddressSeachBar];
     [self addMarkView];
@@ -585,24 +583,27 @@
     //左边快速定位
     UIView *locationView=[[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetHeight(self.view.bounds)-180, 50, 140)];
     
-    /**
-     * @brief 家庭住址
-     **/
-    UIButton *homeLocationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    homeLocationBtn.frame = CGRectMake(0, 0, 30, 30);
-    [homeLocationBtn setImage:[UIImage imageNamed:@"xbb_808"] forState:UIControlStateNormal];
-    [homeLocationBtn addTarget:self action:@selector(moveToHomeLocation) forControlEvents:UIControlEventTouchUpInside];
-    [locationView addSubview:homeLocationBtn];
-    
-    
-    /**
-     * @brief 公司地址按钮
-     **/
-    UIButton *companyLocationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    companyLocationBtn.frame = CGRectMake(0, 45, 30, 30);
-    [companyLocationBtn setImage:[UIImage imageNamed:@"xbb_807"] forState:UIControlStateNormal];
-    [companyLocationBtn addTarget:self action:@selector(moveToCompanyLocation) forControlEvents:UIControlEventTouchUpInside];
-    [locationView addSubview:companyLocationBtn];
+    if (self.isHomeControllerto) {
+        /**
+         * @brief 家庭住址
+         **/
+        UIButton *homeLocationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        homeLocationBtn.frame = CGRectMake(0, 0, 30, 30);
+        [homeLocationBtn setImage:[UIImage imageNamed:@"xbb_808"] forState:UIControlStateNormal];
+        [homeLocationBtn addTarget:self action:@selector(moveToHomeLocation) forControlEvents:UIControlEventTouchUpInside];
+        [locationView addSubview:homeLocationBtn];
+        
+        
+        /**
+         * @brief 公司地址按钮
+         **/
+        UIButton *companyLocationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        companyLocationBtn.frame = CGRectMake(0, 45, 30, 30);
+        [companyLocationBtn setImage:[UIImage imageNamed:@"xbb_807"] forState:UIControlStateNormal];
+        [companyLocationBtn addTarget:self action:@selector(moveToCompanyLocation) forControlEvents:UIControlEventTouchUpInside];
+        [locationView addSubview:companyLocationBtn];
+    }
+   
     
     /**
      * @brief 当前位置按钮

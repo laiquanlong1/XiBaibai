@@ -15,4 +15,6 @@ typedef void(^Select)(BOOL);
 @property (nonatomic, copy) Select selectAddress;
 @property (nonatomic, copy) NSString *superController;
 
+@property (nonatomic, assign) BOOL isHomeControllerto;
+
 @end

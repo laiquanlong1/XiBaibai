@@ -41,7 +41,11 @@
 //请求用户车辆(12.10)
 #define XBB_Car_select [NSString stringWithFormat:@"%@/userCars", APIDomain]
 
+//优惠券(12.11)
+#define XBB_Coupons_select [NSString stringWithFormat:@"%@/userCoupons", APIDomain]
 
+// 优惠码
+#define XBB_exchangeCoupons [NSString stringWithFormat:@"%@/exchangeCoupons", APIDomain]
 
 
 

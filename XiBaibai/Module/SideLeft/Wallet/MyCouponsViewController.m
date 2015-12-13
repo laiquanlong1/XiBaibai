@@ -19,6 +19,7 @@
 @interface MyCouponsViewController ()<UITableViewDelegate,UITableViewDataSource>{
     UITableView *tbView;
     UIImageView *imgViewguize;
+    UILabel     *nofoundLabel;
 }
 @property (strong, nonatomic) NSMutableArray *couDoneArr;
 
@@ -28,29 +29,63 @@
 
 @implementation MyCouponsViewController
 
+
+
+- (void)backViewController:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)setNavigationBarControl
+{
+    self.showNavigation = YES;
+    UIImage *leftImage = [UIImage imageNamed:@"back_xbb"];
+    if (XBB_IsIphone6_6s) {
+        leftImage = [UIImage imageNamed:@"back_xbb6"];
+    }
+    
+    UIButton *backButton = [[UIButton alloc] init];
+    backButton.userInteractionEnabled = YES;
+    [backButton addTarget:self action:@selector(backViewController:) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setImage:leftImage forState:UIControlStateNormal];
+    [self.xbbNavigationBar addSubview:backButton];
+    [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(5.f);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(9.f);
+        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(50);
+    }];
+    
+    UILabel *titelLabel = [[UILabel alloc] init];
+    [titelLabel setTextColor:[UIColor whiteColor]];
+    [titelLabel setBackgroundColor:[UIColor clearColor]];
+    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"我的优惠券"];
+    [titelLabel setFont:XBB_NavBar_Font];
+    [titelLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.xbbNavigationBar addSubview:titelLabel];
+    [titelLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(30.);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(10.f);
+        make.left.mas_equalTo(50);
+        make.width.mas_equalTo(XBB_Screen_width-100);
+    }];
+}
+
+
 - (void)initView{
-    self.view.backgroundColor = kUIColorFromRGB(0xf6f5fa);
-    self.title = @"我的优惠券";
-    //返回
-    UIImageView * img_view=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"1@icon_back.png"]];
-    img_view.layer.masksToBounds=YES;
-    img_view.userInteractionEnabled=YES;
-    UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fanhui)];
-    [img_view addGestureRecognizer:tap];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:img_view];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"使用规则" style:UIBarButtonItemStyleBordered target:self action:@selector(guize)];
-    self.navigationItem.rightBarButtonItem.tintColor = kUIColorFromRGB(0xFFFFFF);
-    
+
     tbView=[UITableView new];
-    tbView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds));
+    tbView.frame = CGRectMake(0, 65, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-64);
     tbView.dataSource=self;
     tbView.delegate=self;
     tbView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:tbView];
-    
     // 2.集成刷新控件
     [self setupRefresh];
+    [self setNavigationBarControl];
+    [self initNotDataUI];
+    
 }
 
 - (void)guize{
@@ -59,7 +94,7 @@
 }
 - (void)setupRefresh
 {
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = XBB_Bg_Color;
     WS(weakSelf)
     tbView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf fetchYouhuiFromWeb:^{
@@ -67,13 +102,6 @@
             [tbView.footer resetNoMoreData];
         }];
     }];
-    /*
-    tbView.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        [weakSelf fetchYouhuiFromWeb:^{
-            [tbView.footer endRefreshing];
-        }];
-    }];
-     */
 }
 
 - (void)couponsUseRule
@@ -92,11 +120,6 @@
     [SVProgressHUD show];
     
     [NetworkHelper postWithAPI:YouhuiSelect_API parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
-//        <#code#>
-//    } failBlock:<#^(NSError *error)fail#>]
-//    
-//    
-//    [NetworkHelper getWithAPI:YouhuiSelect_API parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
         if (callback)
             callback();
         self.couDoneArr = [NSMutableArray array];
@@ -105,37 +128,68 @@
             for (NSDictionary *temp in response[@"result"]) {
                 
                 if ([temp[@"state"] integerValue] == 0) {
-                    
-//                [MyCouponsModel setupReplacedKeyFromPropertyName:^NSDictionary *{
-//                    return @{@"couponsId": @"id"};
-//                }];
-//                MyCouponsModel *model = [MyCouponsModel objectWithKeyValues:temp];
-                
                 [self.couDoneArr addObject:temp];
                 
                   }
                 if (self.couDoneArr == 0) {
+                    [self alphaNoFound:NO];
                     [SVProgressHUD showErrorWithStatus:@"暂无数据"];
                     [tbView.footer noticeNoMoreData];
                 } else {
+                   
                     [SVProgressHUD dismiss];
                 }
             }
         } else {
             [SVProgressHUD showErrorWithStatus:@"查询失败"];
         }
-        [tbView reloadData];
+        if (self.couDoneArr.count > 0) {
+             [self alphaNoFound:YES];
+             [tbView reloadData];
+        }else
+        {
+            [self alphaNoFound:NO];
+           
+        }
     } failBlock:^(NSError *error) {
         if (callback)
             callback();
+        [self alphaNoFound:NO];
         [SVProgressHUD showErrorWithStatus:@"查询失败"];
     }];
 }
 
+
+
+- (void)alphaNoFound:(BOOL)hidden
+{
+    if (hidden) {
+        nofoundLabel.alpha = 0;
+    }else
+    {
+        [UIView animateWithDuration:0.3 animations:^{
+            nofoundLabel.alpha = 1;
+        }];
+        
+    }
+    
+}
+
+- (void)initNotDataUI
+{
+    nofoundLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, XBB_Screen_height/2-XBB_Size_w_h(200), XBB_Screen_width, 50)];
+    nofoundLabel.numberOfLines = 0;
+    [nofoundLabel setTextAlignment:NSTextAlignmentCenter];
+    nofoundLabel.text = NSLocalizedString(@"您还没有优惠券信息哦～", nil);
+    [tbView addSubview:nofoundLabel];
+    nofoundLabel.alpha = 0;
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     [self initView];
+    [tbView registerNib:[UINib nibWithNibName:@"MyCouponsTableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     [self fetchYouhuiFromWeb:nil];
 }
 
@@ -168,15 +222,22 @@
     if (!cell) {
         cell = [[MyCouponsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
     }
-//    MyCouponsModel *model = self.couDoneArr[indexPath.row];
+    //    cell.labRemark.text = dic[@"coupons_remark"]; //model.coupons_remark;
     NSDictionary *dic = self.couDoneArr[indexPath.row];
-//    cell.labFuhao.text = @"￥";
-    cell.labMoney.text =  dic[@"coupons_price"];//model.coupons_price;
-    cell.labTitle.text = dic[@"coupons_name"];//model.coupons_name;
+    
+    NSMutableAttributedString *at = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ 元",dic[@"coupons_price"]]];
+    [at addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:20.]} range:NSMakeRange(0, [at length]-1)];
+    [at addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:13.]} range:NSMakeRange([at length]-1, 1)];
+    cell.priceLabel.attributedText = at;
+    
+    
+//    cell.priceLabel.text =  dic[@"coupons_price"];//model.coupons_price;
+    cell.nameLabel.text= dic[@"coupons_name"];//model.coupons_name;
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     fmt.dateFormat = @"YYYY.MM.dd HH:mm";
-    cell.labValtime.text = [NSString stringWithFormat:@"有效期至%@",dic[@"expired_time"]];
-    cell.labRemark.text = dic[@"coupons_remark"]; //model.coupons_remark;
+    cell.endTimeLabel.text = [NSString stringWithFormat:@"有效期至%@",dic[@"expired_time"]];
+
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
@@ -186,29 +247,34 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.couponselectDic) {
-        self.couponselectDic = nil;
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (self.isAddoder) {
+        if (self.couponselectDic) {
+            self.couponselectDic = nil;
+        }
+        
+        NSDictionary *dic = self.couDoneArr[indexPath.row];
+        self.couponselectDic = dic;
+        DLog(@"dic");
+        MyCouponsModel *model = [[MyCouponsModel alloc] init];
+        model.coupons_name = dic[@"coupons_name"];
+        model.coupons_price = dic[@"coupons_price"];
+        model.coupons_remark = dic[@"coupons_remark"];
+        model.effective_time = dic[@"effective_time"];
+        model.expired_time = dic[@"expired_time"];
+        model.couponsId = dic[@"id"];
+        model.number = dic[@"number"];
+        model.state = dic[@"state"];
+        model.time = dic[@"time"];
+        model.type = dic[@"type"];
+        model.uid = dic[@"uid"];
+        self.couponsBlock(model);
+        [self dismissViewControllerAnimated:YES completion:nil];
+        
     }
     
-    NSDictionary *dic = self.couDoneArr[indexPath.row];
-    self.couponselectDic = dic;
-  
-   NSArray *controllers = self.navigationController.viewControllers;
-    for (int i = 0; i < controllers.count; i++) {
-        UIViewController *vc =  controllers[i];
-        if ([vc isKindOfClass:[AddOrderViewController class]]) {
-            self.couponsBlock(dic);
-            [self.navigationController popViewControllerAnimated:YES];
-            return;
-        }
-        if ([vc isKindOfClass:[MyWallViewController class]]) {
-            [vc removeFromParentViewController];
-            AddOrderViewController *addOrder = [[AddOrderViewController alloc] init];
-//            addOrder.selectCouponWashDic = dic;
-            [self.navigationController pushViewController:addOrder animated:YES];
-            return;
-        }
-    }
+
 }
 
 @end

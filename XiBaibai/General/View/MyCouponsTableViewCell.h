@@ -20,4 +20,10 @@
 @property (strong,nonatomic) UILabel *labValtime;
 @property (strong,nonatomic) UILabel *labRemark;
 
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *priceLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *endTimeLabel;
+
 @end

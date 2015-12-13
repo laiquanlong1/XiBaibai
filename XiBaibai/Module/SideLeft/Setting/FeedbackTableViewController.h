@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FeedbackTableViewController : UITableViewController
+@interface FeedbackTableViewController : XBBViewController
 
 @end

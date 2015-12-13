@@ -16,17 +16,17 @@
 @end
 
 @implementation CarportTableViewController
-
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = NO;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if ([[UserObj shareInstance] homeAddress] == nil) {
+        [self fetchAddressFromWeb:nil];
+    }
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    [self fetchAddressFromWeb:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -47,17 +47,14 @@
             for (NSDictionary *temp in result) {
                 if ([temp[@"address_type"] integerValue] == 0) {
                     //家
-                    _labHomeCommon.text = temp[@"address"];
-                    _labHomeInfo.text = temp[@"address_info"];
-                    [UserObj shareInstance].homeAddress = _labHomeCommon.text;
-                    [UserObj shareInstance].homeDetailAddress = _labHomeInfo.text;
+            
+                    [UserObj shareInstance].homeAddress = temp[@"address"];
+                    [UserObj shareInstance].homeDetailAddress = temp[@"address_info"];
                     [UserObj shareInstance].homeCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);
                 } else if ([temp[@"address_type"] integerValue] == 1) {
                     //公司
-                    _labComp.text = temp[@"address"];
-                    _labCompInfo.text = temp[@"address_info"];
-                    [UserObj shareInstance].companyAddress = _labComp.text;
-                    [UserObj shareInstance].companyDetailAddress = _labCompInfo.text;
+                    [UserObj shareInstance].companyAddress = temp[@"address"];
+                    [UserObj shareInstance].companyDetailAddress = temp[@"address_info"];
                     [UserObj shareInstance].companyCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);
                 }
             }
@@ -70,6 +67,12 @@
 }
 
 #pragma mark - Table view data source
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60.;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     SetCarAddsViewController *setcaraddVC = [[SetCarAddsViewController alloc] init];
     SetCarAddsInfoViewController *setcaraddsInfoVC = [[SetCarAddsInfoViewController alloc] init];
@@ -105,21 +108,31 @@
         }
 
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
 - (void)setNowLocation:(NSString *)strLocation withNum:(NSInteger)num{
-    if (num == 0) {
-        self.labHomeCommon.text = strLocation;
-    }else if(num==1){
-        self.labComp.text = strLocation;
-    }
+//    if (num == 0) {
+//        self.labHomeCommon.text = strLocation;
+//    }else if(num==1){
+//        self.labComp.text = strLocation;
+//    }
 }
 - (void)setAddsInfo:(NSString *)AddsInfo withNum:(NSInteger)num{
-    if (num == 0) {
-        self.labHomeInfo.text = AddsInfo;
-    }else if (num == 1){
-        self.labCompInfo.text = AddsInfo;
-    }
+//    if (num == 0) {
+//        self.labHomeInfo.text = AddsInfo;
+//    }else if (num == 1){
+//        self.labCompInfo.text = AddsInfo;
+//    }
 }
 //- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 //#warning Potentially incomplete method implementation.

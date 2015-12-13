@@ -9,29 +9,63 @@
 #import "CarListTableViewController.h"
 #import "MJExtension.h"
 
-@interface CarListTableViewController ()
+@interface CarListTableViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (strong, nonatomic) NSMutableArray *brandArr, *firstWordArr;
 @property (strong, nonatomic) NSMutableDictionary *brandDic;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
 @implementation CarListTableViewController
 
+
+- (void)setNavigationBarControl
+{
+    self.showNavigation = YES;
+    UIImage *leftImage = [UIImage imageNamed:@"back_xbb"];
+    if (XBB_IsIphone6_6s) {
+        leftImage = [UIImage imageNamed:@"back_xbb6"];
+    }
+    
+    UIButton *backButton = [[UIButton alloc] init];
+    backButton.userInteractionEnabled = YES;
+    [backButton addTarget:self action:@selector(backViewController:) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setImage:leftImage forState:UIControlStateNormal];
+    [self.xbbNavigationBar addSubview:backButton];
+    [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(5.f);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(9.f);
+        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(50);
+    }];
+    
+    UILabel *titelLabel = [[UILabel alloc] init];
+    [titelLabel setTextColor:[UIColor whiteColor]];
+    [titelLabel setBackgroundColor:[UIColor clearColor]];
+    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"选择车辆品牌"];
+    [titelLabel setFont:XBB_NavBar_Font];
+    [titelLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.xbbNavigationBar addSubview:titelLabel];
+    [titelLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(30.);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(10.f);
+        make.left.mas_equalTo(50);
+        make.width.mas_equalTo(XBB_Screen_width-100);
+    }];
+    self.tableView.alpha = 0.;
+}
+- (IBAction)backViewController:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    self.title = @"选择车辆品牌";
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"1@icon_back"] style:UIBarButtonItemStyleBordered target:self action:@selector(backOnTouch)];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-    
+    [self setNavigationBarControl];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    self.tableView.backgroundView = nil;
+    self.tableView.backgroundColor = XBB_Bg_Color;
     [self fetchCarbrandFromWeb:nil];
 }
 
@@ -49,6 +83,7 @@
     [NetworkHelper postWithAPI:API_AllCarbrandSelect parameter:nil successBlock:^(id response) {
         if ([response[@"code"] integerValue] == 1) {
             [SVProgressHUD dismiss];
+            self.tableView.alpha = 1.;
             [CarBrandModel setupReplacedKeyFromPropertyName:^NSDictionary *{
                 return @{@"brandId": @"id"};
             }];
@@ -60,7 +95,6 @@
                     [self.firstWordArr addObject:model.first_letter];
                 }
             }
-            
             self.brandDic = [NSMutableDictionary dictionary];
             for (NSString *firstWork in self.firstWordArr) {
                 [self.brandDic setObject:[NSMutableArray array] forKey:firstWork];
@@ -82,6 +116,11 @@
 
 #pragma mark - Table view data source
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60.;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return [self.firstWordArr count];
 }
@@ -94,12 +133,14 @@
     return self.firstWordArr;
 }
 
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    // Configure the cell...
+    cell.backgroundColor = [UIColor clearColor];
     CarBrandModel *model = [[self.brandDic objectForKey:self.firstWordArr[indexPath.section]] objectAtIndex:indexPath.row];
     cell.textLabel.font = [UIFont systemFontOfSize:15];
     cell.textLabel.text =  model.make_name;
@@ -119,48 +160,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

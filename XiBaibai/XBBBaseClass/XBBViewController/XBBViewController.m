@@ -155,4 +155,58 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
+
+
+
+
+
+
+
+
+
+
+//
+//- (void)setNavigationBarControl
+//{
+//    self.showNavigation = YES;
+//    UIImage *leftImage = [UIImage imageNamed:@"back_xbb"];
+//    if (XBB_IsIphone6_6s) {
+//        leftImage = [UIImage imageNamed:@"back_xbb6"];
+//    }
+//    _backButton = [[UIButton alloc] init];
+//    _backButton.userInteractionEnabled = YES;
+//    [_backButton setImage:leftImage forState:UIControlStateNormal];
+//    [self.xbbNavigationBar addSubview:_backButton];
+//    [_backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.mas_equalTo(5.f);
+//        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(9.f);
+//        make.width.mas_equalTo(50);
+//        make.height.mas_equalTo(50);
+//    }];
+//
+//    _titelLabel = [[UILabel alloc] init];
+//    [_titelLabel setTextColor:[UIColor whiteColor]];
+//    [_titelLabel setBackgroundColor:[UIColor clearColor]];
+//    [_titelLabel setText:self.navigationTitle?self.navigationTitle:@"Navigation"];
+//    [_titelLabel setFont:XBB_NavBar_Font];
+//    [_titelLabel setTextAlignment:NSTextAlignmentCenter];
+//    [self.xbbNavigationBar addSubview:_titelLabel];
+//    [_titelLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.height.mas_equalTo(30.);
+//        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(10.f);
+//        make.left.mas_equalTo(50);
+//        make.width.mas_equalTo(XBB_Screen_width-100);
+//    }];
+//}
+
+
+
+
+
+
+
+
+
+
 @end

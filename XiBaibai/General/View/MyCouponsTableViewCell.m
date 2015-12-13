@@ -23,7 +23,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
          UIImageView *cellBacgroundimgview = [UIImageView new];
-        cellBacgroundimgview.image = [UIImage imageNamed:@"1@icon_youhuiquanCell.png"];
+        cellBacgroundimgview.image = [UIImage imageNamed:@"圆角矩形"];
         [self.contentView addSubview:cellBacgroundimgview];
         [cellBacgroundimgview mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.mas_equalTo(self.contentView).mas_offset(0);

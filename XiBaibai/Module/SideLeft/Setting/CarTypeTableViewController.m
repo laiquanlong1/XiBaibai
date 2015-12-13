@@ -13,15 +13,21 @@
 @end
 
 @implementation CarTypeTableViewController
-
+- (void)setTableViewcell
+{
+    
+    [self addTabelView:UITableViewStyleGrouped];
+    self.view.backgroundColor = XBB_Bg_Color;
+    self.tableView.backgroundView = nil;
+    self.tableView.backgroundColor = XBB_Bg_Color;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.separatorColor = XBB_separatorColor;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-    self.title = @"选择车辆类型";
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"1@icon_back"] style:UIBarButtonItemStyleBordered target:self action:@selector(backOnTouch:)];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-    
+    [self setNavigationBarControl];
+    [self setTableViewcell];
     self.dataArry = @[@{@"name":@"轿车",@"type":@"1"},@{@"type":@"2",@"name":@"SUV"},@{@"type":@"3",@"name":@"MPV"}];
   
 }
@@ -34,9 +40,47 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+- (void)setNavigationBarControl
+{
+    self.showNavigation = YES;
+    UIImage *leftImage = [UIImage imageNamed:@"back_xbb"];
+    if (XBB_IsIphone6_6s) {
+        leftImage = [UIImage imageNamed:@"back_xbb6"];
+    }
+    
+    UIButton *backButton = [[UIButton alloc] init];
+    backButton.userInteractionEnabled = YES;
+    [backButton addTarget:self action:@selector(backOnTouch:) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setImage:leftImage forState:UIControlStateNormal];
+    [self.xbbNavigationBar addSubview:backButton];
+    [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(5.f);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(9.f);
+        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(50);
+    }];
+    
+    UILabel *titelLabel = [[UILabel alloc] init];
+    [titelLabel setTextColor:[UIColor whiteColor]];
+    [titelLabel setBackgroundColor:[UIColor clearColor]];
+    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"选择车辆类型"];
+    [titelLabel setFont:XBB_NavBar_Font];
+    [titelLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.xbbNavigationBar addSubview:titelLabel];
+    [titelLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(30.);
+        make.centerY.mas_equalTo(self.xbbNavigationBar).mas_offset(10.f);
+        make.left.mas_equalTo(50);
+        make.width.mas_equalTo(XBB_Screen_width-100);
+    }];
+//    self.tableView.alpha = 0.;
+}
 
 #pragma mark - Table view data source
-
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60.;
+}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 #warning Incomplete implementation, return the number of sections
     return 1;
@@ -53,10 +97,12 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    
+    cell.backgroundColor = [UIColor clearColor];
     NSDictionary *dic = self.dataArry[indexPath.row];
     cell.textLabel.text = dic[@"name"];
-    
+    [cell.textLabel setFont:[UIFont systemFontOfSize:14.]];
+//    [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
+    [cell.textLabel setFrame:CGRectMake(30, 0, 120, cell.contentView.bounds.size.height)];
     // Configure the cell...
     
     return cell;

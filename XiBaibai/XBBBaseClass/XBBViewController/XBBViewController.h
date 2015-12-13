@@ -24,6 +24,4 @@
 - (void)initViewDidLoadDatas;
 - (void)disposeDidLoadUI;
 
-
-
 @end

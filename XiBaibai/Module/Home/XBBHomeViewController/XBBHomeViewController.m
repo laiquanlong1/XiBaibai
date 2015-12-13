@@ -26,6 +26,8 @@
 #import "XBBHomeFacialTableViewCell.h"
 #import "XBBHomeFacialOneTableViewCell.h"
 #import "XBBProObject.h"
+#import <MJRefresh.h>
+#import <MJExtension.h>
 
 static NSString *identifier_facial = @"facial_cell";
 static NSString *identifier_diy = @"diy";
@@ -38,15 +40,14 @@ static NSString *identifier_diy = @"diy";
     NSArray        *bannerArrayData;
     UILabel        *areaFirstTitileLabel;
     UILabel        *areaLastTitleLabel;
-    
-    
-    
-    
     UILabel        *inSpaNameLabel;
     UILabel        *inSpaPriceLabel;
     UILabel        *oilNameLabel;
     UILabel        *oilPriceLabel;
+    BOOL            hasDefaultCar;
     
+    
+    BOOL            isDisconnection;
     
 }
 @property (nonatomic, strong) UITableView *tableView;
@@ -58,6 +59,29 @@ static NSString *identifier_diy = @"diy";
 
 
 #pragma mark featchData
+
+
+- (void)fetchDatas:(void(^)(void))block
+{
+    if (block) {
+        block();
+    }
+    [self feachBannerData];
+    [self feachFacialDatas];
+    [self feachProDatas];
+    
+}
+
+- (void)setupRefresh
+{
+    WS(weakSelf)
+    self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakSelf fetchDatas:^{
+            [self.tableView.header endRefreshing];
+            [self.tableView.footer resetNoMoreData];
+        }];
+    }];
+}
 
 - (void)feachFacialDatas
 {
@@ -136,7 +160,6 @@ static NSString *identifier_diy = @"diy";
     });
 }
 
-
 - (void)initData{
     NSUserDefaults *isLogin = [NSUserDefaults standardUserDefaults];
     NSString *userid = [isLogin objectForKey:@"userid"];
@@ -179,25 +202,44 @@ static NSString *identifier_diy = @"diy";
                 
                 
                 [NetworkHelper postWithAPI:XBB_Car_select parameter:@{@"uid":[UserObj shareInstance].uid} successBlock:^(id response) {
+                    
                     if ([response[@"code"] integerValue] == 1) {
+                        
                         NSArray *resultArray = response[@"result"];
+                        if (resultArray.count == 0) {
+                            hasDefaultCar = NO;
+                            [UserObj shareInstance].c_id = nil;
+                            [UserObj shareInstance].carModel = nil;
+                        }
                         for (NSDictionary *carDic in resultArray) {
                             if ([carDic[@"default"] integerValue] == 1) {
                                 [UserObj shareInstance].c_id = carDic[@"id"];
+                                MyCarModel *model = [[MyCarModel alloc] init];
+                                model.uid = [carDic[@"uid"] integerValue];
+                                model.carId = [carDic[@"id"] integerValue];
+                                model.c_type = [carDic[@"c_type"] integerValue];
+                                model.c_remark = carDic[@"c_remark"];
+                                model.c_plate_num = carDic[@"c_plate_num"];
+                                model.c_color = carDic[@"c_color"];
+                                model.c_brand = carDic[@"c_brand"];
+                                model.add_time = [carDic[@"add_time"] integerValue];
+                                [UserObj shareInstance].carModel = model;
+                                
+                                DLog(@"%@  %@",[UserObj shareInstance].carModel.c_color,[UserObj shareInstance].carModel.c_plate_num)
                             }
                         }
+                       
                     }else
                     {
-                        [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+                        [UserObj shareInstance].c_id = nil;
+                        [UserObj shareInstance].carModel = nil;
+                        hasDefaultCar = NO;
+//                        [SVProgressHUD showErrorWithStatus:response[@"msg"]];
                     }
-                    
-                    
-                    DLog(@"%@",response)
                 } failBlock:^(NSError *error) {
-                    [SVProgressHUD showErrorWithStatus:@"获取车辆信息失败"];
+                    hasDefaultCar = NO;
+//                    [SVProgressHUD showErrorWithStatus:@"获取车辆信息失败"];
                 }];
-                
-                
                 if ([[[response objectForKey:@"result"] objectForKey:@"u_img"] isKindOfClass:[NSNull class]]) {
                     leftNavigationBotton.image=[UIImage imageNamed:@"nav1.png"];
                 }else{
@@ -220,37 +262,40 @@ static NSString *identifier_diy = @"diy";
 
 - (void)feachBannerData
 {
-    [NetworkHelper postWithAPI:XBB_Banner_roop parameter:nil successBlock:^(id response) {
-        [SVProgressHUD dismiss];
-        NSDictionary *dic = response;
-        if ([dic[@"code"] integerValue] == 1) {
-            NSArray  *contentDics = dic[@"result"];
-            NSMutableArray *objects = [NSMutableArray array];
-            for (NSDictionary *dic_1 in contentDics) {
-                XBBBannerObject *ob = [[XBBBannerObject alloc] init];
-                ob.oid = dic_1[@"id"];
-                ob.imageUrl = [NSString stringWithFormat:@"%@/%@",ImgDomain,dic_1[@"thumb"]];
-                ob.url = dic_1[@"url"];
-                ob.title = dic_1[@"title"];
-                [objects addObject:ob];
+    if (bannerArrayData.count == 0) {
+        [NetworkHelper postWithAPI:XBB_Banner_roop parameter:nil successBlock:^(id response) {
+            [SVProgressHUD dismiss];
+            NSDictionary *dic = response;
+            if ([dic[@"code"] integerValue] == 1) {
+                NSArray  *contentDics = dic[@"result"];
+                NSMutableArray *objects = [NSMutableArray array];
+                for (NSDictionary *dic_1 in contentDics) {
+                    XBBBannerObject *ob = [[XBBBannerObject alloc] init];
+                    ob.oid = dic_1[@"id"];
+                    ob.imageUrl = [NSString stringWithFormat:@"%@/%@",ImgDomain,dic_1[@"thumb"]];
+                    ob.url = dic_1[@"url"];
+                    ob.title = dic_1[@"title"];
+                    [objects addObject:ob];
+                }
+                
+                bannerArrayData = [objects copy];
+                [self addBannerWithModels:bannerArrayData];
+            }else
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [SVProgressHUD showErrorWithStatus:dic[@"msg"]];
+                });
+                
             }
-          
-            bannerArrayData = [objects copy];
-            [self addBannerWithModels:bannerArrayData];
-        }else
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [SVProgressHUD showErrorWithStatus:dic[@"msg"]];
-            });
+            DLog(@"%@",response);
             
-        }
-        DLog(@"%@",response);
-       
-    } failBlock:^(NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD showErrorWithStatus:@"获取轮播网络错误"];
-        });
-    }];
+        } failBlock:^(NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD showErrorWithStatus:@"获取轮播网络错误"];
+            });
+        }];
+        
+    }
 }
 
 
@@ -279,10 +324,19 @@ static NSString *identifier_diy = @"diy";
 - (void)changeNetStatusHaveDisconnection
 {
    DLog(@"")
+    isDisconnection = YES;
 }
 - (void)changeNetStatusHaveConnection
 {
     
+    if (isDisconnection) {
+        if ([[UserObj shareInstance] carModel] == nil) {
+            [self initData];
+        }
+        [self feachBannerData];
+        [self feachDatas];
+    }
+    isDisconnection = NO;
     
 //    if (banner == nil) {
 //        [self feachBannerData];
@@ -319,6 +373,7 @@ static NSString *identifier_diy = @"diy";
     
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self addTableViewHomes];
@@ -332,6 +387,7 @@ static NSString *identifier_diy = @"diy";
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
+    [self setupRefresh];
     self.tableView.separatorColor = [UIColor groupTableViewBackgroundColor];
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBHomeFacialTableViewCell" bundle:nil] forCellReuseIdentifier:identifier_diy];
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBHomeFacialOneTableViewCell" bundle:nil] forCellReuseIdentifier:identifier_facial];
@@ -419,8 +475,8 @@ static NSString *identifier_diy = @"diy";
     banner = [[XBBBannerView alloc] initWithFrame:CGRectMake(0,0, XBB_Screen_width, XBB_Size_w_h(300.)) imagesNames:arr];
     banner.xbbDelegate = self;
     [headView insertSubview:banner atIndex:0];
-//    [self alphaToOne];
 }
+
 - (void)removeBanner
 {
     [banner.timer invalidate];
@@ -744,14 +800,18 @@ static NSString *identifier_diy = @"diy";
 {
     if (IsLogin)
     {
-        AddOrderViewController *diy = [[AddOrderViewController alloc] init];
-        diy.navigationTitle = @"一键洗车";
-        [self.navigationController pushViewController:diy animated:YES];
+        if ([[UserObj shareInstance] carModel] != nil) {
+            AddOrderViewController *diy = [[AddOrderViewController alloc] init];
+            diy.navigationTitle = @"一键洗车";
+            [self.navigationController pushViewController:diy animated:YES];
+            
+        }else
+        {
+            UIAlertView *alrt = [[UIAlertView alloc] initWithTitle:@"绑定车辆" message:@"您还没有设置默认车辆" delegate:self cancelButtonTitle:@"再看看" otherButtonTitles:@"好吧", nil];
+            [alrt show];
+        }
     }
-    else
-    {
-        GoToLogin(self);
-    }
+    
 }
 
 #pragma mark action
@@ -768,9 +828,15 @@ static NSString *identifier_diy = @"diy";
 {
     
 
-    [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
-        
-    }];
+    if ([[UserObj shareInstance] iphone]) {
+        [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
+            
+        }];
+    }else
+    {
+        [SVProgressHUD showErrorWithStatus:@"正在加载个人信息!"];
+    }
+    
 }
 
 - (IBAction)rightButtonAction:(id)sender
@@ -778,6 +844,7 @@ static NSString *identifier_diy = @"diy";
     
     XBBMapViewController *map = [[XBBMapViewController alloc] init];
     map.navigationTitle = @"地图";
+    map.isHomeControllerto = YES;
 //        [self presentViewController:map animated:YES completion:nil];
     [self.navigationController pushViewController:map animated:YES];
     return;

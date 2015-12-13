@@ -14,7 +14,7 @@
 
 @end
 
-@interface SetCarAddsViewController : UIViewController
+@interface SetCarAddsViewController : XBBViewController
 
 @property (assign,nonatomic) NSInteger num;
 

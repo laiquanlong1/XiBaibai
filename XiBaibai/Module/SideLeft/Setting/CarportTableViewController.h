@@ -8,11 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CarportTableViewController : UITableViewController
+@interface CarportTableViewController : XBBViewController
 
-@property (weak, nonatomic) IBOutlet UILabel *labHomeCommon;
-@property (weak, nonatomic) IBOutlet UILabel *labHomeInfo;
-@property (weak, nonatomic) IBOutlet UILabel *labComp;
-@property (weak, nonatomic) IBOutlet UILabel *labCompInfo;
 
 @end

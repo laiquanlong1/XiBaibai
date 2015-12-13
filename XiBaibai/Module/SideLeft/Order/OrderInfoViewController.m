@@ -12,7 +12,7 @@
 #import "PayTableViewController.h"
 #import "MyCarModel.h"
 
-
+#import "UserObj.h"
 
 @interface OrderInfoViewController (){
     UIView *viewOrderPay;
@@ -574,6 +574,7 @@
         carmodel.c_plate_num = self.orderDitailDic[@"c_plate_num"];
         carmodel.c_type = cartype;
         
+        [UserObj shareInstance].carModel = carmodel;
         
         // 获取产品信息
         NSMutableArray *proArr = [NSMutableArray array];
@@ -585,13 +586,13 @@
         
         PayTableViewController *viewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"PayTableViewController"];
         viewController.orderNO = self.labOrder_numX.text;
-        viewController.price = [[self.labMoney.text substringFromIndex:1] doubleValue];
+//        viewController.price = [[self.labMoney.text substringFromIndex:1] doubleValue];
         viewController.orderName = self.labTitle.text;
         
         viewController.location = self.orderDitailDic[@"location"];
-        viewController.carType = cartype;
+//        viewController.carType = cartype;
         viewController.pro_Dics = proArr;
-        viewController.carModels =@[ carmodel];
+//        viewController.carModels =@[ carmodel];
         
         
         [self.navigationController pushViewController:viewController animated:YES];

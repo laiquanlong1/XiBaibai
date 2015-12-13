@@ -14,6 +14,8 @@
 #import "XBBOrder.h"
 #import "WebViewController.h"
 #import "AddOrderViewController.h"
+#import "UserObj.h"
+
 
 @class AddOrderViewController;
 @interface XBBFacialViewController ()
@@ -22,6 +24,7 @@
     XBBListHeadLabel *priceTotalTitle;
     float allPrice;
     NSHashTable *selectHashTable;
+    NSInteger carType; // 1 轿车
  
 }
 
@@ -53,9 +56,7 @@
 - (void)sortArray
 {
     NSMutableArray *arr = [NSMutableArray array];
-    
     for (int i = 0; i < self.proArray.count; i ++) {
-        
         NSMutableArray *arr_1 = [NSMutableArray array];
         XBBDiyObject *diy = self.proArray[i];
         
@@ -131,29 +132,33 @@
        [SVProgressHUD showErrorWithStatus:@"获取美容数据网络错误"];
    }];
 }
+- (void)addAllPrice
+{
+    allPrice = 0.;
+    for (XBBDiyObject *object in selectHashTable) {
+        if (carType == 1) {
+            allPrice += object.price1;
+        }else
+        {
+            allPrice += object.price2;
+        }
+    }
+    
+    priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",allPrice>0?allPrice:0.00];
+}
+
+- (void)initData
+{
+    carType = [[UserObj shareInstance] carModel].c_type;
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self initData];
+    [self initUI];
+}
 
 
 #pragma mark viewdisposed
-
-- (void)alphatoZero
-{
-    barView.alpha = 0;
-    self.tableView.alpha = 0.;
-}
-- (void)alphaToOne
-{
-    [UIView animateWithDuration:0.25 animations:^{
-        barView.alpha = 1;
-        self.tableView.alpha = 1.;
-    }];
-    
-}
-
-- (void)initUI
-{
-    [self setNavigationBarControl];
-    [self addTabBar];
-}
 
 - (void)setNavigationBarControl
 {
@@ -215,19 +220,34 @@
     self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, XBB_Screen_width, XBB_Screen_height-64.-barView.frame.size.height);
     [self alphatoZero];
 }
-- (void)addAllPrice
-{
-    priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",allPrice>0?allPrice:0.00];
-}
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.tableView.separatorColor = [UIColor groupTableViewBackgroundColor];
+- (void)registerCell
+{
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBDIYTableViewCell" bundle:nil] forCellReuseIdentifier:@"diycell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"AddOrderDetailTableViewCell" bundle:nil] forCellReuseIdentifier:@"txt1"];
-    [self initUI];
 }
 
+- (void)alphatoZero
+{
+    barView.alpha = 0;
+    self.tableView.alpha = 0.;
+}
+- (void)alphaToOne
+{
+    [UIView animateWithDuration:0.25 animations:^{
+        barView.alpha = 1;
+        self.tableView.alpha = 1.;
+    }];
+    
+}
+
+- (void)initUI
+{
+    [self registerCell];
+     self.tableView.separatorColor = XBB_separatorColor;;
+    [self setNavigationBarControl];
+    [self addTabBar];
+}
 
 #pragma mark actions
 
@@ -317,7 +337,6 @@
 {
 
     XBBDiyObject *object = self.dataSource[indexPath.section][indexPath.row];
- 
     if (object.price1==0) {
         XBBDIYTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diycell"];
         
@@ -344,26 +363,17 @@
         cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
         cell.tag = 1;
         cell.titleLabel.text = object.proName;
-        if (self.selectCarType == 1) {
+        if (carType == 1) {
             cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",object.price1];
         }else
         {
             cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",object.price2];
         }
-        
-        
         if (selectHashTable) {
             for (XBBDiyObject *ob in selectHashTable) {
                 if ([object.proName isEqualToString:ob.proName]) {
                     cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
                     cell.tag = 2;
-                    if (self.selectCarType == 1) {
-                       allPrice += object.price1;
-                    }
-                    else
-                    {
-                        allPrice += object.price2;
-                    }
                     [self addAllPrice];
                     
                 }
@@ -384,15 +394,11 @@
     if (selectHashTable == nil) {
         selectHashTable = [NSHashTable weakObjectsHashTable];
     }
-    
     XBBDiyObject *object = self.dataSource[indexPath.section][indexPath.row];
     if (indexPath.row == 0) {
         
     }else
     {
-        
-       
-        
         
         AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
@@ -407,27 +413,12 @@
                     if (cell.tag == 1) {
                         cell.tag = 2;
                         cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
-                        if (self.selectCarType == 1) {
-                            allPrice += object.price1;
-                        }else
-                        {
-                            allPrice += object.price2;
-                        }
-                        
-                        [self addAllPrice];
                         [selectHashTable addObject:object];
                         
                     }else
                     {
                         cell.tag = 1;
                         cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
-                        if (self.selectCarType == 1) {
-                            allPrice -= object.price1;
-                        }else
-                        {
-                            allPrice -= object.price2;
-                        }
-                        [self addAllPrice];
                         [selectHashTable removeObject:object];
                         
                     }
@@ -437,13 +428,6 @@
                     if (cell_1.tag == 2) {
                         cell_1.tag = 1;
                         cell_1.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
-                        if (self.selectCarType == 1) {
-                            allPrice -= object_1.price1;
-                        }else
-                        {
-                            allPrice -= object_1.price2;
-                        }
-                        [self addAllPrice];
                         [selectHashTable removeObject:object_1];
                         
                     }
@@ -455,52 +439,21 @@
             if (cell.tag == 1) {
                 cell.tag = 2;
                 cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
-                if (self.selectCarType == 1) {
-                    allPrice += object.price1;
-                }else
-                {
-                    allPrice += object.price2;
-                }
-                
-                [self addAllPrice];
                 [selectHashTable addObject:object];
                 
             }else
             {
                 cell.tag = 1;
                 cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
-                if (self.selectCarType == 1) {
-                    allPrice -= object.price1;
-                }else
-                {
-                    allPrice -= object.price2;
-                }
-                [self addAllPrice];
                 [selectHashTable removeObject:object];
                 
             }
             
-
         }
-        
-        
-        
-        
-        
-        
-        
     }
+    
+    [self addAllPrice];
 }
 
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

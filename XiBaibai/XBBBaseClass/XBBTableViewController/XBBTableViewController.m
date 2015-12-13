@@ -16,10 +16,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self addTabelView];
+    [self initTableView];
 }
 
-- (void)addTabelView
+
+- (void)initTableView
 {
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, XBB_Screen_height-64)];
     self.tableView.delegate = self;
@@ -27,7 +28,28 @@
     [self.view addSubview:self.tableView];
 }
 
-
+- (void)addTabelView:(UITableViewStyle)style
+{
+    if (self.tableView) {
+         [self.tableView removeFromSuperview];
+        self.tableView = nil;
+    }
+    
+    CGFloat  hight = 0;
+    if (self.showNavigation) {
+        hight = 64;
+    }else
+    {
+        hight = 0;
+    }
+    
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, hight, XBB_Screen_width, XBB_Screen_height-hight) style:style];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.view addSubview:self.tableView];
+   
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -52,14 +74,8 @@
     return cell;
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+
+
 
 @end

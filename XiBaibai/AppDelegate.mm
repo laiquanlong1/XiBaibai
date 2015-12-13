@@ -86,11 +86,22 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     MMDrawerController *drawerController = [[MMDrawerController alloc] initWithCenterViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MyNavigationController"] leftDrawerViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"LeftSideBarViewController"]];
-    drawerController.maximumLeftDrawerWidth = 240.;
+    drawerController.maximumLeftDrawerWidth = XBB_Screen_width - 60.;//240.;
     drawerController.showsShadow = NO;
+//    drawerController.animationVelocity = 0.1;
     drawerController.closeDrawerGestureModeMask = MMCloseDrawerGestureModeAll;
     drawerController.shouldStretchDrawer = NO;
-    self.window.rootViewController =  drawerController;
+    
+    if (IsLogin) {
+        self.window.rootViewController =  drawerController;
+    }else
+    {
+        LoginViewController *login = [[LoginViewController alloc] init];
+        self.window.rootViewController = login;
+        
+    }
+    
+    
     [self.window makeKeyAndVisible];
     return YES;
 }

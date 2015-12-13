@@ -161,7 +161,6 @@
             {
                 XBBDIYViewController *diy = [[XBBDIYViewController alloc] init];
                 diy.washType = 11;
-                diy.selectCarType = self.selectCarType;
                 diy.selectArray = @[oder];
                 
                  [self.navigationController pushViewController:diy animated:YES];
@@ -171,7 +170,6 @@
             {
                 XBBFacialViewController *fa = [[XBBFacialViewController alloc] init];
                 fa.selectFacialArray = @[oder];
-                fa.selectCarType = self.selectCarType;
                  [self.navigationController pushViewController:fa animated:YES];
 //                [self presentViewController:fa animated:YES completion:nil];
             }

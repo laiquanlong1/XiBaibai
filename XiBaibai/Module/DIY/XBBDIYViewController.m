@@ -15,15 +15,17 @@
 #import "XBBOrder.h"
 #import "WebViewController.h"
 #import "AddOrderViewController.h"
+#import "UserObj.h"
 
 @interface XBBDIYViewController ()
 {
     UIView *barView;
     float allPrice;
     XBBListHeadLabel *priceTotalTitle;
-   
+    NSInteger carType;
+    NSHashTable *selectObjects;
 }
-@property (nonatomic, copy) NSMutableArray *dataSource;// 全部数据
+@property (nonatomic, copy) NSMutableArray *dataSource; // allDatas
 
 @end
 
@@ -34,6 +36,7 @@
 
 - (void)initViewDidLoadDatas
 {
+    carType = [UserObj shareInstance].carModel.c_type;
     [NetworkHelper postWithAPI:XBB_DIY_Pro parameter:nil successBlock:^(id response) {
         DLog(@"%@",response);
         NSDictionary *dic = response;
@@ -87,9 +90,6 @@
             }
             
             [gropTempArrayAll addObject:commonTempArray];
-       
-//            self.commonProSocurce = [commonTempArray mutableCopy];
-            
             self.dataSource = [gropTempArrayAll copy];
             for (XBBDiyObject *ob in self.dataSource) {
                 DLog(@"%@",ob);
@@ -106,28 +106,35 @@
 
 - (void)inita
 {
-    if (self.selectObjects == nil) {
-        self.selectObjects = [NSHashTable weakObjectsHashTable];
+    if (selectObjects == nil) {
+        selectObjects = [NSHashTable weakObjectsHashTable];
     }
     for (XBBOrder *order in self.selectArray) {
         for (NSArray *array in self.dataSource) {
             for (XBBDiyObject *object in array) {
                 if ([order.xbbid isEqualToString:object.pid]) {
-                    [self.selectObjects addObject:object];
-                    DLog(@"%@",object.pid);
-                    
-                    
-                    if (self.selectCarType == 1) {
-                        allPrice += object.price1;
-                    }else
-                    {
-                        allPrice += object.price2;
-                    }
+                    [selectObjects addObject:object];
                 }
             }
         }
         
     }
+    [self addAllPrice];
+}
+
+
+- (void)addAllPrice
+{
+    allPrice = 0;
+    for (XBBDiyObject *object in selectObjects) {
+        if (carType == 1) {
+            allPrice += object.price1;
+        }else
+        {
+            allPrice += object.price2;
+        }
+    }
+    priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",allPrice>0?allPrice:0.00];
 }
 
 #pragma mark viewdisposed
@@ -145,11 +152,7 @@
     }];
     
 }
-- (void)initUI
-{
-    [self setNavigationBarControl];
-    [self addTabBar];
-}
+
 
 - (void)setNavigationBarControl
 {
@@ -210,19 +213,30 @@
     [self alphatoZero];
     
 }
-- (void)addAllPrice
+
+
+- (void)resigestCell
 {
-   
-    priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",allPrice>0?allPrice:0.00];
+    self.tableView.separatorColor = XBB_separatorColor;
+    [self.tableView registerNib:[UINib nibWithNibName:@"XBBDIYTableViewCell" bundle:nil] forCellReuseIdentifier:@"diycell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"AddOrderDetailTableViewCell" bundle:nil] forCellReuseIdentifier:@"txt1"];
 }
+
+- (void)initUI
+{
+    [self setNavigationBarControl];
+    [self addTabBar];
+    [self resigestCell];
+}
+
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
     
-    [self.tableView setSeparatorColor:[UIColor groupTableViewBackgroundColor]];
-    [self.tableView registerNib:[UINib nibWithNibName:@"XBBDIYTableViewCell" bundle:nil] forCellReuseIdentifier:@"diycell"];
-    [self.tableView registerNib:[UINib nibWithNibName:@"AddOrderDetailTableViewCell" bundle:nil] forCellReuseIdentifier:@"txt1"];
+   
     // Do any additional setup after loading the view.
 }
 
@@ -248,7 +262,6 @@
 {
  
     NSArray *viewControllers = self.navigationController.viewControllers;
-    DLog(@"%@",viewControllers)
     BOOL isWeb = NO;
     for (id viewControll in viewControllers) {
         if ([viewControll isKindOfClass:[WebViewController class]]) {
@@ -258,7 +271,7 @@
     if (isWeb) {
         isWeb = NO;
         NSMutableArray *arr = [NSMutableArray array];
-        for (XBBDiyObject *object in self.selectObjects) {
+        for (XBBDiyObject *object in selectObjects) {
             object.type = 1;
             [arr addObject:object];
         }
@@ -267,8 +280,7 @@
         [self.navigationController pushViewController:ader animated:YES];
         return;
     }
-    
-    self.selectObjectsBlock(self.selectObjects);
+    self.selectObjectsBlock(selectObjects);
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:YES];
     DLog(@"")
@@ -329,7 +341,7 @@
             cell.selectImageView.alpha = 0;
             cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
             
-            NSEnumerator *enumerator = [self.selectObjects objectEnumerator];
+            NSEnumerator *enumerator = [selectObjects objectEnumerator];
             id object_enumer;
             while (object_enumer = [enumerator nextObject]) {
                 if ([ob isEqual:object_enumer]) {
@@ -350,7 +362,7 @@
                 cell = [[AddOrderDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"txt1"];
             }
             cell.titleLabel.frame = CGRectMake(20, 0, 120, cell.contentView.frame.size.height);
-            if (self.selectCarType == 1) {
+            if (carType == 1) {
                 cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",ob.price1];
             }
             else
@@ -367,7 +379,7 @@
             cell.titleLabel.tag = [ob.pid integerValue];
             cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
             
-            NSEnumerator *enumerator = [self.selectObjects objectEnumerator];
+            NSEnumerator *enumerator = [selectObjects objectEnumerator];
             id object_enumer;
             
             while (object_enumer = [enumerator nextObject]) {
@@ -397,7 +409,7 @@
         [cell.nameLabel addGestureRecognizer:tap];
         cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
         cell.nameLabel.text = ob.proName;
-        if (self.selectCarType == 1) {
+        if (carType == 1) {
             cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",ob.price1];
         }
         else
@@ -405,7 +417,7 @@
             cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",ob.price2];
         }
         
-        NSEnumerator *enumerator = [self.selectObjects objectEnumerator];
+        NSEnumerator *enumerator = [selectObjects objectEnumerator];
         id object_enumer;
         while (object_enumer = [enumerator nextObject]) {
             if ([ob isEqual:object_enumer]) {
@@ -423,32 +435,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.selectObjects == nil) {
-        self.selectObjects = [NSHashTable weakObjectsHashTable];
+    if (selectObjects == nil) {
+        selectObjects = [NSHashTable weakObjectsHashTable];
     }
     XBBDiyObject *object = self.dataSource[indexPath.section][indexPath.row];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    if (self.washType == 0) {
-//        if (self.selectObjects.count == 0) {
-//            [SVProgressHUD showErrorWithStatus:@"此选项必须选择洗车"];
-//            return;
-//        }
-//        
-//        
-//        
-//        NSEnumerator *enumerator = [self.selectObjects objectEnumerator];
-//        DLog(@"%@",self.selectObjects);
-//        XBBDiyObject *object_enumer;
-//        while (object_enumer = [enumerator nextObject]) {
-//            DLog(@"%@\n%@",object_enumer.pid,object.pid);
-//            if (![object isEqual:object_enumer]) {
-//                [SVProgressHUD showErrorWithStatus:@"此选项必须选择洗车"];
-//                return;
-//            }
-//        }
-//    }
-//    
-  
+    
     if (indexPath.section < [self.dataSource count]-1) {
         if (indexPath.row != 0) {
             for (int i = 0; i < [self.dataSource[indexPath.section] count]; i++) {
@@ -465,45 +457,23 @@
                         
                         cell.tag = 2;
                         cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
-                        [self.selectObjects addObject:object];
-                        if (self.selectCarType == 1) {
-                            allPrice += object.price1;
-                        }else
-                        {
-                            allPrice += object.price2;
-                        }
-                        
-                        [self addAllPrice];
+                        [selectObjects addObject:object];
                     }else
                     {
                         cell.tag = 1;
                         cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
-                        if (self.selectCarType == 1) {
-                            allPrice -= object.price1;
-                        }else
-                        {
-                            allPrice -= object.price2;
-                        }
-                        [self addAllPrice];
-                        [self.selectObjects removeObject:object];
+                        [selectObjects removeObject:object];
                     }
                 }else
                 {
                    XBBDiyObject *object_1 = self.dataSource[indexPath.section][i];
                     cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
                     cell.tag = 1;
-                    NSEnumerator *enumerator = [self.selectObjects objectEnumerator];
+                    NSEnumerator *enumerator = [selectObjects objectEnumerator];
                     id object_enumer;
                     while (object_enumer = [enumerator nextObject]) {
                         if ([object_1 isEqual:object_enumer]) {
-                            [self.selectObjects removeObject:object_1];
-                            if (self.selectCarType == 1) {
-                                allPrice -= object.price1;
-                            }else
-                            {
-                                allPrice -= object.price2;
-                            }
-                            [self addAllPrice];
+                            [selectObjects removeObject:object_1];
                             break;
                         }
                     }
@@ -519,41 +489,21 @@
                 [SVProgressHUD showErrorWithStatus:@"此选项必须选择洗车"];
                 return;
             }
-            if (self.selectCarType == 1) {
-                allPrice += object.price1;
-            }else
-            {
-                allPrice += object.price2;
-            }
             cell.tag = 2;
-            [self.selectObjects addObject:object];
+            [selectObjects addObject:object];
             cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
         }else
         {
-            if (self.selectCarType == 1) {
-                allPrice -= object.price1;
-            }else
-            {
-                allPrice -= object.price2;
-            }
             cell.tag = 1;
-            [self.selectObjects removeObject:object];
+            [selectObjects removeObject:object];
             cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
             
         }
-        [self addAllPrice];
+       
     }
-    DLog(@"%@",self.selectObjects);
+    
+     [self addAllPrice];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

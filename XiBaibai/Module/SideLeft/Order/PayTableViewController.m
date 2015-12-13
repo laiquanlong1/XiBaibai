@@ -10,17 +10,13 @@
 #import "RechargeHelper.h"
 #import "UserObj.h"
 #import "CarInfo.h"
-//#import "OrderPaySigleTableViewCell.h"
-//#import "OrderPayWayTableViewCell.h"
-//#import "OrderPayUserInfoTableViewCell.h"
 #import "XBBListHeadLabel.h"
-
 #import "AddOrderTableViewCell.h"
 #import "AddOrderDetailTableViewCell.h"
 
 
 
-@interface PayTableViewController () <UIActionSheetDelegate,UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface PayTableViewController () <UIActionSheetDelegate,UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
 {
     UIView *barView;
     XBBListHeadLabel *priceTotalTitle;
@@ -42,8 +38,15 @@ static NSString *identifier = @"titcell";
 static NSString *identifier_2 = @"tit1cell";
 
 @implementation PayTableViewController
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if (buttonIndex == 1) {
+//        [self performSegueWithIdentifier:@"PayPushPayCallback" sender:nil];
+        return;
+    }
+    
     NSLog(@"%ld",buttonIndex);
     NSMutableDictionary *orderDic = [NSMutableDictionary dictionaryWithDictionary:self.dic_prama];
     // 下单时间
@@ -55,14 +58,14 @@ static NSString *identifier_2 = @"tit1cell";
     
     
     
-    if (buttonIndex==1) {
+    if (buttonIndex==0) {
         [SVProgressHUD show];
         if (!self.data)
             [NetworkHelper postWithAPI:OrderInsert_API parameter:orderDic successBlock:^(id response) {
                 if ([response[@"code"] integerValue] == 1) {
                     self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
                     self.orderName = response[@"result"][@"order_name"];
-                    self.price = [response[@"result"][@"total_price"] doubleValue];
+                    selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
                     self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
                     [SVProgressHUD showSuccessWithStatus:@"下单成功"];
                     [self toPay];
@@ -85,7 +88,68 @@ static NSString *identifier_2 = @"tit1cell";
                 if ([response[@"code"] integerValue] == 1) {
                     self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
                     self.orderName = response[@"result"][@"order_name"];
-                    self.price = [response[@"result"][@"total_price"] doubleValue];
+                    selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
+                    self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
+                    [SVProgressHUD showSuccessWithStatus:@"下单成功"];
+                    [self toPay];
+                    self.isDownOrder = YES;
+                    
+                } else {
+                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+                }
+            } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+                [SVProgressHUD showErrorWithStatus:@"下单失败"];
+            }];
+        }
+        
+    }
+
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"%ld",buttonIndex);
+    NSMutableDictionary *orderDic = [NSMutableDictionary dictionaryWithDictionary:self.dic_prama];
+    // 下单时间
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
+    DLog(@"%@",currentDateStr);
+    [orderDic setObject:currentDateStr?currentDateStr:@"" forKey:@"day"];
+    
+    
+    
+    if (buttonIndex==1) {
+        [SVProgressHUD show];
+        if (!self.data)
+            [NetworkHelper postWithAPI:OrderInsert_API parameter:orderDic successBlock:^(id response) {
+                if ([response[@"code"] integerValue] == 1) {
+                    self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
+                    self.orderName = response[@"result"][@"order_name"];
+                    selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
+                    self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
+                    [SVProgressHUD showSuccessWithStatus:@"下单成功"];
+                    [self toPay];
+                    self.isDownOrder = YES;
+                    
+                } else {
+                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+                }
+            } failBlock:^(NSError *error) {
+                [SVProgressHUD showErrorWithStatus:@"下单失败"];
+            }];
+        else {
+            AFHTTPRequestOperationManager *uploadManager = [AFHTTPRequestOperationManager manager];
+            uploadManager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+            [uploadManager POST:OrderInsert_API parameters:orderDic constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+                [formData appendPartWithFileData:self.data name:[NSString stringWithFormat:@"file"] fileName:[NSString stringWithFormat:@"file.aac"] mimeType:@"file/.aac"];
+            } success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+                NSLog(@"%@", responseObject);
+                id response = responseObject;
+                if ([response[@"code"] integerValue] == 1) {
+                    self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
+                    self.orderName = response[@"result"][@"order_name"];
+                    selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
                     self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
                     [SVProgressHUD showSuccessWithStatus:@"下单成功"];
                     [self toPay];
@@ -201,7 +265,11 @@ static NSString *identifier_2 = @"tit1cell";
     for (NSDictionary *dic in self.pro_Dics) {
         selectAllPrice += [dic[@"p_price"] floatValue];
     }
-    priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",selectAllPrice];
+    
+    
+    
+    
+    priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",selectAllPrice - self.couponprice];
 }
 
 - (void)viewDidLoad {
@@ -212,7 +280,7 @@ static NSString *identifier_2 = @"tit1cell";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOfPay:) name:NotificationRecharge object:nil];
     self.priceArr = @[@"10", @"20", @"30", @"50", @"100"];
     self.orderNameLabel.text = self.orderName;
-    self.priceLabel.text = [NSString stringWithFormat:@"%@", @(self.price)];
+    self.priceLabel.text = [NSString stringWithFormat:@"%@", @(selectAllPrice)];
     _selectedImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"xbb_168"]];
     
     //请求产品标题
@@ -225,9 +293,9 @@ static NSString *identifier_2 = @"tit1cell";
             
 #pragma mark 改价格  哈哈
             
-            self.price = [[NSString stringWithFormat:@"%@",response[@"result"][@"order_price"]] doubleValue];
+            selectAllPrice = [[NSString stringWithFormat:@"%@",response[@"result"][@"order_price"]] doubleValue];
             self.orderNameLabel.text = self.orderName;
-            self.priceLabel.text = [NSString stringWithFormat:@"%@", @(self.price)];
+            self.priceLabel.text = [NSString stringWithFormat:@"%@", @(selectAllPrice)];
         } failBlock:^(NSError *error) {
             [SVProgressHUD showErrorWithStatus:@"信息有误"];
             [self.navigationController popViewControllerAnimated:YES];
@@ -333,13 +401,14 @@ static NSString *identifier_2 = @"tit1cell";
         if (cell == nil) {
             cell = [[AddOrderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
         }
+        
         cell.tag = 1;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         switch (indexPath.section) {
             case 0:
             {
                 cell.titleLabel.text = @"订单内容";
-                
+                _selectedImgView.alpha = 0;
             }
                 break;
                 
@@ -352,6 +421,7 @@ static NSString *identifier_2 = @"tit1cell";
                 {
                     cell.detailLabel.text = self.planTime;
                 }
+                _selectedImgView.alpha = 0;
                 
             }
                 break;
@@ -360,14 +430,14 @@ static NSString *identifier_2 = @"tit1cell";
             case 2:
             {
                 cell.titleLabel.text = @"车辆信息";
-                
+                _selectedImgView.alpha = 0;
             }
                 break;
                 
             case 3:
             {
                 cell.titleLabel.text = @"用户信息";
-                
+                _selectedImgView.alpha = 0;
             }
                 break;
                 
@@ -450,12 +520,10 @@ static NSString *identifier_2 = @"tit1cell";
             switch (indexPath.row) {
                 case 1:
                 {
+                    MyCarModel *model = [[UserObj shareInstance] carModel];
+                    cell.addressLabel.text = [NSString stringWithFormat:@"%@  %@  %@  %@",model.c_brand?model.c_brand:@"",model.typeString?model.typeString :@"",model.c_plate_num?model.c_plate_num:@"",model.c_color?model.c_color:@""];
                     
-                    if (self.carModels) {
-                        MyCarModel *model = self.carModels[0];
-                        cell.addressLabel.text = [NSString stringWithFormat:@"%@  %@  %@  %@",model.c_brand?model.c_brand:@"",model.typeString?model.typeString :@"",model.c_plate_num?model.c_plate_num:@"",model.c_color?model.c_color:@""];
-                    }
-                  
+                    
                 }
                     break;
                 case 2:
@@ -505,13 +573,6 @@ static NSString *identifier_2 = @"tit1cell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (indexPath.section == 0) {
-//        if (indexPath.row == 1 && self.isRecharge) {
-//            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"请选择充值金额" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:nil];
-//            for (NSString *price in self.priceArr) {
-//                [actionSheet addButtonWithTitle:price];
-//            }
-//            [actionSheet showInView:self.view];
-//        }
     } else if (indexPath.section == 4) {
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
@@ -530,24 +591,6 @@ static NSString *identifier_2 = @"tit1cell";
         }
         
         if (indexPath.row == 0) {
-//            if (self.isRecharge == NO) {
-//                [RechargeHelper setAliPayNotifyURLString:[NSString stringWithFormat:@"%@?recharge_type=%@", Notify_AlipayCallback_Url, @"1"]];
-//                [[RechargeHelper defaultRechargeHelper] payAliWithMoney:[self.priceLabel.text doubleValue] orderNO:self.orderNO productTitle:self.orderNameLabel.text productDescription:self.orderName];
-//            } else {
-//                [NetworkHelper postWithAPI:API_Recharge parameter:@{@"uid": [UserObj shareInstance].uid, @"money": self.priceLabel.text} successBlock:^(id response) {
-//                    if ([response[@"code"] integerValue] == 1) {
-//                        NSString *orderNO = [[response objectForKey:@"result"] objectForKey:@"recharge_num"];
-//                        NSString *orderName = response[@"result"][@"recharge_name"];
-//                        double price = [response[@"result"][@"recharge_price"] doubleValue];
-////                        NSString *orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
-//                        [[RechargeHelper defaultRechargeHelper] payAliWithMoney:price orderNO:orderNO productTitle:orderName productDescription:orderName];
-//                    } else {
-//                        [SVProgressHUD showErrorWithStatus:response[@"msg"]];
-//                    }
-//                } failBlock:^(NSError *error) {
-//                    [SVProgressHUD showErrorWithStatus:@"充值失败"];
-//                }];
-//            }
         } else {
             [SVProgressHUD showErrorWithStatus:@"暂未开通"];
         }
@@ -563,23 +606,26 @@ static NSString *identifier_2 = @"tit1cell";
     {
         if (_payType == 1) {
             
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"确认下单" message:@"是否下单?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-            [alert show];
+            
+            UIActionSheet *actionSh = [[UIActionSheet alloc] initWithTitle:@"确认下单" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [actionSh showInView:self.view];
+            
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"确认下单" message:@"是否下单?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+//            [alert show];
         } else {
             [SVProgressHUD showErrorWithStatus:@"请选择支付方式"];
         }
     }
 }
 
-// 支付
 - (void)toPay
 {
     if (self.isDownOrder) {
         if (self.isRecharge == NO) {
             [RechargeHelper setAliPayNotifyURLString:[NSString stringWithFormat:@"%@?recharge_type=%@", Notify_AlipayCallback_Url, @"1"]];
-            [[RechargeHelper defaultRechargeHelper] payAliWithMoney:self.price orderNO:self.orderNO productTitle:self.orderName productDescription:self.orderName];
+            [[RechargeHelper defaultRechargeHelper] payAliWithMoney:selectAllPrice orderNO:self.orderNO productTitle:self.orderName productDescription:self.orderName];
         } else {
-            [NetworkHelper postWithAPI:API_Recharge parameter:@{@"uid": [UserObj shareInstance].uid, @"money": [NSString stringWithFormat:@"%.2f",self.price]} successBlock:^(id response) {
+            [NetworkHelper postWithAPI:API_Recharge parameter:@{@"uid": [UserObj shareInstance].uid, @"money": [NSString stringWithFormat:@"%.2f",selectAllPrice]} successBlock:^(id response) {
                 if ([response[@"code"] integerValue] == 1) {
                     NSString *orderNO = [[response objectForKey:@"result"] objectForKey:@"recharge_num"];
                     NSString *orderName = response[@"result"][@"recharge_name"];
@@ -601,7 +647,7 @@ static NSString *identifier_2 = @"tit1cell";
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (self.isRecharge == NO) {
                     [RechargeHelper setAliPayNotifyURLString:[NSString stringWithFormat:@"%@?recharge_type=%@", Notify_AlipayCallback_Url, @"1"]];
-                    [[RechargeHelper defaultRechargeHelper] payAliWithMoney:self.price orderNO:self.orderNO productTitle:self.orderName productDescription:self.orderName];
+                    [[RechargeHelper defaultRechargeHelper] payAliWithMoney:selectAllPrice orderNO:self.orderNO productTitle:self.orderName productDescription:self.orderName];
                 } else {
                     [NetworkHelper postWithAPI:API_Recharge parameter:@{@"uid": [UserObj shareInstance].uid, @"money": self.priceLabel.text} successBlock:^(id response) {
                         if ([response[@"code"] integerValue] == 1) {
@@ -624,74 +670,18 @@ static NSString *identifier_2 = @"tit1cell";
     
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex > 0) {
-        self.priceLabel.text = [NSString stringWithFormat:@"%@", self.priceArr[buttonIndex - 1]];
-    }
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    if ([segue.identifier isEqualToString:@"PayPushPayCallback"]) {
-        [segue.destinationViewController setValue:_orderId forKey:@"orderId"];
-    }
-}
-
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-//#warning Potentially incomplete method implementation.
-//    // Return the number of sections.
-//    return 0;
-//}
-//
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//#warning Incomplete method implementation.
-//    // Return the number of rows in the section.
-//    return 0;
+//- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+//    if (buttonIndex > 0) {
+//        self.priceLabel.text = [NSString stringWithFormat:@"%@", self.priceArr[buttonIndex - 1]];
+//    }
 //}
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+//    if ([segue.identifier isEqualToString:@"PayPushPayCallback"]) {
+//        [segue.destinationViewController setValue:_orderId forKey:@"orderId"];
+//    }
+//}
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 @end

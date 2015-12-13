@@ -14,7 +14,7 @@
 
 @end
 
-@interface SetCarAddsInfoViewController : UIViewController
+@interface SetCarAddsInfoViewController : XBBViewController
 @property (assign,nonatomic) NSInteger num;
 
 @property (assign,nonatomic) id<SetCarAddsInfoViewControllerDelegate> delegate;

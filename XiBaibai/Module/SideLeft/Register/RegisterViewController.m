@@ -315,7 +315,7 @@
 
 
 - (IBAction)backViewController:(id)sender {
-    
+    [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -360,6 +360,7 @@
                             [isLogin setObject:[[response objectForKey:@"result"] objectForKey:@"uid"] forKey:@"userid"];
                             [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginSuccessful object:nil];
                             [self.navigationController popToRootViewControllerAnimated:YES];
+                            [self dismissViewControllerAnimated:YES completion:nil];
                         }
                         
                     } failBlock:^(NSError *error) {

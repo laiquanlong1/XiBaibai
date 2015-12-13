@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PayCallbackViewController : UIViewController
+@interface PayCallbackViewController : XBBViewController
 
 @property (copy, nonatomic) NSString *orderId;
 

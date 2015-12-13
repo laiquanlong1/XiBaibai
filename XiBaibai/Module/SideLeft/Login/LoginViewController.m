@@ -48,7 +48,7 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
      [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 - (void)setUpUIS
@@ -57,32 +57,32 @@
     [self setUpBgImageView];
     [self setUpControlLayer];
     [self startAnimation];
-    [self backButton];
+//    [self backButton];
 }
 
 
-- (void)backButton
-{
-    UIButton *back = [[UIButton alloc] init];
-    
-    UIImage *backimage = nil;
-    if (XBB_IsIphone6_6s) {
-       backimage = [UIImage imageNamed:@"xbb_back_login6"];
-    }else
-    {
-        backimage = [UIImage imageNamed:@"xbb_back_login"];
-    }
-    
-    [back setImage:backimage forState:UIControlStateNormal];
-    [self.view addSubview:back];
-    [back addTarget:self action:@selector(fanhui) forControlEvents:UIControlEventTouchUpInside];
-    [back mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.mas_equalTo(10.f);
-        make.top.mas_equalTo(20.f);
-        make.width.mas_equalTo(50.f);
-        make.height.mas_equalTo(50.f);
-    }];
-}
+//- (void)backButton
+//{
+//    UIButton *back = [[UIButton alloc] init];
+//    
+//    UIImage *backimage = nil;
+//    if (XBB_IsIphone6_6s) {
+//       backimage = [UIImage imageNamed:@"xbb_back_login6"];
+//    }else
+//    {
+//        backimage = [UIImage imageNamed:@"xbb_back_login"];
+//    }
+//    
+//    [back setImage:backimage forState:UIControlStateNormal];
+//    [self.view addSubview:back];
+//    [back addTarget:self action:@selector(fanhui) forControlEvents:UIControlEventTouchUpInside];
+//    [back mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.leading.mas_equalTo(10.f);
+//        make.top.mas_equalTo(20.f);
+//        make.width.mas_equalTo(50.f);
+//        make.height.mas_equalTo(50.f);
+//    }];
+//}
 - (void)setNavigation
 {
     [self.navigationController.navigationBar setHidden:YES];
@@ -355,8 +355,25 @@
     _controlScrollView.contentSize = CGSizeMake(0, 567.);
 }
 
-
 #pragma mark anction
+
+- (IBAction)setRootController:(id)sender
+{
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        self.view.alpha = 0;
+    } completion:^(BOOL finished) {
+        
+        MMDrawerController *drawerController = [[MMDrawerController alloc] initWithCenterViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MyNavigationController"] leftDrawerViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"LeftSideBarViewController"]];
+        drawerController.maximumLeftDrawerWidth = 240.;
+        drawerController.showsShadow = NO;
+        drawerController.closeDrawerGestureModeMask = MMCloseDrawerGestureModeAll;
+        drawerController.shouldStretchDrawer = NO;
+        self.view.window.rootViewController = drawerController;
+    }];
+    
+    
+}
 - (IBAction)taptoloseFristResponse:(id)sender
 {
     if ([self.txtLogin isFirstResponder]) {
@@ -408,9 +425,12 @@
                     [isLogin setObject:[[response objectForKey:@"result"] objectForKey:@"iphone"] forKey:@"iphone"];
                     [isLogin setObject:[[response objectForKey:@"result"] objectForKey:@"id"] forKey:@"userid"];
                     [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginSuccessful object:nil];
-                    
-                    [self.navigationController popViewControllerAnimated:YES];
-                    [self dismissViewControllerAnimated:YES completion:nil];
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        [NSThread sleepForTimeInterval:0.5];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self setRootController:nil];
+                        });
+                    });
                 } else {
                     [SVProgressHUD showErrorWithStatus:response[@"msg"]];
                 }
@@ -432,6 +452,7 @@
         return;
     }
     ForgetPwdViewController *forgetPwdVC = [[ForgetPwdViewController alloc] init];
+    [self presentViewController:forgetPwdVC animated:YES completion:nil];
     [self.navigationController pushViewController:forgetPwdVC animated:YES];
 }
 #pragma mark 注册
@@ -441,7 +462,8 @@
         return;
     }
     RegisterViewController *registerVC = [[RegisterViewController alloc] init];
-    [self.navigationController pushViewController:registerVC animated:YES];
+    [self presentViewController:registerVC animated:YES completion:nil];
+//    [self.navigationController pushViewController:registerVC animated:YES];
 }
 
 

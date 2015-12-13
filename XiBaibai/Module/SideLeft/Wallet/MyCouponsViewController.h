@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
-typedef void(^MyCouponsViewControllerBlock)(id);
-@interface MyCouponsViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UITableView *CouponsTableview;
+#import "XBBViewController.h"
+#import "MyCouponsModel.h"
+typedef void(^MyCouponsViewControllerBlock)(MyCouponsModel *model);
+@interface MyCouponsViewController : XBBViewController
 @property (copy, nonatomic) MyCouponsViewControllerBlock couponsBlock;
+@property (nonatomic, assign) BOOL isAddoder;
 
 @end

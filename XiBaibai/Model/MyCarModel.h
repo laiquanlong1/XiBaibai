@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MyCarModel : NSObject
+@interface MyCarModel : NSObject <NSCopying>
 
 @property (assign, nonatomic) NSInteger carId;
 @property (assign, nonatomic) NSInteger uid;
@@ -23,6 +23,6 @@
 
 - (NSString *)typeString;
 - (NSString *)addTimeString:(NSString *)format;
-
+- (id)copyWithZone:(nullable NSZone *)zone;
 
 @end
