@@ -14,17 +14,46 @@
 
 
 @interface XBBAddressViewController () <UITableViewDataSource, UITableViewDelegate,SetCarAddsViewControllerDelegate,SetCarAddsInfoViewControllerDelegate>
+{
+    UILabel  *nofoundLabel;
+}
 @property (nonatomic, strong) UITableView *tableView;
 @end
 
 static NSString *identifi = @"cell";
 @implementation XBBAddressViewController
 
+- (void)alphaNoFound:(BOOL)hidden
+{
+    if (hidden) {
+        nofoundLabel.alpha = 0;
+    }else
+    {
+        [UIView animateWithDuration:0.3 animations:^{
+            nofoundLabel.alpha = 1;
+        }];
+        
+    }
+    
+}
+
+- (void)initNotDataUI
+{
+    nofoundLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, XBB_Screen_height/2-XBB_Size_w_h(200), XBB_Screen_width, 50)];
+    nofoundLabel.numberOfLines = 0;
+    [nofoundLabel setTextAlignment:NSTextAlignmentCenter];
+    nofoundLabel.text = NSLocalizedString(@"获取数据失败～", nil);
+    [self.view addSubview:nofoundLabel];
+    nofoundLabel.alpha = 1;
+}
 
 - (void)fetchAddressFromWeb:(void (^)())callback {
+
+    
     [SVProgressHUD show];
     [NetworkHelper postWithAPI:API_AddressSelect parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
         [self hiddenTableView:NO];
+//        self.tableView.alpha = 1;
         if ([response[@"code"] integerValue] == 1) {
             [SVProgressHUD dismiss];
             NSArray *result = response[@"result"][@"list"];
@@ -42,10 +71,22 @@ static NSString *identifi = @"cell";
                     [UserObj shareInstance].companyCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);
                 }
             }
+            
+            if ([[UserObj shareInstance] homeAddress] || [[UserObj shareInstance] companyAddress]) {
+                [self hiddenTableView:NO];
+                [self alphaNoFound:YES];
+                [self.tableView reloadData];
+            }else
+            {
+                
+            }
+          
         } else {
             [SVProgressHUD showErrorWithStatus:response[@"msg"]];
         }
+        
     } failBlock:^(NSError *error) {
+        [self alphaNoFound:NO];
         [SVProgressHUD showErrorWithStatus:@"查询失败"];
     }];
 }
@@ -73,7 +114,7 @@ static NSString *identifi = @"cell";
     UILabel *titelLabel = [[UILabel alloc] init];
     [titelLabel setTextColor:[UIColor whiteColor]];
     [titelLabel setBackgroundColor:[UIColor clearColor]];
-    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"地图"];
+    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"常用地址"];
     [titelLabel setFont:XBB_NavBar_Font];
     [titelLabel setTextAlignment:NSTextAlignmentCenter];
     [self.xbbNavigationBar addSubview:titelLabel];
@@ -106,7 +147,6 @@ static NSString *identifi = @"cell";
 
 - (void)regisCell
 {
-    
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, XBB_Screen_height-64) style:UITableViewStyleGrouped];
     [self.view addSubview:self.tableView];
     self.tableView.backgroundView = nil;
@@ -121,6 +161,7 @@ static NSString *identifi = @"cell";
 {
     [self setNavigationBarControl];
     [self regisCell];
+    [self initNotDataUI];
 }
 
 - (void)viewDidLoad {
@@ -128,6 +169,10 @@ static NSString *identifi = @"cell";
     [self inirUI];
     if ([[UserObj shareInstance] homeAddress] == nil) {
         [self fetchAddressFromWeb:nil];
+    }else
+    {
+        [self hiddenTableView:NO];
+        [self alphaNoFound:YES];
     }
 }
 
@@ -164,10 +209,10 @@ static NSString *identifi = @"cell";
         case 0:
         {
             if (indexPath.row == 0) {
-                cell.headImageView.image = [UIImage imageNamed:@"xbb_803"];
+                cell.headImageView.image = [UIImage imageNamed:@"家庭5"];
                 cell.contentLabel.text = [[UserObj shareInstance] homeAddress];
             }else if (indexPath.row == 1) {
-                 cell.headImageView.image = [UIImage imageNamed:@"备注11"];
+                 cell.headImageView.image = [UIImage imageNamed:@"备注5"];
                 cell.contentLabel.text = [[UserObj shareInstance] homeDetailAddress];
 
             }
@@ -176,11 +221,11 @@ static NSString *identifi = @"cell";
         case 1:
         {
             if (indexPath.row == 0) {
-                 cell.headImageView.image = [UIImage imageNamed:@"公司11"];
+                 cell.headImageView.image = [UIImage imageNamed:@"公司5"];
                 cell.contentLabel.text = [[UserObj shareInstance] companyAddress];
 
             }else if (indexPath.row == 1) {
-                 cell.headImageView.image = [UIImage imageNamed:@"备注11"];
+                 cell.headImageView.image = [UIImage imageNamed:@"备注5"];
                 cell.contentLabel.text = [[UserObj shareInstance] companyDetailAddress];
 
             }
@@ -196,6 +241,7 @@ static NSString *identifi = @"cell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SetCarAddsViewController *setcaraddVC = [[SetCarAddsViewController alloc] init];
     SetCarAddsInfoViewController *setcaraddsInfoVC = [[SetCarAddsInfoViewController alloc] init];
     if(indexPath.section == 0){

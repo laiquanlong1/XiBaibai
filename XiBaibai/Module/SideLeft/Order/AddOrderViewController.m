@@ -948,7 +948,7 @@ static NSString *identifier_2 = @"tit1cell";
      MyCarModel *carModel = [UserObj shareInstance].carModel;
       NSString *carId = nil;
     if (self.selectCar) {
-        carId = [NSString stringWithFormat:@"%d",carModel.carId];
+        carId = [NSString stringWithFormat:@"%ld",carModel.carId];
     }else
     {
         carId = @"";
@@ -962,9 +962,8 @@ static NSString *identifier_2 = @"tit1cell";
 
     pay.location = [NSString stringWithFormat:@"%@ %@",self.selectAddress.address?self.selectAddress.address:@"",self.selectAddress.remarkAddress?self.selectAddress.remarkAddress:@""];
     pay.planTime = planTime;
-     pay.couponprice = selectCouponPrice;
-    
-    
+    pay.couponprice = selectCouponPrice;
+
     [self.navigationController pushViewController:pay animated:YES];
 
     

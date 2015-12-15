@@ -47,11 +47,31 @@
 // 优惠码
 #define XBB_exchangeCoupons [NSString stringWithFormat:@"%@/exchangeCoupons", APIDomain]
 
-
-
+// 订单详情
+#define XBB_orderSelect [NSString stringWithFormat:@"%@/orderSelect", APIDomain]
 
 //查询用户资料
-#define Select_user_API [NSString stringWithFormat:@"%@/user_msg_select", APIDomain]
+#define Select_user_API [NSString stringWithFormat:@"%@/userInfo", APIDomain]
+
+// 二次请求
+#define API_selectOrder_topay [NSString stringWithFormat:@"%@/confirmPay", APIDomain]
+
+//取消订单
+#define API_OrderCancel [NSString stringWithFormat:@"%@/orderCancel", APIDomain]
+
+//查询订单详情
+#define OrderSelect_detail_API [NSString stringWithFormat:@"%@/orderDetail",APIDomain]
+
+
+
+
+
+
+
+
+
+
+
 
 //修改用户头像接口 和名称
 #define UpdateUserImg_API [NSString stringWithFormat:@"%@/user_msg_u_img", APIDomain]
@@ -65,8 +85,7 @@
 //查询订单
 #define OrderSelect_API [NSString stringWithFormat:@"%@/order_select", APIDomain]
 
-//查询订单详情
-#define OrderSelect_detail_API [NSString stringWithFormat:@"%@/order_msg_select",APIDomain]
+
 
 //确认订单时的订单名称
 #define API_orderName_price [NSString stringWithFormat:@"%@/proName_select",APIDomain]
@@ -77,8 +96,11 @@
 //新增用户地址
 #define AddUser_address_API [NSString stringWithFormat:@"%@/address_insert",APIDomain]
 
-//查询优惠券
-#define YouhuiSelect_API [NSString stringWithFormat:@"%@/user_coupons_select", APIDomain]
+//查询常用地址车位
+#define API_AddressSelect [NSString stringWithFormat:@"%@/selectAddress", APIDomain]
+
+
+
 
 //新增用户车辆
 #define Car_Insert_API [NSString stringWithFormat:@"%@/car_insert", APIDomain]
@@ -137,8 +159,7 @@
 //限行尾号
 #define API_CityLimit [NSString stringWithFormat:@"%@/city_limit", APIDomain]
 
-//查询常用地址车位
-#define API_AddressSelect [NSString stringWithFormat:@"%@/address_select", APIDomain]
+
 
 //查询全部评价
 #define API_CommentSelect [NSString stringWithFormat:@"%@/comment_select", APIDomain]
@@ -147,8 +168,7 @@
 //修改用户车辆
 #define API_CarUpdate [NSString stringWithFormat:@"%@/car_up", APIDomain]
 
-//取消订单
-#define API_OrderCancel [NSString stringWithFormat:@"%@/cancel_order", APIDomain]
+
 
 //评论员工
 #define API_CommentInsert [NSString stringWithFormat:@"%@/comment_insert", APIDomain]

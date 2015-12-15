@@ -23,14 +23,11 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dvR-hy-CTl">
-                        <rect key="frame" x="68" y="23" width="166" height="20.5"/>
+                        <rect key="frame" x="68" y="23" width="252" height="20.5"/>
                         <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="166" id="6MB-au-aOx"/>
-                            <constraint firstAttribute="width" constant="166" id="HaY-I5-hkN"/>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20.5" id="UQy-JO-jIj"/>
                             <constraint firstAttribute="height" constant="20.5" id="pfp-MZ-Piz"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -42,6 +39,9 @@
                     <constraint firstItem="dvR-hy-CTl" firstAttribute="centerY" secondItem="H6u-bE-Ceg" secondAttribute="centerY" id="zG5-mU-CKd"/>
                 </constraints>
             </tableViewCellContentView>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="dvR-hy-CTl" secondAttribute="trailing" id="Cxi-ao-bzQ"/>
+            </constraints>
             <connections>
                 <outlet property="contentLabel" destination="dvR-hy-CTl" id="u2c-J9-rJ9"/>
                 <outlet property="headImageView" destination="H6u-bE-Ceg" id="Zd2-gn-mYE"/>

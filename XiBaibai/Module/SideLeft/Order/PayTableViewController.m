@@ -60,7 +60,7 @@ static NSString *identifier_2 = @"tit1cell";
     
     if (buttonIndex==0) {
         [SVProgressHUD show];
-        if (!self.data)
+//        if (!self.data)
             [NetworkHelper postWithAPI:OrderInsert_API parameter:orderDic successBlock:^(id response) {
                 if ([response[@"code"] integerValue] == 1) {
                     self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
@@ -77,30 +77,30 @@ static NSString *identifier_2 = @"tit1cell";
             } failBlock:^(NSError *error) {
                 [SVProgressHUD showErrorWithStatus:@"下单失败"];
             }];
-        else {
-            AFHTTPRequestOperationManager *uploadManager = [AFHTTPRequestOperationManager manager];
-            uploadManager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-            [uploadManager POST:OrderInsert_API parameters:orderDic constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-                [formData appendPartWithFileData:self.data name:[NSString stringWithFormat:@"file"] fileName:[NSString stringWithFormat:@"file.aac"] mimeType:@"file/.aac"];
-            } success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-                NSLog(@"%@", responseObject);
-                id response = responseObject;
-                if ([response[@"code"] integerValue] == 1) {
-                    self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
-                    self.orderName = response[@"result"][@"order_name"];
-                    selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
-                    self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
-                    [SVProgressHUD showSuccessWithStatus:@"下单成功"];
-                    [self toPay];
-                    self.isDownOrder = YES;
-                    
-                } else {
-                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
-                }
-            } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
-                [SVProgressHUD showErrorWithStatus:@"下单失败"];
-            }];
-        }
+//        else {
+//            AFHTTPRequestOperationManager *uploadManager = [AFHTTPRequestOperationManager manager];
+//            uploadManager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+//            [uploadManager POST:OrderInsert_API parameters:orderDic constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+//                [formData appendPartWithFileData:self.data name:[NSString stringWithFormat:@"file"] fileName:[NSString stringWithFormat:@"file.aac"] mimeType:@"file/.aac"];
+//            } success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+//                NSLog(@"%@", responseObject);
+//                id response = responseObject;
+//                if ([response[@"code"] integerValue] == 1) {
+//                    self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
+//                    self.orderName = response[@"result"][@"order_name"];
+//                    selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
+//                    self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
+//                    [SVProgressHUD showSuccessWithStatus:@"下单成功"];
+//                    [self toPay];
+//                    self.isDownOrder = YES;
+//                    
+//                } else {
+//                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+//                }
+//            } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+//                [SVProgressHUD showErrorWithStatus:@"下单失败"];
+//            }];
+//        }
         
     }
 
@@ -121,7 +121,7 @@ static NSString *identifier_2 = @"tit1cell";
     
     if (buttonIndex==1) {
         [SVProgressHUD show];
-        if (!self.data)
+//        if (!self.data)
             [NetworkHelper postWithAPI:OrderInsert_API parameter:orderDic successBlock:^(id response) {
                 if ([response[@"code"] integerValue] == 1) {
                     self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
@@ -138,30 +138,30 @@ static NSString *identifier_2 = @"tit1cell";
             } failBlock:^(NSError *error) {
                 [SVProgressHUD showErrorWithStatus:@"下单失败"];
             }];
-        else {
-            AFHTTPRequestOperationManager *uploadManager = [AFHTTPRequestOperationManager manager];
-            uploadManager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-            [uploadManager POST:OrderInsert_API parameters:orderDic constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-                [formData appendPartWithFileData:self.data name:[NSString stringWithFormat:@"file"] fileName:[NSString stringWithFormat:@"file.aac"] mimeType:@"file/.aac"];
-            } success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-                NSLog(@"%@", responseObject);
-                id response = responseObject;
-                if ([response[@"code"] integerValue] == 1) {
-                    self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
-                    self.orderName = response[@"result"][@"order_name"];
-                    selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
-                    self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
-                    [SVProgressHUD showSuccessWithStatus:@"下单成功"];
-                    [self toPay];
-                    self.isDownOrder = YES;
-                    
-                } else {
-                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
-                }
-            } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
-                [SVProgressHUD showErrorWithStatus:@"下单失败"];
-            }];
-        }
+//        else {
+//            AFHTTPRequestOperationManager *uploadManager = [AFHTTPRequestOperationManager manager];
+//            uploadManager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+//            [uploadManager POST:OrderInsert_API parameters:orderDic constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+//                [formData appendPartWithFileData:self.data name:[NSString stringWithFormat:@"file"] fileName:[NSString stringWithFormat:@"file.aac"] mimeType:@"file/.aac"];
+//            } success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+//                NSLog(@"%@", responseObject);
+//                id response = responseObject;
+//                if ([response[@"code"] integerValue] == 1) {
+//                    self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
+//                    self.orderName = response[@"result"][@"order_name"];
+//                    selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
+//                    self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
+//                    [SVProgressHUD showSuccessWithStatus:@"下单成功"];
+//                    [self toPay];
+//                    self.isDownOrder = YES;
+//                    
+//                } else {
+//                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+//                }
+//            } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+//                [SVProgressHUD showErrorWithStatus:@"下单失败"];
+//            }];
+//        }
 
     }
 }
@@ -186,7 +186,6 @@ static NSString *identifier_2 = @"tit1cell";
 {
     
     [self setNavigationBarControl];
-   
     [self addTabBar];
     [self addtabview];
 }
@@ -265,10 +264,6 @@ static NSString *identifier_2 = @"tit1cell";
     for (NSDictionary *dic in self.pro_Dics) {
         selectAllPrice += [dic[@"p_price"] floatValue];
     }
-    
-    
-    
-    
     priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",selectAllPrice - self.couponprice];
 }
 
@@ -276,32 +271,68 @@ static NSString *identifier_2 = @"tit1cell";
     
     [super viewDidLoad];
     [self initUI];
-    [self addAllPrice];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOfPay:) name:NotificationRecharge object:nil];
-    self.priceArr = @[@"10", @"20", @"30", @"50", @"100"];
+    // 存在订单号
+    if (self.orderNO && self.orderId) {
+        [NetworkHelper postWithAPI:OrderSelect_detail_API parameter:@{@"orderid":self.orderId} successBlock:^(id response) {
+            if ([response[@"code"] integerValue] == 1) {
+                self.location = response[@"result"][@"location"];
+                self.planTime = response[@"result"][@"servicetime"];
+//                cell.addressLabel.text = dic[@"p_info"];
+//                NSString *string = dic[@"p_price"];
+//                DLog(@"%@",string);
+//                cell.price2Label.text = [NSString stringWithFormat:@"¥ %.2f" ,[dic[@"p_price"] floatValue]];
+                NSArray *proArr = response[@"result"][@"prolist"];
+                NSMutableArray *arr = [NSMutableArray array];
+                for (NSDictionary *dci in proArr) {
+                    NSDictionary *dic_1 = @{@"p_info":dci[@"p_name"],@"p_price":dci[@"price"]};
+                    [arr addObject:dic_1];
+                }
+                self.pro_Dics = [arr copy];
+                [self addAllPrice];
+                [self.tableView reloadData];
+             
+            }else
+            {
+                [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+            }
+            
+            DLog(@"respose %@",response)
+        } failBlock:^(NSError *error) {
+            [SVProgressHUD showErrorWithStatus:@"网络错误"];
+            self.tableView.alpha = 0;
+        }];
+    }else
+    {
+        
+        
+        
+        [self addAllPrice];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOfPay:) name:NotificationRecharge object:nil];
+//        self.priceArr = @[@"10", @"20", @"30", @"50", @"100"];
+
+        
+        //请求产品标题
+//        if (self.dic) {
+//            [NetworkHelper postWithAPI:API_orderName_price parameter:@{@"p_ids":[self.dic objectForKey:@"p_ids"]} successBlock:^(id response) {
+//                [SVProgressHUD dismiss];
+//                self.orderName = response[@"result"][@"order_name"];
+//                NSLog(@"pro %@",response);
+//                selectAllPrice = [[NSString stringWithFormat:@"%@",response[@"result"][@"order_price"]] doubleValue];
+//                self.orderNameLabel.text = self.orderName;
+//                self.priceLabel.text = [NSString stringWithFormat:@"%@", @(selectAllPrice)];
+//            } failBlock:^(NSError *error) {
+//                [SVProgressHUD showErrorWithStatus:@"信息有误"];
+//                [self.navigationController popViewControllerAnimated:YES];
+//            }];
+//        }
+        
+        
+    }
+    
+    
     self.orderNameLabel.text = self.orderName;
     self.priceLabel.text = [NSString stringWithFormat:@"%@", @(selectAllPrice)];
     _selectedImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"xbb_168"]];
-    
-    //请求产品标题
-    if (self.dic) {
-        [NetworkHelper postWithAPI:API_orderName_price parameter:@{@"p_ids":[self.dic objectForKey:@"p_ids"]} successBlock:^(id response) {
-            [SVProgressHUD dismiss];
-            self.orderName = response[@"result"][@"order_name"];
-            NSLog(@"pro %@",response);
-            
-            
-#pragma mark 改价格  哈哈
-            
-            selectAllPrice = [[NSString stringWithFormat:@"%@",response[@"result"][@"order_price"]] doubleValue];
-            self.orderNameLabel.text = self.orderName;
-            self.priceLabel.text = [NSString stringWithFormat:@"%@", @(selectAllPrice)];
-        } failBlock:^(NSError *error) {
-            [SVProgressHUD showErrorWithStatus:@"信息有误"];
-            [self.navigationController popViewControllerAnimated:YES];
-        }];
-    }
-    
     // 是否是有订单
     if (self.orderNO)
     {
@@ -311,7 +342,6 @@ static NSString *identifier_2 = @"tit1cell";
     {
         self.isDownOrder = NO;
     }
-
 }
 
 - (void)handleOfPay:(NSNotification *)sender {
@@ -408,6 +438,8 @@ static NSString *identifier_2 = @"tit1cell";
             case 0:
             {
                 cell.titleLabel.text = @"订单内容";
+                cell.headImageView.image = [UIImage imageNamed:@"01我的订单"];
+                
                 _selectedImgView.alpha = 0;
             }
                 break;
@@ -421,6 +453,7 @@ static NSString *identifier_2 = @"tit1cell";
                 {
                     cell.detailLabel.text = self.planTime;
                 }
+                cell.headImageView.image = [UIImage imageNamed:@"01时间"];
                 _selectedImgView.alpha = 0;
                 
             }
@@ -429,6 +462,7 @@ static NSString *identifier_2 = @"tit1cell";
                 
             case 2:
             {
+                cell.headImageView.image = [UIImage imageNamed:@"01车辆信息"];
                 cell.titleLabel.text = @"车辆信息";
                 _selectedImgView.alpha = 0;
             }
@@ -436,6 +470,7 @@ static NSString *identifier_2 = @"tit1cell";
                 
             case 3:
             {
+                cell.headImageView.image = [UIImage imageNamed:@"01用户信息"];
                 cell.titleLabel.text = @"用户信息";
                 _selectedImgView.alpha = 0;
             }
@@ -458,6 +493,7 @@ static NSString *identifier_2 = @"tit1cell";
                 
                 cell.titleLabel.text = @"支付宝";
                 cell.selectionStyle = UITableViewCellSelectionStyleGray;
+                cell.headImageView.image = [UIImage imageNamed:@"01支付宝"];
             }
                 break;
             default:
@@ -600,7 +636,12 @@ static NSString *identifier_2 = @"tit1cell";
 - (IBAction)submitPayOnTouch:(id)sender {
     
     if (self.isDownOrder) {
-        [self toPay];
+        if (_payType == 1) {
+            [self toPay];
+        }else{
+            
+            [SVProgressHUD showErrorWithStatus:@"请选择支付方式"];
+        }
     }
     else
     {

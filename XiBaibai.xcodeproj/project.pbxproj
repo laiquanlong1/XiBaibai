@@ -222,6 +222,12 @@
 		8E7E49D31BF5AA2F008517DC /* OrderPaySigleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E7E49D21BF5AA2F008517DC /* OrderPaySigleTableViewCell.m */; };
 		8E7E49D81BF5AA70008517DC /* OrderPayUserInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E7E49D71BF5AA70008517DC /* OrderPayUserInfoTableViewCell.m */; };
 		8E7E49DB1BF5AA8E008517DC /* OrderPayWayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E7E49DA1BF5AA8E008517DC /* OrderPayWayTableViewCell.m */; };
+		8E86A3EA1C1E88D20040CE45 /* MyOrderMouldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E86A3E81C1E88D20040CE45 /* MyOrderMouldTableViewCell.m */; };
+		8E86A3EB1C1E88D20040CE45 /* MyOrderMouldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E86A3E91C1E88D20040CE45 /* MyOrderMouldTableViewCell.xib */; };
+		8E86A3EE1C1EC00C0040CE45 /* XBBOrderObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E86A3ED1C1EC00C0040CE45 /* XBBOrderObject.m */; };
+		8E86A3F11C1FC3630040CE45 /* XBBOrderInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E86A3F01C1FC3630040CE45 /* XBBOrderInfoViewController.m */; };
+		8E86A3F51C1FC3B50040CE45 /* XBBOrderInfoOneCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E86A3F31C1FC3B50040CE45 /* XBBOrderInfoOneCell.m */; };
+		8E86A3F61C1FC3B50040CE45 /* XBBOrderInfoOneCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E86A3F41C1FC3B50040CE45 /* XBBOrderInfoOneCell.xib */; };
 		8E91F4FE1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E91F4FC1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.m */; };
 		8E91F4FF1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E91F4FD1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.xib */; };
 		8EAA96BF1C1039A600B83CA7 /* XBBHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EAA96BE1C1039A600B83CA7 /* XBBHomeViewController.m */; };
@@ -424,8 +430,8 @@
 		188D98961BADCD9A00E68506 /* CommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentViewController.m; sourceTree = "<group>"; };
 		188D98971BADCD9A00E68506 /* ComplaintViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComplaintViewController.h; sourceTree = "<group>"; };
 		188D98981BADCD9A00E68506 /* ComplaintViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComplaintViewController.m; sourceTree = "<group>"; };
-		188D98991BADCD9A00E68506 /* MyOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOrderViewController.h; sourceTree = "<group>"; };
-		188D989A1BADCD9A00E68506 /* MyOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOrderViewController.m; sourceTree = "<group>"; };
+		188D98991BADCD9A00E68506 /* MyOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyOrderViewController.h; path = SideLeft/Order/MyOrderViewController.h; sourceTree = "<group>"; };
+		188D989A1BADCD9A00E68506 /* MyOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyOrderViewController.m; path = SideLeft/Order/MyOrderViewController.m; sourceTree = "<group>"; };
 		188D989B1BADCD9A00E68506 /* OrderDetailCompleteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderDetailCompleteViewController.h; sourceTree = "<group>"; };
 		188D989C1BADCD9A00E68506 /* OrderDetailCompleteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderDetailCompleteViewController.m; sourceTree = "<group>"; };
 		188D989D1BADCD9A00E68506 /* OrderInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderInfoViewController.h; sourceTree = "<group>"; };
@@ -708,6 +714,16 @@
 		8E7E49D71BF5AA70008517DC /* OrderPayUserInfoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OrderPayUserInfoTableViewCell.m; path = OrderCell/OrderPayUserInfoTableViewCell.m; sourceTree = "<group>"; };
 		8E7E49D91BF5AA8E008517DC /* OrderPayWayTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderPayWayTableViewCell.h; sourceTree = "<group>"; };
 		8E7E49DA1BF5AA8E008517DC /* OrderPayWayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderPayWayTableViewCell.m; sourceTree = "<group>"; };
+		8E86A3E71C1E88D20040CE45 /* MyOrderMouldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyOrderMouldTableViewCell.h; path = MyOrder/MyOrderMouldTableViewCell.h; sourceTree = "<group>"; };
+		8E86A3E81C1E88D20040CE45 /* MyOrderMouldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyOrderMouldTableViewCell.m; path = MyOrder/MyOrderMouldTableViewCell.m; sourceTree = "<group>"; };
+		8E86A3E91C1E88D20040CE45 /* MyOrderMouldTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MyOrderMouldTableViewCell.xib; path = MyOrder/MyOrderMouldTableViewCell.xib; sourceTree = "<group>"; };
+		8E86A3EC1C1EC00C0040CE45 /* XBBOrderObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBOrderObject.h; path = MyOrder/XBBOrderObject.h; sourceTree = "<group>"; };
+		8E86A3ED1C1EC00C0040CE45 /* XBBOrderObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBOrderObject.m; path = MyOrder/XBBOrderObject.m; sourceTree = "<group>"; };
+		8E86A3EF1C1FC3630040CE45 /* XBBOrderInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBOrderInfoViewController.h; path = MyOrder/XBBOrderInfoViewController.h; sourceTree = "<group>"; };
+		8E86A3F01C1FC3630040CE45 /* XBBOrderInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBOrderInfoViewController.m; path = MyOrder/XBBOrderInfoViewController.m; sourceTree = "<group>"; };
+		8E86A3F21C1FC3B50040CE45 /* XBBOrderInfoOneCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBOrderInfoOneCell.h; path = MyOrder/XBBOrderInfoOneCell.h; sourceTree = "<group>"; };
+		8E86A3F31C1FC3B50040CE45 /* XBBOrderInfoOneCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBOrderInfoOneCell.m; path = MyOrder/XBBOrderInfoOneCell.m; sourceTree = "<group>"; };
+		8E86A3F41C1FC3B50040CE45 /* XBBOrderInfoOneCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XBBOrderInfoOneCell.xib; path = MyOrder/XBBOrderInfoOneCell.xib; sourceTree = "<group>"; };
 		8E91F4FB1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBHomeFacialOneTableViewCell.h; path = XBBHomeViewController/XBBHomeFacialOneTableViewCell.h; sourceTree = "<group>"; };
 		8E91F4FC1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBHomeFacialOneTableViewCell.m; path = XBBHomeViewController/XBBHomeFacialOneTableViewCell.m; sourceTree = "<group>"; };
 		8E91F4FD1C1580EA00DA0479 /* XBBHomeFacialOneTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XBBHomeFacialOneTableViewCell.xib; path = XBBHomeViewController/XBBHomeFacialOneTableViewCell.xib; sourceTree = "<group>"; };
@@ -1073,6 +1089,7 @@
 		188D98751BADCD9A00E68506 /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				8E86A3E61C1E81840040CE45 /* MyOrder */,
 				8E79B8841C1DCE9D00EB7518 /* MyAddress */,
 				8E79B87E1C1C72DE00EB7518 /* MyCoupons */,
 				8E79B8741C1C00F900EB7518 /* Mygit */,
@@ -1165,8 +1182,6 @@
 				188D98961BADCD9A00E68506 /* CommentViewController.m */,
 				188D98971BADCD9A00E68506 /* ComplaintViewController.h */,
 				188D98981BADCD9A00E68506 /* ComplaintViewController.m */,
-				188D98991BADCD9A00E68506 /* MyOrderViewController.h */,
-				188D989A1BADCD9A00E68506 /* MyOrderViewController.m */,
 				188D989B1BADCD9A00E68506 /* OrderDetailCompleteViewController.h */,
 				188D989C1BADCD9A00E68506 /* OrderDetailCompleteViewController.m */,
 				188D989D1BADCD9A00E68506 /* OrderInfoViewController.h */,
@@ -1704,6 +1719,25 @@
 			name = OrderCell;
 			sourceTree = "<group>";
 		};
+		8E86A3E61C1E81840040CE45 /* MyOrder */ = {
+			isa = PBXGroup;
+			children = (
+				188D98991BADCD9A00E68506 /* MyOrderViewController.h */,
+				188D989A1BADCD9A00E68506 /* MyOrderViewController.m */,
+				8E86A3E71C1E88D20040CE45 /* MyOrderMouldTableViewCell.h */,
+				8E86A3E81C1E88D20040CE45 /* MyOrderMouldTableViewCell.m */,
+				8E86A3E91C1E88D20040CE45 /* MyOrderMouldTableViewCell.xib */,
+				8E86A3EC1C1EC00C0040CE45 /* XBBOrderObject.h */,
+				8E86A3ED1C1EC00C0040CE45 /* XBBOrderObject.m */,
+				8E86A3EF1C1FC3630040CE45 /* XBBOrderInfoViewController.h */,
+				8E86A3F01C1FC3630040CE45 /* XBBOrderInfoViewController.m */,
+				8E86A3F21C1FC3B50040CE45 /* XBBOrderInfoOneCell.h */,
+				8E86A3F31C1FC3B50040CE45 /* XBBOrderInfoOneCell.m */,
+				8E86A3F41C1FC3B50040CE45 /* XBBOrderInfoOneCell.xib */,
+			);
+			name = MyOrder;
+			sourceTree = "<group>";
+		};
 		8EAA96C31C1128C300B83CA7 /* XBBMapViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1948,6 +1982,7 @@
 				8EB5489C1C0EA37200FFB086 /* AddOrderTableViewCell.xib in Resources */,
 				188D9A031BADCD9A00E68506 /* xbb_diygogounselected.png in Resources */,
 				188D9A081BADCD9A00E68506 /* AlipaySDK.bundle in Resources */,
+				8E86A3F61C1FC3B50040CE45 /* XBBOrderInfoOneCell.xib in Resources */,
 				188D99D31BADCD9A00E68506 /* 1@icon_32.png in Resources */,
 				188D99CE1BADCD9A00E68506 /* 1@icon_12.png in Resources */,
 				188D99D01BADCD9A00E68506 /* 1@icon_16@2x.png in Resources */,
@@ -2017,6 +2052,7 @@
 				188D99EF1BADCD9A00E68506 /* diytest@2x.png in Resources */,
 				188D99F01BADCD9A00E68506 /* guize@2x.png in Resources */,
 				8EEFCC4A1BF0EBAF00D3D93F /* FacialTableViewCell.xib in Resources */,
+				8E86A3EB1C1E88D20040CE45 /* MyOrderMouldTableViewCell.xib in Resources */,
 				188D99DA1BADCD9A00E68506 /* 1@icon_mywal@2x.png in Resources */,
 				188D99F91BADCD9A00E68506 /* nav2.png in Resources */,
 				188D99E31BADCD9A00E68506 /* 1@shezhi_14@2x.png in Resources */,
@@ -2152,6 +2188,7 @@
 				188D9A111BADCD9A00E68506 /* MD5DataSigner.m in Sources */,
 				188D99901BADCD9A00E68506 /* MyOrderTableViewCell.m in Sources */,
 				188D999A1BADCD9A00E68506 /* RechargeHelper.m in Sources */,
+				8E86A3EA1C1E88D20040CE45 /* MyOrderMouldTableViewCell.m in Sources */,
 				188D999C1BADCD9A00E68506 /* CommentModel.m in Sources */,
 				188D98051BADCD6100E68506 /* AppDelegate.mm in Sources */,
 				188D99BD1BADCD9A00E68506 /* CarportTableViewController.m in Sources */,
@@ -2171,6 +2208,7 @@
 				188D9A121BADCD9A00E68506 /* NSDataEx.m in Sources */,
 				8E7E49D31BF5AA2F008517DC /* OrderPaySigleTableViewCell.m in Sources */,
 				188D99C11BADCD9A00E68506 /* SetCarAddsViewController.m in Sources */,
+				8E86A3F11C1FC3630040CE45 /* XBBOrderInfoViewController.m in Sources */,
 				8E41D11B1C1AC95F00735CEA /* XBBMyCenterInfoTableViewCell.m in Sources */,
 				188D999E1BADCD9A00E68506 /* MyCarModel.m in Sources */,
 				189393301BAF0EE900AF5E01 /* CarBrandModel.m in Sources */,
@@ -2195,6 +2233,7 @@
 				186A2A3D1BAEA98600645069 /* MWCaptionView.m in Sources */,
 				8E488B621C06B212007FC881 /* XBBViewController.m in Sources */,
 				188D99A11BADCD9A00E68506 /* MyPointsModel.m in Sources */,
+				8E86A3EE1C1EC00C0040CE45 /* XBBOrderObject.m in Sources */,
 				188D9A181BADCD9A00E68506 /* UITableView+FDTemplateLayoutCell.m in Sources */,
 				8E79B8721C1BCEAA00EB7518 /* XBBAddCarTableViewCell.m in Sources */,
 				188D9A131BADCD9A00E68506 /* openssl_wrapper.m in Sources */,
@@ -2218,6 +2257,7 @@
 				8EEFCC541BF1B3CB00D3D93F /* XBBDIYImageView.m in Sources */,
 				188D9A101BADCD9A00E68506 /* DataVerifier.m in Sources */,
 				186A2A751BAEA9C000645069 /* DACircularProgressView.m in Sources */,
+				8E86A3F51C1FC3B50040CE45 /* XBBOrderInfoOneCell.m in Sources */,
 				1893932D1BAF0C9B00AF5E01 /* CarListTableViewController.m in Sources */,
 				8E79B87D1C1C0BE200EB7518 /* XBBCashViewController.m in Sources */,
 				8E1CC4F61C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.m in Sources */,

@@ -391,6 +391,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Yap-RB-9AY"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="tIa-Qo-MA5">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="onDrag" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="sr4-vl-IFd">
@@ -512,16 +513,16 @@
                                 <exclude reference="A5h-D8-T27"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="Wb5-FK-HgW"/>
-                                <exclude reference="hCU-BU-NVy"/>
-                                <exclude reference="Hmt-aj-2O8"/>
-                                <exclude reference="Q9V-Qr-KaE"/>
-                                <exclude reference="wel-EL-1VZ"/>
                                 <exclude reference="F9H-nO-VUP"/>
                                 <exclude reference="m3D-hy-pWt"/>
                                 <exclude reference="vcJ-ZB-sba"/>
+                                <exclude reference="Hmt-aj-2O8"/>
+                                <exclude reference="Q9V-Qr-KaE"/>
+                                <exclude reference="wel-EL-1VZ"/>
                                 <exclude reference="5GG-B0-qTP"/>
                                 <exclude reference="TSJ-6m-Qa8"/>
+                                <exclude reference="Wb5-FK-HgW"/>
+                                <exclude reference="hCU-BU-NVy"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -532,16 +533,16 @@
                                 <include reference="A5h-D8-T27"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="Wb5-FK-HgW"/>
-                                <include reference="hCU-BU-NVy"/>
-                                <include reference="Hmt-aj-2O8"/>
-                                <include reference="Q9V-Qr-KaE"/>
-                                <include reference="wel-EL-1VZ"/>
                                 <include reference="F9H-nO-VUP"/>
                                 <include reference="m3D-hy-pWt"/>
                                 <include reference="vcJ-ZB-sba"/>
+                                <include reference="Hmt-aj-2O8"/>
+                                <include reference="Q9V-Qr-KaE"/>
+                                <include reference="wel-EL-1VZ"/>
                                 <include reference="5GG-B0-qTP"/>
                                 <include reference="TSJ-6m-Qa8"/>
+                                <include reference="Wb5-FK-HgW"/>
+                                <include reference="hCU-BU-NVy"/>
                             </mask>
                         </variation>
                     </view>
@@ -564,6 +565,7 @@
                         <viewControllerLayoutGuide type="bottom" id="f0m-Gg-JHt"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="4nl-3d-MHL">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>

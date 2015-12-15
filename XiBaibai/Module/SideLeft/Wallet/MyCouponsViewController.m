@@ -119,7 +119,7 @@
 - (void)fetchYouhuiFromWeb:(void (^)())callback {
     [SVProgressHUD show];
     
-    [NetworkHelper postWithAPI:YouhuiSelect_API parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
+    [NetworkHelper postWithAPI:XBB_Coupons_select parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
         if (callback)
             callback();
         self.couDoneArr = [NSMutableArray array];
@@ -234,8 +234,12 @@
 //    cell.priceLabel.text =  dic[@"coupons_price"];//model.coupons_price;
     cell.nameLabel.text= dic[@"coupons_name"];//model.coupons_name;
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-    fmt.dateFormat = @"YYYY.MM.dd HH:mm";
-    cell.endTimeLabel.text = [NSString stringWithFormat:@"有效期至%@",dic[@"expired_time"]];
+    fmt.dateFormat = @"YYYY.MM.dd";
+    NSDate *timer = [NSDate dateWithTimeIntervalSince1970:[dic[@"expired_time"] integerValue]];
+    NSString *timeString = [fmt stringFromDate:timer];
+    
+    
+    cell.endTimeLabel.text = [NSString stringWithFormat:@"有效期至  %@",timeString];
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
