@@ -25,12 +25,13 @@
 {
     UILabel    *nofoundLabel;
     NSInteger   page;
+    NSInteger   selectTag;
 }
 @property (nonatomic, strong) UITableView *orderTableView;
 
 @property (weak, nonatomic) IBOutlet UIButton *completionButton;
 @property (strong, nonatomic) NSMutableArray *orderArr;
-@property (assign, nonatomic) int doingPage, donePage;
+
 
 @end
 
@@ -174,6 +175,14 @@ static NSString *identifi = @"cell";
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         RechargeResultObject *result = sender.object;
         if (result.isSuccessful) {
+            
+            XBBOrderObject *object = self.orderArr[selectTag];
+            XBBOrderInfoViewController *info = [[XBBOrderInfoViewController alloc] init];
+            info.isPayBack = YES;
+            info.navigationTitle = @"支付成功";
+            info.orderid = object.order_id;
+            [self.navigationController pushViewController:info animated:YES];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:NotificationOrderListUpdate object:nil];
         } else {
             [SVProgressHUD showErrorWithStatus:result.message];
@@ -183,8 +192,17 @@ static NSString *identifi = @"cell";
 
 - (IBAction)backViewController:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    
+    if (self.isBackController) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }else
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
+//    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)handleOrderDidUpdate:(NSNotification *)sender {
@@ -206,7 +224,12 @@ static NSString *identifi = @"cell";
 
 
 - (IBAction)clickBack:(id)sender {
+    if (self.isBackController) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }else
+    {
     [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (IBAction)typeBtnOnClick:(id)sender {
@@ -306,6 +329,7 @@ static NSString *identifi = @"cell";
         
         DLog(@"取消")
     }else if ([button.titleLabel.text isEqualToString:@"支付订单"]){
+        selectTag = button.tag;
 
         [RechargeHelper setAliPayNotifyURLString:[NSString stringWithFormat:@"%@?recharge_type=%@", Notify_AlipayCallback_Url, @"1"]];
         [[RechargeHelper defaultRechargeHelper] payAliWithMoney:order.total_price orderNO:order.order_num productTitle:order.order_name productDescription:order.order_name];
@@ -551,8 +575,8 @@ static NSString *identifi = @"cell";
 
     XBBOrderObject *object = self.orderArr[indexPath.section];
     XBBOrderInfoViewController *info = [[XBBOrderInfoViewController alloc] init];
-    
-    info.navigationTitle = object.order_name;
+//    info.isPayBack = YES;
+    info.navigationTitle = @"订单详情";
     info.orderid = object.order_id;
     [self.navigationController pushViewController:info animated:YES];
     

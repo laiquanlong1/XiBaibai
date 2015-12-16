@@ -15,15 +15,19 @@
 #import "XBBOrderInfoOneCell.h"
 #import "RechargeHelper.h"
 #import "XBBOrderInfoCommentTableViewCell.h"
+#import "MyOrderViewController.h"
 
-
-@interface XBBOrderInfoViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface XBBOrderInfoViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
 {
     NSInteger state;
     UIView *backView;
     float coupon_price;
     float total_price;
     float actually_price;
+    UIButton *backButton;
+    
+    NSString *empPhone;
+    
 }
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *prolist;
@@ -141,6 +145,8 @@ static NSString *mycomment = @"mycomment";
                     
                     XBBOrder *name = [[XBBOrder alloc] init];
                     name.title = [NSString stringWithFormat:@"技师名字:    %@",model.emp_name];
+                    name.empPhone = model.emp_iphone;
+                    empPhone = model.emp_iphone;
                     [oper addObject:name];
                     self.empArrays = oper;
                 }
@@ -251,10 +257,14 @@ static NSString *mycomment = @"mycomment";
     backView.alpha = 1;
 }
 
-
+- (void)dealloc
+{
+     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOfPay:) name:NotificationRecharge object:nil];
     [self initUI];
     [self feathOrderInfo];
     
@@ -295,7 +305,7 @@ static NSString *mycomment = @"mycomment";
         leftImage = [UIImage imageNamed:@"back_xbb6"];
     }
     
-    UIButton *backButton = [[UIButton alloc] init];
+    backButton = [[UIButton alloc] init];
     backButton.userInteractionEnabled = YES;
     [backButton addTarget:self action:@selector(backViewController:) forControlEvents:UIControlEventTouchUpInside];
     [backButton setImage:leftImage forState:UIControlStateNormal];
@@ -320,6 +330,11 @@ static NSString *mycomment = @"mycomment";
         make.left.mas_equalTo(50);
         make.width.mas_equalTo(XBB_Screen_width-100);
     }];
+    
+    if (self.isPayBack) {
+        backButton.alpha = 0;
+    }
+    
 }
 - (void)addTableView
 {
@@ -336,14 +351,48 @@ static NSString *mycomment = @"mycomment";
 }
 
 #pragma mark action
-- (IBAction)toCallPhone:(id)sender
+
+- (IBAction)toBackAction:(id)sender
+{
+    DLog(@"succesd")
+    if (self.pageController == 1) {
+        MyOrderViewController *order =  [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MyOrderViewController"];
+        order.isBackController = YES;
+        [self.navigationController pushViewController:order animated:YES];
+    }else if (self.pageController == 2) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
+    
+    
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        [self callPhone:empPhone];
+    }
+}
+- (void)callPhone:(NSString *)number
 {
     
+    NSString *phoneNumber = [NSString stringWithFormat:@"tel://%@",number];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumber]];
+    
+}
+- (IBAction)toCallPhone:(id)sender
+{
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"联系技师" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:[NSString stringWithFormat:@"%@",empPhone] otherButtonTitles:nil, nil];
+    [sheet showInView:self.view];
 }
 - (void)handleOfPay:(NSNotification *)sender {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         RechargeResultObject *result = sender.object;
         if (result.isSuccessful) {
+            
+            self.isPayBack = YES;
+            backButton.alpha = 0;
+            [self feathOrderInfo];
             [[NSNotificationCenter defaultCenter] postNotificationName:NotificationOrderListUpdate object:nil];
         } else {
             [SVProgressHUD showErrorWithStatus:result.message];
@@ -369,8 +418,33 @@ static NSString *mycomment = @"mycomment";
 
 
 #pragma mark tableViewDelegate
-
-
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (self.isPayBack) {
+        if (section == 1) {
+            return 66.;
+        }
+        
+    }
+    return 0;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    if (self.isPayBack) {
+        if (section == 1) {
+       
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, 60.)];
+        UIImage *image = [UIImage imageNamed:@"确定"];
+        UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 66/2-10, XBB_Screen_width-40., 44.)];
+        [view addSubview:backButton];
+        [backButton setBackgroundImage:image forState:UIControlStateNormal];
+        [backButton setTitle:@"确定" forState:UIControlStateNormal];
+        [backButton addTarget:self action:@selector(toBackAction:) forControlEvents:UIControlEventTouchUpInside];
+        return view;
+        }
+    }
+    return nil;
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (state == 5 && indexPath.section == 3 && indexPath.row == 1) {
@@ -394,6 +468,12 @@ static NSString *mycomment = @"mycomment";
      * 6已评价
      * 7已取消
      */
+    
+    
+    if (self.isPayBack) {
+        return 2;
+    }
+    
     
     if (state == 3 || state == 4) {
         return 3;
@@ -421,6 +501,20 @@ static NSString *mycomment = @"mycomment";
      * 6已评价
      * 7已取消
      */
+    if (self.isPayBack) {
+        switch (section) {
+            case 0:
+                return self.twoSectionArray.count;
+                break;
+            case 1:
+                return self.onsectionArray.count;
+                break;
+            default:
+                break;
+        }
+    }
+    
+    
     if (state == 3 || state == 4) {
         switch (section) {
             case 0:
@@ -507,40 +601,61 @@ static NSString *mycomment = @"mycomment";
      */
     
     XBBOrder *order = nil;
-    switch (indexPath.section) {
-        case 0:
-        {
-            order = self.onsectionArray[indexPath.row];
-        }
-            break;
-        case 1:
-        {
-            if (state == 0 || state == 1 || state == 2 || state == 7) {
-                order = self.twoSectionArray[indexPath.row];
-            }else
-            {
-                order = self.empArrays[indexPath.row];
-            }
-        }
-            break;
-        case 2:
-        {
-            if (state == 0 || state == 1 || state == 2 || state == 7) {
-
-            }else
+    
+    if (self.isPayBack) {
+        switch (indexPath.section) {
+            case 0:
             {
                 order = self.twoSectionArray[indexPath.row];
             }
+                break;
+            case 1:
+            {
+                order = self.onsectionArray[indexPath.row];
+            }
+                break;
+            default:
+                break;
         }
-            break;
-        case 3:
-        {
-            order = self.commentArray[indexPath.row];
+        
+    }else{
+        
+        
+        switch (indexPath.section) {
+            case 0:
+            {
+                order = self.onsectionArray[indexPath.row];
+            }
+                break;
+            case 1:
+            {
+                if (state == 0 || state == 1 || state == 2 || state == 7) {
+                    order = self.twoSectionArray[indexPath.row];
+                }else
+                {
+                    order = self.empArrays[indexPath.row];
+                }
+            }
+                break;
+            case 2:
+            {
+                if (state == 0 || state == 1 || state == 2 || state == 7) {
+                    
+                }else
+                {
+                    order = self.twoSectionArray[indexPath.row];
+                }
+            }
+                break;
+            case 3:
+            {
+                order = self.commentArray[indexPath.row];
+            }
+                break;
+                
+            default:
+                break;
         }
-            break;
-            
-        default:
-            break;
     }
     
     if (indexPath.row == 0) {
@@ -554,6 +669,7 @@ static NSString *mycomment = @"mycomment";
         
     }else
     {
+        
         
         if (indexPath.section == 3 && state == 5) {
             XBBOrderInfoCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:mycomment];
@@ -574,46 +690,100 @@ static NSString *mycomment = @"mycomment";
         cell.phoneButton.hidden = YES;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell.priceLabel setFont:[UIFont systemFontOfSize:14.]];
-        if (indexPath.section == 0) {
-            cell.titLabel.hidden = YES;
-            cell.twoTitleLabel.hidden = NO;
-            cell.priceLabel.hidden = NO;
-            cell.twoTitleLabel.text = order.title;
-            cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",order.price];
-            [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
-            [cell.priceLabel setTextColor:[UIColor blackColor]];
-            if ([order.title isEqualToString:@"优惠金额"]) {
-                [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
-                [cell.priceLabel setTextColor:[UIColor orangeColor]];
+        
+        
+        if (self.isPayBack) {
+            if (indexPath.section != 0) {
+                cell.titLabel.hidden = YES;
+                cell.twoTitleLabel.hidden = NO;
+                cell.priceLabel.hidden = NO;
+                cell.twoTitleLabel.text = order.title;
+                cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",order.price];
+                [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
+                [cell.priceLabel setTextColor:[UIColor blackColor]];
+                if ([order.title isEqualToString:@"优惠金额"]) {
+                    [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
+                    [cell.priceLabel setTextColor:[UIColor orangeColor]];
+                }
+                if ([order.title isEqualToString:@"实际支付"]) {
+                    [cell.priceLabel setFont:[UIFont systemFontOfSize:18.]];
+                    [cell.priceLabel setTextColor:[UIColor redColor]];
+                }
+                
+                
+                
+            }else
+            {
+                
+                cell.phoneButton.hidden = YES;
+                if (indexPath.section == 1 && (state == 3 || state == 4 || state == 6 || state == 5)) {
+                    cell.phoneButton.hidden = NO;
+                    [cell.phoneButton addTarget:self action:@selector(toCallPhone:) forControlEvents:UIControlEventTouchUpInside];
+                }else
+                {
+                    cell.phoneButton.hidden = YES;
+                }
+                
+                [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
+                [cell.priceLabel setTextColor:[UIColor blackColor]];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.titLabel.hidden = YES;
+                cell.twoTitleLabel.hidden = NO;
+                cell.priceLabel.hidden = YES;
+                cell.twoTitleLabel.text = order.title;
+                
             }
-            if ([order.title isEqualToString:@"实际支付"]) {
-                 [cell.priceLabel setFont:[UIFont systemFontOfSize:18.]];
-                  [cell.priceLabel setTextColor:[UIColor redColor]];
-            }
-            
-            
- 
+
         }else
         {
             
-             cell.phoneButton.hidden = YES;
-            if (indexPath.section == 1 && (state == 3 || state == 4 || state == 6 || state == 5)) {
-                cell.phoneButton.hidden = NO;
-                [cell.phoneButton addTarget:self action:@selector(toCallPhone:) forControlEvents:UIControlEventTouchUpInside];
+            if (indexPath.section == 0) {
+                cell.titLabel.hidden = YES;
+                cell.twoTitleLabel.hidden = NO;
+                cell.priceLabel.hidden = NO;
+                cell.twoTitleLabel.text = order.title;
+                cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",order.price];
+                [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
+                [cell.priceLabel setTextColor:[UIColor blackColor]];
+                if ([order.title isEqualToString:@"优惠金额"]) {
+                    [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
+                    [cell.priceLabel setTextColor:[UIColor orangeColor]];
+                }
+                if ([order.title isEqualToString:@"实际支付"]) {
+                    [cell.priceLabel setFont:[UIFont systemFontOfSize:18.]];
+                    [cell.priceLabel setTextColor:[UIColor redColor]];
+                }
+                
+                
+                
             }else
             {
+                
                 cell.phoneButton.hidden = YES;
+                if (indexPath.section == 1 && (state == 3 || state == 4 || state == 6 || state == 5)) {
+                    cell.phoneButton.hidden = NO;
+                    [cell.phoneButton addTarget:self action:@selector(toCallPhone:) forControlEvents:UIControlEventTouchUpInside];
+                }else
+                {
+                    cell.phoneButton.hidden = YES;
+                }
+                
+                [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
+                [cell.priceLabel setTextColor:[UIColor blackColor]];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.titLabel.hidden = YES;
+                cell.twoTitleLabel.hidden = NO;
+                cell.priceLabel.hidden = YES;
+                cell.twoTitleLabel.text = order.title;
+                
             }
-            
-            [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
-            [cell.priceLabel setTextColor:[UIColor blackColor]];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.titLabel.hidden = YES;
-            cell.twoTitleLabel.hidden = NO;
-            cell.priceLabel.hidden = YES;
-            cell.twoTitleLabel.text = order.title;
 
         }
+        
+        
+        
+        
+        
         
         
         

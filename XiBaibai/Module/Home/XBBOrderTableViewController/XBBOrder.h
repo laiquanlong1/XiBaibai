@@ -23,4 +23,6 @@
 @property (nonatomic, assign) NSInteger p_wash_free;
 @property (nonatomic, strong) NSMutableArray *xbbOrders;
 
+
+@property (nonatomic, copy) NSString *empPhone;
 @end

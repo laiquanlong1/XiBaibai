@@ -13,7 +13,7 @@
 #import "XBBListHeadLabel.h"
 #import "AddOrderTableViewCell.h"
 #import "AddOrderDetailTableViewCell.h"
-
+#import "XBBOrderInfoViewController.h"
 
 
 @interface PayTableViewController () <UIActionSheetDelegate,UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
@@ -349,9 +349,14 @@ static NSString *identifier_2 = @"tit1cell";
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         RechargeResultObject *result = sender.object;
         if (result.isSuccessful) {
-            if (self.isRecharge == NO)
-                DLog(@"%@",result)
-//                [self performSegueWithIdentifier:@"PayPushPayCallback" sender:nil];
+            if (self.isRecharge == NO){
+                XBBOrderInfoViewController *info = [[XBBOrderInfoViewController alloc] init];
+                info.isPayBack = YES;
+                info.pageController = 1;
+                info.navigationTitle = @"支付成功";
+                info.orderid = self.orderId;
+                [self.navigationController pushViewController:info animated:YES];
+            }
             else {
                 [SVProgressHUD showSuccessWithStatus:@"充值成功"];
                 [[NSNotificationCenter defaultCenter] postNotificationName:NotificationMoneyUpdate object:nil];

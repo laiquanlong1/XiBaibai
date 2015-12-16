@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface MyOrderViewController : XBBViewController
-
+@property (nonatomic, assign) BOOL isBackController;
 @end
