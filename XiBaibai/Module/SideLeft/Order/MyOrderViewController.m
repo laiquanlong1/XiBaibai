@@ -189,7 +189,8 @@ static NSString *identifi = @"cell";
 
 - (void)handleOrderDidUpdate:(NSNotification *)sender {
     NSLog(@"%s",__func__);
-    [self.orderTableView.header beginRefreshing];
+//    [self.orderTableView.header beginRefreshing];
+    [self fetchOrderFromWeb:nil];
 }
 
 
@@ -267,9 +268,13 @@ static NSString *identifi = @"cell";
     if (buttonIndex == 0) {
         XBBOrderObject *model = self.orderArr[actionSheet.tag];
         [SVProgressHUD show];
-        [NetworkHelper postWithAPI:API_OrderCancel parameter:@{@"uid": [UserObj shareInstance].uid, @"order_id": model.order_id} successBlock:^(id response) {
+        [NetworkHelper postWithAPI:API_OrderCancel parameter:@{@"uid": [UserObj shareInstance].uid, @"orderid": model.order_id} successBlock:^(id response) {
             if ([response[@"code"] integerValue] == 1) {
                 [SVProgressHUD showSuccessWithStatus:@"取消成功"];
+                [self.orderArr removeAllObjects];
+                self.orderArr = nil;
+                page = 1;
+                
                 [[NSNotificationCenter defaultCenter] postNotificationName:NotificationOrderListUpdate object:nil];
             } else {
                 [SVProgressHUD showErrorWithStatus:response[@"msg"]];
@@ -301,26 +306,10 @@ static NSString *identifi = @"cell";
         
         DLog(@"取消")
     }else if ([button.titleLabel.text isEqualToString:@"支付订单"]){
-//        [NetworkHelper postWithAPI:API_selectOrder_topay parameter:@{@"uid":[[UserObj shareInstance] uid],@"orderid":order.order_id} successBlock:^(id response) {
-//            if ([response[@"code"] integerValue] == 1) {
-//                DLog(@"%@",response)
-//            }else
-//            {
-//                [SVProgressHUD showErrorWithStatus:response[@"msg"]];
-//            }
-//        } failBlock:^(NSError *error) {
-//            
-//        }];
-//        
-        
+
         [RechargeHelper setAliPayNotifyURLString:[NSString stringWithFormat:@"%@?recharge_type=%@", Notify_AlipayCallback_Url, @"1"]];
         [[RechargeHelper defaultRechargeHelper] payAliWithMoney:order.total_price orderNO:order.order_num productTitle:order.order_name productDescription:order.order_name];
-        
-        //        PayTableViewController *pay = [[PayTableViewController alloc] init];
-        //        pay.orderName = order.order_name;
-        //        pay.orderNO = order.order_num;
-        //        pay.orderId = order.order_id;
-        //          [self.navigationController pushViewController:pay animated:YES];
+
         DLog(@"支付订单")
     }else if ([button.titleLabel.text isEqualToString:@"去评价"]) {
         DLog(@"去评价")
@@ -465,16 +454,21 @@ static NSString *identifi = @"cell";
             break;
         case 4:
         {
-            cell.oneButton.alpha = 1.;
-            [cell.oneButton setTitleColor:XBB_Bg_Color forState:UIControlStateNormal];
-            [cell.oneButton setBackgroundImage:sureImage forState:UIControlStateNormal];
-            [cell.oneButton setTitle:@"去评价" forState:UIControlStateNormal];
+//            cell.oneButton.alpha = 1.;
+//            [cell.oneButton setTitleColor:XBB_Bg_Color forState:UIControlStateNormal];
+//            [cell.oneButton setBackgroundImage:cannelImage forState:UIControlStateNormal];
+//            [cell.oneButton setTitle:@"取消订单" forState:UIControlStateNormal];
+//            [cell.oneButton setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
+           
   
         }
             break;
         case 5:
         {
-            
+            cell.oneButton.alpha = 1.;
+            [cell.oneButton setTitleColor:XBB_Bg_Color forState:UIControlStateNormal];
+            [cell.oneButton setBackgroundImage:sureImage forState:UIControlStateNormal];
+            [cell.oneButton setTitle:@"去评价" forState:UIControlStateNormal];
         }
             break;
         case 6:

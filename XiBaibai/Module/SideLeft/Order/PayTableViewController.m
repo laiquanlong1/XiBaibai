@@ -345,11 +345,13 @@ static NSString *identifier_2 = @"tit1cell";
 }
 
 - (void)handleOfPay:(NSNotification *)sender {
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         RechargeResultObject *result = sender.object;
         if (result.isSuccessful) {
             if (self.isRecharge == NO)
-                [self performSegueWithIdentifier:@"PayPushPayCallback" sender:nil];
+                DLog(@"%@",result)
+//                [self performSegueWithIdentifier:@"PayPushPayCallback" sender:nil];
             else {
                 [SVProgressHUD showSuccessWithStatus:@"充值成功"];
                 [[NSNotificationCenter defaultCenter] postNotificationName:NotificationMoneyUpdate object:nil];

@@ -36,7 +36,7 @@
 #define XBB_Index_Pro [NSString stringWithFormat:@"%@/indexProList", APIDomain]
 
 // 美容接口
-#define API_SelectWax  [NSString stringWithFormat:@"%@/product_info", APIDomain]
+#define API_SelectWax  [NSString stringWithFormat:@"%@/productInfo", APIDomain]
 
 //请求用户车辆(12.10)
 #define XBB_Car_select [NSString stringWithFormat:@"%@/userCars", APIDomain]
@@ -62,7 +62,8 @@
 //查询订单详情
 #define OrderSelect_detail_API [NSString stringWithFormat:@"%@/orderDetail",APIDomain]
 
-
+//新增订单
+#define OrderInsert_API [NSString stringWithFormat:@"%@/createOrder", APIDomain]
 
 
 
@@ -90,16 +91,13 @@
 //确认订单时的订单名称
 #define API_orderName_price [NSString stringWithFormat:@"%@/proName_select",APIDomain]
 
-//新增订单
-#define OrderInsert_API [NSString stringWithFormat:@"%@/order_insert", APIDomain]
+
 
 //新增用户地址
 #define AddUser_address_API [NSString stringWithFormat:@"%@/address_insert",APIDomain]
 
 //查询常用地址车位
 #define API_AddressSelect [NSString stringWithFormat:@"%@/selectAddress", APIDomain]
-
-
 
 
 //新增用户车辆

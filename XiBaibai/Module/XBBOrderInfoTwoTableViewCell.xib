@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="XBBOrderInfoTwoTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="订单内容" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6wg-6e-hnJ">
+                        <rect key="frame" x="23" y="8" width="289" height="27"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="¥ 20.30" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gWj-IR-XMk">
+                        <rect key="frame" x="8" y="8" width="289" height="27"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="服务时间" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IvU-MT-bnd">
+                        <rect key="frame" x="47" y="8" width="265" height="27"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QeG-58-fwL">
+                        <rect key="frame" x="240" y="11" width="69" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="69" id="Vdl-Gb-mVR"/>
+                            <constraint firstAttribute="height" constant="22" id="x8w-M3-LR5"/>
+                        </constraints>
+                        <state key="normal" image="电话"/>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="6wg-6e-hnJ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="0jn-Wp-dmY"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="gWj-IR-XMk" secondAttribute="trailing" constant="15" id="3Ze-mb-uzD"/>
+                    <constraint firstItem="QeG-58-fwL" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="7j9-zW-C5h"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="QeG-58-fwL" secondAttribute="trailing" constant="3" id="9Ul-SW-yEZ"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="gWj-IR-XMk" secondAttribute="bottom" id="D4P-f9-Obr"/>
+                    <constraint firstItem="gWj-IR-XMk" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="F8v-m1-b5O"/>
+                    <constraint firstItem="gWj-IR-XMk" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="H0j-Q1-BNd"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="6wg-6e-hnJ" secondAttribute="trailing" id="IqE-t9-ccj"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="6wg-6e-hnJ" secondAttribute="bottom" id="Lpj-qx-ybZ"/>
+                    <constraint firstItem="IvU-MT-bnd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="Ua5-hR-iSl"/>
+                    <constraint firstItem="IvU-MT-bnd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="39" id="bgU-L4-VgR"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="IvU-MT-bnd" secondAttribute="bottom" id="hGM-dV-oFD"/>
+                    <constraint firstItem="6wg-6e-hnJ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="15" id="k5J-eR-LzK"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="IvU-MT-bnd" secondAttribute="trailing" id="wQt-cC-C51"/>
+                </constraints>
+            </tableViewCellContentView>
+            <inset key="separatorInset" minX="35" minY="0.0" maxX="0.0" maxY="0.0"/>
+            <connections>
+                <outlet property="phoneButton" destination="QeG-58-fwL" id="t3a-4B-KbL"/>
+                <outlet property="priceLabel" destination="gWj-IR-XMk" id="gDZ-vj-awG"/>
+                <outlet property="titLabel" destination="6wg-6e-hnJ" id="gZ8-wY-Ryx"/>
+                <outlet property="twoTitleLabel" destination="IvU-MT-bnd" id="aob-9s-Ym9"/>
+            </connections>
+            <point key="canvasLocation" x="495" y="431"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="电话" width="15" height="15"/>
+    </resources>
+</document>

@@ -51,15 +51,16 @@
 
 
 
-
+@property (nonatomic, assign) float coupons_price;
 @property (nonatomic, copy) NSString *advice;
 @property (nonatomic, copy) NSString *user_evaluate;
 @property (nonatomic, copy) NSArray *washimg;
 
+
 @property (nonatomic, copy) NSArray *prolist;
 @property (nonatomic, copy) NSString *order_id;
-@property (assign, nonatomic) NSInteger pay_type;//"pay_type" = "--";
-@property (assign, nonatomic) NSInteger pay_time;//"pay_time" = "--";
+@property (copy, nonatomic) NSString *pay_type;//"pay_type" = "--";
+@property (copy, nonatomic) NSString  *pay_time;//"pay_time" = "--";
 @property (assign, nonatomic) NSInteger pay_num;//"pay_num" = "0.01";
 @property (assign, nonatomic) NSInteger p_order_time_cid;
 @property (copy, nonatomic) NSString *car_wash_before_img;
@@ -88,7 +89,7 @@
 @property (assign, nonatomic) NSInteger operate_time;
 @property (assign, nonatomic) NSInteger order_reg_id;
 @property (copy, nonatomic) NSString *p_ids;//"p_ids" = "1,12,15,14,33,13";
-@property (copy, nonatomic) NSString *p_order_time;//"p_order_time" = "--";
+@property (copy, nonatomic) NSString *p_order_time;
 @property (copy, nonatomic) NSString *plan_time;
 @property (copy, nonatomic) NSString *remark;
 @property (assign, nonatomic) NSInteger state;

@@ -258,6 +258,10 @@
 		8EEFCC4D1BF0F2CD00D3D93F /* FacialDIYTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC4C1BF0F2CD00D3D93F /* FacialDIYTableViewCell.m */; };
 		8EEFCC511BF1B39300D3D93F /* XBBBaseImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC501BF1B39300D3D93F /* XBBBaseImageView.m */; };
 		8EEFCC541BF1B3CB00D3D93F /* XBBDIYImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC531BF1B3CB00D3D93F /* XBBDIYImageView.m */; };
+		8F73782B1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F7378291C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.m */; };
+		8F73782C1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F73782A1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.xib */; };
+		8FDA2D8B1C217BA6005D8188 /* XBBOrderInfoCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FDA2D891C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.m */; };
+		8FDA2D8C1C217BA6005D8188 /* XBBOrderInfoCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FDA2D8A1C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.xib */; };
 		DF67B4B92478E96DD8EF7E5C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 970BC71EB779C2A0ED120862 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -779,6 +783,12 @@
 		8EEFCC501BF1B39300D3D93F /* XBBBaseImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBBaseImageView.m; path = DIYView/ImageView/XBBBaseImageView.m; sourceTree = "<group>"; };
 		8EEFCC521BF1B3CB00D3D93F /* XBBDIYImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBDIYImageView.h; path = DIYView/ImageView/XBBDIYImageView.h; sourceTree = "<group>"; };
 		8EEFCC531BF1B3CB00D3D93F /* XBBDIYImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBDIYImageView.m; path = DIYView/ImageView/XBBDIYImageView.m; sourceTree = "<group>"; };
+		8F7378281C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBBOrderInfoTwoTableViewCell.h; sourceTree = "<group>"; };
+		8F7378291C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBBOrderInfoTwoTableViewCell.m; sourceTree = "<group>"; };
+		8F73782A1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XBBOrderInfoTwoTableViewCell.xib; sourceTree = "<group>"; };
+		8FDA2D881C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBOrderInfoCommentTableViewCell.h; path = MyOrder/XBBOrderInfoCommentTableViewCell.h; sourceTree = "<group>"; };
+		8FDA2D891C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBOrderInfoCommentTableViewCell.m; path = MyOrder/XBBOrderInfoCommentTableViewCell.m; sourceTree = "<group>"; };
+		8FDA2D8A1C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XBBOrderInfoCommentTableViewCell.xib; path = MyOrder/XBBOrderInfoCommentTableViewCell.xib; sourceTree = "<group>"; };
 		970BC71EB779C2A0ED120862 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		98298A6F277D5DB5D0D70DE4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1731,9 +1741,15 @@
 				8E86A3ED1C1EC00C0040CE45 /* XBBOrderObject.m */,
 				8E86A3EF1C1FC3630040CE45 /* XBBOrderInfoViewController.h */,
 				8E86A3F01C1FC3630040CE45 /* XBBOrderInfoViewController.m */,
+				8F7378281C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.h */,
+				8F7378291C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.m */,
+				8F73782A1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.xib */,
 				8E86A3F21C1FC3B50040CE45 /* XBBOrderInfoOneCell.h */,
 				8E86A3F31C1FC3B50040CE45 /* XBBOrderInfoOneCell.m */,
 				8E86A3F41C1FC3B50040CE45 /* XBBOrderInfoOneCell.xib */,
+				8FDA2D881C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.h */,
+				8FDA2D891C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.m */,
+				8FDA2D8A1C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.xib */,
 			);
 			name = MyOrder;
 			sourceTree = "<group>";
@@ -1997,6 +2013,7 @@
 				188D99CD1BADCD9A00E68506 /* 1@icon_11@2x.png in Resources */,
 				188D99D61BADCD9A00E68506 /* 1@icon_back@2x.png in Resources */,
 				188D99EE1BADCD9A00E68506 /* close@2x.png in Resources */,
+				8FDA2D8C1C217BA6005D8188 /* XBBOrderInfoCommentTableViewCell.xib in Resources */,
 				188D99F31BADCD9A00E68506 /* map_fast_2@2x.png in Resources */,
 				188D99DC1BADCD9A00E68506 /* 1@icon_starhui.png in Resources */,
 				8EB548A11C0EBD7900FFB086 /* AddOrderDetailTableViewCell.xib in Resources */,
@@ -2011,6 +2028,7 @@
 				188D99CC1BADCD9A00E68506 /* 1@icon_09.png in Resources */,
 				188D99ED1BADCD9A00E68506 /* choose.png in Resources */,
 				188D99FA1BADCD9A00E68506 /* NowLocation.png in Resources */,
+				8F73782C1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.xib in Resources */,
 				188D99D91BADCD9A00E68506 /* 1@icon_myorder@2x.png in Resources */,
 				188D9A011BADCD9A00E68506 /* sounds2.png in Resources */,
 				188D99DE1BADCD9A00E68506 /* 1@icon_starredhui.png in Resources */,
@@ -2194,12 +2212,14 @@
 				188D99BD1BADCD9A00E68506 /* CarportTableViewController.m in Sources */,
 				8EAA96C21C10472B00B83CA7 /* XBBBannerObject.m in Sources */,
 				8E7E49D81BF5AA70008517DC /* OrderPayUserInfoTableViewCell.m in Sources */,
+				8F73782B1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.m in Sources */,
 				188D998B1BADCD9A00E68506 /* AllCommentTableViewCell.m in Sources */,
 				188D9A0D1BADCD9A00E68506 /* Order.m in Sources */,
 				188D9A151BADCD9A00E68506 /* RSADataVerifier.m in Sources */,
 				8EAA96F51C1166C100B83CA7 /* XBBDiyObject.m in Sources */,
 				8E79B86E1C1BBD1800EB7518 /* AddCarNumTableViewCell.m in Sources */,
 				188D99B01BADCD9A00E68506 /* AddPlanOrderViewController.m in Sources */,
+				8FDA2D8B1C217BA6005D8188 /* XBBOrderInfoCommentTableViewCell.m in Sources */,
 				188D99931BADCD9A00E68506 /* StarView.m in Sources */,
 				186A2A661BAEA9A700645069 /* PSTCollectionViewController.m in Sources */,
 				188D99C71BADCD9A00E68506 /* MyCouponsViewController.m in Sources */,

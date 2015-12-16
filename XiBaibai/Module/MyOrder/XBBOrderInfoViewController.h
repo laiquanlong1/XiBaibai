@@ -9,5 +9,7 @@
 #import "XBBViewController.h"
 
 @interface XBBOrderInfoViewController : XBBViewController
+
 @property (nonatomic, copy) NSString *orderid;
+
 @end
