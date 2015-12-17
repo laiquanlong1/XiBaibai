@@ -2472,7 +2472,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.marnow.xbb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b2fd43c8-4fb2-4054-9f7f-e4fa4714f5d2";
 				SKIP_INSTALL = NO;
 			};
 			name = Debug;
@@ -2517,7 +2517,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.marnow.xbb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b2fd43c8-4fb2-4054-9f7f-e4fa4714f5d2";
 				SKIP_INSTALL = NO;
 			};
 			name = Release;
