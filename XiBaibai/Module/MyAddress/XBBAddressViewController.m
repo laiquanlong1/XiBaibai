@@ -23,37 +23,12 @@
 static NSString *identifi = @"cell";
 @implementation XBBAddressViewController
 
-- (void)alphaNoFound:(BOOL)hidden
-{
-    if (hidden) {
-        nofoundLabel.alpha = 0;
-    }else
-    {
-        [UIView animateWithDuration:0.3 animations:^{
-            nofoundLabel.alpha = 1;
-        }];
-        
-    }
-    
-}
 
-- (void)initNotDataUI
-{
-    nofoundLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, XBB_Screen_height/2-XBB_Size_w_h(200), XBB_Screen_width, 50)];
-    nofoundLabel.numberOfLines = 0;
-    [nofoundLabel setTextAlignment:NSTextAlignmentCenter];
-    nofoundLabel.text = NSLocalizedString(@"获取数据失败～", nil);
-    [self.view addSubview:nofoundLabel];
-    nofoundLabel.alpha = 1;
-}
 
 - (void)fetchAddressFromWeb:(void (^)())callback {
-
-    
     [SVProgressHUD show];
     [NetworkHelper postWithAPI:API_AddressSelect parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
         [self hiddenTableView:NO];
-//        self.tableView.alpha = 1;
         if ([response[@"code"] integerValue] == 1) {
             [SVProgressHUD dismiss];
             NSArray *result = response[@"result"][@"list"];
@@ -72,21 +47,12 @@ static NSString *identifi = @"cell";
                 }
             }
             
-            if ([[UserObj shareInstance] homeAddress] || [[UserObj shareInstance] companyAddress]) {
-                [self hiddenTableView:NO];
-                [self alphaNoFound:YES];
-                [self.tableView reloadData];
-            }else
-            {
-                
-            }
           
         } else {
             [SVProgressHUD showErrorWithStatus:response[@"msg"]];
         }
         
     } failBlock:^(NSError *error) {
-        [self alphaNoFound:NO];
         [SVProgressHUD showErrorWithStatus:@"查询失败"];
     }];
 }
@@ -161,19 +127,13 @@ static NSString *identifi = @"cell";
 {
     [self setNavigationBarControl];
     [self regisCell];
-    [self initNotDataUI];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self inirUI];
-    if ([[UserObj shareInstance] homeAddress] == nil) {
-        [self fetchAddressFromWeb:nil];
-    }else
-    {
-        [self hiddenTableView:NO];
-        [self alphaNoFound:YES];
-    }
+    [self fetchAddressFromWeb:nil];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -274,19 +234,30 @@ static NSString *identifi = @"cell";
             default:
                 break;
         }
-        
     }
-
-    
-    
 }
 
 - (void)setNowLocation:(NSString *)strLocation withNum:(NSInteger )num;
 {
-    
+    if (num == 0) {
+        [UserObj shareInstance].homeAddress = strLocation;
+        [UserObj shareInstance].homeDetailAddress = @"";
+    }else
+    {
+        [UserObj shareInstance].companyAddress = strLocation;
+        [UserObj shareInstance].companyDetailAddress = @"";
+    }
+    [self.tableView reloadData];
 }
 - (void)setAddsInfo:(NSString *)AddsInfo withNum:(NSInteger )num
 {
+    if (num == 0) {
+        [UserObj shareInstance].homeDetailAddress = AddsInfo;
+    }else
+    {
+        [UserObj shareInstance].companyDetailAddress = AddsInfo;
+    }
+    [self.tableView reloadData];
     
 }
 /*

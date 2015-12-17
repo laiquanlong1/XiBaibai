@@ -695,7 +695,8 @@ static NSString *identifier_2 = @"tit1cell";
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (self.isRecharge == NO) {
                     [RechargeHelper setAliPayNotifyURLString:[NSString stringWithFormat:@"%@?recharge_type=%@", Notify_AlipayCallback_Url, @"1"]];
-                    [[RechargeHelper defaultRechargeHelper] payAliWithMoney:selectAllPrice orderNO:self.orderNO productTitle:self.orderName productDescription:self.orderName];
+                    double price = selectAllPrice;
+                    [[RechargeHelper defaultRechargeHelper] payAliWithMoney:price orderNO:self.orderNO productTitle:self.orderName productDescription:self.orderName];
                 } else {
                     [NetworkHelper postWithAPI:API_Recharge parameter:@{@"uid": [UserObj shareInstance].uid, @"money": self.priceLabel.text} successBlock:^(id response) {
                         if ([response[@"code"] integerValue] == 1) {

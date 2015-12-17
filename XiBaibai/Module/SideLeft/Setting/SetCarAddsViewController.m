@@ -277,6 +277,7 @@
 {
     bmlocation=userLocation;
     NSLog(@"didUpdateUserLocation lat %f,long %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
+    [UserObj shareInstance].currentCoordinate = userLocation.location.coordinate;
     [mapset updateLocationData:userLocation];
 }
 

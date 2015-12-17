@@ -428,7 +428,7 @@ static NSString *identifier_1 = @"cell_1";
     UILabel *titelLabel = [[UILabel alloc] init];
     [titelLabel setTextColor:[UIColor whiteColor]];
     [titelLabel setBackgroundColor:[UIColor clearColor]];
-    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"我的账户"];
+    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"个人信息"];
     [titelLabel setFont:XBB_NavBar_Font];
     [titelLabel setTextAlignment:NSTextAlignmentCenter];
     [self.xbbNavigationBar addSubview:titelLabel];

@@ -19,7 +19,7 @@
     CarBrandModel *selectCarbrand;
     NSDictionary  *selectCarType;
     NSString      *selectNumber;
-    NSString      *selectColor;
+    NSString    *selectColor;
 }
 @property (strong, nonatomic) IBOutlet UIView *backView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -72,8 +72,7 @@ static NSString *identifier = @"cell";
 
 - (void)sureOnClick:(id)sender
 {
-    DLog(@"")
-    
+
     if (selectNumber == nil || [selectNumber length] == 0) {
         [SVProgressHUD showErrorWithStatus:@"请输入车牌号"];
     } else if (selectCarbrand == nil) {
@@ -96,11 +95,12 @@ static NSString *identifier = @"cell";
 
 - (IBAction)updateOnTouch:(id)sender {
     [SVProgressHUD show];
-    [NetworkHelper postWithAPI:API_CarUpdate parameter:@{@"id": @(self.carModel.carId), @"uid": [UserObj shareInstance].uid, @"c_plate_num": selectNumber, @"c_brand": selectCarbrand.make_name, @"c_color": selectColor,@"c_type":selectCarType?selectCarType[@"type"]:@""} successBlock:^(id response) {
-        [SVProgressHUD dismiss];
+     [NetworkHelper getWithAPI:API_CarUpdate parameter:@{@"id": @(self.carModel.carId), @"uid": [UserObj shareInstance].uid, @"c_plate_num": selectNumber, @"c_brand": selectCarbrand.make_name, @"c_color": selectColor,@"c_type":selectCarType?selectCarType[@"type"]:@""} successBlock:^(id response){
+        
         if ([response[@"code"] integerValue] == 1) {
             [SVProgressHUD showSuccessWithStatus:@"修改成功"];
             [[NSNotificationCenter defaultCenter] postNotificationName:NotificationCarListUpdate object:nil];
+            [SVProgressHUD dismiss];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 if (self.navigationController.visibleViewController == self)
                     [self.navigationController popViewControllerAnimated:YES];
@@ -119,8 +119,6 @@ static NSString *identifier = @"cell";
 - (void)addCarToWeb:(void (^)())callback {
     [SVProgressHUD show];
     [NetworkHelper postWithAPI:Car_Insert_API parameter:@{@"uid": [UserObj shareInstance].uid, @"c_img": @"", @"c_plate_num": selectNumber, @"c_type": selectCarType?selectCarType[@"type"]:@"", @"c_color": selectColor, @"add_time": @([[NSDate date] timeIntervalSince1970]), @"c_remark": @"", @"c_brand": selectCarbrand.make_name} successBlock:^(NSDictionary *response) {
-        [SVProgressHUD dismiss];
-        DLog(@"%@",response)
         if ([[response objectForKey:@"code"] integerValue] == 1) {
             [SVProgressHUD showSuccessWithStatus:@"添加成功"];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(SVDisplayDuration(4) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -134,11 +132,6 @@ static NSString *identifier = @"cell";
         [SVProgressHUD showErrorWithStatus:@"添加失败"];
     }];
 }
-
-
-
-
-
 
 - (IBAction)backViewController:(id)sender
 {
@@ -389,28 +382,32 @@ static NSString *identifier = @"cell";
         
         
     }
-    
-    
-    
+
     return YES;
+    
 }
 
 
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    DLog(@"%@",textField.text)
+   if (textField.tag == 0){
+        selectNumber = textField.text;
+        
+    }else
+    {
+        selectColor = textField.text;
+    }
+}
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    
-    AddCarNumTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    AddCarNumTableViewCell *cell_1 = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]];
+
     NSString *string_1 = [textField.text stringByReplacingCharactersInRange:range withString:string];
     if ([string_1 length] > 8) {
         return NO;
     }
-    if ([textField isEqual:cell.nameTextFile]) {
-        selectNumber = string_1;
-    }else if ([textField isEqual:cell_1.nameTextFile])
-    {
-        selectColor = string_1;
-    }
+
     
     return YES;
 }

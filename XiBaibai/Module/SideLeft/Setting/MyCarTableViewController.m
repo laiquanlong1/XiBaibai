@@ -261,9 +261,6 @@ static NSString *identifier = @"carcell";
 }
 
 
-
-
-
 #pragma mark - Table view data source
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

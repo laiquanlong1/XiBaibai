@@ -28,11 +28,12 @@
 #import "XBBProObject.h"
 #import <MJRefresh.h>
 #import <MJExtension.h>
+#import "MyCarTableViewController.h"
 
 static NSString *identifier_facial = @"facial_cell";
 static NSString *identifier_diy = @"diy";
 
-@interface XBBHomeViewController ()<XBBBannerViewDelegate,UITableViewDelegate,UITableViewDataSource>{
+@interface XBBHomeViewController ()<XBBBannerViewDelegate,UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
     UIView         *headView;
     UIImageView    *leftNavigationBotton;
     UIButton       *titleCityButton;
@@ -201,44 +202,32 @@ static NSString *identifier_diy = @"diy";
                 
                 
                 
-                [NetworkHelper postWithAPI:XBB_Car_select parameter:@{@"uid":[UserObj shareInstance].uid} successBlock:^(id response) {
+                [NetworkHelper postWithAPI:car_select parameter:@{@"uid":[UserObj shareInstance].uid} successBlock:^(id response) {
                     
+                    DLog(@"%@",response)
                     if ([response[@"code"] integerValue] == 1) {
-                        
-                        NSArray *resultArray = response[@"result"];
-                        if (resultArray.count == 0) {
-                            hasDefaultCar = NO;
-                            [UserObj shareInstance].c_id = nil;
-                            [UserObj shareInstance].carModel = nil;
-                        }
-                        for (NSDictionary *carDic in resultArray) {
-                            if ([carDic[@"default"] integerValue] == 1) {
-                                [UserObj shareInstance].c_id = carDic[@"id"];
-                                MyCarModel *model = [[MyCarModel alloc] init];
-                                model.uid = [carDic[@"uid"] integerValue];
-                                model.carId = [carDic[@"id"] integerValue];
-                                model.c_type = [carDic[@"c_type"] integerValue];
-                                model.c_remark = carDic[@"c_remark"];
-                                model.c_plate_num = carDic[@"c_plate_num"];
-                                model.c_color = carDic[@"c_color"];
-                                model.c_brand = carDic[@"c_brand"];
-                                model.add_time = [carDic[@"add_time"] integerValue];
-                                [UserObj shareInstance].carModel = model;
-                                
-                                DLog(@"%@  %@",[UserObj shareInstance].carModel.c_color,[UserObj shareInstance].carModel.c_plate_num)
+                        if ([response[@"result"][@"default"] integerValue] != 0) {
+                            NSArray *list = response[@"result"][@"list"];
+                            for (NSDictionary *dic in list) {
+                                if ([dic[@"id"] isEqualToString:response[@"result"][@"default"]]) {
+                                    MyCarModel *model = [[MyCarModel alloc] init];
+                                    model.uid = [dic[@"uid"] integerValue];
+                                    model.carId = [dic[@"id"] integerValue];
+                                    model.c_type = [dic[@"c_type"] integerValue];
+                                    model.c_remark = dic[@"c_remark"];
+                                    model.c_plate_num = dic[@"c_plate_num"];
+                                    model.c_color = dic[@"c_color"];
+                                    model.c_brand = dic[@"c_brand"];
+                                    model.add_time = [dic[@"add_time"] integerValue];
+                                    [UserObj shareInstance].carModel = model;
+                                    [UserObj shareInstance].c_id = dic[@"id"];
+                                }
                             }
                         }
-                       
-                    }else
-                    {
-                        [UserObj shareInstance].c_id = nil;
-                        [UserObj shareInstance].carModel = nil;
-                        hasDefaultCar = NO;
-//                        [SVProgressHUD showErrorWithStatus:response[@"msg"]];
                     }
-                } failBlock:^(NSError *error) {
+                  } failBlock:^(NSError *error) {
                     hasDefaultCar = NO;
-//                    [SVProgressHUD showErrorWithStatus:@"获取车辆信息失败"];
+                    [SVProgressHUD showErrorWithStatus:@"获取车辆信息失败"];
                 }];
                 if ([[[response objectForKey:@"result"] objectForKey:@"u_img"] isKindOfClass:[NSNull class]]) {
                     leftNavigationBotton.image=[UIImage imageNamed:@"nav1.png"];
@@ -794,6 +783,7 @@ static NSString *identifier_diy = @"diy";
 }
 
 
+
 #pragma mark 下单
 
 - (void)addOrder
@@ -815,6 +805,16 @@ static NSString *identifier_diy = @"diy";
 }
 
 #pragma mark action
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        MyCarTableViewController *myCar = [[MyCarTableViewController alloc] init];
+        [self.navigationController pushViewController:myCar animated:YES];
+    }
+}
+
+
 - (IBAction)toAddDownOrder:(id)sender
 {
      [self addOrder];

@@ -101,6 +101,7 @@
 {
     NSString *strings = [textView.text stringByReplacingCharactersInRange:range withString:text];
     if ([strings length]>400) {
+        [SVProgressHUD showInfoWithStatus:@"超过限定字数"];
         return NO;
     }
     

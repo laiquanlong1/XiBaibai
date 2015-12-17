@@ -57,6 +57,9 @@ static NSString *mycomment = @"mycomment";
 {
     [self addTableView];
     [self initTabView];
+    if (self.isPayBack) {
+        state = 1;
+    }
     if (state==0) {
          self.tableView.frame = CGRectMake(0, self.tableView.frame.origin.y, XBB_Screen_width, self.tableView.frame.size.height - 66.);
         backView.alpha = 1;
@@ -278,17 +281,21 @@ static NSString *mycomment = @"mycomment";
 
 - (void)initTabView
 {
-    backView = [[UIView alloc] initWithFrame:CGRectMake(0, XBB_Screen_height-66., XBB_Screen_width, 44.)];
-    backView.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:backView];
-    UIImage *image = [UIImage imageNamed:@"确定"];
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(20., 0, XBB_Screen_width-40., 44.)];
-    [button setBackgroundImage:image forState:UIControlStateNormal];
-    [button setTitle:@"去支付" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(toPay:) forControlEvents:UIControlEventTouchUpInside];
-    [backView addSubview:button];
-    [self.view bringSubviewToFront:backView];
-    backView.alpha = 0.;
+    if (self.isPayBack == NO) {
+        
+        
+        backView = [[UIView alloc] initWithFrame:CGRectMake(0, XBB_Screen_height-66., XBB_Screen_width, 44.)];
+        backView.backgroundColor = [UIColor clearColor];
+        [self.view addSubview:backView];
+        UIImage *image = [UIImage imageNamed:@"确定"];
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(20., 0, XBB_Screen_width-40., 44.)];
+        [button setBackgroundImage:image forState:UIControlStateNormal];
+        [button setTitle:@"去支付" forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(toPay:) forControlEvents:UIControlEventTouchUpInside];
+        [backView addSubview:button];
+        [self.view bringSubviewToFront:backView];
+        backView.alpha = 0.;
+    }
     
 }
 
@@ -359,7 +366,7 @@ static NSString *mycomment = @"mycomment";
         MyOrderViewController *order =  [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MyOrderViewController"];
         order.isBackController = YES;
         [self.navigationController pushViewController:order animated:YES];
-    }else if (self.pageController == 2) {
+    }else  {
         [self.navigationController popViewControllerAnimated:YES];
     }
     
@@ -386,14 +393,14 @@ static NSString *mycomment = @"mycomment";
     [sheet showInView:self.view];
 }
 - (void)handleOfPay:(NSNotification *)sender {
+
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         RechargeResultObject *result = sender.object;
         if (result.isSuccessful) {
-            
             self.isPayBack = YES;
             backButton.alpha = 0;
             [self feathOrderInfo];
-            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationOrderListUpdate object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationOrderListUpdate object:@"orderInfo"];
         } else {
             [SVProgressHUD showErrorWithStatus:result.message];
         }
@@ -408,7 +415,8 @@ static NSString *mycomment = @"mycomment";
 - (IBAction)toPay:(id)sender
 {
     [RechargeHelper setAliPayNotifyURLString:[NSString stringWithFormat:@"%@?recharge_type=%@", Notify_AlipayCallback_Url, @"1"]];
-    [[RechargeHelper defaultRechargeHelper] payAliWithMoney:actually_price orderNO:self.feathModel.order_num productTitle:self.feathModel.order_name  productDescription:self.feathModel.order_name];
+    double price = actually_price;
+    [[RechargeHelper defaultRechargeHelper] payAliWithMoney:price orderNO:self.orderNum productTitle:self.orderName  productDescription:self.orderName];
 }
 - (IBAction)backViewController:(id)sender
 {
@@ -471,6 +479,7 @@ static NSString *mycomment = @"mycomment";
     
     
     if (self.isPayBack) {
+      
         return 2;
     }
     

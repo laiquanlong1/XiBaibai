@@ -38,9 +38,6 @@
 // 美容接口
 #define API_SelectWax  [NSString stringWithFormat:@"%@/productInfo", APIDomain]
 
-//请求用户车辆(12.10)
-#define XBB_Car_select [NSString stringWithFormat:@"%@/userCars", APIDomain]
-
 //优惠券(12.11)
 #define XBB_Coupons_select [NSString stringWithFormat:@"%@/userCoupons", APIDomain]
 
@@ -65,67 +62,95 @@
 //新增订单
 #define OrderInsert_API [NSString stringWithFormat:@"%@/createOrder", APIDomain]
 
-
-
-
-
-
-
-
-
-
 //修改用户头像接口 和名称
-#define UpdateUserImg_API [NSString stringWithFormat:@"%@/user_msg_u_img", APIDomain]
-
-//修改用户资料接口
-#define updateUserInfo [NSString stringWithFormat:@"%@/user_msg_up", APIDomain]
+#define UpdateUserImg_API [NSString stringWithFormat:@"%@/updateHeadImg", APIDomain]
 
 //请求用户车辆
-#define car_select [NSString stringWithFormat:@"%@/car_select", APIDomain]
+#define car_select [NSString stringWithFormat:@"%@/carSelect", APIDomain]
 
-//查询订单
-#define OrderSelect_API [NSString stringWithFormat:@"%@/order_select", APIDomain]
+//查询所有车辆品牌
+#define API_AllCarbrandSelect [NSString stringWithFormat:@"%@/carBrands", APIDomain]
 
 
+//修改用户车辆
+#define API_CarUpdate [NSString stringWithFormat:@"%@/updateCarInfo", APIDomain]
 
-//确认订单时的订单名称
-#define API_orderName_price [NSString stringWithFormat:@"%@/proName_select",APIDomain]
 
+//新增用户车辆
+#define Car_Insert_API [NSString stringWithFormat:@"%@/carAdd", APIDomain]
+
+//设置默认车辆
+#define API_set_default_car [NSString stringWithFormat:@"%@/setDefaultCar", APIDomain]
+
+
+//删除用户车辆
+#define Car_Delete_API [NSString stringWithFormat:@"%@/deleteCar", APIDomain]
 
 
 //新增用户地址
-#define AddUser_address_API [NSString stringWithFormat:@"%@/address_insert",APIDomain]
+#define AddUser_address_API [NSString stringWithFormat:@"%@/addAddress",APIDomain]
+
 
 //查询常用地址车位
 #define API_AddressSelect [NSString stringWithFormat:@"%@/selectAddress", APIDomain]
 
-
-//新增用户车辆
-#define Car_Insert_API [NSString stringWithFormat:@"%@/car_insert", APIDomain]
-
-//删除用户车辆
-#define Car_Delete_API [NSString stringWithFormat:@"%@/car_delete", APIDomain]
-
 //反馈
-#define Advice_Insert_API [NSString stringWithFormat:@"%@/advice_insert", APIDomain]
+#define Advice_Insert_API [NSString stringWithFormat:@"%@/userFeedback", APIDomain]
+
+//修改用户资料接口
+#define updateUserInfo [NSString stringWithFormat:@"%@/user_msg_up", APIDomain]
+
+//查询订单
+#define OrderSelect_API [NSString stringWithFormat:@"%@/order_select", APIDomain]
+
+//确认订单时的订单名称
+#define API_orderName_price [NSString stringWithFormat:@"%@/proName_select",APIDomain]
 
 //查询时间段是否可预约
-#define Time_select_make_API [NSString stringWithFormat:@"%@/time_config_select", APIDomain]
+#define Time_select_make_API [NSString stringWithFormat:@"%@/appointTime", APIDomain]
+
 
 //发送验证码
-#define sendCode_API [NSString stringWithFormat:@"%@/re_iphone", APIDomain]
-
-//发送验证码--忘记密码
-#define sendCode_API2 [NSString stringWithFormat:@"%@/re_iphone2", APIDomain]
+#define sendCode_API [NSString stringWithFormat:@"%@/authCode", APIDomain]
 
 //注册用户
 #define Register_API [NSString stringWithFormat:@"%@/register", APIDomain]
 
-//注册用户--忘记密码
-#define Register_API2 [NSString stringWithFormat:@"%@/register2", APIDomain]
-
 //登录
 #define Login_API [NSString stringWithFormat:@"%@/login", APIDomain]
+
+//注册用户--忘记密码
+#define Register_API2 [NSString stringWithFormat:@"%@/forgetPwd", APIDomain]
+
+//发送验证码--忘记密码
+#define sendCode_API2 [NSString stringWithFormat:@"%@/authCodePwd", APIDomain]
+
+
+//支付宝支付回调
+#define Notify_AlipayCallback_Url [NSString stringWithFormat:@"%@/alipay_return", APIDomain]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 服务时间
 #define ServerTime [NSString stringWithFormat:@"%@/servertime", APIDomain]
@@ -133,13 +158,9 @@
 //查询产品
 #define API_Pro_select [NSString stringWithFormat:@"%@/pro_select", APIDomain]
 
-//设置默认车辆
-#define API_set_default_car [NSString stringWithFormat:@"%@/setup_default_car", APIDomain]
 
 //DIY
 #define API_selectDIY [NSString stringWithFormat:@"%@/diy_select", APIDomain]
-
-
 
 // 获取洗车方式和优惠券
 #define API_Washinfo [NSString stringWithFormat:@"%@/washinfo", APIDomain]
@@ -157,16 +178,8 @@
 //限行尾号
 #define API_CityLimit [NSString stringWithFormat:@"%@/city_limit", APIDomain]
 
-
-
 //查询全部评价
 #define API_CommentSelect [NSString stringWithFormat:@"%@/comment_select", APIDomain]
-//http://s-199705.gotocdn.com/Api/index/comment_select
-
-//修改用户车辆
-#define API_CarUpdate [NSString stringWithFormat:@"%@/car_up", APIDomain]
-
-
 
 //评论员工
 #define API_CommentInsert [NSString stringWithFormat:@"%@/comment_insert", APIDomain]
@@ -180,11 +193,17 @@
 //充值
 #define API_Recharge [NSString stringWithFormat:@"%@/recharge", APIDomain]
 
-//查询所有车辆品牌
-#define API_AllCarbrandSelect [NSString stringWithFormat:@"%@/all_carbrand_select", APIDomain]
 
-//支付宝支付回调
-#define Notify_AlipayCallback_Url [NSString stringWithFormat:@"%@/alipay_return", APIDomain]
+
+
+
+
+
+
+
+
+
+
 
 //上传文件接口
 #define API_UploadFile [NSString stringWithFormat:@"%@/UploadFile", APIDomain]

@@ -21,12 +21,8 @@
 #import "MyCarTableViewController.h"
 #import "AddOrderViewController.h"
 
-//// 获取服务起止时间
-//#define START_TIME @"reserve_start_time"
-//#define END_TIME @"reserve_end_time"
 
-
-@interface XBBMapViewController ()<BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate,UIScrollViewDelegate,UIAlertViewDelegate,BMKOverlay ,BMKSuggestionSearchDelegate,UITextFieldDelegate>{
+@interface XBBMapViewController ()<BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate,UIScrollViewDelegate,UIAlertViewDelegate,BMKOverlay ,BMKSuggestionSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,UITableViewDataSource,UITableViewDelegate>{
     
     /**
      * @brief 百度地图相关信息
@@ -47,7 +43,7 @@
     
     UIImageView *imgViewCurrent;
 
-//  BMKPoiSearch *search;
+    BMKPoiSearch *search;
     BMKGeoCodeSearch *_geoCodeSearch;//地里编码
    
     UILabel *labNowLoaction;
@@ -99,7 +95,10 @@
     UITextField  *searchField;
     UIView *seachBar;
     UITableView *searchTableView;
+    UIImageView *searchImageView;
+    UIButton *searchCannelButton;
     
+    int  currentPage;
     
 }
 
@@ -117,6 +116,9 @@
 @property (nonatomic, copy) NSDictionary *dicCoordinates;
 
 @property (nonatomic, copy) NSDictionary *defaultCarDic;
+
+@property (nonatomic, copy) NSArray *searchArray;
+
 
 @end
 
@@ -136,21 +138,38 @@
         searchTableView.alpha = 0;
         seachBar.frame = CGRectMake(20., 65+10, XBB_Screen_width - 40., 44.);
         self.xbbNavigationBar.alpha = 1.;
+        searchImageView.userInteractionEnabled = NO;
+         searchCannelButton.alpha = 0;
     
     }else
     {
+        searchField.text = @"";
+        self.searchArray = nil;
+        [searchTableView reloadData];
         searchTableView.alpha = 0.7;
         CGRect frame = seachBar.frame;
         frame.origin.y = 20.;
         frame.origin.x = 0.;
         frame.size.width = XBB_Screen_width;
+        
+        CGRect frame_one = searchCannelButton.frame;
+        frame_one.origin.x = XBB_Screen_width - 80.;
+        searchCannelButton.frame = frame_one;
+          searchCannelButton.alpha = 1;
         seachBar.frame = frame;
         self.xbbNavigationBar.alpha = 0.;
+         searchImageView.userInteractionEnabled = YES;
     }
     [UIView setAnimationDelay:0.];
     [UIView commitAnimations];
     
 }
+- (IBAction)cannel:(id)sender
+{
+    [searchField resignFirstResponder];
+    [self hiddenSearchBar:YES];
+}
+
 - (void)addAddressSeachBar
 {
   
@@ -161,10 +180,22 @@
     seachBar.layer.masksToBounds = YES;
     seachBar.backgroundColor = [UIColor whiteColor];
     
+    
+    searchCannelButton = [[UIButton alloc] initWithFrame:CGRectMake(seachBar.bounds.size.width - 80, 0, 80, seachBar.bounds.size.height)];
+    [searchCannelButton setTitle:@"取消" forState:UIControlStateNormal];
+    [searchCannelButton setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
+    [seachBar addSubview:searchCannelButton];
+    [searchCannelButton addTarget:self action:@selector(cannel:) forControlEvents:UIControlEventTouchUpInside];
+    searchCannelButton.alpha = 0;
+    
+
     [self.view addSubview:seachBar];
     UIImage *seachImage = [UIImage imageNamed:@"搜索"];
-    UIImageView *searchImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, CGRectGetHeight(seachBar.bounds)/2-seachImage.size.height/2, seachImage.size.width, seachImage.size.height)];
+    searchImageView= [[UIImageView alloc] initWithFrame:CGRectMake(10, CGRectGetHeight(seachBar.bounds)/2-seachImage.size.height/2, seachImage.size.width, seachImage.size.height)];
     searchImageView.image = seachImage;
+    UITapGestureRecognizer *tap_1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toSeach:)];
+    [searchImageView addGestureRecognizer:tap_1];
+    
     [seachBar addSubview:searchImageView];
     searchField = [[UITextField alloc] initWithFrame:CGRectMake(searchImageView.frame.origin.x+searchImageView.frame.size.width+10, 0, seachBar.bounds.size.width - (searchImageView.frame.origin.x+searchImageView.frame.size.width+10), 44.)];
     searchField.backgroundColor = [UIColor clearColor];
@@ -174,10 +205,12 @@
     [seachBar addSubview:searchField];
     
     searchTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 65, XBB_Screen_width, XBB_Screen_height - 65)];
+    searchTableView.delegate = self;
+    searchTableView.dataSource = self;
     searchTableView.userInteractionEnabled = YES;
     searchTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapMarkControl:)];
-    [searchTableView addGestureRecognizer:tap];
+//    [searchTableView addGestureRecognizer:tap];
     
     
     [self.view addSubview:searchTableView];
@@ -188,13 +221,17 @@
 {
     markBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, XBB_Screen_height)];
     markBackView.backgroundColor = [UIColor blackColor];
-    markBackView.alpha = 0.7;
+    markBackView.alpha = 0.8;
     [self.view addSubview:markBackView];
+    
+   
+    
     markBackControlView = [[UIView alloc] initWithFrame:markBackView.bounds];
     [markBackView addSubview:markBackControlView];
     textView = [[UITextView alloc] initWithFrame:CGRectMake(20., XBB_Screen_height - 400., XBB_Screen_width-40., 200.)];
     
     textView.layer.cornerRadius = 5;
+    [textView setFont:[UIFont systemFontOfSize:15.]];
     textView.layer.masksToBounds = YES;
     [markBackControlView addSubview:textView];
     
@@ -456,24 +493,24 @@
 }
 
 #pragma mark view disposed
-- (void)featchAableArea
-{
-    [NetworkHelper postWithAPI:Lat_Long parameter:nil successBlock:^(id response) {
-        DLog(@"%@",response);
-        if (response) {
-            NSDictionary *dic = [(NSDictionary*)response objectForKey:@"result"];
-            self.dicCoordinates = dic;
-        }
-        
-    } failBlock:^(NSError *error) {
-        [SVProgressHUD showErrorWithStatus:@"获取可服务区域失败"];
-    }];
-
-}
+//- (void)featchAableArea
+//{
+//    [NetworkHelper postWithAPI:Lat_Long parameter:nil successBlock:^(id response) {
+//        DLog(@"%@",response);
+//        if (response) {
+//            NSDictionary *dic = [(NSDictionary*)response objectForKey:@"result"];
+//            self.dicCoordinates = dic;
+//        }
+//        
+//    } failBlock:^(NSError *error) {
+//        [SVProgressHUD showErrorWithStatus:@"获取可服务区域失败"];
+//    }];
+//
+//}
 
 - (void)initData
 {
-    [self featchAableArea];
+//    [self featchAableArea];
     [UserObj shareInstance].currentAddressDetail = @"";
 }
 - (void)initAll
@@ -564,6 +601,7 @@
         [self.view addSubview:map];
         [self.view sendSubviewToBack:map];
     }
+    search.delegate = self;
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
@@ -574,6 +612,9 @@
     map.delegate = nil; // 不用时，置nil
     _locService.delegate = nil;
     _suggestionSearch.delegate = nil;
+    search.delegate = nil;
+    
+    
 }
 
 
@@ -710,6 +751,8 @@
     //注意：必须初始化地理编码类
     _geoCodeSearch = [[BMKGeoCodeSearch alloc]init];
     _geoCodeSearch.delegate = self;
+    search = [[BMKPoiSearch alloc] init];
+    search.delegate = self;
 }
 
 #pragma mark 开通城市
@@ -1188,23 +1231,57 @@
     
     return YES;
 }
+- (void)onGetPoiResult:(BMKPoiSearch *)searcher result:(BMKPoiResult *)poiResult errorCode:(BMKSearchErrorCode)errorCode
+{
+    self.searchArray = poiResult.poiInfoList;
+    DLog(@"%@",self.searchArray)
+    [searchTableView reloadData];
+}
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     NSString *string_one = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    BMKGeoCodeSearchOption * option = [[BMKGeoCodeSearchOption alloc] init];
-    option.city = self.cityName;
-    option.address = string_one;
-    [_geoCodeSearch geoCode:option];
-    
-//    BMKSuggestionSearchOption *opting = [[BMKSuggestionSearchOption alloc] init];
-//    opting.keyword = string_one;
-//    opting.cityname = self.cityName;
-//    [_suggestionSearch suggestionSearch:opting];
+
+     self.searchArray = nil;
+    DLog(@"%@   %@",string_one, searchField.text)
+    BMKCitySearchOption *op = [[BMKCitySearchOption alloc] init];
+    op.pageIndex = 0;
+    op.pageCapacity = 10;
+    op.keyword = string_one;
+    op.city = self.cityName;
+    BOOL flag =  [search poiSearchInCity:op];
+    if(flag)
+    {
+        NSLog(@"城市内检索发送成功");
+    }
+    else
+    {
+        NSLog(@"城市内检索发送失败");
+    }
     return YES;
 }
 
 #pragma mark action
+
+- (IBAction)toSeach:(id)sender
+{
+    self.searchArray = nil;
+    DLog(@"%@",searchField.text)
+    BMKCitySearchOption *op = [[BMKCitySearchOption alloc] init];
+    op.pageIndex = 0;
+    op.pageCapacity = 10;
+    op.keyword = searchField.text;
+    op.city = self.cityName;
+    BOOL flag =  [search poiSearchInCity:op];
+    if(flag)
+    {
+        NSLog(@"城市内检索发送成功");
+    }
+    else
+    {
+        NSLog(@"城市内检索发送失败");
+    }
+}
 
 - (IBAction)backViewController:(id)sender{
     if ([self.superController isEqualToString:@"XBBAddressSelectViewController"]) {
@@ -1305,5 +1382,41 @@
 }
 
 
+
+#pragma mark tableView
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.searchArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+    }
+    BMKPoiInfo *info = self.searchArray[indexPath.row];
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+ 
+    cell.textLabel.text = info.name;
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    BMKPoiInfo *info = self.searchArray[indexPath.row];
+    map.userTrackingMode = BMKUserTrackingModeNone;
+    [map setCenterCoordinate:info.pt animated:YES];
+    [self hiddenSearchBar:YES];
+    [searchField resignFirstResponder];
+    
+}
 
 @end

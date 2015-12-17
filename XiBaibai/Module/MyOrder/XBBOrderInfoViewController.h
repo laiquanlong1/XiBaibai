@@ -10,7 +10,7 @@
 
 @interface XBBOrderInfoViewController : XBBViewController
 
-@property (nonatomic, copy) NSString *orderid;
+@property (nonatomic, copy) NSString* orderid ,*orderNum , *orderName;
 @property (nonatomic, assign) BOOL isPayBack;
 @property (nonatomic, assign) NSInteger pageController; // 1 第一次支付 2.列表页 
 @end

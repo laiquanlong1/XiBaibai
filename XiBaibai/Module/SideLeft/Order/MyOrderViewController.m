@@ -26,6 +26,7 @@
     UILabel    *nofoundLabel;
     NSInteger   page;
     NSInteger   selectTag;
+    BOOL isCurrentClass;
 }
 @property (nonatomic, strong) UITableView *orderTableView;
 
@@ -122,6 +123,19 @@ static NSString *identifi = @"cell";
     }];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    isCurrentClass = YES;
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    isCurrentClass = NO;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setNavigationBarControl];
@@ -175,15 +189,22 @@ static NSString *identifi = @"cell";
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         RechargeResultObject *result = sender.object;
         if (result.isSuccessful) {
-            
-            XBBOrderObject *object = self.orderArr[selectTag];
-            XBBOrderInfoViewController *info = [[XBBOrderInfoViewController alloc] init];
-            info.isPayBack = YES;
-            info.navigationTitle = @"支付成功";
-            info.orderid = object.order_id;
-            [self.navigationController pushViewController:info animated:YES];
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationOrderListUpdate object:nil];
+         
+            if (isCurrentClass) {
+                XBBOrderObject *object = self.orderArr[selectTag];
+                XBBOrderInfoViewController *info = [[XBBOrderInfoViewController alloc] init];
+                info.isPayBack = YES;
+                info.pageController = 2;
+                info.navigationTitle = @"支付成功";
+                info.orderid = object.order_id;
+                
+                [self.navigationController pushViewController:info animated:YES];
+                [self.orderArr removeAllObjects];
+                self.orderArr = nil;
+                page = 1;
+                [[NSNotificationCenter defaultCenter] postNotificationName:NotificationOrderListUpdate object:nil];
+            }
+      
         } else {
             [SVProgressHUD showErrorWithStatus:result.message];
         }
@@ -206,6 +227,13 @@ static NSString *identifi = @"cell";
 }
 
 - (void)handleOrderDidUpdate:(NSNotification *)sender {
+
+    if ([sender.object isEqualToString:@"orderInfo"]) {
+        [self.orderArr removeAllObjects];
+        self.orderArr = nil;
+        page = 1;
+    }
+    
     NSLog(@"%s",__func__);
 //    [self.orderTableView.header beginRefreshing];
     [self fetchOrderFromWeb:nil];
@@ -240,14 +268,11 @@ static NSString *identifi = @"cell";
 - (void)fetchOrderFromWeb:(void (^)())callback {
     [SVProgressHUD show];
     [NetworkHelper postWithAPI:XBB_orderSelect parameter:@{@"uid": [UserObj shareInstance].uid,@"p":@(page)} successBlock:^(id response) {
-        DLog(@"%ld",page)
-        DLog(@"%@",response)
         if (callback)
             callback();
         if (self.orderArr == nil) {
             self.orderArr = [NSMutableArray array];
         }
-        
         if ([response[@"code"] integerValue] == 1) {
             id arr = response[@"result"];
             if (![arr isKindOfClass:[NSArray class]]) {
@@ -274,12 +299,14 @@ static NSString *identifi = @"cell";
             }
             
         } else {
+            [self alphahiddnNoFound:NO];
             [SVProgressHUD showInfoWithStatus:response[@"msg"]];
         }
         [SVProgressHUD dismiss];
     } failBlock:^(NSError *error) {
         if (callback)
             callback();
+        [self alphahiddnNoFound:NO];
         [SVProgressHUD showErrorWithStatus:@"查询失败"];
     }];
    
@@ -332,14 +359,14 @@ static NSString *identifi = @"cell";
         selectTag = button.tag;
 
         [RechargeHelper setAliPayNotifyURLString:[NSString stringWithFormat:@"%@?recharge_type=%@", Notify_AlipayCallback_Url, @"1"]];
-        [[RechargeHelper defaultRechargeHelper] payAliWithMoney:order.total_price orderNO:order.order_num productTitle:order.order_name productDescription:order.order_name];
+        double price = order.total_price;
+        [[RechargeHelper defaultRechargeHelper] payAliWithMoney:price orderNO:order.order_num productTitle:order.order_name productDescription:order.order_name];
 
         DLog(@"支付订单")
     }else if ([button.titleLabel.text isEqualToString:@"去评价"]) {
         DLog(@"去评价")
     }
 }
-
 
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -575,9 +602,11 @@ static NSString *identifi = @"cell";
 
     XBBOrderObject *object = self.orderArr[indexPath.section];
     XBBOrderInfoViewController *info = [[XBBOrderInfoViewController alloc] init];
-//    info.isPayBack = YES;
     info.navigationTitle = @"订单详情";
     info.orderid = object.order_id;
+    info.orderNum = object.order_num;
+    info.orderName = object.order_name;
+    
     [self.navigationController pushViewController:info animated:YES];
     
 }
