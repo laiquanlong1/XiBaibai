@@ -209,51 +209,12 @@
     searchTableView.dataSource = self;
     searchTableView.userInteractionEnabled = YES;
     searchTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapMarkControl:)];
-//    [searchTableView addGestureRecognizer:tap];
-    
-    
+
     [self.view addSubview:searchTableView];
     searchTableView.alpha  = 0;
     [self hiddenSearchBar:YES];
 }
-- (void)addMarkView
-{
-    markBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, XBB_Screen_height)];
-    markBackView.backgroundColor = [UIColor blackColor];
-    markBackView.alpha = 0.8;
-    [self.view addSubview:markBackView];
-    
-   
-    
-    markBackControlView = [[UIView alloc] initWithFrame:markBackView.bounds];
-    [markBackView addSubview:markBackControlView];
-    textView = [[UITextView alloc] initWithFrame:CGRectMake(20., XBB_Screen_height - 400., XBB_Screen_width-40., 200.)];
-    
-    textView.layer.cornerRadius = 5;
-    [textView setFont:[UIFont systemFontOfSize:15.]];
-    textView.layer.masksToBounds = YES;
-    [markBackControlView addSubview:textView];
-    
-    UIImage *buttonImage = [UIImage imageNamed:@"X"];
-    cannelbutton = [[UIButton alloc] initWithFrame:CGRectMake(textView.frame.size.width + textView.frame.origin.x -30.-buttonImage.size.width, textView.frame.origin.y - buttonImage.size.height/2, buttonImage.size.width, buttonImage.size.height)];
-    [cannelbutton setImage:buttonImage forState:UIControlStateNormal];
-    [cannelbutton addTarget:self action:@selector(toClose) forControlEvents:UIControlEventTouchUpInside];
-    [markBackControlView addSubview:cannelbutton];
-    
-    UIImage *image = [UIImage imageNamed:@"确定"];
-    UIButton *markButton = [[UIButton alloc] initWithFrame:CGRectMake(20., XBB_Screen_height - 150., XBB_Screen_width-40., 44.)];
-    [markButton setTitle:@"提交" forState:UIControlStateNormal];
-    [markButton addTarget:self action:@selector(smitMark) forControlEvents:UIControlEventTouchUpInside];
-    [markButton setBackgroundImage:image forState:UIControlStateNormal];
-    [markBackControlView addSubview:markButton];
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapMarkControl:)];
-    [markBackControlView addGestureRecognizer:tap];
-    markBackView.alpha = 0;
-    [self hiddenMarkViews:YES];
-   
-}
+
 - (void)hiddenMarkViews:(BOOL)hidden
 {
     if (hidden) {
@@ -844,26 +805,10 @@
     [markLabel setTextAlignment:NSTextAlignmentCenter];
     [imgViewCurrent addSubview:markLabel];
     
-    
-    
     imgViewCurrent.alpha = 0;
     
 }
 
-
-
-
-- (void)myLocationOnTouch:(UITapGestureRecognizer *)sender {
-    if (IsLogin) {
-        [self performSegueWithIdentifier:@"PushSearch" sender:nil];
-    } else {
-        GoToLogin(self);
-    }
-}
-
-
-
-#pragma mark Data
 
 
 #pragma mark datas
@@ -1098,9 +1043,15 @@
             [self.navigationController pushViewController:carTableVC animated:YES];
         }
     }
+    
+    if ([alertView.title isEqualToString:@"设置车辆"]) {
+        if (buttonIndex == 1) {
+            MyCarTableViewController *myCar = [[MyCarTableViewController alloc] init];
+            [self.navigationController pushViewController:myCar animated:YES];
+        }
+    }
+    
 }
-
-
 
 
 
@@ -1115,25 +1066,17 @@
 }
 
 - (void)moveToHomeLocation {
-    if (!IsLogin) {
-        GoToLogin(self);
-    } else if ([UserObj shareInstance].homeCoordinate.latitude == 0) {
-        [self.navigationController pushViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"CarportTableViewController"] animated:YES];
-    } else {
+
         map.userTrackingMode = BMKUserTrackingModeNone;
         [map setCenterCoordinate:[UserObj shareInstance].homeCoordinate animated:YES];
-    }
+    
 }
 
 - (void)moveToCompanyLocation {
-    if (!IsLogin) {
-        GoToLogin(self);
-    } else if ([UserObj shareInstance].companyCoordinate.latitude == 0) {
-        [self.navigationController pushViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"CarportTableViewController"] animated:YES];
-    } else {
+
         map.userTrackingMode = BMKUserTrackingModeNone;
         [map setCenterCoordinate:[UserObj shareInstance].companyCoordinate animated:YES];
-    }
+    
 }
 
 /**
@@ -1144,11 +1087,7 @@
 {
     [_locService stopUserLocationService];
     bmlocation=userLocation;
- 
-//    CGPoint point=[map convertCoordinate:map.centerCoordinate toPointToView:map];
     [map updateLocationData:userLocation];
-
-    
     [UserObj shareInstance].currentCoordinate = userLocation.location.coordinate;
     [map setCenterCoordinate:userLocation.location.coordinate animated:YES];
 }
@@ -1171,9 +1110,6 @@
      * @detail 设置开通城市
      **/
     [self setWindStyleWithopenCity:[self hasOpenServerCityWithCityName:self.cityName]];
-
-
-    
     labNowLoaction.text=result.address;
     if (imgViewCurrent.alpha < 1) {
         [UIView beginAnimations:@"imageAlpha" context:nil];
@@ -1204,25 +1140,13 @@
  *@param animated 是否动画
  */
 - (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
-//    myLocationView.hidden=NO;
-//    imgViewCurrent.hidden = NO;
-    //将大头针坐标转化为地理坐标
-    
+
     //需要逆地理编码的坐标位置
     reverseGeoCodeOption.reverseGeoPoint = [map convertPoint:imgViewCurrent.center toCoordinateFromView:map];
     [_geoCodeSearch reverseGeoCode:reverseGeoCodeOption];
 }
 
-/**
- * @brief 选择左边按钮
- * @detail 选择左边按钮打开左抽屉视图
- **/
-- (void)clickLeftButton{
-    
-    [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
-        
-    }];
-}
+
 #pragma mark textFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
@@ -1234,16 +1158,16 @@
 - (void)onGetPoiResult:(BMKPoiSearch *)searcher result:(BMKPoiResult *)poiResult errorCode:(BMKSearchErrorCode)errorCode
 {
     self.searchArray = poiResult.poiInfoList;
-    DLog(@"%@",self.searchArray)
     [searchTableView reloadData];
 }
+
+
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     NSString *string_one = [textField.text stringByReplacingCharactersInRange:range withString:string];
 
      self.searchArray = nil;
-    DLog(@"%@   %@",string_one, searchField.text)
     BMKCitySearchOption *op = [[BMKCitySearchOption alloc] init];
     op.pageIndex = 0;
     op.pageCapacity = 10;
@@ -1261,12 +1185,13 @@
     return YES;
 }
 
+
+
 #pragma mark action
 
 - (IBAction)toSeach:(id)sender
 {
     self.searchArray = nil;
-    DLog(@"%@",searchField.text)
     BMKCitySearchOption *op = [[BMKCitySearchOption alloc] init];
     op.pageIndex = 0;
     op.pageCapacity = 10;
@@ -1283,6 +1208,10 @@
     }
 }
 
+
+
+
+
 - (IBAction)backViewController:(id)sender{
     if ([self.superController isEqualToString:@"XBBAddressSelectViewController"]) {
         self.selectAddress(NO);
@@ -1291,26 +1220,84 @@
     [self.navigationController popViewControllerAnimated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+
+
 - (IBAction)sureCommit:(id)sender
 {
-    //
-    DLog(@"")
-    if ([self.superController isEqualToString:@"XBBAddressSelectViewController"]) {
-        self.selectAddress(YES);
-        [self.navigationController popViewControllerAnimated:YES];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }else
+    
+    
+    if (IsLogin)
     {
-        AddOrderViewController *order = [[AddOrderViewController alloc] init];
-        order.hasLocation = YES;
-        [self.navigationController pushViewController:order animated:YES];
+        if ([[UserObj shareInstance] carModel] != nil) {
+            DLog(@"")
+            if ([self.superController isEqualToString:@"XBBAddressSelectViewController"]) {
+                self.selectAddress(YES);
+                [self.navigationController popViewControllerAnimated:YES];
+                [self dismissViewControllerAnimated:YES completion:nil];
+            }else
+            {
+                AddOrderViewController *order = [[AddOrderViewController alloc] init];
+                order.hasLocation = YES;
+                [self.navigationController pushViewController:order animated:YES];
+            }
+            
+
+        }else
+        {
+            UIAlertView *alrt = [[UIAlertView alloc] initWithTitle:@"设置车辆" message:@"您还没有设置默认车辆哦" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"设置", nil];
+            [alrt show];
+            return;
+        }
     }
     
     
+    //
+  }
+
+
+
+
+#pragma mark Mark
+
+- (void)addMarkView
+{
+    markBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, XBB_Screen_height)];
+    markBackView.backgroundColor = [UIColor blackColor];
+    markBackView.alpha = 0.8;
+    [self.view addSubview:markBackView];
     
     
+    
+    markBackControlView = [[UIView alloc] initWithFrame:markBackView.bounds];
+    [markBackView addSubview:markBackControlView];
+    textView = [[UITextView alloc] initWithFrame:CGRectMake(20., XBB_Screen_height - 400., XBB_Screen_width-40., 200.)];
+    
+    textView.layer.cornerRadius = 5;
+    [textView setFont:[UIFont systemFontOfSize:15.]];
+    textView.layer.masksToBounds = YES;
+    [markBackControlView addSubview:textView];
+    
+    UIImage *buttonImage = [UIImage imageNamed:@"X"];
+    cannelbutton = [[UIButton alloc] initWithFrame:CGRectMake(textView.frame.size.width + textView.frame.origin.x -30.-buttonImage.size.width, textView.frame.origin.y - buttonImage.size.height/2, buttonImage.size.width, buttonImage.size.height)];
+    [cannelbutton setImage:buttonImage forState:UIControlStateNormal];
+    [cannelbutton addTarget:self action:@selector(toClose) forControlEvents:UIControlEventTouchUpInside];
+    [markBackControlView addSubview:cannelbutton];
+    
+    UIImage *image = [UIImage imageNamed:@"确定"];
+    UIButton *markButton = [[UIButton alloc] initWithFrame:CGRectMake(20., XBB_Screen_height - 150., XBB_Screen_width-40., 44.)];
+    [markButton setTitle:@"提交" forState:UIControlStateNormal];
+    [markButton addTarget:self action:@selector(smitMark) forControlEvents:UIControlEventTouchUpInside];
+    [markButton setBackgroundImage:image forState:UIControlStateNormal];
+    [markBackControlView addSubview:markButton];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapMarkControl:)];
+    [markBackControlView addGestureRecognizer:tap];
+    markBackView.alpha = 0;
+    [self hiddenMarkViews:YES];
     
 }
+
 - (IBAction)toucheMap:(id)sender
 {
     ismark = NO;
@@ -1342,43 +1329,10 @@
 
 - (IBAction)markAction:(id)sender
 {
-//    [self addMarkView];
     ismark = YES;
     [textView becomeFirstResponder];
     textView.text = [UserObj shareInstance].currentAddressDetail;
     [self hiddenMarkViews:NO];
-}
-
-- (IBAction)toTouchAppleButton:(id)sender
-{
-    if (self.haveConnection == NO) {
-        [SVProgressHUD showErrorWithStatus:@"检查您的网络啊"];
-    }
-    if ([address_chose length]==0 || [location_lg length] == 0 || [location_lt length]==0) {
-        return;
-    }
-    [NetworkHelper postWithAPI:Applyopen parameter:@{@"uid":[UserObj shareInstance].uid,@"address":address_chose,@"latitude":location_lt,@"longitude":location_lg} successBlock:^(id response) {
-        if (response) {
-            NSDictionary *dicResponse = response;
-            switch ([dicResponse[@"code"] integerValue]) {
-                case 1:
-                {
-                    [SVProgressHUD showSuccessWithStatus:dicResponse[@"msg"]];
-                    [lab_prompt setTitle:@"已收到您的申请" forState:UIControlStateNormal];
-                    lab_prompt.userInteractionEnabled = NO;
-                }
-                    break;
-                    
-                default:
-                {
-                    [SVProgressHUD showErrorWithStatus:dicResponse[@"msg"]];
-                }
-                    break;
-            }
-        }
-    } failBlock:^(NSError *error) {
-        [SVProgressHUD showErrorWithStatus:@"网络错误"];
-    }];
 }
 
 
@@ -1418,5 +1372,58 @@
     [searchField resignFirstResponder];
     
 }
+
+
+
+
+
+
+
+///**
+// * @brief 选择左边按钮
+// * @detail 选择左边按钮打开左抽屉视图
+// **/
+//- (void)clickLeftButton{
+//
+//    [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
+//
+//    }];
+//}
+
+
+
+//
+//- (IBAction)toTouchAppleButton:(id)sender
+//{
+//    if (self.haveConnection == NO) {
+//        [SVProgressHUD showErrorWithStatus:@"检查您的网络啊"];
+//    }
+//    if ([address_chose length]==0 || [location_lg length] == 0 || [location_lt length]==0) {
+//        return;
+//    }
+//    [NetworkHelper postWithAPI:Applyopen parameter:@{@"uid":[UserObj shareInstance].uid,@"address":address_chose,@"latitude":location_lt,@"longitude":location_lg} successBlock:^(id response) {
+//        if (response) {
+//            NSDictionary *dicResponse = response;
+//            switch ([dicResponse[@"code"] integerValue]) {
+//                case 1:
+//                {
+//                    [SVProgressHUD showSuccessWithStatus:dicResponse[@"msg"]];
+//                    [lab_prompt setTitle:@"已收到您的申请" forState:UIControlStateNormal];
+//                    lab_prompt.userInteractionEnabled = NO;
+//                }
+//                    break;
+//
+//                default:
+//                {
+//                    [SVProgressHUD showErrorWithStatus:dicResponse[@"msg"]];
+//                }
+//                    break;
+//            }
+//        }
+//    } failBlock:^(NSError *error) {
+//        [SVProgressHUD showErrorWithStatus:@"网络错误"];
+//    }];
+//}
+
 
 @end

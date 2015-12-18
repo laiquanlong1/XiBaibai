@@ -21,7 +21,7 @@
     NSString      *selectNumber;
     NSString    *selectColor;
 }
-@property (strong, nonatomic) IBOutlet UIView *backView;
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @end
 
@@ -75,7 +75,9 @@ static NSString *identifier = @"cell";
 
     if (selectNumber == nil || [selectNumber length] == 0) {
         [SVProgressHUD showErrorWithStatus:@"请输入车牌号"];
-    } else if (selectCarbrand == nil) {
+    } else if ([selectNumber length] != 7) {
+        [SVProgressHUD showErrorWithStatus:@"车牌号位数不正确"];
+    }else if (selectCarbrand == nil) {
         [SVProgressHUD showErrorWithStatus:@"请输入品牌"];
     }else if (selectCarType == nil) {
         [SVProgressHUD showErrorWithStatus:@"请输入车型"];
@@ -148,6 +150,9 @@ static NSString *identifier = @"cell";
 
 - (void)setTap
 {
+    
+    UIView *vi = [[UIView alloc] initWithFrame:self.view.bounds];
+    self.tableView.backgroundView = vi;
     [self.tableView.backgroundView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)]];
 }
 
@@ -157,7 +162,7 @@ static NSString *identifier = @"cell";
     [self initUI];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.backView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)]];
+    [self setTap];
    
     
 }
@@ -184,6 +189,7 @@ static NSString *identifier = @"cell";
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, 120.)];
+    [backView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)]];
     backView.userInteractionEnabled = YES;
     backView.backgroundColor = [UIColor clearColor];
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(30., backView.bounds.size.height - 44., XBB_Screen_width - 60., 44.)];
@@ -223,6 +229,7 @@ static NSString *identifier = @"cell";
 {
     DLog(@"")
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.row) {
@@ -306,6 +313,7 @@ static NSString *identifier = @"cell";
     
     if (indexPath.row == 1 || indexPath.row == 2) {
         XBBAddCarTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        
         if (indexPath.row == 1) {
             
             CarListTableViewController *calist = [[UIStoryboard storyboardWithName:@"XBBOne" bundle:nil] instantiateViewControllerWithIdentifier:@"CarListTableViewController"];
@@ -404,7 +412,8 @@ static NSString *identifier = @"cell";
 {
 
     NSString *string_1 = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    if ([string_1 length] > 8) {
+    if ([string_1 length] > 7) {
+        [SVProgressHUD showInfoWithStatus:@"超出输入限制"];
         return NO;
     }
 

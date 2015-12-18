@@ -18,19 +18,19 @@
                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="订单内容" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6wg-6e-hnJ">
                         <rect key="frame" x="23" y="8" width="289" height="27"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="¥ 20.30" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gWj-IR-XMk">
                         <rect key="frame" x="8" y="8" width="289" height="27"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="服务时间" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IvU-MT-bnd">
-                        <rect key="frame" x="47" y="8" width="265" height="27"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="服务时间" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IvU-MT-bnd">
+                        <rect key="frame" x="47" y="0.0" width="265" height="43"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QeG-58-fwL">
@@ -52,9 +52,9 @@
                     <constraint firstItem="gWj-IR-XMk" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="H0j-Q1-BNd"/>
                     <constraint firstAttribute="trailingMargin" secondItem="6wg-6e-hnJ" secondAttribute="trailing" id="IqE-t9-ccj"/>
                     <constraint firstAttribute="bottomMargin" secondItem="6wg-6e-hnJ" secondAttribute="bottom" id="Lpj-qx-ybZ"/>
-                    <constraint firstItem="IvU-MT-bnd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="Ua5-hR-iSl"/>
+                    <constraint firstItem="IvU-MT-bnd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="Ua5-hR-iSl"/>
                     <constraint firstItem="IvU-MT-bnd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="39" id="bgU-L4-VgR"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="IvU-MT-bnd" secondAttribute="bottom" id="hGM-dV-oFD"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="IvU-MT-bnd" secondAttribute="bottom" constant="-8" id="hGM-dV-oFD"/>
                     <constraint firstItem="6wg-6e-hnJ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="15" id="k5J-eR-LzK"/>
                     <constraint firstAttribute="trailingMargin" secondItem="IvU-MT-bnd" secondAttribute="trailing" id="wQt-cC-C51"/>
                 </constraints>

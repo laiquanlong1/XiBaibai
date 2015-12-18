@@ -13,9 +13,10 @@
 #import "AddOrderViewController.h"
 #import "XBBFacialViewController.h"
 #import "XBBOrder.h"
+#import "UserObj.h"
+#import "MyCarTableViewController.h"
 
-
-@interface WebViewController ()
+@interface WebViewController ()<UIAlertViewDelegate>
 {
     XBBListHeadLabel *priceTotalTitle;
     UIView *barView;
@@ -139,64 +140,91 @@
 
 }
 
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if ([alertView.title isEqualToString:@"设置车辆"]) {
+        if (buttonIndex == 1) {
+            MyCarTableViewController *myCar = [[MyCarTableViewController alloc] init];
+            [self.navigationController pushViewController:myCar animated:YES];
+        }
+    }
+}
+
 - (void)submit:(id)sender
 {
     
     UIButton *button = sender;
-    switch (button.tag) {
-        case 1:
+    
+    
+    if (IsLogin)
+    {
+        if ([[UserObj shareInstance] carModel] == nil) {
+            UIAlertView *alrt = [[UIAlertView alloc] initWithTitle:@"设置车辆" message:@"您还没有设置默认车辆哦" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"设置", nil];
+            [alrt show];
+            return;
+            
+        }else
         {
-            XBBOrder *oder = [[XBBOrder alloc] init];
-            oder.xbbid = self.proObject.p_id;
-            oder.title = self.proObject.p_name;
-            if (self.selectCarType == 1) {
-                oder.price = self.proObject.price_1;
-
-            }else
-            {
-                oder.price = self.proObject.price_2;
-
+            switch (button.tag) {
+                case 1:
+                {
+                    XBBOrder *oder = [[XBBOrder alloc] init];
+                    oder.xbbid = self.proObject.p_id;
+                    oder.title = self.proObject.p_name;
+                    if (self.selectCarType == 1) {
+                        oder.price = self.proObject.price_1;
+                        
+                    }else
+                    {
+                        oder.price = self.proObject.price_2;
+                        
+                    }
+                    if (self.proObject.type == 1)
+                    {
+                        XBBDIYViewController *diy = [[XBBDIYViewController alloc] init];
+                        diy.washType = 11;
+                        diy.selectArray = @[oder];
+                        
+                        [self.navigationController pushViewController:diy animated:YES];
+                        //                [self presentViewController:diy animated:YES completion:nil];
+                        
+                    }else if (self.proObject.type == 2)
+                    {
+                        XBBFacialViewController *fa = [[XBBFacialViewController alloc] init];
+                        fa.selectFacialArray = @[oder];
+                        [self.navigationController pushViewController:fa animated:YES];
+                        //                [self presentViewController:fa animated:YES completion:nil];
+                    }
+                    
+                    
+                    
+                }
+                    break;
+                case 2:
+                {
+                    XBBDiyObject *object = [[XBBDiyObject alloc] init];
+                    object.proName = self.proObject.p_name;
+                    object.price1 = self.proObject.price_1;
+                    object.price2 = self.proObject.price_2;
+                    object.pid = self.proObject.p_id;
+                    object.type = self.proObject.type;
+                    NSArray *arr = @[object];
+                    AddOrderViewController *order = [[AddOrderViewController alloc] init];
+                    order.selectArray = arr;
+                    [self.navigationController pushViewController:order animated:YES];
+                    //            [self presentViewController:order animated:YES completion:nil];
+                }
+                    break;
+                    
+                default:
+                    break;
             }
-            if (self.proObject.type == 1)
-            {
-                XBBDIYViewController *diy = [[XBBDIYViewController alloc] init];
-                diy.washType = 11;
-                diy.selectArray = @[oder];
-                
-                 [self.navigationController pushViewController:diy animated:YES];
-//                [self presentViewController:diy animated:YES completion:nil];
-                
-            }else if (self.proObject.type == 2)
-            {
-                XBBFacialViewController *fa = [[XBBFacialViewController alloc] init];
-                fa.selectFacialArray = @[oder];
-                 [self.navigationController pushViewController:fa animated:YES];
-//                [self presentViewController:fa animated:YES completion:nil];
-            }
-            
-            
-            
+
         }
-            break;
-        case 2:
-        {
-            XBBDiyObject *object = [[XBBDiyObject alloc] init];
-            object.proName = self.proObject.p_name;
-            object.price1 = self.proObject.price_1;
-            object.price2 = self.proObject.price_2;
-            object.pid = self.proObject.p_id;
-            object.type = self.proObject.type;
-            NSArray *arr = @[object];
-            AddOrderViewController *order = [[AddOrderViewController alloc] init];
-            order.selectArray = arr;
-             [self.navigationController pushViewController:order animated:YES];
-//            [self presentViewController:order animated:YES completion:nil];
-        }
-            break;
-            
-        default:
-            break;
     }
+
+    
     
     DLog(@"")
 }

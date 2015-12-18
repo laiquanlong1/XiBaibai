@@ -23,10 +23,10 @@
 
 @interface MyOrderViewController () <UIActionSheetDelegate,UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>
 {
-    UILabel    *nofoundLabel;
     NSInteger   page;
     NSInteger   selectTag;
     BOOL isCurrentClass;
+    XBBNotDataView *noDataView;
 }
 @property (nonatomic, strong) UITableView *orderTableView;
 
@@ -57,34 +57,11 @@ static NSString *identifi = @"cell";
     [self.orderTableView  registerNib:[UINib nibWithNibName:@"MyOrderMouldTableViewCell" bundle:nil] forCellReuseIdentifier:identifi];
 }
 
-- (void)alphahiddnNoFound:(BOOL)hidden
-{
-    if (hidden) {
-        nofoundLabel.alpha = 0;
-    }else
-    {
-        [UIView animateWithDuration:0.3 animations:^{
-            nofoundLabel.alpha = 1;
-        }];
-    }
-}
-
-- (void)initNotDataUI
-{
-    nofoundLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, XBB_Screen_height/2-XBB_Size_w_h(200), XBB_Screen_width, 50)];
-    nofoundLabel.numberOfLines = 0;
-    [nofoundLabel setTextAlignment:NSTextAlignmentCenter];
-    nofoundLabel.text = NSLocalizedString(@"您还没有订单信息～", nil);
-    [self.orderTableView addSubview:nofoundLabel];
-    nofoundLabel.alpha = 0;
-}
 
 
 
-- (void)setUpNoInfo
-{
-    [self initNotDataUI];
-}
+
+
 
 
 - (void)setNavigationBarControl
@@ -138,13 +115,32 @@ static NSString *identifi = @"cell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self initNoDataUI];
     [self setNavigationBarControl];
     [self regisCell];
     [self initView];
     page = 1;
-    [self setUpNoInfo];
+
     
     [self fetchOrderFromWeb:^{
+        [UIView animateWithDuration:0.3 animations:^{
+            if (self.orderArr.count == 0) {
+                [SVProgressHUD showErrorWithStatus:@"暂无数据"];
+                noDataView.alpha = 1;
+                self.orderTableView.alpha = 0;
+                
+            }else
+            {
+                noDataView.alpha = 0;
+                self.orderTableView.alpha = 1;
+            }
+            
+        } completion:^(BOOL finished) {
+            [self.orderTableView reloadData];
+            [SVProgressHUD dismiss];
+        }];
+
+        
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOfPay:) name:NotificationRecharge object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOrderDidUpdate:) name:NotificationOrderListUpdate object:nil];
@@ -155,21 +151,54 @@ static NSString *identifi = @"cell";
     WS(weakSelf)
     self.orderTableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         page++;
+        [weakSelf.orderTableView.header endRefreshing];
+        [weakSelf.orderTableView.footer resetNoMoreData];
         [weakSelf fetchOrderFromWeb:^{
-            [weakSelf.orderTableView.header endRefreshing];
-            [weakSelf.orderTableView.footer resetNoMoreData];
+            [UIView animateWithDuration:0.3 animations:^{
+                if (self.orderArr.count == 0) {
+                    [SVProgressHUD showErrorWithStatus:@"暂无数据"];
+                    noDataView.alpha = 1;
+                    self.orderTableView.alpha = 0;
+                    
+                }else
+                {
+                    noDataView.alpha = 0;
+                    self.orderTableView.alpha = 1;
+                }
+                
+            } completion:^(BOOL finished) {
+                [self.orderTableView reloadData];
+                [SVProgressHUD dismiss];
+               
+            }];
+           
         }];
-        
+       
     }];
     self.orderTableView.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         page++;
+        [weakSelf.orderTableView.header endRefreshing];
+        [weakSelf.orderTableView.footer resetNoMoreData];
         [weakSelf fetchOrderFromWeb:^{
-            [weakSelf.orderTableView.footer endRefreshing];
-            [weakSelf.orderTableView.footer resetNoMoreData];
-            
-        }];
-        
-        
+            [UIView animateWithDuration:0.3 animations:^{
+                if (self.orderArr.count == 0) {
+                    [SVProgressHUD showErrorWithStatus:@"暂无数据"];
+                    noDataView.alpha = 1;
+                    self.orderTableView.alpha = 0;
+                    
+                }else
+                {
+                    noDataView.alpha = 0;
+                    self.orderTableView.alpha = 1;
+                }
+                
+            } completion:^(BOOL finished) {
+                [self.orderTableView reloadData];
+                [SVProgressHUD dismiss];
+           
+            }];
+                   }];
+
     }];
 }
 
@@ -221,9 +250,15 @@ static NSString *identifi = @"cell";
     {
         [self.navigationController popViewControllerAnimated:YES];
     }
-    
-//    [self dismissViewControllerAnimated:YES completion:nil];
-//    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+
+- (void)initNoDataUI
+{
+    noDataView = [[XBBNotDataView alloc] initWithFrame:self.view.bounds withImage:[UIImage imageNamed:@"泡泡"] withString:@"您还没有订单信息哦"];
+    [self.view addSubview:noDataView];
+    noDataView.alpha = 0;
 }
 
 - (void)handleOrderDidUpdate:(NSNotification *)sender {
@@ -233,10 +268,25 @@ static NSString *identifi = @"cell";
         self.orderArr = nil;
         page = 1;
     }
-    
-    NSLog(@"%s",__func__);
-//    [self.orderTableView.header beginRefreshing];
-    [self fetchOrderFromWeb:nil];
+    [self fetchOrderFromWeb:^{
+        [UIView animateWithDuration:0.3 animations:^{
+            if (self.orderArr.count == 0) {
+                [SVProgressHUD showErrorWithStatus:@"暂无数据"];
+                noDataView.alpha = 1;
+                self.orderTableView.alpha = 0;
+                
+            }else
+            {
+                noDataView.alpha = 0;
+                self.orderTableView.alpha = 1;
+                [SVProgressHUD dismiss];
+            }
+            
+        } completion:^(BOOL finished) {
+            [SVProgressHUD dismiss];
+            [self.orderTableView reloadData];
+        }];
+    }];
 }
 
 
@@ -268,8 +318,7 @@ static NSString *identifi = @"cell";
 - (void)fetchOrderFromWeb:(void (^)())callback {
     [SVProgressHUD show];
     [NetworkHelper postWithAPI:XBB_orderSelect parameter:@{@"uid": [UserObj shareInstance].uid,@"p":@(page)} successBlock:^(id response) {
-        if (callback)
-            callback();
+   
         if (self.orderArr == nil) {
             self.orderArr = [NSMutableArray array];
         }
@@ -285,28 +334,16 @@ static NSString *identifi = @"cell";
                     XBBOrderObject *model = [XBBOrderObject objectWithKeyValues:temp];
                     [self.orderArr addObject:model];
                 }
-                if (self.orderArr.count == 0) {
-                    [SVProgressHUD showErrorWithStatus:@"暂无数据"];
-                    [self alphahiddnNoFound:NO];
-                    
-                }else
-                {
-                    [self alphahiddnNoFound:YES];
-                    [self.orderTableView reloadData];
-                    [SVProgressHUD dismiss];
-                }
-                
             }
-            
         } else {
-            [self alphahiddnNoFound:NO];
             [SVProgressHUD showInfoWithStatus:response[@"msg"]];
         }
-        [SVProgressHUD dismiss];
+        
+        if (callback)
+            callback();
     } failBlock:^(NSError *error) {
         if (callback)
             callback();
-        [self alphahiddnNoFound:NO];
         [SVProgressHUD showErrorWithStatus:@"查询失败"];
     }];
    
@@ -314,7 +351,6 @@ static NSString *identifi = @"cell";
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    DLog(@"%ld",buttonIndex)
     if (buttonIndex == 0) {
         XBBOrderObject *model = self.orderArr[actionSheet.tag];
         [SVProgressHUD show];
@@ -434,7 +470,7 @@ static NSString *identifi = @"cell";
     
     cell.serviceTimeLabel.text = [NSString stringWithFormat:@"服务时间:   %@",order.servicetime?order.servicetime:@""];
     cell.downOrderTimeLabel.text = [NSString stringWithFormat:@"车辆位置:   %@",order.location?order.location:@""];
-    cell.carTypeLabel.text = [NSString stringWithFormat:@"车型:   %@",order.cartype?order.cartype:@""];
+    cell.carTypeLabel.text = [NSString stringWithFormat:@"车       型:   %@",order.cartype?order.cartype:@""];
     cell.carCaseLabel.text = [NSString stringWithFormat:@"下单时间:   %@",order.p_order_time?order.p_order_time:@""];
     cell.CarNumLabel.text = [NSString stringWithFormat:@"订单号码:   %@",order.order_num?order.order_num:@""];
     

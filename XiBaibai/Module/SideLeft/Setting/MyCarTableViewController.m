@@ -17,8 +17,8 @@
 
 @interface MyCarTableViewController ()
 {
-    UILabel *nofoundLabel;
     UIView  *barView;
+    XBBNotDataView *noDataView;
 }
 @property (strong, nonatomic) NSMutableArray *carArr;
 @property (assign, nonatomic) NSInteger defaultId;
@@ -108,25 +108,32 @@ static NSString *identifier = @"carcell";
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
+- (void)initNoDataUI
+{
+    noDataView = [[XBBNotDataView alloc] initWithFrame:self.view.bounds withImage:[UIImage imageNamed:@"泡泡"] withString:@"您还没有车辆信息哦" withButtonTitle:@"现在添加"];
+    [self.view addSubview:noDataView];
+    [noDataView.sureButton addTarget:self action:@selector(addOnClick:) forControlEvents:UIControlEventTouchUpInside];
+    noDataView.alpha = 0;
+}
+
 - (void)initUI
 {
+    [self initNoDataUI];
     [self setNavigationBarControl];
     [self addTabelView:UITableViewStyleGrouped];
     self.tableView.backgroundColor = XBB_Bg_Color;
     self.tableView.backgroundView = nil;
-    
     [self registerCell];
-    [self initNotDataUI];
-//    [self addTabBar];
-    
 }
 - (void)registerCell
 {
     [self.tableView registerNib:[UINib nibWithNibName:@"MyCarTableViewCell" bundle:nil] forCellReuseIdentifier:identifier];
     self.tableView.alpha = 0;
-    
-
 }
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
@@ -136,8 +143,31 @@ static NSString *identifier = @"carcell";
     [SVProgressHUD show];
     [self fetchCarListFromWeb:^{
         [SVProgressHUD dismiss];
+        [UIView animateWithDuration:0.3 animations:^{
+            if (self.carArr.count == 0) {
+                [SVProgressHUD showErrorWithStatus:@"暂无车辆"];
+                self.tableView.alpha = 0.;
+                noDataView.alpha = 1;
+                
+            } else {
+                self.tableView.alpha = 1.;
+                noDataView.alpha = 0;
+                
+            }
+        } completion:^(BOOL finished) {
+            
+            [self.tableView reloadData];
+        }];
+  
+        
     }];
 }
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 
 - (void)setDefaultCar:(NSNotification *)sender{
     [self.tableView reloadData];
@@ -151,12 +181,24 @@ static NSString *identifier = @"carcell";
     WS(weakSelf)
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf fetchCarListFromWeb:^{
-            [weakSelf fetchCarListFromWeb:^{
+
+            [UIView animateWithDuration:0.3 animations:^{
                 if (self.carArr.count == 0) {
+                    [SVProgressHUD showErrorWithStatus:@"暂无车辆"];
+                    self.tableView.alpha = 0.;
+                    noDataView.alpha = 1;
+                    
+                } else {
+                    self.tableView.alpha = 1.;
+                    noDataView.alpha = 0;
                     
                 }
+            } completion:^(BOOL finished) {
+                [self.tableView reloadData];
                 [weakSelf.tableView.header endRefreshing];
             }];
+            
+            
         }];
     }];
 }
@@ -171,10 +213,6 @@ static NSString *identifier = @"carcell";
         if (self.tableView.header.isRefreshing) {
             [self.carArr removeAllObjects];
         }
-        if (callback) {
-            callback();
-        }
-        
         if ([response[@"code"] integerValue] == 1) {
             if (!self.carArr) {
                 self.carArr = [NSMutableArray array];
@@ -188,14 +226,9 @@ static NSString *identifier = @"carcell";
                 }];
                 [self.carArr addObject:[MyCarModel objectWithKeyValues:temp]];
             }
-            if (self.carArr.count == 0) {
-                
-                [SVProgressHUD showErrorWithStatus:@"暂无车辆"];
-                [self alphaNoFound:NO];
-            } else {
-                [self.tableView reloadData];
-                 [self alphaNoFound:YES];
-            }
+        }
+        if (callback) {
+            callback();
         }
     } failBlock:^(NSError *error) {
         if (callback) {
@@ -205,29 +238,8 @@ static NSString *identifier = @"carcell";
     }];
 }
 
-- (void)alphaNoFound:(BOOL)hidden
-{
-    if (hidden) {
-        nofoundLabel.alpha = 0;
-    }else
-    {
-        [UIView animateWithDuration:0.3 animations:^{
-            nofoundLabel.alpha = 1;
-        }];
-        
-    }
-    
-}
 
-- (void)initNotDataUI
-{
-    nofoundLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, XBB_Screen_height/2-XBB_Size_w_h(200), XBB_Screen_width, 50)];
-    nofoundLabel.numberOfLines = 0;
-    [nofoundLabel setTextAlignment:NSTextAlignmentCenter];
-    nofoundLabel.text = NSLocalizedString(@"您还没有添加车辆信息哦~\n请添加您的爱车，方便技师查找", nil);
-    [self.tableView addSubview:nofoundLabel];
-    nofoundLabel.alpha = 0;
-}
+
 
 
 - (IBAction)backOnClick:(id)sender {
@@ -263,35 +275,67 @@ static NSString *identifier = @"carcell";
 
 #pragma mark - Table view data source
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 120.;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (section == self.carArr.count-1) {
+        return 120;
+    }
+    return 0;
+}
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, 120.)];
-    backView.userInteractionEnabled = YES;
-    backView.backgroundColor = [UIColor clearColor];
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(30., backView.bounds.size.height - 44., XBB_Screen_width - 60., 44.)];
-    button.layer.cornerRadius = 5;
-    button.layer.borderColor = XBB_NavBar_Color.CGColor;
-    button.layer.borderWidth = 1.0;
-    button.layer.masksToBounds = YES;
-    [button setTitle:@"添加新车" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(addOnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [button setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
-    [backView addSubview:button];
-    [button setBackgroundColor:XBB_Bg_Color];
-    return backView;
+    if (section == self.carArr.count-1) {
+        UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, 120.)];
+        backView.userInteractionEnabled = YES;
+        backView.backgroundColor = [UIColor clearColor];
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(30., backView.bounds.size.height - 44., XBB_Screen_width - 60., 44.)];
+        button.layer.cornerRadius = 5;
+        button.layer.borderColor = XBB_NavBar_Color.CGColor;
+        button.layer.borderWidth = 1.0;
+        button.layer.masksToBounds = YES;
+        [button setTitle:@"添加新车" forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(addOnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
+        [backView addSubview:button];
+        [button setBackgroundColor:XBB_Bg_Color];
+        return backView;
+    }
+    return nil;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    return 1;
+    return self.carArr.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return self.carArr.count;
+    return 1;
+}
+
+
+- (IBAction)deleteButtonAction:(id)sender
+{
+    UIButton *button = sender;
+    NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:button.tag];
+    [self  tableView:self.tableView commitEditingStyle:UITableViewCellEditingStyleDelete forRowAtIndexPath:index];
+    
+}
+
+- (IBAction)editButtonAction:(id)sender
+{
+    DLog(@"")
+    UIButton *button = sender;
+    XBBAddCarViewController *car = [[UIStoryboard storyboardWithName:@"XBBOne" bundle:nil] instantiateViewControllerWithIdentifier:@"XBBAddCarViewController"];
+    car.carModel = self.carArr[button.tag];
+    car.navigationTitle = @"修改车辆信息";
+    [self.navigationController pushViewController:car animated:YES];
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -301,31 +345,27 @@ static NSString *identifier = @"carcell";
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    MyCarModel *carModel = [self.carArr objectAtIndex:indexPath.row];
-    cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", [carModel c_brand], carModel.c_color];
-    cell.summaryLabel.text = carModel.c_plate_num;
-    NSLog(@"defalutid%ld",self.defaultId);
+    MyCarModel *carModel = [self.carArr objectAtIndex:indexPath.section];
+    cell.titleLabel.text = carModel.c_plate_num;
+    cell.summaryLabel.text = [NSString stringWithFormat:@"%@  %@  %@", [carModel c_brand], carModel.c_color,[carModel typeString]];//
+    
+    cell.deleteButton.tag = indexPath.section;
+    [cell.deleteButton addTarget:self action:@selector(deleteButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.editButton addTarget:self action:@selector(editButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    cell.editButton.tag = indexPath.section;
+    
     if (carModel.carId == self.defaultId) {
         [cell.btnDefault setTitle:@"默认车辆" forState:UIControlStateNormal];
+        [cell.btnDefault setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
+        [cell.btnDefault setImage:[UIImage imageNamed:@"默认车辆"] forState:UIControlStateNormal];
         cell.btnDefault.userInteractionEnabled = NO;
-        cell.btnDefault.tintColor = [UIColor whiteColor];
-        cell.btnDefault.backgroundColor = kUIColorFromRGB(0xdb3735);
-        cell.btnDefault.titleLabel.font = [UIFont systemFontOfSize:14];
-        [cell.btnDefault mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(80);
-            make.height.mas_equalTo(20);
-        }];
+        
     }else{
-        [cell.btnDefault setTitle:@"设置为默认车辆" forState:UIControlStateNormal];
-        cell.btnDefault.tintColor = [UIColor whiteColor];
-        cell.btnDefault.backgroundColor = kUIColorFromRGB(0xb3b3b3);
-        cell.btnDefault.titleLabel.font = [UIFont systemFontOfSize:14];
-        [cell.btnDefault mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(120);
-             make.height.mas_equalTo(20);
-        }];
-        NSLog(@"defalut%ld",carModel.carId);
+        [cell.btnDefault setTitle:@"设置默认" forState:UIControlStateNormal];
         cell.btnDefault.tag = carModel.carId;
+        cell.btnDefault.userInteractionEnabled = YES;
+        [cell.btnDefault setImage:[UIImage imageNamed:@"常用车辆设为默认"] forState:UIControlStateNormal];
+        [cell.btnDefault setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [cell.btnDefault addTarget:self action:@selector(setdefalutcar:) forControlEvents:UIControlEventTouchUpInside];
     }
     return cell;
@@ -342,27 +382,22 @@ static NSString *identifier = @"carcell";
     [NetworkHelper postWithAPI:API_set_default_car parameter:dic successBlock:^(id response) {
         [SVProgressHUD showSuccessWithStatus:@"设置成功"];
         [btn setTitle:@"默认车辆" forState:UIControlStateNormal];
-//        [self.tableView reloadData];
-        [self.tableView.header beginRefreshing];
-        NSLog(@"response%@",response);
+        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationCarListUpdate object:nil];
     } failBlock:^(NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"设置失败"];
     }];
 }
 
 // Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
+//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+//    // Return NO if you do not want the specified item to be editable.
+//    return YES;
+//}
 
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewCellEditingStyleDelete;
-}
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 80.;
-}
+//- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    return UITableViewCellEditingStyleDelete;
+//}
+
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     MyCarModel *model = [self.carArr objectAtIndex:indexPath.row];
@@ -380,9 +415,23 @@ static NSString *identifier = @"carcell";
                     
                     [self.carArr removeObject:model];
                     if (self.carArr.count == 0) {
-                        [self alphaNoFound:NO];
+                        [UIView animateWithDuration:0.3 animations:^{
+                            if (self.carArr.count == 0) {
+                                [SVProgressHUD showErrorWithStatus:@"暂无车辆"];
+                                self.tableView.alpha = 0.;
+                                noDataView.alpha = 1;
+                                
+                            } else {
+                                self.tableView.alpha = 1.;
+                                noDataView.alpha = 0;
+                                
+                            }
+                        } completion:^(BOOL finished) {
+                        }];
+
                     }
-                    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    NSIndexSet *set= [[NSIndexSet alloc] initWithIndex:indexPath.section];
+                    [tableView deleteSections:set withRowAnimation:UITableViewRowAnimationAutomatic];
                 }
             }];
 
@@ -398,22 +447,30 @@ static NSString *identifier = @"carcell";
         if (isSuccess) {
             [self.carArr removeObject:model];
             if (self.carArr.count == 0) {
-                [self alphaNoFound:NO];
+                [UIView animateWithDuration:0.3 animations:^{
+                    if (self.carArr.count == 0) {
+                        [SVProgressHUD showErrorWithStatus:@"暂无车辆"];
+                        self.tableView.alpha = 0.;
+                        noDataView.alpha = 1;
+                        
+                    } else {
+                        self.tableView.alpha = 1.;
+                        noDataView.alpha = 0;
+                        
+                    }
+                } completion:^(BOOL finished) {
+                }];
             }
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            NSIndexSet *set= [[NSIndexSet alloc] initWithIndex:indexPath.section];
+            [tableView deleteSections:set withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     }];
     }
+ 
+
+    
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    XBBAddCarViewController *car = [[UIStoryboard storyboardWithName:@"XBBOne" bundle:nil] instantiateViewControllerWithIdentifier:@"XBBAddCarViewController"];
-    car.carModel = self.carArr[indexPath.row];
-    car.navigationTitle = @"修改车辆信息";
-    [self.navigationController pushViewController:car animated:YES];
-//    [self performSegueWithIdentifier:@"CarPushUpdateCar" sender:[self.carArr objectAtIndex:indexPath.row]];
-}
 
 
 #pragma mark - Navigation

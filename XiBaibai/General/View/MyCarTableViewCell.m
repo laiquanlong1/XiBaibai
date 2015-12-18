@@ -37,4 +37,10 @@
 //    }];
     
 }
+
+- (IBAction)toEdit:(UIButton *)sender {
+}
+
+- (IBAction)toDeleteCar:(UIButton *)sender {
+}
 @end

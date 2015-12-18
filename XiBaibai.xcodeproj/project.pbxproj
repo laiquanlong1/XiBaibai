@@ -262,6 +262,7 @@
 		8F73782C1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F73782A1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.xib */; };
 		8FDA2D8B1C217BA6005D8188 /* XBBOrderInfoCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FDA2D891C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.m */; };
 		8FDA2D8C1C217BA6005D8188 /* XBBOrderInfoCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FDA2D8A1C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.xib */; };
+		8FDF480E1C242C3800D5A046 /* XBBNotDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FDF480D1C242C3800D5A046 /* XBBNotDataView.m */; };
 		DF67B4B92478E96DD8EF7E5C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 970BC71EB779C2A0ED120862 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -789,6 +790,8 @@
 		8FDA2D881C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBOrderInfoCommentTableViewCell.h; path = MyOrder/XBBOrderInfoCommentTableViewCell.h; sourceTree = "<group>"; };
 		8FDA2D891C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBOrderInfoCommentTableViewCell.m; path = MyOrder/XBBOrderInfoCommentTableViewCell.m; sourceTree = "<group>"; };
 		8FDA2D8A1C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XBBOrderInfoCommentTableViewCell.xib; path = MyOrder/XBBOrderInfoCommentTableViewCell.xib; sourceTree = "<group>"; };
+		8FDF480C1C242C3800D5A046 /* XBBNotDataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBNotDataView.h; path = DIYView/DIYView/XBBNotDataView.h; sourceTree = "<group>"; };
+		8FDF480D1C242C3800D5A046 /* XBBNotDataView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBNotDataView.m; path = DIYView/DIYView/XBBNotDataView.m; sourceTree = "<group>"; };
 		970BC71EB779C2A0ED120862 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		98298A6F277D5DB5D0D70DE4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1821,6 +1824,7 @@
 		8EEFCC041BEF501A00D3D93F /* DIYView */ = {
 			isa = PBXGroup;
 			children = (
+				8FDF480B1C242C0800D5A046 /* View */,
 				8E7E49D51BF5AA3E008517DC /* OrderCell */,
 				8EEFCC4E1BF1B35400D3D93F /* ImagView */,
 				8EEFCC0E1BEF511500D3D93F /* Label */,
@@ -1865,6 +1869,15 @@
 				8EEFCC531BF1B3CB00D3D93F /* XBBDIYImageView.m */,
 			);
 			name = ImagView;
+			sourceTree = "<group>";
+		};
+		8FDF480B1C242C0800D5A046 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8FDF480C1C242C3800D5A046 /* XBBNotDataView.h */,
+				8FDF480D1C242C3800D5A046 /* XBBNotDataView.m */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		C07B3FF934334F94CFF64267 /* Pods */ = {
@@ -2203,6 +2216,7 @@
 				188D99BE1BADCD9A00E68506 /* FeedbackTableViewController.m in Sources */,
 				8ECE5B771C17D0D400208998 /* XBBAddressSelectViewController.m in Sources */,
 				188D9A0F1BADCD9A00E68506 /* DataSigner.m in Sources */,
+				8FDF480E1C242C3800D5A046 /* XBBNotDataView.m in Sources */,
 				188D9A111BADCD9A00E68506 /* MD5DataSigner.m in Sources */,
 				188D99901BADCD9A00E68506 /* MyOrderTableViewCell.m in Sources */,
 				188D999A1BADCD9A00E68506 /* RechargeHelper.m in Sources */,
@@ -2472,7 +2486,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.marnow.xbb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b2fd43c8-4fb2-4054-9f7f-e4fa4714f5d2";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 			};
 			name = Debug;
@@ -2517,7 +2531,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.marnow.xbb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b2fd43c8-4fb2-4054-9f7f-e4fa4714f5d2";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 			};
 			name = Release;

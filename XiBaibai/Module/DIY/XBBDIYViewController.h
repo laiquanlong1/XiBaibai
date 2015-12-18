@@ -11,6 +11,8 @@
 typedef void(^SelectDiyObject)(NSHashTable *selectHashObject);
 @interface XBBDIYViewController : XBBTableViewController
 
+
+@property (nonatomic, assign) BOOL hasWax;
 @property (nonatomic, assign) NSInteger washType; // 11为外观 22为整车 0.没有选择洗车
 @property (nonatomic, copy) SelectDiyObject selectObjectsBlock;
 @property (nonatomic, copy) NSArray *selectArray;

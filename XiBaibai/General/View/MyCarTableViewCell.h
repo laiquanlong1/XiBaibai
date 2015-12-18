@@ -21,6 +21,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnDefault;
 
 - (IBAction)btnSetDefalut:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+@property (weak, nonatomic) IBOutlet UIButton *editButton;
+
 
 
 

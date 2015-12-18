@@ -449,7 +449,8 @@
                 if ([index_1 isEqual:indexPath]) {
                     if (cell.tag == 1) {
                         
-                        if (self.washType == 0) {
+                        if (self.washType == 0 && self.hasWax == NO) {
+                            
                             [SVProgressHUD showErrorWithStatus:@"此选项必须选择洗车"];
                             return;
                         }
@@ -484,7 +485,7 @@
     {
         XBBDIYTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         if (cell.tag == 1) {
-            if (self.washType == 0) {
+            if (self.washType == 0 && self.hasWax == NO) {
                 
                 [SVProgressHUD showErrorWithStatus:@"此选项必须选择洗车"];
                 return;

@@ -15,5 +15,4 @@
 @property (copy, nonatomic) NSString *urlString;
 @property (nonatomic,strong) XBBProObject *proObject;
 
-
 @end

@@ -84,9 +84,9 @@
 }
 
 - (void)loginFailed:(NSNotification *)sender {
-    [self.avatarImageView setHidden:YES];
-    [self.summaryLabel setHidden:YES];
-    [self.nameLabel setHidden:YES];
+//    [self.avatarImageView setHidden:YES];
+//    [self.summaryLabel setHidden:YES];
+//    [self.nameLabel setHidden:YES];
 }
 
 - (void)updateUserSuccessful:(NSNotification *)sender{

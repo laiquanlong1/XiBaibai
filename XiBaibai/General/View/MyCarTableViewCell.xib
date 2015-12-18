@@ -1,67 +1,102 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="84" id="9dE-42-WDQ" customClass="MyCarTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="84"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="120" id="9dE-42-WDQ" customClass="MyCarTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="115"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9dE-42-WDQ" id="OtL-Pz-pR9">
-                <rect key="frame" x="0.0" y="0.0" width="287" height="83.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2k8-rN-b6z">
-                        <rect key="frame" x="21" y="11" width="213" height="18"/>
+                        <rect key="frame" x="69" y="16" width="213" height="27"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="213" id="2lt-jd-UIG"/>
-                            <constraint firstAttribute="height" constant="18" id="fwQ-Wx-MXR"/>
+                            <constraint firstAttribute="width" constant="213" id="7qR-C0-cPh"/>
+                            <constraint firstAttribute="height" constant="27" id="Bpb-z3-Tg6"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4cu-j1-vt7">
-                        <rect key="frame" x="21" y="37" width="241" height="16"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="16" id="4ab-p4-eQd"/>
-                            <constraint firstAttribute="width" constant="241" id="xnp-XT-1Lh"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <rect key="frame" x="69" y="42" width="213" height="27"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ihF-sF-QQt">
-                        <rect key="frame" x="177" y="52" width="102" height="24"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ihF-sF-QQt">
+                        <rect key="frame" x="23" y="77" width="96" height="32"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="102" id="aKq-wk-Sbh"/>
-                            <constraint firstAttribute="height" constant="24" id="gQa-hL-XUj"/>
+                            <constraint firstAttribute="height" constant="32" id="Ef5-eS-fDJ"/>
+                            <constraint firstAttribute="width" constant="96" id="v4E-yN-b6g"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                        <state key="normal" title="默认车辆"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <inset key="titleEdgeInsets" minX="14" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <inset key="imageEdgeInsets" minX="-13" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <state key="normal" title="默认车辆" image="常用车辆设为默认">
+                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="car" translatesAutoresizingMaskIntoConstraints="NO" id="pVS-Q7-WKv">
+                        <rect key="frame" x="18" y="16" width="40" height="27"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="4xw-cf-pBX"/>
+                            <constraint firstAttribute="height" constant="27" id="Afu-vA-sxz"/>
+                        </constraints>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ENK-V1-9bT">
+                        <rect key="frame" x="262" y="77" width="50" height="32"/>
+                        <state key="normal" image="常用车辆删除"/>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wXs-pY-JWj">
+                        <rect key="frame" x="207" y="77" width="50" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="50" id="Qm2-1H-MfT"/>
+                        </constraints>
+                        <state key="normal" image="常用车辆编辑"/>
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="ihF-sF-QQt" firstAttribute="top" secondItem="OtL-Pz-pR9" secondAttribute="topMargin" constant="44" id="7tL-43-zWG"/>
-                    <constraint firstItem="2k8-rN-b6z" firstAttribute="leading" secondItem="OtL-Pz-pR9" secondAttribute="leadingMargin" constant="13" id="9ox-Sr-OMr"/>
-                    <constraint firstItem="2k8-rN-b6z" firstAttribute="top" secondItem="OtL-Pz-pR9" secondAttribute="topMargin" constant="3" id="Oqm-FM-TaA"/>
-                    <constraint firstItem="4cu-j1-vt7" firstAttribute="leading" secondItem="OtL-Pz-pR9" secondAttribute="leadingMargin" constant="13" id="Otx-E1-QNu"/>
-                    <constraint firstItem="4cu-j1-vt7" firstAttribute="top" secondItem="2k8-rN-b6z" secondAttribute="bottom" constant="8" id="fh5-68-jt6"/>
+                    <constraint firstItem="ENK-V1-9bT" firstAttribute="leading" secondItem="wXs-pY-JWj" secondAttribute="trailing" constant="5" id="2NJ-HL-Hhu"/>
+                    <constraint firstItem="ENK-V1-9bT" firstAttribute="height" secondItem="wXs-pY-JWj" secondAttribute="height" id="4We-yt-M7P"/>
+                    <constraint firstItem="wXs-pY-JWj" firstAttribute="top" secondItem="ihF-sF-QQt" secondAttribute="top" id="E1g-5v-GGf"/>
+                    <constraint firstItem="ihF-sF-QQt" firstAttribute="top" secondItem="4cu-j1-vt7" secondAttribute="bottom" constant="8" id="L67-Xp-32V"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="ENK-V1-9bT" secondAttribute="trailing" id="NBX-Mp-dah"/>
+                    <constraint firstItem="2k8-rN-b6z" firstAttribute="leading" secondItem="pVS-Q7-WKv" secondAttribute="trailing" constant="11" id="OXe-bN-Te1"/>
+                    <constraint firstItem="pVS-Q7-WKv" firstAttribute="top" secondItem="OtL-Pz-pR9" secondAttribute="topMargin" constant="8" id="VEp-TY-y5E"/>
+                    <constraint firstItem="4cu-j1-vt7" firstAttribute="width" secondItem="2k8-rN-b6z" secondAttribute="width" id="Vio-yN-AYU"/>
+                    <constraint firstItem="4cu-j1-vt7" firstAttribute="top" secondItem="2k8-rN-b6z" secondAttribute="bottom" constant="-1" id="YFO-30-ner"/>
+                    <constraint firstItem="ENK-V1-9bT" firstAttribute="width" secondItem="wXs-pY-JWj" secondAttribute="width" id="ad0-aF-Ccz"/>
+                    <constraint firstItem="4cu-j1-vt7" firstAttribute="leading" secondItem="2k8-rN-b6z" secondAttribute="leading" id="b7t-cR-uar"/>
+                    <constraint firstItem="wXs-pY-JWj" firstAttribute="height" secondItem="ihF-sF-QQt" secondAttribute="height" id="bBn-X9-vc6"/>
+                    <constraint firstItem="pVS-Q7-WKv" firstAttribute="leading" secondItem="OtL-Pz-pR9" secondAttribute="leadingMargin" constant="10" id="biP-Au-K3C"/>
+                    <constraint firstItem="ihF-sF-QQt" firstAttribute="leading" secondItem="OtL-Pz-pR9" secondAttribute="leadingMargin" constant="15" id="gmX-c4-HCE"/>
+                    <constraint firstItem="4cu-j1-vt7" firstAttribute="height" secondItem="2k8-rN-b6z" secondAttribute="height" id="pFD-Wd-ZZ9"/>
+                    <constraint firstItem="ENK-V1-9bT" firstAttribute="top" secondItem="wXs-pY-JWj" secondAttribute="top" id="rhP-OD-3nS"/>
+                    <constraint firstItem="2k8-rN-b6z" firstAttribute="top" secondItem="pVS-Q7-WKv" secondAttribute="top" id="wgV-Bq-a4V"/>
                 </constraints>
             </tableViewCellContentView>
-            <constraints>
-                <constraint firstAttribute="trailing" secondItem="ihF-sF-QQt" secondAttribute="trailing" constant="41" id="wHH-4e-RYA"/>
-            </constraints>
             <connections>
                 <outlet property="btnDefault" destination="ihF-sF-QQt" id="3Jx-TC-ZvA"/>
+                <outlet property="deleteButton" destination="ENK-V1-9bT" id="idc-Nq-p0c"/>
+                <outlet property="editButton" destination="wXs-pY-JWj" id="mWM-OT-IJu"/>
                 <outlet property="summaryLabel" destination="4cu-j1-vt7" id="QT4-ep-oPA"/>
                 <outlet property="titleLabel" destination="2k8-rN-b6z" id="6y7-UQ-ecs"/>
             </connections>
-            <point key="canvasLocation" x="255" y="222"/>
+            <point key="canvasLocation" x="255" y="237.5"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="car" width="20" height="14"/>
+        <image name="常用车辆删除" width="10" height="14"/>
+        <image name="常用车辆编辑" width="14" height="13"/>
+        <image name="常用车辆设为默认" width="13" height="13"/>
+    </resources>
 </document>

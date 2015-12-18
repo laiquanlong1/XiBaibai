@@ -55,6 +55,7 @@ static NSString *identifier_2 = @"tit1cell";
     BOOL isJust;
     BOOL haveSelectWash;
     NSString *planTime;
+    BOOL hasWaxs;
 }
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
@@ -172,23 +173,23 @@ static NSString *identifier_2 = @"tit1cell";
                     [self initUpdateData];
                 }else
                 {
-                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+                
                 }
                 
                 
                 
             } failBlock:^(NSError *error) {
-                [SVProgressHUD showErrorWithStatus:@"获取优惠券错误!"];
+            
             }];
             
             [self initUpdateData];
             [self alphaToOne];
         }else
         {
-            [SVProgressHUD showErrorWithStatus:resposeDic[@"msg"]];
+           
         }
     } failBlock:^(NSError *error) {
-        [SVProgressHUD showErrorWithStatus:@"获取洗车方式和优惠券网络错误"];
+        [SVProgressHUD showErrorWithStatus:@"网络错误"];
     }];
 }
 
@@ -456,6 +457,7 @@ static NSString *identifier_2 = @"tit1cell";
 
 - (void)submit:(id)sender
 {
+
     if (self.selectCar == nil) {
          [SVProgressHUD showErrorWithStatus:@"请设置车辆！"];
         return;
@@ -465,9 +467,26 @@ static NSString *identifier_2 = @"tit1cell";
         return;
     }
     if (self.selectWashOrderObject == nil && self.selectDIYArray.count > 0) {
-        [SVProgressHUD showErrorWithStatus:@"您选择的DIY项目需要洗车才能下单！"];
+        hasWaxs = NO;
+        if (self.selectFacialArray.count >0) {
+            for (XBBOrder *order in self.selectFacialArray) {
+                if (order.p_wash_free == 1) {
+                    hasWaxs = YES;
+                }
+            }
+        }
+        
+        if (hasWaxs == NO) {
+            [SVProgressHUD showErrorWithStatus:@"您选择的DIY项目需要洗车才能下单！"];
+            return;
+        }
+    }
+    
+    if (!hasWaxs && self.selectFacialArray.count > 0 && self.selectWashOrderObject == nil) {
+        [SVProgressHUD showErrorWithStatus:@"您选择的美容项目需要洗车才能下单！"];
         return;
     }
+    
     [self packageData];
 }
 
@@ -779,6 +798,13 @@ static NSString *identifier_2 = @"tit1cell";
         
         XBBDIYViewController *diy_1 = [[XBBDIYViewController alloc] init];
         diy_1.washType = washType;
+        BOOL hasWax = NO;
+        for (XBBOrder *oder in self.selectFacialArray) {
+            if (oder.p_wash_free==1) {
+                hasWax = YES;
+            }
+        }
+        diy_1.hasWax = hasWax;
         diy_1.selectArray = object.xbbOrders;
         diy_1.selectObjectsBlock = ^(NSHashTable *selectHashObject){
             NSMutableArray *arr = [NSMutableArray array];
@@ -818,6 +844,9 @@ static NSString *identifier_2 = @"tit1cell";
         fa.facialBlock = ^(NSHashTable *selectHashObject){
             NSMutableArray *arr = [NSMutableArray array];
             selectFaicalPrice = 0;
+            
+            
+            BOOL hasWax = NO;
             for (XBBDiyObject *object in selectHashObject) {
                 XBBOrder *order = [[XBBOrder alloc] init];
                 order.title = object.proName;
@@ -829,12 +858,24 @@ static NSString *identifier_2 = @"tit1cell";
                 {
                     order.price = object.price2;
                 }
+                
                 order.p_wash_free = object.p_wash_free;
 
-                
+                if (object.p_wash_free==1) {
+                    hasWax = YES;
+                }
                 selectFaicalPrice += order.price;
                 [arr addObject:order];
             }
+            hasWaxs = hasWax;
+            if (hasWax) {
+                selectWashPrice = 0;
+                self.selectWashOrderObject = nil;
+                washType = 0;
+                haveSelectWash = YES;
+                
+            }
+            
             [self addAllPrice];
             object.xbbOrders = arr;
             self.selectFacialArray = arr;
@@ -954,6 +995,9 @@ static NSString *identifier_2 = @"tit1cell";
         carId = @"";
     }
     [orderDic setObject:carId forKey:@"c_ids"];
+    
+    
+    DLog(@"%@",p_ids)
     
 //    [orderDic setObject:<#(nonnull id)#> forKey:@"order_reg_id"];
     PayTableViewController *pay = [[PayTableViewController alloc] init];

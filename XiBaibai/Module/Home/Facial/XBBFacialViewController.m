@@ -83,7 +83,7 @@
            NSDictionary *resultDic_1 = responseDic[@"result"];
            NSArray  *wax = resultDic_1[@"wax"][@"result"];
            NSArray  *noWashArr = resultDic_1[@"notwash"][@"result"];
-           
+           DLog(@"")
            XBBDiyObject *diy_1 = [[XBBDiyObject alloc] init];
            diy_1.proName = @"打蜡";
            diy_1.isWaxTag = 1;

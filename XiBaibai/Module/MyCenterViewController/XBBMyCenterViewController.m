@@ -34,20 +34,6 @@ static NSString *identifier_1 = @"cell_1";
     
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"退出账号" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil, nil];
     [sheet showInView:self.view];
-    
-//    
-//    [BPush delTag:[UserObj shareInstance].uid withCompleteHandler:^(id result, NSError *error) {
-//        
-//    }];
-//    NSLog(@"退出");
-//    NSUserDefaults *isLogin = [NSUserDefaults standardUserDefaults];
-//    
-//    
-//    [isLogin removeObjectForKey:@"userid"];
-//    
-//    [isLogin synchronize];
-//    
-    
 }
 
 - (IBAction)backViewController:(id)sender
@@ -116,7 +102,6 @@ static NSString *identifier_1 = @"cell_1";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
-    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
@@ -177,13 +162,13 @@ static NSString *identifier_1 = @"cell_1";
                 [_headImageView removeFromSuperview];
                 _headImageView = nil;
             }
-            cell.accessoryType = UITableViewCellAccessoryNone;
+            
             cell.nameLabel.text = NSLocalizedString(@"头像", nil);
             //            cell.headImageView.image = imgView_head.image;
            [cell.textLabel setFont:[UIFont systemFontOfSize:14.]];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+           
             NSString *urlString =[NSString stringWithFormat:@"%@/%@", ImgDomain, [UserObj shareInstance].imgstring];
-            _headImageView = [[UIImageView alloc] initWithFrame:CGRectMake(XBB_Screen_width - 60, cell.contentView.bounds.size.height/2 - 20, 40, 40)];
+            _headImageView = [[UIImageView alloc] initWithFrame:CGRectMake(XBB_Screen_width - 80, cell.contentView.bounds.size.height/2 - 20, 40, 40)];
             _headImageView.layer.borderColor = [UIColor groupTableViewBackgroundColor].CGColor;
             _headImageView.layer.masksToBounds = YES;
             _headImageView.layer.cornerRadius = 20;
@@ -211,6 +196,8 @@ static NSString *identifier_1 = @"cell_1";
         {
             cell.nameLabel.text = @"手机号";
             cell.decelLabel.text = [[UserObj shareInstance] iphone];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
             break;
             
@@ -223,6 +210,36 @@ static NSString *identifier_1 = @"cell_1";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    switch (indexPath.row) {
+        case 0:
+        {
+            [self changeHeadImage:nil];
+        }
+            break;
+            
+        case 1:
+        {
+            
+        }
+            break;
+        case 2:
+        {
+            
+        }
+            break;
+        case 3:
+        {
+            
+        }
+            break;
+        default:
+            break;
+    }
+    
+    
+    
+    
+    
 }
 
 - (IBAction)changeHeadImage:(id)sender

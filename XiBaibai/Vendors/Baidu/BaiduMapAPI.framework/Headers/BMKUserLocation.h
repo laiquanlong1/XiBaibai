@@ -10,6 +10,7 @@
 #import "BMKBaseComponent.h"
 @class CLLocation;
 @class CLHeading;
+
 @interface BMKUserLocation : NSObject
 
 /// 位置更新状态，如果正在更新位置信息，则该值为YES

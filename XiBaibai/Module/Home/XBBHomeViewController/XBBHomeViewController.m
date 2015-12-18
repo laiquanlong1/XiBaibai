@@ -33,10 +33,10 @@
 static NSString *identifier_facial = @"facial_cell";
 static NSString *identifier_diy = @"diy";
 
-@interface XBBHomeViewController ()<XBBBannerViewDelegate,UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
+@interface XBBHomeViewController ()<XBBBannerViewDelegate,UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate>{
     UIView         *headView;
     UIImageView    *leftNavigationBotton;
-    UIButton       *titleCityButton;
+    UILabel       *titleCityButton;
     XBBBannerView  *banner;
     NSArray        *bannerArrayData;
     UILabel        *areaFirstTitileLabel;
@@ -46,17 +46,52 @@ static NSString *identifier_diy = @"diy";
     UILabel        *oilNameLabel;
     UILabel        *oilPriceLabel;
     BOOL            hasDefaultCar;
-    
-    
     BOOL            isDisconnection;
     
+    
+    BMKUserLocation *bmlocation;  // 位置信息
+    BMKLocationService *_locService;
+    NSString *cityName;
+    BMKGeoCodeSearch *_geoCodeSearch;//地里编码
+    BMKReverseGeoCodeOption *reverseGeoCodeOption;
+    NSString *locationString;
 }
+
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) NSArray *dataSource;
 @property (nonatomic, copy) NSArray *proArray;
 @end
 
 @implementation XBBHomeViewController
+
+#pragma mark didUpdate
+
+- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
+{
+     [_locService stopUserLocationService];
+     bmlocation=userLocation;
+    reverseGeoCodeOption.reverseGeoPoint = bmlocation.location.coordinate;
+    [_geoCodeSearch reverseGeoCode:reverseGeoCodeOption];
+//     [map updateLocationData:userLocation];
+//     [map setCenterCoordinate:bmlocation.location.coordinate animated:NO];
+
+    
+}
+
+- (void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error{
+    
+    cityName = result.addressDetail.city;
+  
+    if ([cityName length]>1) {
+        if ([[cityName substringWithRange:NSMakeRange([cityName length]-1, 1)] isEqualToString:@"市"]) {
+            cityName = [cityName substringWithRange:NSMakeRange(0, [cityName length]-1)];
+        }
+    }
+    titleCityButton.text = cityName;
+    [UserObj shareInstance].currentAddress = result.address;
+    [UserObj shareInstance].currentCoordinate = result.location;
+}
+
 
 
 #pragma mark featchData
@@ -87,7 +122,6 @@ static NSString *identifier_diy = @"diy";
 - (void)feachFacialDatas
 {
     [NetworkHelper postWithAPI:XBB_Facial_Pro parameter:nil successBlock:^(id response) {
-        DLog(@"%@",response)
         if ([response[@"code"] integerValue] == 1) {
             NSArray *resultArray = response[@"result"];
             NSMutableArray *arr = [NSMutableArray array];
@@ -140,15 +174,12 @@ static NSString *identifier_diy = @"diy";
                 [arr addObject:object];
             }
             self.dataSource = arr;
-//            [self.tableView reloadData];
             [self feachFacialDatas];
             
         }else
         {
             [SVProgressHUD showErrorWithStatus:response[@"msg"]];
         }
-        
-        DLog(@"%@",response);
     } failBlock:^(NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"产品信息获取失败"];
     }];
@@ -185,9 +216,6 @@ static NSString *identifier_diy = @"diy";
                 user.uid=[[response objectForKey:@"result"] objectForKey:@"uid"];
                 user.uname=[[response objectForKey:@"result"] objectForKey:@"uname"];
                 user.weixin=[[response objectForKey:@"result"] objectForKey:@"weixin"];
-                user.imgstring = [[response objectForKey:@"result"] objectForKey:@"u_img"];
-                //                [BPush setTag:user.uid withCompleteHandler:^(id result, NSError *error) {
-                //                }];
                 NSString *channelId = [BPush getChannelId];
                 if (channelId)
                     [NetworkHelper postWithAPI:API_ChannelIdInsert parameter:@{@"uid": user.uid, @"channelid": channelId} successBlock:^(id response) {
@@ -340,12 +368,45 @@ static NSString *identifier_diy = @"diy";
 - (void)addNotification
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserSuccessfulIndex:) name:NotificationUpdateUserSuccessful object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotificationCarUpdate) name:NotificationCarListUpdate object:nil];
+}
+
+- (void)handleNotificationCarUpdate
+{
+    if ([UserObj shareInstance].carModel == nil) {
+        [NetworkHelper postWithAPI:car_select parameter:@{@"uid":[UserObj shareInstance].uid} successBlock:^(id response) {
+            
+            DLog(@"%@",response)
+            if ([response[@"code"] integerValue] == 1) {
+                if ([response[@"result"][@"default"] integerValue] != 0) {
+                    NSArray *list = response[@"result"][@"list"];
+                    for (NSDictionary *dic in list) {
+                        if ([dic[@"id"] isEqualToString:response[@"result"][@"default"]]) {
+                            MyCarModel *model = [[MyCarModel alloc] init];
+                            model.uid = [dic[@"uid"] integerValue];
+                            model.carId = [dic[@"id"] integerValue];
+                            model.c_type = [dic[@"c_type"] integerValue];
+                            model.c_remark = dic[@"c_remark"];
+                            model.c_plate_num = dic[@"c_plate_num"];
+                            model.c_color = dic[@"c_color"];
+                            model.c_brand = dic[@"c_brand"];
+                            model.add_time = [dic[@"add_time"] integerValue];
+                            [UserObj shareInstance].carModel = model;
+                            [UserObj shareInstance].c_id = dic[@"id"];
+                        }
+                    }
+                }
+            }
+        } failBlock:^(NSError *error) {
+            hasDefaultCar = NO;
+        }];
+    }
 }
 
 - (void)removeNotifaction
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NotificationUpdateUserSuccessful object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 }
 #pragma mark view disposed
 
@@ -362,13 +423,34 @@ static NSString *identifier_diy = @"diy";
     
 }
 
+- (void)locationData
+{
+    bmlocation = [[BMKUserLocation alloc] init];  // 百度地图位置
+    _locService = [[BMKLocationService alloc]init]; // 初始化BMKLocationService
+    _locService.delegate = self;
+    
+    //启动LocationService
+    [_locService startUserLocationService];
+    //初始化逆地理编码类
+    reverseGeoCodeOption= [[BMKReverseGeoCodeOption alloc] init];
+    //注意：必须初始化地理编码类
+    _geoCodeSearch = [[BMKGeoCodeSearch alloc]init];
+    _geoCodeSearch.delegate = self;
+    
+}
+
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
+    
     [self addTableViewHomes];
     [self feachDatas];
     [self initUI];
     [self addNotification];
+    
+    [self locationData];
+   
 }
 - (void)addTableViewHomes
 {
@@ -391,6 +473,8 @@ static NSString *identifier_diy = @"diy";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    _locService.delegate=self;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self feachBannerData];
         [self initData];
@@ -400,6 +484,7 @@ static NSString *identifier_diy = @"diy";
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    _locService.delegate = nil;
     [self removeBanner];
 }
 
@@ -432,21 +517,20 @@ static NSString *identifier_diy = @"diy";
     UITapGestureRecognizer *titleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(titleAction:)];
     [titleImageView addGestureRecognizer:titleTap];
     
-    titleCityButton = [[UIButton alloc] initWithFrame:CGRectMake(titleImageView.frame.size.width+titleImageView.frame.origin.x-7, titleImageView.frame.origin.y + 8, 50, 12)];
-    
-    UIImage *titImage_2 = [UIImage imageNamed:@"xbbDownLog"];
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(titleCityButton.bounds.size.width-titImage_2.size.width, titleCityButton.bounds.size.height/2, titImage_2.size.width, titImage_2.size.height)];
-    imageView.image = titImage_2;
-    [titleCityButton addSubview:imageView];
-    [titleCityButton.titleLabel setFont:[UIFont systemFontOfSize:13.]];
-    [titleCityButton.titleLabel setTextAlignment:NSTextAlignmentLeft];
+    titleCityButton = [[UILabel alloc] initWithFrame:CGRectMake(titleImageView.frame.size.width+titleImageView.frame.origin.x, titleImageView.frame.origin.y + 8, 80, 12)];
+    [titleCityButton setTextColor:[UIColor whiteColor]];
+
+    [titleCityButton setFont:[UIFont systemFontOfSize:13.]];
+    [titleCityButton setTextAlignment:NSTextAlignmentLeft];
     [titleCityButton setBackgroundColor:[UIColor clearColor]];
     [self.xbbNavigationBar addSubview:titleCityButton];
-    [titleCityButton addTarget:self action:@selector(titleAction:) forControlEvents:UIControlEventTouchUpInside];
-    [titleCityButton setTitle:@"成都" forState:UIControlStateNormal];
-    
+    cityName = @"成都";
+    titleCityButton.text = cityName;
+    [titleCityButton setUserInteractionEnabled:YES];
+    UITapGestureRecognizer *tap_1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(titleAction:)];
+    [titleCityButton addGestureRecognizer:tap_1];
     UIImage *rightImage = [UIImage imageNamed:@"xbb_location"];
-    UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width - rightImage.size.width-20., 32-rightImage.size.height/2+10, rightImage.size.width, rightImage.size.height)];
+    UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width - 55.,10, 60, 61)];
     [rightButton setImage:rightImage forState:UIControlStateNormal];
     [rightButton addTarget:self action:@selector(rightButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [rightButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -726,6 +810,8 @@ static NSString *identifier_diy = @"diy";
                 cell = [[XBBHomeFacialTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier_diy];
             }
             XBBProObject *object = self.dataSource[indexPath.row];
+            cell.headImageView.layer.cornerRadius = 5;
+            cell.headImageView.layer.masksToBounds = YES;
             [cell.headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ImgDomain,object.imageURL]] placeholderImage:nil];
             cell.pInfoLabel.text = object.p_info;
             cell.pNameLabel.text = object.p_name;
@@ -797,7 +883,7 @@ static NSString *identifier_diy = @"diy";
             
         }else
         {
-            UIAlertView *alrt = [[UIAlertView alloc] initWithTitle:@"绑定车辆" message:@"您还没有设置默认车辆" delegate:self cancelButtonTitle:@"再看看" otherButtonTitles:@"好吧", nil];
+            UIAlertView *alrt = [[UIAlertView alloc] initWithTitle:@"设置车辆" message:@"您还没有设置默认车辆哦" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"设置", nil];
             [alrt show];
         }
     }
@@ -826,15 +912,15 @@ static NSString *identifier_diy = @"diy";
 }
 - (IBAction)leftButtonAction:(id)sender
 {
-    
-
-    if ([[UserObj shareInstance] iphone]) {
-        [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
-            
-        }];
-    }else
-    {
-        [SVProgressHUD showErrorWithStatus:@"正在加载个人信息!"];
+    if (IsLogin) {
+        if ([[UserObj shareInstance] iphone]) {
+            [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
+                
+            }];
+        }else
+        {
+            [SVProgressHUD showErrorWithStatus:@"正在加载个人信息!"];
+        }
     }
     
 }
@@ -842,15 +928,12 @@ static NSString *identifier_diy = @"diy";
 - (IBAction)rightButtonAction:(id)sender
 {
     
-    XBBMapViewController *map = [[XBBMapViewController alloc] init];
-    map.navigationTitle = @"地图";
-    map.isHomeControllerto = YES;
-//        [self presentViewController:map animated:YES completion:nil];
-    [self.navigationController pushViewController:map animated:YES];
+    XBBMapViewController *mapco = [[XBBMapViewController alloc] init];
+    mapco.navigationTitle = @"地址选择";
+    mapco.isHomeControllerto = YES;
+    [self.navigationController pushViewController:mapco animated:YES];
     return;
     
 }
-
-
 
 @end

@@ -10,13 +10,13 @@
 #define XBB_ServiceAPIMacro_h
 
 
-#define APIDomain @"http://captainoak.cn/Api/V3"
-#define ImgDomain @"http://captainoak.cn"
+//#define APIDomain @"http://captainoak.cn/Api/V3"
+//#define ImgDomain @"http://captainoak.cn"
 
-//#define APIDomain @"http://xbbwx.marnow.com/Api/Indextwo"
-//#define ImgDomain @"http://xbbwx.marnow.com"
+#define APIDomain @"http://xbbwx.marnow.com/Api/V3"
+#define ImgDomain @"http://xbbwx.marnow.com"
 
-//#define APIDomain @"http://xbbwx.marnow.com/Api/index"
+//#define APIDomain @"http://xbbwx.marnow.com//Api/V3"
 //#define ImgDomain @"http://192.168.1.113/xbb"
 
 

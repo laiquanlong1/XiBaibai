@@ -85,6 +85,7 @@ static NSString *mycomment = @"mycomment";
            DLog(@"%@",response)
                 // 获取产品数组
                 NSArray *proArray = response[@"result"][@"prolist"];
+                DLog(@"%@   %ld",proArray,proArray.count)
                 state = [response[@"result"][@"order_state"] integerValue];
                 
                 /**
@@ -169,7 +170,7 @@ static NSString *mycomment = @"mycomment";
                 [arr_1 addObject:order_1_2];
                 
                 XBBOrder *order_1_4 = [[XBBOrder alloc] init];
-                order_1_4.title =[NSString stringWithFormat:@"订单时间:    %@", model.p_order_time];
+                order_1_4.title =[NSString stringWithFormat:@"下单时间:    %@", model.p_order_time];
                 [arr_1 addObject:order_1_4];
                 
                 if (state != 0) {
@@ -192,7 +193,7 @@ static NSString *mycomment = @"mycomment";
                 
                 
                 XBBOrder *order_1_7 = [[XBBOrder alloc] init];
-                order_1_7.title = [NSString stringWithFormat:@"车辆类别:    %@",model.cartype];
+                order_1_7.title = [NSString stringWithFormat:@"车       型:    %@",model.cartype];
                 [arr_1 addObject:order_1_7];
                 
                 XBBOrder *order_1_8 = [[XBBOrder alloc] init];
@@ -708,10 +709,10 @@ static NSString *mycomment = @"mycomment";
                 cell.priceLabel.hidden = NO;
                 cell.twoTitleLabel.text = order.title;
                 cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",order.price];
-                [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
-                [cell.priceLabel setTextColor:[UIColor blackColor]];
+                [cell.twoTitleLabel setTextColor:[UIColor darkGrayColor]];
+                [cell.priceLabel setTextColor:[UIColor darkGrayColor]];
                 if ([order.title isEqualToString:@"优惠金额"]) {
-                    [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
+//                    [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
                     [cell.priceLabel setTextColor:[UIColor orangeColor]];
                 }
                 if ([order.title isEqualToString:@"实际支付"]) {
@@ -733,8 +734,8 @@ static NSString *mycomment = @"mycomment";
                     cell.phoneButton.hidden = YES;
                 }
                 
-                [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
-                [cell.priceLabel setTextColor:[UIColor blackColor]];
+                [cell.twoTitleLabel setTextColor:[UIColor darkGrayColor]];
+                [cell.priceLabel setTextColor:[UIColor darkGrayColor]];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 cell.titLabel.hidden = YES;
                 cell.twoTitleLabel.hidden = NO;
@@ -752,10 +753,10 @@ static NSString *mycomment = @"mycomment";
                 cell.priceLabel.hidden = NO;
                 cell.twoTitleLabel.text = order.title;
                 cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",order.price];
-                [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
-                [cell.priceLabel setTextColor:[UIColor blackColor]];
+                [cell.twoTitleLabel setTextColor:[UIColor darkGrayColor]];
+                [cell.priceLabel setTextColor:[UIColor darkGrayColor]];
                 if ([order.title isEqualToString:@"优惠金额"]) {
-                    [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
+//                    [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
                     [cell.priceLabel setTextColor:[UIColor orangeColor]];
                 }
                 if ([order.title isEqualToString:@"实际支付"]) {
@@ -777,8 +778,8 @@ static NSString *mycomment = @"mycomment";
                     cell.phoneButton.hidden = YES;
                 }
                 
-                [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
-                [cell.priceLabel setTextColor:[UIColor blackColor]];
+                [cell.twoTitleLabel setTextColor:[UIColor darkGrayColor]];
+                [cell.priceLabel setTextColor:[UIColor darkGrayColor]];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 cell.titLabel.hidden = YES;
                 cell.twoTitleLabel.hidden = NO;

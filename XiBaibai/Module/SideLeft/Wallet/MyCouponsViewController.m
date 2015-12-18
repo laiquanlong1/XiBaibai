@@ -19,7 +19,7 @@
 @interface MyCouponsViewController ()<UITableViewDelegate,UITableViewDataSource>{
     UITableView *tbView;
     UIImageView *imgViewguize;
-    UILabel     *nofoundLabel;
+    XBBNotDataView *noDataView;
 }
 @property (strong, nonatomic) NSMutableArray *couDoneArr;
 
@@ -28,7 +28,6 @@
 @end
 
 @implementation MyCouponsViewController
-
 
 
 - (void)backViewController:(id)sender
@@ -73,8 +72,6 @@
 
 
 - (void)initView{
-    
-
     tbView=[UITableView new];
     tbView.frame = CGRectMake(0, 65, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-64);
     tbView.dataSource=self;
@@ -84,7 +81,6 @@
     // 2.集成刷新控件
     [self setupRefresh];
     [self setNavigationBarControl];
-    [self initNotDataUI];
     
 }
 
@@ -98,6 +94,14 @@
     WS(weakSelf)
     tbView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf fetchYouhuiFromWeb:^{
+            if (self.couDoneArr.count == 0 || self.couDoneArr == nil) {
+                tbView.alpha = 0;
+                noDataView.alpha = 1;
+            }else
+            {
+                tbView.alpha = 1;
+                noDataView.alpha = 0;
+            }
             [tbView.header endRefreshing];
             [tbView.footer resetNoMoreData];
         }];
@@ -120,8 +124,7 @@
     [SVProgressHUD show];
     
     [NetworkHelper postWithAPI:XBB_Coupons_select parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
-        if (callback)
-            callback();
+       
         self.couDoneArr = [NSMutableArray array];
         NSLog(@"dic%@",response);
         if ([response[@"code"] integerValue] == 1) {
@@ -132,7 +135,6 @@
                 
                   }
                 if (self.couDoneArr == 0) {
-                    [self alphaNoFound:NO];
                     [SVProgressHUD showErrorWithStatus:@"暂无数据"];
                     [tbView.footer noticeNoMoreData];
                 } else {
@@ -144,53 +146,45 @@
             [SVProgressHUD showErrorWithStatus:@"查询失败"];
         }
         if (self.couDoneArr.count > 0) {
-             [self alphaNoFound:YES];
-             [tbView reloadData];
+            [tbView reloadData];
         }else
         {
-            [self alphaNoFound:NO];
-           
+            
         }
+        
+        if (callback)
+            callback();
     } failBlock:^(NSError *error) {
         if (callback)
             callback();
-        [self alphaNoFound:NO];
         [SVProgressHUD showErrorWithStatus:@"查询失败"];
     }];
 }
 
 
 
-- (void)alphaNoFound:(BOOL)hidden
+
+- (void)initNoDataUI
 {
-    if (hidden) {
-        nofoundLabel.alpha = 0;
-    }else
-    {
-        [UIView animateWithDuration:0.3 animations:^{
-            nofoundLabel.alpha = 1;
-        }];
-        
-    }
-    
+    noDataView = [[XBBNotDataView alloc] initWithFrame:self.view.bounds withImage:[UIImage imageNamed:@"泡泡"] withString:@"您还没有优惠券信息哦" ];
+    [self.view addSubview:noDataView];
+    noDataView.alpha = 0;
 }
-
-- (void)initNotDataUI
-{
-    nofoundLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, XBB_Screen_height/2-XBB_Size_w_h(200), XBB_Screen_width, 50)];
-    nofoundLabel.numberOfLines = 0;
-    [nofoundLabel setTextAlignment:NSTextAlignmentCenter];
-    nofoundLabel.text = NSLocalizedString(@"您还没有优惠券信息哦～", nil);
-    [tbView addSubview:nofoundLabel];
-    nofoundLabel.alpha = 0;
-}
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self initNoDataUI];
     [self initView];
     [tbView registerNib:[UINib nibWithNibName:@"MyCouponsTableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
-    [self fetchYouhuiFromWeb:nil];
+    [self fetchYouhuiFromWeb:^{
+        if (self.couDoneArr.count == 0 || self.couDoneArr == nil) {
+            tbView.alpha = 0;
+            noDataView.alpha = 1;
+        }else
+        {
+            tbView.alpha = 1;
+            noDataView.alpha = 0;
+        }
+    }];
 }
 
 
