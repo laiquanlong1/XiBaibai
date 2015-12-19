@@ -91,6 +91,7 @@
 - (void)setupRefresh
 {
     self.view.backgroundColor = XBB_Bg_Color;
+   
     WS(weakSelf)
     tbView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf fetchYouhuiFromWeb:^{
@@ -166,7 +167,7 @@
 
 - (void)initNoDataUI
 {
-    noDataView = [[XBBNotDataView alloc] initWithFrame:self.view.bounds withImage:[UIImage imageNamed:@"泡泡"] withString:@"您还没有优惠券信息哦" ];
+    noDataView = [[XBBNotDataView alloc] initWithFrame:self.view.bounds withImage:[UIImage imageNamed:@"43我的优惠券无数据"] withString:@"您还没有优惠券信息哦" ];
     [self.view addSubview:noDataView];
     noDataView.alpha = 0;
 }
@@ -174,7 +175,14 @@
     [super viewDidLoad];
     [self initNoDataUI];
     [self initView];
+    tbView.backgroundColor = XBB_Bg_Color;
     [tbView registerNib:[UINib nibWithNibName:@"MyCouponsTableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
+    self.couDoneArr = [NSMutableArray array];
+    
+//      NSDictionary *dic = @{@"coupons_price":@"34234",@"coupons_name":@"dsad",@"expired_time":@"123232412412"};
+//     NSDictionary *dic_q = @{@"coupons_price":@"34234",@"coupons_name":@"dsad",@"expired_time":@"123232412412"};
+//    [self.couDoneArr addObject:dic];
+//    [self.couDoneArr addObject:dic_q];
     [self fetchYouhuiFromWeb:^{
         if (self.couDoneArr.count == 0 || self.couDoneArr == nil) {
             tbView.alpha = 0;
@@ -184,6 +192,8 @@
             tbView.alpha = 1;
             noDataView.alpha = 0;
         }
+        
+        
     }];
 }
 
@@ -218,12 +228,13 @@
     }
     //    cell.labRemark.text = dic[@"coupons_remark"]; //model.coupons_remark;
     NSDictionary *dic = self.couDoneArr[indexPath.row];
-    
+  
     NSMutableAttributedString *at = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ 元",dic[@"coupons_price"]]];
     [at addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:20.]} range:NSMakeRange(0, [at length]-1)];
     [at addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:13.]} range:NSMakeRange([at length]-1, 1)];
     cell.priceLabel.attributedText = at;
-    
+    cell.backgroundView.backgroundColor = XBB_Bg_Color;
+    cell.backgroundColor = XBB_Bg_Color;
     
 //    cell.priceLabel.text =  dic[@"coupons_price"];//model.coupons_price;
     cell.nameLabel.text= dic[@"coupons_name"];//model.coupons_name;

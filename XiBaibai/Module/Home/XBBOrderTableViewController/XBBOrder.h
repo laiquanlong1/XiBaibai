@@ -25,4 +25,6 @@
 
 
 @property (nonatomic, copy) NSString *empPhone;
+@property (nonatomic, assign) NSInteger star_num;
+
 @end

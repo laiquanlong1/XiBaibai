@@ -47,7 +47,7 @@ static NSString *identifi = @"cell";
 
 - (void)regisCell
 {
-    self.orderTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, XBB_Screen_height-64) style:UITableViewStyleGrouped];
+    self.orderTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, XBB_Screen_height-64)];
     [self.view addSubview:self.orderTableView ];
     self.orderTableView .backgroundView = nil;
     self.orderTableView .backgroundColor = XBB_Bg_Color;
@@ -55,13 +55,8 @@ static NSString *identifi = @"cell";
     self.orderTableView .delegate = self;
     self.orderTableView.separatorColor = XBB_separatorColor;
     [self.orderTableView  registerNib:[UINib nibWithNibName:@"MyOrderMouldTableViewCell" bundle:nil] forCellReuseIdentifier:identifi];
+//    self.orderTableView.contentInset = UIEdgeInsetsMake(6., 0, 0, 0);
 }
-
-
-
-
-
-
 
 
 - (void)setNavigationBarControl
@@ -120,8 +115,7 @@ static NSString *identifi = @"cell";
     [self regisCell];
     [self initView];
     page = 1;
-
-    
+    self.orderTableView.alpha = 0;
     [self fetchOrderFromWeb:^{
         [UIView animateWithDuration:0.3 animations:^{
             if (self.orderArr.count == 0) {
@@ -256,7 +250,7 @@ static NSString *identifi = @"cell";
 
 - (void)initNoDataUI
 {
-    noDataView = [[XBBNotDataView alloc] initWithFrame:self.view.bounds withImage:[UIImage imageNamed:@"泡泡"] withString:@"您还没有订单信息哦"];
+    noDataView = [[XBBNotDataView alloc] initWithFrame:self.view.bounds withImage:[UIImage imageNamed:@"40订单列表无数据"] withString:@"您还没有订单信息哦"];
     [self.view addSubview:noDataView];
     noDataView.alpha = 0;
 }
@@ -458,6 +452,21 @@ static NSString *identifi = @"cell";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
      return 300.;
 }
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = XBB_Bg_Color;
+    return view;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    
+    return 6.0;
+}
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    return 6.;
+//}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     XBBOrderObject *order = self.orderArr[indexPath.section];

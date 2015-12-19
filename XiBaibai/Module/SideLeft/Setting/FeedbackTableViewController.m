@@ -66,11 +66,12 @@
     [super viewDidLoad];
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)]];
-    
-    self.inputTextView.layer.cornerRadius = 10.;
+    self.view.backgroundColor = XBB_Bg_Color;
+    self.inputTextView.layer.cornerRadius = 5.;
+    self.inputTextView.backgroundColor = XBB_Forground_Color;
     self.inputTextView.layer.masksToBounds = YES;
-    self.inputTextView.layer.borderColor = XBB_NavBar_Color.CGColor;
-    self.inputTextView.layer.borderWidth = 1.0;
+//    self.inputTextView.layer.borderColor = XBB_NavBar_Color.CGColor;
+//    self.inputTextView.layer.borderWidth = 1.0;
     
     [self setNavigationBarControl];
 }

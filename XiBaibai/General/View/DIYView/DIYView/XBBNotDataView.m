@@ -24,6 +24,7 @@
 - (instancetype)initWithFrame:(CGRect)frame withImage:(UIImage *)image withString:(NSString *)string
 {
     if (self == [super initWithFrame:frame]) {
+        self.backgroundColor = XBB_Bg_Color;
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.bounds.size.width/2 - image.size.width/2, self.bounds.size.height/2-image.size.height, image.size.width, image.size.height)];
         [self addSubview:imageView];
         imageView.image = image;
@@ -43,6 +44,7 @@
 - (instancetype)initWithFrame:(CGRect)frame withImage:(UIImage *)image withString:(NSString *)string withButtonTitle:(NSString *)buttonTitle
 {
     if (self == [super initWithFrame:frame]) {
+        self.backgroundColor = XBB_Bg_Color;
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.bounds.size.width/2 - image.size.width/2, self.bounds.size.height/2-image.size.height, image.size.width, image.size.height)];
         [self addSubview:imageView];
         imageView.image = image;

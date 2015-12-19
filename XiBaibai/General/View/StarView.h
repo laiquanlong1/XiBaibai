@@ -13,6 +13,7 @@
  * @detail 星级视图
  **/
 @interface StarView : UIView
+
 @property (weak, nonatomic) IBOutlet UIImageView *starOne;
 @property (weak, nonatomic) IBOutlet UIImageView *starTwo;
 @property (weak, nonatomic) IBOutlet UIImageView *starThree;
@@ -21,6 +22,5 @@
 @property (assign, nonatomic) float score;
 
 + (id)starView;
-
 
 @end

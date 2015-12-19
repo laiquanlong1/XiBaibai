@@ -11,10 +11,14 @@
 #import "UserObj.h"
 #import "BPush.h"
 #import "LoginViewController.h"
+#import "XBBInputView.h"
+
 
 @interface XBBMyCenterViewController ()<UITableViewDelegate, UITableViewDataSource,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIActionSheetDelegate>
 {
     UIImageView       *_headImageView;
+    XBBInputView      *_inputView;
+    UILabel           *titelLabel;
 }
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -38,7 +42,12 @@ static NSString *identifier_1 = @"cell_1";
 
 - (IBAction)backViewController:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_inputView.alpha == 1.) {
+        [self hiddenInputView:YES];
+    }else
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)setNavigationBarControl
@@ -61,7 +70,7 @@ static NSString *identifier_1 = @"cell_1";
         make.height.mas_equalTo(50);
     }];
     
-    UILabel *titelLabel = [[UILabel alloc] init];
+     titelLabel = [[UILabel alloc] init];
     [titelLabel setTextColor:[UIColor whiteColor]];
     [titelLabel setBackgroundColor:[UIColor clearColor]];
     [titelLabel setText:self.navigationTitle?self.navigationTitle:@"个人信息"];
@@ -80,7 +89,7 @@ static NSString *identifier_1 = @"cell_1";
 
 - (void)addTableViewUI
 {
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64., XBB_Screen_width, XBB_Screen_height - 64.) style:UITableViewStyleGrouped];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64., XBB_Screen_width, XBB_Screen_height - 64.)];
     [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -92,8 +101,61 @@ static NSString *identifier_1 = @"cell_1";
     
 }
 
+- (IBAction)toSaveNikeName:(id)sender
+{
+    if ([_inputView.textFiled.text length] < 1) {
+        [SVProgressHUD showInfoWithStatus:@"输入有效昵称"];
+        return;
+    }
+    NSMutableDictionary *dic=[[NSMutableDictionary alloc] init];
+    [dic setObject:[[UserObj shareInstance] uid] forKey:@"uid"];
+    [dic setObject:_inputView.textFiled.text forKey:@"uname"];
+    [SVProgressHUD show];
+   
+    [NetworkHelper postWithAPI:updateUserInfo parameter:dic successBlock:^(id response) {
+        [SVProgressHUD dismiss];
+        [UserObj shareInstance].uname = _inputView.textFiled.text;
+        [self hiddenInputView:YES];
+    } failBlock:^(NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"昵称修改失败"];
+    }];
+}
+- (IBAction)toRig:(id)sender
+{
+    [_inputView.textFiled resignFirstResponder];
+}
+- (void)initInPutView
+{
+    _inputView = [[XBBInputView alloc] initWithFrame:self.view.bounds placeeholder:@"取个逼格高的昵称吧" buttonName:@"保存" inittag:1];
+    [_inputView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toRig:)]];
+    
+    [self.view addSubview:_inputView];
+    [_inputView.button addTarget:self action:@selector(toSaveNikeName:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)hiddenInputView:(BOOL)hidden
+{
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        if (hidden) {
+            [titelLabel setText:@"个人信息"];
+            [_inputView.textFiled resignFirstResponder];
+            _inputView.alpha = 0.;
+            self.tableView.alpha = 1.;
+        }else
+        {
+            [titelLabel setText:@"修改昵称"];
+            [_inputView.textFiled becomeFirstResponder];
+            _inputView.alpha = 1.;
+            self.tableView.alpha = 0.;
+        }
+    }];
+    
+}
+
 - (void)initUI
 {
+    [self initInPutView];
     [self addTableViewUI];
     [self setNavigationBarControl];
 }
@@ -189,8 +251,28 @@ static NSString *identifier_1 = @"cell_1";
         case 2:
         {
             cell.nameLabel.text = @"性别";
-            cell.decelLabel.text = [UserObj shareInstance].sex;
-        }
+            switch ([[UserObj shareInstance].sex integerValue]) {
+                case 0:
+                {
+                     cell.decelLabel.text = @"未设置";
+                }
+                    break;
+                case 1:
+                {
+                    cell.decelLabel.text = @"男";
+                }
+                    break;
+                case 2:
+                {
+                    cell.decelLabel.text = @"女";
+
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+                    }
             break;
         case 3:
         {
@@ -219,12 +301,13 @@ static NSString *identifier_1 = @"cell_1";
             
         case 1:
         {
-            
+            [self hiddenInputView:NO];
         }
             break;
         case 2:
         {
-            
+            UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"修改性别" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"男" otherButtonTitles:@"女", nil];
+            [sheet showInView:self.view];
         }
             break;
         case 3:
@@ -248,11 +331,49 @@ static NSString *identifier_1 = @"cell_1";
     [action showInView:self.view];
 }
 
+- (void)updateSex:(NSInteger)sex
+{
+    [NetworkHelper postWithAPI:updateUserInfo parameter:@{@"uid": [UserObj shareInstance].uid, @"sex": @(sex)} successBlock:^(id response) {
+        if ([response[@"code"] integerValue] == 1) {
+            [SVProgressHUD showSuccessWithStatus:@"修改成功"];
+            [UserObj shareInstance].sex = @"1";
+            [self.tableView reloadData];
+        } else {
+            [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+        }
+    } failBlock:^(NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"修改失败"];
+    }];
+
+}
+
 
 #pragma  --mark 头像修改
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    
+    if ([actionSheet.title isEqualToString:@"修改性别"]) {
+        DLog(@"%ld",buttonIndex)
+        switch (buttonIndex) {
+            case 0:
+            {
+                //1
+                [self updateSex:1];
+            }
+                break;
+            case 1:
+            {
+                //2
+                [self updateSex:2];
+            }
+                break;
+                
+            default:
+                break;
+        }
+        
+        
+        return;
+    }
     if ([actionSheet.title isEqualToString:@"退出账号"]) {
         if (buttonIndex == 0) {
             [BPush delTag:[UserObj shareInstance].uid withCompleteHandler:^(id result, NSError *error) {

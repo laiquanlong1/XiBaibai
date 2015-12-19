@@ -153,6 +153,7 @@ static NSString *identifier = @"cell";
     
     UIView *vi = [[UIView alloc] initWithFrame:self.view.bounds];
     self.tableView.backgroundView = vi;
+    vi.backgroundColor = XBB_Bg_Color;
     [self.tableView.backgroundView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)]];
 }
 
@@ -162,6 +163,7 @@ static NSString *identifier = @"cell";
     [self initUI];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self.tableView setContentInset:UIEdgeInsetsMake(6, 0, 0, 0)];
     [self setTap];
    
     
@@ -411,11 +413,15 @@ static NSString *identifier = @"cell";
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
 
+    AddCarNumTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]];
     NSString *string_1 = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    if ([string_1 length] > 7) {
-        [SVProgressHUD showInfoWithStatus:@"超出输入限制"];
-        return NO;
+    if (![textField isEqual:cell.nameTextFile]) {
+        if ([string_1 length] > 7) {
+            [SVProgressHUD showInfoWithStatus:@"超出输入限制"];
+            return NO;
+        }
     }
+  
 
     
     return YES;

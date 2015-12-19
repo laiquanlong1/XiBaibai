@@ -29,6 +29,10 @@
 #import <MJRefresh.h>
 #import <MJExtension.h>
 #import "MyCarTableViewController.h"
+#import "ServerCityViewController.h"
+
+#import "StarView.h"
+
 
 static NSString *identifier_facial = @"facial_cell";
 static NSString *identifier_diy = @"diy";
@@ -439,7 +443,10 @@ static NSString *identifier_diy = @"diy";
     
 }
 
-
+- (IBAction)tosetStar:(id)sender
+{
+    DLog(@"")
+}
 - (void)viewDidLoad {
     
     [super viewDidLoad];
@@ -450,6 +457,20 @@ static NSString *identifier_diy = @"diy";
     [self addNotification];
     
     [self locationData];
+    
+//    StarView *star = [StarView starView];
+//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 100, star.frame.size.width, star.frame.size.height)];
+//    [view addSubview:star];
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tosetStar:)];
+//    [star.starOne addGestureRecognizer:tap];
+//    [star.starTwo addGestureRecognizer:tap];
+//    [star.starThree addGestureRecognizer:tap];
+//    [star.starFour addGestureRecognizer:tap];
+//    [star.starFive addGestureRecognizer:tap];
+//    
+//    
+//    star.score = 4;
+//    [self.view addSubview:view];
    
 }
 - (void)addTableViewHomes
@@ -621,7 +642,7 @@ static NSString *identifier_diy = @"diy";
                 return headView;
             }
             headView = [[UIView alloc] init];
-            headView.backgroundColor = XBB_Bg_Color;
+            headView.backgroundColor = XBB_Forground_Color; //XBB_Bg_Color;
             UIImage *image = [UIImage imageNamed:@"xbb_twoBai"];
             UIImage *buttonImage = [UIImage imageNamed:@"xbb_One_Button"];
             UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height)];
@@ -647,7 +668,7 @@ static NSString *identifier_diy = @"diy";
             
             
             areaFirstTitileLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, button.frame.size.height+button.frame.origin.y+20., XBB_Screen_width, 40.)];
-            areaFirstTitileLabel.backgroundColor = XBB_Bg_Color;
+            areaFirstTitileLabel.backgroundColor = XBB_Forground_Color; //XBB_Bg_Color;
             [headView addSubview:areaFirstTitileLabel];
             
             [areaFirstTitileLabel setFont:[UIFont systemFontOfSize:15.]];
@@ -727,7 +748,6 @@ static NSString *identifier_diy = @"diy";
             if (cell == nil) {
                 cell = [[XBBHomeFacialOneTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier_diy];
             }
-            
             for (int i = 0;i < self.proArray.count;i ++) {
                 XBBProObject *object = self.proArray[i];
                 switch (object.sort) {
@@ -790,10 +810,6 @@ static NSString *identifier_diy = @"diy";
                         break;
                 }
             }
-            
-          
-  
-            
             [cell.inSPAButton addTarget:self action:@selector(inSPAButtonAction:) forControlEvents:UIControlEventTouchUpInside];
             [cell.crysalButton addTarget:self action:@selector(inSPAButtonAction:) forControlEvents:UIControlEventTouchUpInside];
             [cell.naturalButton addTarget:self action:@selector(inSPAButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -908,6 +924,8 @@ static NSString *identifier_diy = @"diy";
 - (IBAction)titleAction:(id)sender
 {
     DLog(@"")
+    ServerCityViewController *severCity = [[ServerCityViewController alloc] init];
+    [self presentViewController:severCity animated:YES completion:nil];
    
 }
 - (IBAction)leftButtonAction:(id)sender
@@ -927,13 +945,11 @@ static NSString *identifier_diy = @"diy";
 
 - (IBAction)rightButtonAction:(id)sender
 {
-    
     XBBMapViewController *mapco = [[XBBMapViewController alloc] init];
-    mapco.navigationTitle = @"地址选择";
+    mapco.navigationTitle = @"地图";
     mapco.isHomeControllerto = YES;
     [self.navigationController pushViewController:mapco animated:YES];
     return;
-    
 }
 
 @end

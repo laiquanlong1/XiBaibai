@@ -153,7 +153,7 @@
     self.txtPWDOK.userInteractionEnabled = NO;
     
     registerButton= [[UIButton alloc] init];
-    [registerButton setTitle:@"重置密码" forState:UIControlStateNormal];
+    [registerButton setTitle:@"确定" forState:UIControlStateNormal];
     UIImage *loginNoselectImage = nil;
     if (XBB_IsIphone6_6s) {
         loginNoselectImage = [UIImage imageNamed:@"xbb_register_noSelect6"];

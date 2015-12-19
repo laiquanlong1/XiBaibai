@@ -664,9 +664,7 @@ static NSString *identifier_1 = @"cell_1";
         } failBlock:^(NSError *error) {
             [SVProgressHUD showErrorWithStatus:@"修改失败"];
         }];
-        
     }
-
 }
 
 //修改性别

@@ -85,7 +85,7 @@
            NSArray  *noWashArr = resultDic_1[@"notwash"][@"result"];
            DLog(@"")
            XBBDiyObject *diy_1 = [[XBBDiyObject alloc] init];
-           diy_1.proName = @"打蜡";
+           diy_1.proName = @"打蜡(附赠外观清洗)";
            diy_1.isWaxTag = 1;
            XBBDiyObject *diy_2 = [[XBBDiyObject alloc] init];
            diy_2.proName = @"推荐美容";

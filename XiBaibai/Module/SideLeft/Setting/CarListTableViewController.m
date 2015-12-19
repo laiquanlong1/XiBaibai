@@ -133,14 +133,19 @@
     return self.firstWordArr;
 }
 
-
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    UIView *view = [[UIView alloc] init];
+//    view.backgroundColor = XBB_Bg_Color;
+//    return view;
+//}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    cell.backgroundColor = [UIColor clearColor];
+    cell.backgroundColor = XBB_Forground_Color;
     CarBrandModel *model = [[self.brandDic objectForKey:self.firstWordArr[indexPath.section]] objectAtIndex:indexPath.row];
     cell.textLabel.font = [UIFont systemFontOfSize:15];
     cell.textLabel.text =  model.make_name;
@@ -159,7 +164,5 @@
     }
     [self.navigationController popViewControllerAnimated:YES];
 }
-
-
 
 @end

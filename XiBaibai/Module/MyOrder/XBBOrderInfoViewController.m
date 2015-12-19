@@ -16,6 +16,8 @@
 #import "RechargeHelper.h"
 #import "XBBOrderInfoCommentTableViewCell.h"
 #import "MyOrderViewController.h"
+#import "CommentTableViewCell.h"
+#import "StarView.h"
 
 @interface XBBOrderInfoViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
 {
@@ -25,9 +27,7 @@
     float total_price;
     float actually_price;
     UIButton *backButton;
-    
     NSString *empPhone;
-    
 }
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *prolist;
@@ -50,6 +50,7 @@ static NSString *orderInfo = @"orderInfo";
 //static NSString *oprationMessage = @"opreationMessage";
 //static NSString *orderContent = @"orderContent";
 static NSString *mycomment = @"mycomment";
+static NSString *hascomment = @"hascomment";
 
 @implementation XBBOrderInfoViewController
 
@@ -74,7 +75,7 @@ static NSString *mycomment = @"mycomment";
     [NetworkHelper postWithAPI:OrderSelect_detail_API parameter:@{@"uid":[[UserObj shareInstance] uid],@"orderid":self.orderid} successBlock:^(id response) {
         if ([response[@"code"] integerValue] == 1) {
             if (response[@"result"]) {
-                
+                DLog(@"%@",response)
                 [MyOrderModel setupReplacedKeyFromPropertyName:^NSDictionary *{
                     return @{@"order_id": @"id"};
                 }];
@@ -82,7 +83,6 @@ static NSString *mycomment = @"mycomment";
                 self.feathModel = model;
                 total_price = model.totalprice;
                 coupon_price = model.coupons_price;
-           DLog(@"%@",response)
                 // 获取产品数组
                 NSArray *proArray = response[@"result"][@"prolist"];
                 DLog(@"%@   %ld",proArray,proArray.count)
@@ -126,12 +126,14 @@ static NSString *mycomment = @"mycomment";
                 
                 [arr_0 addObject:endOrder];
                 self.onsectionArray = arr_0;
-                
-                XBBOrder *endOrder_2 = [[XBBOrder alloc] init];
-                endOrder_2.title = @"优惠金额";
-                endOrder_2.price = -coupon_price;
-                [arr_0 addObject:endOrder_2];
-                self.onsectionArray = arr_0;
+                if (coupon_price > 0) {
+                    XBBOrder *endOrder_2 = [[XBBOrder alloc] init];
+                    endOrder_2.title = @"优惠金额";
+                    endOrder_2.price = -coupon_price;
+                    [arr_0 addObject:endOrder_2];
+                    self.onsectionArray = arr_0;
+                }
+               
                 
                 actually_price = total_price - coupon_price;
                 XBBOrder *endOrder_1 = [[XBBOrder alloc] init];
@@ -148,7 +150,7 @@ static NSString *mycomment = @"mycomment";
                     [oper addObject:one];
                     
                     XBBOrder *name = [[XBBOrder alloc] init];
-                    name.title = [NSString stringWithFormat:@"技师名字:    %@",model.emp_name];
+                    name.title = [NSString stringWithFormat:@"技师名字:    %@",model.emp_name?model.emp_name:@"_ _"];
                     name.empPhone = model.emp_iphone;
                     empPhone = model.emp_iphone;
                     [oper addObject:name];
@@ -217,18 +219,18 @@ static NSString *mycomment = @"mycomment";
                 }else if (state == 6)
                 {
                     XBBOrder *oder = [[XBBOrder alloc] init];
-                    oder.title = @"已评价";
+                    oder.title = @"我的评价";
                     [conA addObject:oder];
+                    
                     XBBOrder *oder_1 = [[XBBOrder alloc] init];
-                    oder_1.title = @"已评论";
+                    oder_1.title = model.user_evaluate;
+                    oder_1.star_num = model.order_star;
                     [conA addObject:oder_1];
+                    
                     
                 }
                self.commentArray = conA;
-              
-                
-                
-                
+
                 [self agoTableView];
 
                 [self.tableView reloadData];
@@ -346,7 +348,7 @@ static NSString *mycomment = @"mycomment";
 }
 - (void)addTableView
 {
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, XBB_Screen_height-64) style:UITableViewStyleGrouped];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, XBB_Screen_height-64)];
     [self.view addSubview:self.tableView];
     self.tableView.backgroundView = nil;
     self.tableView.backgroundColor = XBB_Bg_Color;
@@ -356,6 +358,7 @@ static NSString *mycomment = @"mycomment";
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBOrderInfoOneCell" bundle:nil] forCellReuseIdentifier:titleCell];
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBOrderInfoTwoTableViewCell" bundle:nil] forCellReuseIdentifier:orderInfo];
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBOrderInfoCommentTableViewCell" bundle:nil] forCellReuseIdentifier:mycomment];
+    [self.tableView registerNib:[UINib nibWithNibName:@"CommentTableViewCell" bundle:nil] forCellReuseIdentifier:hascomment];
 }
 
 #pragma mark action
@@ -427,13 +430,25 @@ static NSString *mycomment = @"mycomment";
 
 
 #pragma mark tableViewDelegate
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = XBB_Bg_Color;
+    return view;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 6.0;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     if (self.isPayBack) {
         if (section == 1) {
             return 66.;
         }
-        
     }
     return 0;
 }
@@ -444,11 +459,11 @@ static NSString *mycomment = @"mycomment";
        
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, 60.)];
         UIImage *image = [UIImage imageNamed:@"确定"];
-        UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 66/2-10, XBB_Screen_width-40., 44.)];
-        [view addSubview:backButton];
-        [backButton setBackgroundImage:image forState:UIControlStateNormal];
-        [backButton setTitle:@"确定" forState:UIControlStateNormal];
-        [backButton addTarget:self action:@selector(toBackAction:) forControlEvents:UIControlEventTouchUpInside];
+        UIButton *bacButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 66/2-10, XBB_Screen_width-40., 44.)];
+        [view addSubview:bacButton];
+        [bacButton setBackgroundImage:image forState:UIControlStateNormal];
+        [bacButton setTitle:@"确定" forState:UIControlStateNormal];
+        [bacButton addTarget:self action:@selector(toBackAction:) forControlEvents:UIControlEventTouchUpInside];
         return view;
         }
     }
@@ -456,7 +471,7 @@ static NSString *mycomment = @"mycomment";
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (state == 5 && indexPath.section == 3 && indexPath.row == 1) {
+    if ((state == 5|| state == 6) && indexPath.section == 3 && indexPath.row == 1) {
         return 80;
     }
     return 44.;
@@ -690,6 +705,19 @@ static NSString *mycomment = @"mycomment";
             [cell.toCommentButton setTitle:order.title forState:UIControlStateNormal];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
+        }else if (indexPath.section == 3 && state == 6) {
+            CommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:hascomment];
+            if (cell == nil) {
+                cell = [[CommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:hascomment];
+            }
+            
+            
+            StarView *star = [StarView starView];
+            DLog(@"%ld",order.star_num)
+            star.score =order.star_num; //(double)order.star_num;
+            [cell.commentStar addSubview:star];
+            cell.commentContent.text = order.title;
+            return cell;
         }
         
         
@@ -762,10 +790,7 @@ static NSString *mycomment = @"mycomment";
                 if ([order.title isEqualToString:@"实际支付"]) {
                     [cell.priceLabel setFont:[UIFont systemFontOfSize:18.]];
                     [cell.priceLabel setTextColor:[UIColor redColor]];
-                }
-                
-                
-                
+                }   
             }else
             {
                 

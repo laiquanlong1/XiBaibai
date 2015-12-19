@@ -60,7 +60,6 @@
 //    [self backButton];
 }
 
-
 //- (void)backButton
 //{
 //    UIButton *back = [[UIButton alloc] init];
@@ -415,6 +414,15 @@
         [SVProgressHUD showErrorWithStatus:@"请检查您的网络"];
         return;
     }
+    
+    if ([self.txtLogin.text length] == 0) {
+        [SVProgressHUD showInfoWithStatus:@"请输入手机号"];
+        return;
+    }
+    if ([self.txtPWD.text length] == 0) {
+        [SVProgressHUD showInfoWithStatus:@"请输入密码"];
+        return;
+    }
     [SVProgressHUD show];
     if ([self.txtLogin.text length] == 11) {
         if ([self.txtPWD.text length] >= 6) {
@@ -438,7 +446,7 @@
                 [SVProgressHUD showErrorWithStatus:@"登录失败"];
             }];
         }else{
-            [SVProgressHUD showInfoWithStatus:@"密码格式错误"];
+            [SVProgressHUD showInfoWithStatus:@"密码长度不正确"];
         }
     }else{
         [SVProgressHUD showInfoWithStatus:@"账户不是手机号"];

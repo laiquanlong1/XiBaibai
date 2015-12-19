@@ -113,12 +113,14 @@ static NSString *identifi = @"cell";
 
 - (void)regisCell
 {
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, XBB_Screen_height-64) style:UITableViewStyleGrouped];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, XBB_Screen_height-64)];
     [self.view addSubview:self.tableView];
+    self.view.backgroundColor = XBB_Bg_Color;
     self.tableView.backgroundView = nil;
     self.tableView.backgroundColor = XBB_Bg_Color;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.contentInset = XBB_HeadEdge;
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBAddressHomeTableViewCell" bundle:nil] forCellReuseIdentifier:identifi];
     [self hiddenTableView:YES];
 }
@@ -157,7 +159,20 @@ static NSString *identifi = @"cell";
 {
     return 60.;
 }
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (section == 1) {
+        return 200.;
+    }
+    return 6.;
+}
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = XBB_Bg_Color;
+    return view;
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     XBBAddressHomeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifi];
@@ -204,6 +219,7 @@ static NSString *identifi = @"cell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SetCarAddsViewController *setcaraddVC = [[SetCarAddsViewController alloc] init];
     SetCarAddsInfoViewController *setcaraddsInfoVC = [[SetCarAddsInfoViewController alloc] init];
+    setcaraddsInfoVC.navigationTitle = @"备注";
     if(indexPath.section == 0){
         switch (indexPath.row) {
             case 0:

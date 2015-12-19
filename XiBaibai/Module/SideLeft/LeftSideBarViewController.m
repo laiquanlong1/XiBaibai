@@ -214,7 +214,7 @@
 - (IBAction)guanyu:(id)sender {
     WebViewController *viewController = [[WebViewController alloc] init];
     viewController.navigationTitle = @"关于洗车APP";
-    viewController.urlString =([[SystemObjct shareSystem] aboutUrlString])? [[SystemObjct shareSystem] aboutUrlString]:@"http://mp.weixin.qq.com/s?__biz=MzAxMTY4ODEyOQ==&mid=207988342&izdx=1&sn=a011a2b05c04d12fadc4eae58d404353&scene=18#rd";
+    viewController.urlString =([[SystemObjct shareSystem] aboutUrlString])? [[SystemObjct shareSystem] aboutUrlString]:@"http://mp.weixin.qq.com/s?__biz=MzI4MDA4ODU3Nw==&mid=400371763&idx=1&sn=58b52a2f414b0b52823767429d07e741&scene=18#wechat_redirect";
     UINavigationController *nav = (UINavigationController *)self.mm_drawerController.centerViewController;
     [nav pushViewController:viewController animated:YES];
     [self.mm_drawerController closeDrawerAnimated:YES completion:nil];

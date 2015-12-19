@@ -21,6 +21,7 @@
     UIView *barView;
     XBBListHeadLabel *priceTotalTitle;
     float selectAllPrice;
+    BOOL isFirstCom;
 }
 
 @property (strong, nonatomic) NSArray *priceArr;
@@ -270,6 +271,8 @@ static NSString *identifier_2 = @"tit1cell";
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    isFirstCom = YES;
+    _payType = 1;
     [self initUI];
     // 存在订单号
     if (self.orderNO && self.orderId) {
@@ -485,7 +488,14 @@ static NSString *identifier_2 = @"tit1cell";
                 
             case 4:
             {
-               
+                if (isFirstCom) {
+                    isFirstCom = NO;
+                    _selectedImgView.frame = CGRectMake(self.view.frame.size.width - 15 - _selectedImgView.frame.size.width, cell.frame.size.height * 0.5 - _selectedImgView.frame.size.height * 0.5, _selectedImgView.frame.size.width, _selectedImgView.frame.size.height);
+                    [cell.contentView addSubview:_selectedImgView];
+                    _selectedImgView.alpha = 1;
+                    _payType = indexPath.row + 1;
+                    
+                }
                 
                 if (_payType == 1) {
                     _selectedImgView.alpha = 1;
@@ -501,6 +511,10 @@ static NSString *identifier_2 = @"tit1cell";
                 cell.titleLabel.text = @"支付宝";
                 cell.selectionStyle = UITableViewCellSelectionStyleGray;
                 cell.headImageView.image = [UIImage imageNamed:@"01支付宝"];
+                
+         
+                
+                
             }
                 break;
             default:

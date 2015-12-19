@@ -15,25 +15,25 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="玻璃防雾" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="byZ-yP-e2m">
-                        <rect key="frame" x="17" y="12" width="120" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="玻璃防雾" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="byZ-yP-e2m">
+                        <rect key="frame" x="17" y="11" width="150" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="c9O-qa-V9q"/>
-                            <constraint firstAttribute="width" constant="120" id="oUa-8y-WII"/>
+                            <constraint firstAttribute="width" constant="150" id="oUa-8y-WII"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="noselectImage" translatesAutoresizingMaskIntoConstraints="NO" id="K77-Hu-3Ta">
-                        <rect key="frame" x="276" y="17" width="11" height="11"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="noselectImage" translatesAutoresizingMaskIntoConstraints="NO" id="K77-Hu-3Ta">
+                        <rect key="frame" x="276" y="16" width="11" height="11"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="11" id="EA6-yM-5Tk"/>
                             <constraint firstAttribute="width" constant="11" id="Kw7-9x-odC"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Boq-lI-Op3">
-                        <rect key="frame" x="133" y="12" width="118" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Boq-lI-Op3">
+                        <rect key="frame" x="133" y="11" width="118" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="118" id="nlC-il-Y2s"/>
                             <constraint firstAttribute="height" constant="21" id="vAN-S5-zOY"/>

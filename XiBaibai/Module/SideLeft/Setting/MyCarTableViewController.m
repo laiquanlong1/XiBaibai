@@ -15,7 +15,7 @@
 #import "XBBAddCarViewController.h"
 
 
-@interface MyCarTableViewController ()
+@interface MyCarTableViewController ()<UIAlertViewDelegate>
 {
     UIView  *barView;
     XBBNotDataView *noDataView;
@@ -97,7 +97,7 @@ static NSString *identifier = @"carcell";
     button.layer.cornerRadius = 5;
     button.layer.masksToBounds = YES;
     [button setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
-    [button setTitle:@"添加新车" forState:UIControlStateNormal];
+    [button setTitle:@"添加车辆" forState:UIControlStateNormal];
     [barView addSubview:button];
     [self alphaTabBar:YES];
     
@@ -112,7 +112,7 @@ static NSString *identifier = @"carcell";
 
 - (void)initNoDataUI
 {
-    noDataView = [[XBBNotDataView alloc] initWithFrame:self.view.bounds withImage:[UIImage imageNamed:@"泡泡"] withString:@"您还没有车辆信息哦" withButtonTitle:@"现在添加"];
+    noDataView = [[XBBNotDataView alloc] initWithFrame:self.view.bounds withImage:[UIImage imageNamed:@"41我的车辆无数据"] withString:@"您还没有车辆信息哦" withButtonTitle:@"现在添加"];
     [self.view addSubview:noDataView];
     [noDataView.sureButton addTarget:self action:@selector(addOnClick:) forControlEvents:UIControlEventTouchUpInside];
     noDataView.alpha = 0;
@@ -122,7 +122,9 @@ static NSString *identifier = @"carcell";
 {
     [self initNoDataUI];
     [self setNavigationBarControl];
-    [self addTabelView:UITableViewStyleGrouped];
+    [self addTabelView:UITableViewStylePlain];
+    self.tableView.header.ignoredScrollViewContentInsetTop = 6;
+    self.tableView.contentInset = UIEdgeInsetsMake(6, 0, 0, 0);
     self.tableView.backgroundColor = XBB_Bg_Color;
     self.tableView.backgroundView = nil;
     [self registerCell];
@@ -286,7 +288,7 @@ static NSString *identifier = @"carcell";
     if (section == self.carArr.count-1) {
         return 120;
     }
-    return 0;
+    return 6.;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
@@ -299,7 +301,7 @@ static NSString *identifier = @"carcell";
         button.layer.borderColor = XBB_NavBar_Color.CGColor;
         button.layer.borderWidth = 1.0;
         button.layer.masksToBounds = YES;
-        [button setTitle:@"添加新车" forState:UIControlStateNormal];
+        [button setTitle:@"添加车辆" forState:UIControlStateNormal];
         [button addTarget:self action:@selector(addOnClick:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
         [backView addSubview:button];
@@ -318,12 +320,22 @@ static NSString *identifier = @"carcell";
     return 1;
 }
 
-
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        
+        NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:alertView.tag];
+        [self  tableView:self.tableView commitEditingStyle:UITableViewCellEditingStyleDelete forRowAtIndexPath:index];
+    }
+}
 - (IBAction)deleteButtonAction:(id)sender
 {
+    
     UIButton *button = sender;
-    NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:button.tag];
-    [self  tableView:self.tableView commitEditingStyle:UITableViewCellEditingStyleDelete forRowAtIndexPath:index];
+   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"确定删除车辆?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alert.tag = button.tag;
+    [alert show];
+    
     
 }
 
@@ -431,7 +443,8 @@ static NSString *identifier = @"carcell";
 
                     }
                     NSIndexSet *set= [[NSIndexSet alloc] initWithIndex:indexPath.section];
-                    [tableView deleteSections:set withRowAnimation:UITableViewRowAnimationAutomatic];
+                    [tableView deleteSections:set withRowAnimation:UITableViewRowAnimationFade];
+                    [self.tableView reloadData];
                 }
             }];
 
@@ -462,7 +475,8 @@ static NSString *identifier = @"carcell";
                 }];
             }
             NSIndexSet *set= [[NSIndexSet alloc] initWithIndex:indexPath.section];
-            [tableView deleteSections:set withRowAnimation:UITableViewRowAnimationAutomatic];
+            [tableView deleteSections:set withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView reloadData];
         }
     }];
     }

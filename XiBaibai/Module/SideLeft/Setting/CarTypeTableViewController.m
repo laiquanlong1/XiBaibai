@@ -16,9 +16,10 @@
 - (void)setTableViewcell
 {
     
-    [self addTabelView:UITableViewStyleGrouped];
+    [self addTabelView:UITableViewStylePlain];
+    [self.tableView setContentInset:XBB_HeadEdge];
     self.view.backgroundColor = XBB_Bg_Color;
-    self.tableView.backgroundView = nil;
+    self.tableView.backgroundView.backgroundColor = XBB_Bg_Color;
     self.tableView.backgroundColor = XBB_Bg_Color;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -90,14 +91,27 @@
 #warning Incomplete implementation, return the number of rows
     return self.dataArry.count;
 }
-
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (section == self.dataArry.count-1) {
+        return 200;
+    }
+    return 6;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = XBB_Bg_Color;
+    return view;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    cell.backgroundColor = [UIColor clearColor];
+    cell.backgroundColor = XBB_Forground_Color;//[UIColor clearColor];
+    cell.backgroundView.backgroundColor = XBB_Forground_Color;
     NSDictionary *dic = self.dataArry[indexPath.row];
     cell.textLabel.text = dic[@"name"];
     [cell.textLabel setFont:[UIFont systemFontOfSize:14.]];

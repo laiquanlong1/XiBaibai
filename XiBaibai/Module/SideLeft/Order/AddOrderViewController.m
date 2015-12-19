@@ -267,6 +267,10 @@ static NSString *identifier_2 = @"tit1cell";
                 }
                 [arr_2 addObject:order];
                 order.xbbid = object.pid;
+                order.p_wash_free = object.p_wash_free;
+                if (object.p_wash_free == 1) {
+                    hasWaxs = YES;
+                }
             }
         }
         
@@ -276,7 +280,7 @@ static NSString *identifier_2 = @"tit1cell";
         self.selectFacialArray = arr_2;
     }
     
-        
+    
     
     XBBOrder *o_4 = [[XBBOrder alloc] init];
     o_4.title = @"优惠券";
@@ -305,9 +309,6 @@ static NSString *identifier_2 = @"tit1cell";
         self.hasLocation = NO;
         [o_5.xbbOrders addObject:o_5_1];
     }
-    
-    
-    
     
     
     
@@ -573,20 +574,39 @@ static NSString *identifier_2 = @"tit1cell";
             }
         }
         
+     
+        
         if (haveSelectWash == NO) {
-            if ([object isEqual:[self.dataArray[0] xbbOrders][0]]) {
-                cell.tag = 22;
-                washType = 11;
-                cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
-                selectWashPrice = object.price;
-                [self addAllPrice];
-                self.selectWashOrderObject = object;
-                
-                
-            }else if ([object isEqual:[self.dataArray[0] xbbOrders][1]])
-            {
-                cell.tag = 11;
-                cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+            if (hasWaxs) {
+                if ([object isEqual:[self.dataArray[0] xbbOrders][0]]) {
+                    cell.tag = 11;
+                    washType = 0;
+                    cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                    selectWashPrice = 0;
+                    [self addAllPrice];
+                    self.selectWashOrderObject = nil;
+                    
+                    
+                }else if ([object isEqual:[self.dataArray[0] xbbOrders][1]])
+                {
+                    cell.tag = 11;
+                    cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                }
+            }else{
+                if ([object isEqual:[self.dataArray[0] xbbOrders][0]]) {
+                    cell.tag = 22;
+                    washType = 11;
+                    cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                    selectWashPrice = object.price;
+                    [self addAllPrice];
+                    self.selectWashOrderObject = object;
+                    
+                    
+                }else if ([object isEqual:[self.dataArray[0] xbbOrders][1]])
+                {
+                    cell.tag = 11;
+                    cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                }
             }
         }else
         {
@@ -688,6 +708,7 @@ static NSString *identifier_2 = @"tit1cell";
     return nil;
 }
 
+
 - (void)addAllPrice
 {
     if (self.selectCouponModel) {
@@ -709,7 +730,12 @@ static NSString *identifier_2 = @"tit1cell";
     if ([object isEqual:[self.dataArray[0] xbbOrders][0]]||[object isEqual:[self.dataArray[0] xbbOrders][1]]) {
         haveSelectWash = YES;
         AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-       
+        if (hasWaxs) {
+            if (indexPath.row == 1) {
+                [SVProgressHUD showErrorWithStatus:@"打蜡项目赠送外观清洗"];
+                return;
+            }
+        }
         if (cell.tag == 11) {
             cell.tag = 22;
             selectWashPrice = object.price;
@@ -769,6 +795,7 @@ static NSString *identifier_2 = @"tit1cell";
         if ([object isEqual:[self.dataSource lastObject]]) {
             isJust = NO;
             AddPlanOrderViewController *plan = [[AddPlanOrderViewController alloc] init];
+            plan.navigationTitle = @"预约服务时间";
             plan.planTime = ^(NSString *time){
                 planTime = time;
                 cell.priceLabel.text = time;
@@ -869,13 +896,14 @@ static NSString *identifier_2 = @"tit1cell";
             }
             hasWaxs = hasWax;
             if (hasWax) {
-                selectWashPrice = 0;
-                self.selectWashOrderObject = nil;
-                washType = 0;
-                haveSelectWash = YES;
                 
+                if (washType == 11) {
+                    selectWashPrice = 0;
+                    self.selectWashOrderObject = nil;
+                    washType = 0;
+                    haveSelectWash = YES;
+                }
             }
-            
             [self addAllPrice];
             object.xbbOrders = arr;
             self.selectFacialArray = arr;
@@ -912,7 +940,7 @@ static NSString *identifier_2 = @"tit1cell";
     if ([object isEqual:self.dataArray[4]]) {
  
         XBBAddressSelectViewController *address = [[UIStoryboard storyboardWithName:@"XBBOne" bundle:nil] instantiateViewControllerWithIdentifier:@"XBBAddressSelectViewController"];
-        address.navigationTitle = @"地址选择";
+        address.navigationTitle = @"选择车辆位置";
         address.selectAddressBlock = ^(XBBAddressModel *model){
             
             if (model) {

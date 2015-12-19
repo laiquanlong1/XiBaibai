@@ -134,7 +134,7 @@
     [button addTarget:self action:@selector(submit:) forControlEvents:UIControlEventTouchUpInside];
     button.tag = 2;
     button.backgroundColor = XBB_NavBar_Color;
-    [button setTitle:@"选择" forState:UIControlStateNormal];
+    [button setTitle:@"下单" forState:UIControlStateNormal];
     [button setTitleColor:XBB_Bg_Color forState:UIControlStateNormal];
     [barView addSubview:button];
 
@@ -172,6 +172,7 @@
                     XBBOrder *oder = [[XBBOrder alloc] init];
                     oder.xbbid = self.proObject.p_id;
                     oder.title = self.proObject.p_name;
+                    oder.p_wash_free = self.proObject.p_wash_free;
                     if (self.selectCarType == 1) {
                         oder.price = self.proObject.price_1;
                         
@@ -209,6 +210,7 @@
                     object.price2 = self.proObject.price_2;
                     object.pid = self.proObject.p_id;
                     object.type = self.proObject.type;
+                    object.p_wash_free = self.proObject.p_wash_free;
                     NSArray *arr = @[object];
                     AddOrderViewController *order = [[AddOrderViewController alloc] init];
                     order.selectArray = arr;

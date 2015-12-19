@@ -41,6 +41,7 @@
 
 #pragma mark datas
 - (void)fetchAddressFromWeb:(void (^)())callback {
+    
     [SVProgressHUD show];
     [self hiddenTableView:YES];
     [NetworkHelper postWithAPI:API_AddressSelect parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
@@ -58,6 +59,7 @@
                     [UserObj shareInstance].companyCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);
                 }
             }
+            
         } else {
             [SVProgressHUD showErrorWithStatus:response[@"msg"]];
         }
@@ -70,11 +72,13 @@
 
 #pragma mark action
 
+
 - (IBAction)backViewController:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 #pragma mark tableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -147,11 +151,8 @@
                         self.selectAddressBlock(model);
                         [self dismissViewControllerAnimated:YES completion:nil];
                     }
-
                 });
-                
             });
-            
         };
         [self presentViewController:map animated:YES completion:^{
         }];
@@ -164,7 +165,7 @@
             model.coordinate = [[UserObj shareInstance] homeCoordinate];
             self.selectAddressBlock(model);
         }
-         [self dismissViewControllerAnimated:YES completion:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
         return;
     }
     if (indexPath.section == 2) {

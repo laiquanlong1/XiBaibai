@@ -28,6 +28,7 @@
 #import "APPUIMacro.h"
 #import "SystemObjct.h"
 #import "XBBNotDataView.h"
+#import "XBBInputView.h"
 #import "XBBViewController.h"
 #import "XBBTableViewController.h"
 

@@ -10,6 +10,8 @@
 #import "XBBAddressModel.h"
 
 typedef void(^SelectAddress)(XBBAddressModel *model);
+
 @interface XBBAddressSelectViewController : XBBViewController
 @property (nonatomic, copy) SelectAddress selectAddressBlock;
+
 @end
