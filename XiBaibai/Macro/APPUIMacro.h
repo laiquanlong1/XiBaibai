@@ -29,6 +29,18 @@
 
 #define XBB_NavBar_Font [UIFont systemFontOfSize:18.f]
 #define XBB_Prompt_Font [UIFont systemFontOfSize:16.f]
+
+#define XBB_CellTitleColor [UIColor grayColor]
+#define XBB_Promat_Color [UIColor lightGrayColor]
 #define XBB_separatorColor kUIColorFromRGB(0xdddddd)
 #define XBB_HeadEdge UIEdgeInsetsMake(6, 0, 0, 0)
+
+
+#define XBB_CellTitleFont [UIFont systemFontOfSize:16.f]
+#define XBB_CellContentFont [UIFont systemFontOfSize:16.f]
+#define XBB_CellPriceFont [UIFont systemFontOfSize:16.f]
+#define XBB_TXTFont [UIFont systemFontOfSize:13.f]
+
+#define XBB_SelectedColor [UIColor redColor]
+#define XBB_NotSelectColor [UIColor grayColor]
 #endif /* APPUIMacro_h */

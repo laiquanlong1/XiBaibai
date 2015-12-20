@@ -176,8 +176,6 @@ static NSString *identifier_2 = @"tit1cell";
                 
                 }
                 
-                
-                
             } failBlock:^(NSError *error) {
             
             }];
@@ -559,6 +557,7 @@ static NSString *identifier_2 = @"tit1cell";
             cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",object.price];
         }
         cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+        cell.priceLabel.textColor = XBB_NotSelectColor;
         if ([[self.dataArray[1] xbbOrders] count] > 0) {
             for (XBBOrder *ob_1 in [self.dataArray[1] xbbOrders]) {
                 if ([object isEqual:ob_1]) {
@@ -582,6 +581,7 @@ static NSString *identifier_2 = @"tit1cell";
                     cell.tag = 11;
                     washType = 0;
                     cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                    cell.priceLabel.textColor = XBB_NotSelectColor;
                     selectWashPrice = 0;
                     [self addAllPrice];
                     self.selectWashOrderObject = nil;
@@ -591,12 +591,14 @@ static NSString *identifier_2 = @"tit1cell";
                 {
                     cell.tag = 11;
                     cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                    cell.priceLabel.textColor = XBB_NotSelectColor;
                 }
             }else{
                 if ([object isEqual:[self.dataArray[0] xbbOrders][0]]) {
                     cell.tag = 22;
                     washType = 11;
                     cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                    cell.priceLabel.textColor = XBB_SelectedColor;
                     selectWashPrice = object.price;
                     [self addAllPrice];
                     self.selectWashOrderObject = object;
@@ -606,6 +608,7 @@ static NSString *identifier_2 = @"tit1cell";
                 {
                     cell.tag = 11;
                     cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                    cell.priceLabel.textColor = XBB_NotSelectColor;
                 }
             }
         }else
@@ -616,6 +619,7 @@ static NSString *identifier_2 = @"tit1cell";
                     cell.tag = 22;
                     washType = 11;
                     cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                    cell.priceLabel.textColor = XBB_SelectedColor;
                     selectWashPrice = object.price;
                     [self addAllPrice];
                     
@@ -625,6 +629,7 @@ static NSString *identifier_2 = @"tit1cell";
                     cell.tag = 22;
                     washType = 22;
                     cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                    cell.priceLabel.textColor = XBB_SelectedColor;
                     selectWashPrice = object.price;
                     [self addAllPrice];
                 }
@@ -646,12 +651,14 @@ static NSString *identifier_2 = @"tit1cell";
                 cell.tag = 22;
                 isJust = NO;
                 cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                cell.priceLabel.textColor = XBB_NotSelectColor;
             }
         }
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         for (XBBOrder *ooo in [self.dataArray[1] xbbOrders]) {
             if ([ooo isEqual:object]) {
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.priceLabel.textColor = XBB_SelectedColor;
             }
             if (self.selectArray) {
                 selectDIYPrice = 0;
@@ -665,6 +672,7 @@ static NSString *identifier_2 = @"tit1cell";
         for (XBBOrder *ooo in [self.dataArray[2] xbbOrders]) {
             if ([ooo isEqual:object]) {
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.priceLabel.textColor = XBB_SelectedColor;
             }
             if (self.selectArray) {
                 selectFaicalPrice = 0;
@@ -739,14 +747,16 @@ static NSString *identifier_2 = @"tit1cell";
         if (cell.tag == 11) {
             cell.tag = 22;
             selectWashPrice = object.price;
-            [self addAllPrice];
+            [self addAllPrice]; 
             cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+            cell.priceLabel.textColor = XBB_SelectedColor;
             if (indexPath.row == 1) {
                 washType = 11;
                 NSIndexPath *indexPath_1 = [NSIndexPath indexPathForRow:2 inSection:indexPath.section];
                 AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath_1];
                 cell.tag = 11;
                 cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                cell.priceLabel.textColor = XBB_NotSelectColor;
                 self.selectWashOrderObject = object;
                 
                 
@@ -757,6 +767,7 @@ static NSString *identifier_2 = @"tit1cell";
                 AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath_1];
                 cell.tag = 11;
                 cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                cell.priceLabel.textColor = XBB_NotSelectColor;
                 self.selectWashOrderObject = object;
             }
         }
@@ -768,6 +779,7 @@ static NSString *identifier_2 = @"tit1cell";
             selectWashPrice = 0;
             [self addAllPrice];
             cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+            cell.priceLabel.textColor = XBB_NotSelectColor;
             
         }
     }
@@ -782,7 +794,6 @@ static NSString *identifier_2 = @"tit1cell";
                 AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath_1];
                 cell.tag = 11;
                 cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
-                
             }else
             {
                 NSIndexPath *indexPath_1 = [NSIndexPath indexPathForRow:self.dataSource.count-2 inSection:indexPath.section];

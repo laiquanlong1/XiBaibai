@@ -10,13 +10,15 @@
 
 @interface ServerCityViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
-    UITableView *tableView;
+
 }
+@property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray *serversCityArray;
 @end
 
 @implementation ServerCityViewController
+
 #pragma mark data
 
 - (void)initViewDidLoadDatas
@@ -26,7 +28,7 @@
 - (void)toFeathData
 {
     [self feathData:^{
-        
+        DLog(@"%@",self.currentCity)
     }];
 }
 - (void)feathData:(void(^)(void))complation
@@ -35,7 +37,9 @@
         complation();
     }
 }
-#pragma mark ui
+
+#pragma mark UI
+
 - (void)initUI
 {
     [self setNavigationBarControl];
@@ -48,7 +52,6 @@
     if (XBB_IsIphone6_6s) {
         leftImage = [UIImage imageNamed:@"back_xbb6"];
     }
-    
     UIButton *backButton = [[UIButton alloc] init];
     backButton.userInteractionEnabled = YES;
     [backButton addTarget:self action:@selector(backViewController:) forControlEvents:UIControlEventTouchUpInside];
@@ -79,12 +82,15 @@
 
 - (void)initTableView
 {
-    tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 65, XBB_Screen_width, XBB_Screen_height-65) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 65, XBB_Screen_width, XBB_Screen_height-65)];
     
-    tableView.delegate = self;
-    tableView.dataSource = self;
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    _tableView.backgroundColor = XBB_Bg_Color;
+    [_tableView setContentInset:XBB_HeadEdge];
+    self.serversCityArray = @[@"dsadas",@"fsfsdfsd"];
     
-    [self.view addSubview:tableView];
+    [self.view addSubview:_tableView];
 }
 
 
@@ -114,10 +120,27 @@
     if (cell==nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
+    cell.textLabel.text = @"dsfd";
+    [cell.textLabel setContentMode:UIViewContentModeCenter];
     return cell;
 }
 
-
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    if (section == 0) {
+        UIView *view = [[UIView alloc] init];
+        view.backgroundColor = XBB_Bg_Color;
+        return view;
+    }
+    return nil;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (section == 0) {
+        return 100.;
+    }
+    return 0;
+}
 #pragma mark system
 - (void)viewDidLoad {
     [super viewDidLoad];

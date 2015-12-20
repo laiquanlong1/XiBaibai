@@ -340,6 +340,7 @@
             cell.priceLabel.alpha = 0;
             cell.selectImageView.alpha = 0;
             cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+            cell.priceLabel.textColor = XBB_NotSelectColor;
             
             NSEnumerator *enumerator = [selectObjects objectEnumerator];
             id object_enumer;
@@ -347,6 +348,7 @@
                 if ([ob isEqual:object_enumer]) {
                     cell.tag = 2;
                     cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                    cell.priceLabel.textColor = XBB_SelectedColor;
                     break;
                 }
             }
@@ -378,7 +380,7 @@
             cell.titleLabel.text = ob.proName;
             cell.titleLabel.tag = [ob.pid integerValue];
             cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
-            
+            cell.priceLabel.textColor = XBB_NotSelectColor;
             NSEnumerator *enumerator = [selectObjects objectEnumerator];
             id object_enumer;
             
@@ -386,6 +388,7 @@
                 if ([ob isEqual:object_enumer]) {
                     cell.tag = 2;
                     cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                      cell.priceLabel.textColor = XBB_SelectedColor;
                     break;
                 }
             }
@@ -408,6 +411,7 @@
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapLabel:)];
         [cell.nameLabel addGestureRecognizer:tap];
         cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+          cell.priceLabel.textColor = XBB_NotSelectColor;
         cell.nameLabel.text = ob.proName;
         if (carType == 1) {
             cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",ob.price1];
@@ -423,6 +427,7 @@
             if ([ob isEqual:object_enumer]) {
                 cell.tag = 2;
                 cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                  cell.priceLabel.textColor = XBB_SelectedColor;
                 break;
             }
         }
@@ -458,17 +463,20 @@
                         
                         cell.tag = 2;
                         cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                        cell.priceLabel.textColor = XBB_SelectedColor;
                         [selectObjects addObject:object];
                     }else
                     {
                         cell.tag = 1;
                         cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                        cell.priceLabel.textColor = XBB_NotSelectColor;
                         [selectObjects removeObject:object];
                     }
                 }else
                 {
                    XBBDiyObject *object_1 = self.dataSource[indexPath.section][i];
                     cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                      cell.priceLabel.textColor = XBB_NotSelectColor;
                     cell.tag = 1;
                     NSEnumerator *enumerator = [selectObjects objectEnumerator];
                     id object_enumer;
@@ -493,11 +501,13 @@
             cell.tag = 2;
             [selectObjects addObject:object];
             cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+              cell.priceLabel.textColor = XBB_SelectedColor;
         }else
         {
             cell.tag = 1;
             [selectObjects removeObject:object];
             cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+              cell.priceLabel.textColor = XBB_NotSelectColor;
             
         }
        

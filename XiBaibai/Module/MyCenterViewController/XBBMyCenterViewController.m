@@ -111,11 +111,12 @@ static NSString *identifier_1 = @"cell_1";
     [dic setObject:[[UserObj shareInstance] uid] forKey:@"uid"];
     [dic setObject:_inputView.textFiled.text forKey:@"uname"];
     [SVProgressHUD show];
-   
     [NetworkHelper postWithAPI:updateUserInfo parameter:dic successBlock:^(id response) {
-        [SVProgressHUD dismiss];
+        [SVProgressHUD showSuccessWithStatus:@"修改成功"];
         [UserObj shareInstance].uname = _inputView.textFiled.text;
         [self hiddenInputView:YES];
+        [self.tableView reloadData];
+ 
     } failBlock:^(NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"昵称修改失败"];
     }];
@@ -131,6 +132,7 @@ static NSString *identifier_1 = @"cell_1";
     
     [self.view addSubview:_inputView];
     [_inputView.button addTarget:self action:@selector(toSaveNikeName:) forControlEvents:UIControlEventTouchUpInside];
+    _inputView.alpha = 0.;
 }
 
 - (void)hiddenInputView:(BOOL)hidden
@@ -346,6 +348,7 @@ static NSString *identifier_1 = @"cell_1";
     }];
 
 }
+
 
 
 #pragma  --mark 头像修改

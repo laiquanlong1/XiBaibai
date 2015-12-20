@@ -28,7 +28,7 @@ static NSString *identifi = @"cell";
 - (void)fetchAddressFromWeb:(void (^)())callback {
     [SVProgressHUD show];
     [NetworkHelper postWithAPI:API_AddressSelect parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
-        [self hiddenTableView:NO];
+        
         if ([response[@"code"] integerValue] == 1) {
             [SVProgressHUD dismiss];
             NSArray *result = response[@"result"][@"list"];
@@ -47,12 +47,20 @@ static NSString *identifi = @"cell";
                 }
             }
             
-          
+            if (callback) {
+                callback();
+            }
         } else {
+            if (callback) {
+                callback();
+            }
             [SVProgressHUD showErrorWithStatus:response[@"msg"]];
         }
         
     } failBlock:^(NSError *error) {
+        if (callback) {
+            callback();
+        }
         [SVProgressHUD showErrorWithStatus:@"查询失败"];
     }];
 }
@@ -134,7 +142,10 @@ static NSString *identifi = @"cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self inirUI];
-    [self fetchAddressFromWeb:nil];
+    [self fetchAddressFromWeb:^{
+        [self.tableView reloadData];
+        [self hiddenTableView:NO];
+    }];
 
 }
 
@@ -219,6 +230,7 @@ static NSString *identifi = @"cell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SetCarAddsViewController *setcaraddVC = [[SetCarAddsViewController alloc] init];
     SetCarAddsInfoViewController *setcaraddsInfoVC = [[SetCarAddsInfoViewController alloc] init];
+    XBBAddressHomeTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     setcaraddsInfoVC.navigationTitle = @"备注";
     if(indexPath.section == 0){
         switch (indexPath.row) {
@@ -230,6 +242,7 @@ static NSString *identifi = @"cell";
             case 1:
                 setcaraddsInfoVC.delegate = self;
                 setcaraddsInfoVC.num =0;
+                setcaraddsInfoVC.addressD = cell.contentLabel.text;
                 [self.navigationController pushViewController:setcaraddsInfoVC animated:YES];
                 break;
             default:
@@ -245,6 +258,7 @@ static NSString *identifi = @"cell";
             case 1:
                 setcaraddsInfoVC.delegate = self;
                 setcaraddsInfoVC.num = 1;
+                setcaraddsInfoVC.addressD = cell.contentLabel.text;
                 [self.navigationController pushViewController:setcaraddsInfoVC animated:YES];
                 break;
             default:

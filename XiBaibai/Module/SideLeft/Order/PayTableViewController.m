@@ -58,7 +58,6 @@ static NSString *identifier_2 = @"tit1cell";
     [orderDic setObject:currentDateStr?currentDateStr:@"" forKey:@"day"];
     
     
-    
     if (buttonIndex==0) {
         [SVProgressHUD show];
 //        if (!self.data)

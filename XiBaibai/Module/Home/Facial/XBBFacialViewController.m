@@ -361,6 +361,7 @@
         cell.titleLabel.tag = [object.pid integerValue];
         [cell.titleLabel addGestureRecognizer:tap];
         cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+        cell.priceLabel.textColor = XBB_NotSelectColor;
         cell.tag = 1;
         cell.titleLabel.text = object.proName;
         if (carType == 1) {
@@ -373,6 +374,7 @@
             for (XBBDiyObject *ob in selectHashTable) {
                 if ([object.proName isEqualToString:ob.proName]) {
                     cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                      cell.priceLabel.textColor = XBB_SelectedColor;
                     cell.tag = 2;
                     [self addAllPrice];
                     
@@ -395,6 +397,28 @@
         selectHashTable = [NSHashTable weakObjectsHashTable];
     }
     XBBDiyObject *object = self.dataSource[indexPath.section][indexPath.row];
+    
+    BOOL is_free = NO;
+    for (XBBDiyObject *object_1 in selectHashTable) {
+        if (object_1.p_wash_free == 1) {
+            is_free = YES;
+        }
+    }
+    if (self.washType == 0 && is_free == NO && object.p_wash_free==0) {
+        BOOL isOk = NO;
+        for (XBBDiyObject *o_1 in selectHashTable) {
+            if ([o_1 isEqual:object]) {
+                isOk = YES;
+            }
+        }
+        if (isOk) {
+            
+        }else
+        {
+            [SVProgressHUD showErrorWithStatus:@"此项目必须选择洗车"];
+            return;
+        }
+    }
     if (indexPath.row == 0) {
         
     }else
@@ -413,12 +437,14 @@
                     if (cell.tag == 1) {
                         cell.tag = 2;
                         cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                        cell.priceLabel.textColor = XBB_SelectedColor;
                         [selectHashTable addObject:object];
                         
                     }else
                     {
                         cell.tag = 1;
                         cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                        cell.priceLabel.textColor = XBB_NotSelectColor;
                         [selectHashTable removeObject:object];
                         
                     }
@@ -428,6 +454,7 @@
                     if (cell_1.tag == 2) {
                         cell_1.tag = 1;
                         cell_1.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                        cell_1.priceLabel.textColor = XBB_NotSelectColor;
                         [selectHashTable removeObject:object_1];
                         
                     }
@@ -439,12 +466,14 @@
             if (cell.tag == 1) {
                 cell.tag = 2;
                 cell.selectImageView.image = [UIImage imageNamed:@"selectImage"];
+                cell.priceLabel.textColor = XBB_SelectedColor;
                 [selectHashTable addObject:object];
                 
             }else
             {
                 cell.tag = 1;
                 cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
+                cell.priceLabel.textColor = XBB_NotSelectColor;
                 [selectHashTable removeObject:object];
                 
             }

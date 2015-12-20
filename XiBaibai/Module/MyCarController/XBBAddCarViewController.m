@@ -102,7 +102,6 @@ static NSString *identifier = @"cell";
         if ([response[@"code"] integerValue] == 1) {
             [SVProgressHUD showSuccessWithStatus:@"修改成功"];
             [[NSNotificationCenter defaultCenter] postNotificationName:NotificationCarListUpdate object:nil];
-            [SVProgressHUD dismiss];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 if (self.navigationController.visibleViewController == self)
                     [self.navigationController popViewControllerAnimated:YES];

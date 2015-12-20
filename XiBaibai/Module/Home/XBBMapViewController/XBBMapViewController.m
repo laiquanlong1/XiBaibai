@@ -182,6 +182,7 @@
     
     
     searchCannelButton = [[UIButton alloc] initWithFrame:CGRectMake(seachBar.bounds.size.width - 80, 0, 80, seachBar.bounds.size.height)];
+    [searchCannelButton.titleLabel setFont:[UIFont systemFontOfSize:14.]];
     [searchCannelButton setTitle:@"取消" forState:UIControlStateNormal];
     [searchCannelButton setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
     [seachBar addSubview:searchCannelButton];

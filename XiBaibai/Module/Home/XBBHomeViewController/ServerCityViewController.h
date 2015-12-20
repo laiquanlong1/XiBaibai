@@ -10,4 +10,6 @@
 
 @interface ServerCityViewController : XBBViewController
 
+@property (nonatomic, copy) NSString *currentCity;
+
 @end

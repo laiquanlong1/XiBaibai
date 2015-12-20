@@ -538,7 +538,7 @@ static NSString *identifier_diy = @"diy";
     UITapGestureRecognizer *titleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(titleAction:)];
     [titleImageView addGestureRecognizer:titleTap];
     
-    titleCityButton = [[UILabel alloc] initWithFrame:CGRectMake(titleImageView.frame.size.width+titleImageView.frame.origin.x, titleImageView.frame.origin.y + 8, 80, 12)];
+    titleCityButton = [[UILabel alloc] initWithFrame:CGRectMake(titleImageView.frame.size.width+titleImageView.frame.origin.x+2, titleImageView.frame.origin.y + 8, 80, 12)];
     [titleCityButton setTextColor:[UIColor whiteColor]];
 
     [titleCityButton setFont:[UIFont systemFontOfSize:13.]];

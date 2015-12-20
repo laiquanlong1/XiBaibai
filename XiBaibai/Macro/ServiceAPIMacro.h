@@ -20,151 +20,131 @@
 //#define ImgDomain @"http://192.168.1.113/xbb"
 
 
-// 轮播
-#define XBB_Banner_roop [NSString stringWithFormat:@"%@/lunbo", APIDomain]
 
-// 下单页洗车和优惠券
-#define XBB_Wash2Coupons [NSString stringWithFormat:@"%@/washCoupons", APIDomain]
+// 01 发送验证码
+#define sendCode_API [NSString stringWithFormat:@"%@/authCode", APIDomain]
 
-// DIY
-#define XBB_DIY_Pro [NSString stringWithFormat:@"%@/diyPro", APIDomain]
+// 01 发送验证码--忘记密码
+#define sendCode_API2 [NSString stringWithFormat:@"%@/authCodePwd", APIDomain]
 
-// 首页美容
-#define XBB_Facial_Pro [NSString stringWithFormat:@"%@/diyCospro", APIDomain]
+// 02 注册用户
+#define Register_API [NSString stringWithFormat:@"%@/register", APIDomain]
 
-// 首页产品
-#define XBB_Index_Pro [NSString stringWithFormat:@"%@/indexProList", APIDomain]
+// 02 注册用户--忘记密码
+#define Register_API2 [NSString stringWithFormat:@"%@/forgetPwd", APIDomain]
 
-// 美容接口
-#define API_SelectWax  [NSString stringWithFormat:@"%@/productInfo", APIDomain]
+// 03 登录
+#define Login_API [NSString stringWithFormat:@"%@/login", APIDomain]
 
-//优惠券(12.11)
-#define XBB_Coupons_select [NSString stringWithFormat:@"%@/userCoupons", APIDomain]
-
-// 优惠码
-#define XBB_exchangeCoupons [NSString stringWithFormat:@"%@/exchangeCoupons", APIDomain]
-
-// 订单详情
-#define XBB_orderSelect [NSString stringWithFormat:@"%@/orderSelect", APIDomain]
-
-//查询用户资料
-#define Select_user_API [NSString stringWithFormat:@"%@/userInfo", APIDomain]
-
-// 二次请求
-#define API_selectOrder_topay [NSString stringWithFormat:@"%@/confirmPay", APIDomain]
-
-//取消订单
-#define API_OrderCancel [NSString stringWithFormat:@"%@/orderCancel", APIDomain]
-
-//查询订单详情
-#define OrderSelect_detail_API [NSString stringWithFormat:@"%@/orderDetail",APIDomain]
-
-//新增订单
+// 04 新增订单
 #define OrderInsert_API [NSString stringWithFormat:@"%@/createOrder", APIDomain]
 
-//修改用户头像接口 和名称
-#define UpdateUserImg_API [NSString stringWithFormat:@"%@/updateHeadImg", APIDomain]
+// 05 查询订单列表
+#define XBB_orderSelect [NSString stringWithFormat:@"%@/orderSelect", APIDomain]
 
-//请求用户车辆
+// 06 查询订单详情
+#define OrderSelect_detail_API [NSString stringWithFormat:@"%@/orderDetail",APIDomain]
+
+// 07 二次请求（1-10前暂时未用）
+#define API_selectOrder_topay [NSString stringWithFormat:@"%@/confirmPay", APIDomain]
+
+// 08 获取用户优惠券 和使用 规则链接
+#define API_couponsInfo [NSString stringWithFormat:@"%@/couponsInfo", APIDomain]
+
+// 09 优惠码(1-10 后)
+#define XBB_exchangeCoupons [NSString stringWithFormat:@"%@/exchangeCoupons", APIDomain]
+
+// 10 下单页洗车和优惠券
+#define XBB_Wash2Coupons [NSString stringWithFormat:@"%@/washCoupons", APIDomain]
+
+// 11 取消订单
+#define API_OrderCancel [NSString stringWithFormat:@"%@/orderCancel", APIDomain]
+
+// 12 评论订单
+#define API_CommentInsert [NSString stringWithFormat:@"%@/evaluate", APIDomain]
+
+// 13 请求用户车辆
 #define car_select [NSString stringWithFormat:@"%@/carSelect", APIDomain]
 
-//查询所有车辆品牌
-#define API_AllCarbrandSelect [NSString stringWithFormat:@"%@/carBrands", APIDomain]
-
-
-//修改用户车辆
-#define API_CarUpdate [NSString stringWithFormat:@"%@/updateCarInfo", APIDomain]
-
-
-//新增用户车辆
-#define Car_Insert_API [NSString stringWithFormat:@"%@/carAdd", APIDomain]
-
-//设置默认车辆
+// 14 设置默认车辆
 #define API_set_default_car [NSString stringWithFormat:@"%@/setDefaultCar", APIDomain]
 
+// 15 优惠券(12.11)
+#define XBB_Coupons_select [NSString stringWithFormat:@"%@/userCoupons", APIDomain]
 
-//删除用户车辆
+// 16 查询用户资料
+#define Select_user_API [NSString stringWithFormat:@"%@/userInfo", APIDomain]
+
+// 17 修改用户资料接口
+#define updateUserInfo [NSString stringWithFormat:@"%@/updateUserInfo", APIDomain]
+
+// 18 修改用户头像接口
+#define UpdateUserImg_API [NSString stringWithFormat:@"%@/updateHeadImg", APIDomain]
+
+// 19 新增用户车辆
+#define Car_Insert_API [NSString stringWithFormat:@"%@/carAdd", APIDomain]
+
+// 20 修改用户车辆
+#define API_CarUpdate [NSString stringWithFormat:@"%@/updateCarInfo", APIDomain]
+
+// 21 删除用户车辆
 #define Car_Delete_API [NSString stringWithFormat:@"%@/deleteCar", APIDomain]
 
-
-//新增用户地址
+// 22 新增用户地址
 #define AddUser_address_API [NSString stringWithFormat:@"%@/addAddress",APIDomain]
 
-
-//查询常用地址车位
+// 23 查询常用地址车位
 #define API_AddressSelect [NSString stringWithFormat:@"%@/selectAddress", APIDomain]
 
-//反馈
+// 24 查询所有车辆品牌
+#define API_AllCarbrandSelect [NSString stringWithFormat:@"%@/carBrands", APIDomain]
+
+// 25 美容接口
+#define API_SelectWax  [NSString stringWithFormat:@"%@/productInfo", APIDomain]
+
+// 26 查询预约时间段
+#define Time_select_make_API [NSString stringWithFormat:@"%@/appointTime", APIDomain]
+
+// 27 反馈
 #define Advice_Insert_API [NSString stringWithFormat:@"%@/userFeedback", APIDomain]
 
-//修改用户资料接口
-#define updateUserInfo [NSString stringWithFormat:@"%@/user_msg_up", APIDomain]
+// 28 检查版本更新（还没有做ios 2）
+#define API_VersionUpdate [NSString stringWithFormat:@"%@/checkVersion", APIDomain]
 
-//查询订单
-#define OrderSelect_API [NSString stringWithFormat:@"%@/order_select", APIDomain]
+// 29 轮播
+#define XBB_Banner_roop [NSString stringWithFormat:@"%@/lunbo", APIDomain]
+
+// 30 DIY子页面
+#define XBB_DIY_Pro [NSString stringWithFormat:@"%@/diyPro", APIDomain]
+
+// 31 首页美容
+#define XBB_Facial_Pro [NSString stringWithFormat:@"%@/diyCospro", APIDomain]
+
+
+// 31 首页diy产品
+#define XBB_Index_Pro [NSString stringWithFormat:@"%@/indexProList", APIDomain]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//支付宝支付回调（充值页面）
+#define Notify_AlipayCallback_Url [NSString stringWithFormat:@"%@/alipay_return", APIDomain]
 
 //确认订单时的订单名称
 #define API_orderName_price [NSString stringWithFormat:@"%@/proName_select",APIDomain]
 
-//查询时间段是否可预约
-#define Time_select_make_API [NSString stringWithFormat:@"%@/appointTime", APIDomain]
-
-
-//发送验证码
-#define sendCode_API [NSString stringWithFormat:@"%@/authCode", APIDomain]
-
-//注册用户
-#define Register_API [NSString stringWithFormat:@"%@/register", APIDomain]
-
-//登录
-#define Login_API [NSString stringWithFormat:@"%@/login", APIDomain]
-
-//注册用户--忘记密码
-#define Register_API2 [NSString stringWithFormat:@"%@/forgetPwd", APIDomain]
-
-//发送验证码--忘记密码
-#define sendCode_API2 [NSString stringWithFormat:@"%@/authCodePwd", APIDomain]
-
-
-//支付宝支付回调
-#define Notify_AlipayCallback_Url [NSString stringWithFormat:@"%@/alipay_return", APIDomain]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // 服务时间
 #define ServerTime [NSString stringWithFormat:@"%@/servertime", APIDomain]
-
-//查询产品
-#define API_Pro_select [NSString stringWithFormat:@"%@/pro_select", APIDomain]
-
-
-//DIY
-#define API_selectDIY [NSString stringWithFormat:@"%@/diy_select", APIDomain]
-
-// 获取洗车方式和优惠券
-#define API_Washinfo [NSString stringWithFormat:@"%@/washinfo", APIDomain]
-
 
 //用户余额
 #define API_Balance [NSString stringWithFormat:@"%@/pay_select", APIDomain]
@@ -180,9 +160,6 @@
 
 //查询全部评价
 #define API_CommentSelect [NSString stringWithFormat:@"%@/comment_select", APIDomain]
-
-//评论员工
-#define API_CommentInsert [NSString stringWithFormat:@"%@/comment_insert", APIDomain]
 
 //投诉
 #define API_Complaint [NSString stringWithFormat:@"%@/complaint", APIDomain]
@@ -208,8 +185,7 @@
 //上传文件接口
 #define API_UploadFile [NSString stringWithFormat:@"%@/UploadFile", APIDomain]
 
-//检查版本更新
-#define API_VersionUpdate [NSString stringWithFormat:@"%@/version_up", APIDomain]
+
 
 //百度推送设置channel id到服务器 chanelid_insert
 #define API_ChannelIdInsert [NSString stringWithFormat:@"%@/chanelid_insert", APIDomain]

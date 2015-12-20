@@ -22,7 +22,10 @@
 - (void)initViewDidLoadDatas
 {
     if ([[UserObj shareInstance] homeAddress] == nil || [[UserObj shareInstance] companyAddress] == nil) {
-        [self fetchAddressFromWeb:nil];
+        [self fetchAddressFromWeb:^{
+            [SVProgressHUD dismiss];
+            
+        }];
     }
 }
 
@@ -43,11 +46,8 @@
 - (void)fetchAddressFromWeb:(void (^)())callback {
     
     [SVProgressHUD show];
-    [self hiddenTableView:YES];
     [NetworkHelper postWithAPI:API_AddressSelect parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
-        [self hiddenTableView:NO];
         if ([response[@"code"] integerValue] == 1) {
-            [SVProgressHUD dismiss];
             NSArray *result = response[@"result"][@"list"];
             for (NSDictionary *temp in result) {
                 if ([temp[@"address_type"] integerValue] == 0) {
@@ -59,11 +59,12 @@
                     [UserObj shareInstance].companyCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);
                 }
             }
+            [self.tableView reloadData];
             
         } else {
             [SVProgressHUD showErrorWithStatus:response[@"msg"]];
         }
-        [self.tableView reloadData];
+        
     } failBlock:^(NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"查询失败"];
     }];

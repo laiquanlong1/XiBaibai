@@ -18,6 +18,8 @@
 #import "MyOrderViewController.h"
 #import "CommentTableViewCell.h"
 #import "StarView.h"
+#import "XBBCommentViewController.h"
+
 
 @interface XBBOrderInfoViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
 {
@@ -72,6 +74,7 @@ static NSString *hascomment = @"hascomment";
 #pragma datas
 - (void)feathOrderInfo
 {
+    [SVProgressHUD show];
     [NetworkHelper postWithAPI:OrderSelect_detail_API parameter:@{@"uid":[[UserObj shareInstance] uid],@"orderid":self.orderid} successBlock:^(id response) {
         if ([response[@"code"] integerValue] == 1) {
             if (response[@"result"]) {
@@ -235,6 +238,7 @@ static NSString *hascomment = @"hascomment";
 
                 [self.tableView reloadData];
             }
+            [SVProgressHUD dismiss];
         }else
         {
             [SVProgressHUD showErrorWithStatus:response[@"msg"]];
@@ -267,13 +271,21 @@ static NSString *hascomment = @"hascomment";
 {
      [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+- (IBAction)upData:(id)sender
+{
+    [self feathOrderInfo];
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self feathOrderInfo];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOfPay:) name:NotificationRecharge object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(upData:) name:NotificationOrderListUpdate object:nil] ;
     [self initUI];
-    [self feathOrderInfo];
-    
 }
 
 - (void)initUI
@@ -393,8 +405,11 @@ static NSString *hascomment = @"hascomment";
 }
 - (IBAction)toCallPhone:(id)sender
 {
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"联系技师" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:[NSString stringWithFormat:@"%@",empPhone] otherButtonTitles:nil, nil];
-    [sheet showInView:self.view];
+    if (empPhone != NULL) {
+        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"联系技师" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:[NSString stringWithFormat:@"%@",empPhone] otherButtonTitles:nil, nil];
+        [sheet showInView:self.view];
+    }
+    
 }
 - (void)handleOfPay:(NSNotification *)sender {
 
@@ -413,7 +428,9 @@ static NSString *hascomment = @"hascomment";
 
 - (IBAction)toCommentButtonAction:(id)sender
 {
-    
+    XBBCommentViewController *comment = [[XBBCommentViewController alloc] init];
+    comment.orderId = self.orderid;
+    [self presentViewController:comment animated:YES completion:nil];
 }
 
 - (IBAction)toPay:(id)sender

@@ -21,7 +21,6 @@
 @implementation SetCarAddsInfoViewController
 
 - (void)initView{
-    self.view.backgroundColor = kUIColorFromRGB(0xf6f5fa);
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     title.text = @"设置详细地址";
     title.textAlignment = NSTextAlignmentCenter;
@@ -43,18 +42,17 @@
     txtView = [[UITextView alloc] init];
     txtView.delegate = self;//设置它的委托方法
     txtView.returnKeyType = UIReturnKeyDefault;//返回键的类型
-    txtView.layer.borderColor = kUIColorFromRGB(0xCCCCCC).CGColor;
-    txtView.layer.borderWidth = 0.5;
     txtView.keyboardType = UIKeyboardTypeDefault;//键盘类型
     txtView.selectedRange=NSMakeRange(0,-100) ;   //起始位置
     txtView.font = [UIFont systemFontOfSize:15];
+  
    
     self.automaticallyAdjustsScrollViewInsets = NO;
     txtView.autoresizingMask = UIViewAutoresizingFlexibleHeight;//自适应高度
     [self.view addSubview:txtView];
     [txtView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
-        make.top.mas_equalTo(self.view.mas_top).mas_offset(100);
+        make.top.mas_equalTo(self.view.mas_top).mas_offset(71);
         make.right.mas_equalTo(0);
         make.height.mas_equalTo(200);
     }];
@@ -68,7 +66,10 @@
         make.top.mas_equalTo(txtView.mas_top).mas_offset(8);
         make.left.mas_equalTo(txtView.mas_left).mas_offset(5);
     }];
-    
+    if (self.addressD) {
+        txtView.text = self.addressD;
+        self.placeholderLabel.hidden = YES;
+    }
 
 }
 

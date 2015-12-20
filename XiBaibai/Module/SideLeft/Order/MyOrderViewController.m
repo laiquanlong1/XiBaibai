@@ -20,6 +20,8 @@
 #import "PayTableViewController.h"
 #import "RechargeHelper.h"
 #import "XBBOrderInfoViewController.h"
+#import "XBBCommentViewController.h"
+
 
 @interface MyOrderViewController () <UIActionSheetDelegate,UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>
 {
@@ -117,6 +119,7 @@ static NSString *identifi = @"cell";
     page = 1;
     self.orderTableView.alpha = 0;
     [self fetchOrderFromWeb:^{
+       
         [UIView animateWithDuration:0.3 animations:^{
             if (self.orderArr.count == 0) {
                 [SVProgressHUD showErrorWithStatus:@"暂无数据"];
@@ -127,10 +130,10 @@ static NSString *identifi = @"cell";
             {
                 noDataView.alpha = 0;
                 self.orderTableView.alpha = 1;
+                [self.orderTableView reloadData];
             }
             
         } completion:^(BOOL finished) {
-            [self.orderTableView reloadData];
             [SVProgressHUD dismiss];
         }];
 
@@ -262,6 +265,7 @@ static NSString *identifi = @"cell";
         self.orderArr = nil;
         page = 1;
     }
+    self.orderTableView.alpha = 0;
     [self fetchOrderFromWeb:^{
         [UIView animateWithDuration:0.3 animations:^{
             if (self.orderArr.count == 0) {
@@ -384,7 +388,6 @@ static NSString *identifi = @"cell";
             [SVProgressHUD showErrorWithStatus:@"您不能取消此订单"];
         }
         
-        DLog(@"取消")
     }else if ([button.titleLabel.text isEqualToString:@"支付订单"]){
         selectTag = button.tag;
 
@@ -395,29 +398,12 @@ static NSString *identifi = @"cell";
         DLog(@"支付订单")
     }else if ([button.titleLabel.text isEqualToString:@"去评价"]) {
         DLog(@"去评价")
+        XBBCommentViewController *comment = [[XBBCommentViewController alloc] init];
+        comment.orderId = order.order_id;
+        [self presentViewController:comment animated:YES completion:nil];
     }
 }
 
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"MyOrderPushDetailComplete"]) {
-        MyOrderModel *model = sender;
-        [segue.destinationViewController setValue:[NSString stringWithFormat:@"%@", @(model.orderId)] forKey:@"order_id"];
-    } else if ([segue.identifier isEqualToString:@"MyOrderPushComment"]) {
-        MyOrderModel *model = sender;
-        [segue.destinationViewController setValue:model.emp_name forKey:@"emp_name"];
-        [segue.destinationViewController setValue:model.emp_img forKey:@"emp_img"];
-        [segue.destinationViewController setValue:model.emp_num forKey:@"emp_num"];
-        [segue.destinationViewController setValue:@(model.order_reg_id) forKey:@"emp_id"];
-        [segue.destinationViewController setValue:@(model.orderId) forKey:@"order_id"];
-    } else if ([segue.identifier isEqualToString:@"MyOrderPushComplaint"]) {
-        MyOrderModel *model = sender;
-        [segue.destinationViewController setValue:model.emp_name forKey:@"emp_name"];
-        [segue.destinationViewController setValue:model.emp_img forKey:@"emp_img"];
-        [segue.destinationViewController setValue:model.emp_num forKey:@"emp_num"];
-        [segue.destinationViewController setValue:@(model.order_reg_id) forKey:@"emp_id"];
-    }
-}
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     //    if (buttonIndex == 1) {

@@ -343,34 +343,34 @@
 // 获取洗车方式
 - (void)fetchProSelectWashWay
 {
-    
-    [NetworkHelper postWithAPI:API_Washinfo parameter:nil successBlock:^(id response) {
-        if (response) {
-            NSDictionary *responseDic = response;
-           
-                if (responseDic!= nil) {
-                    NSDictionary *resultDic = responseDic[@"result"];
-                    if (responseDic != nil) {
-                        if (_proSet == nil) {_proSet = [NSMutableSet set];}
-                        NSArray *arr = resultDic[@"washinfo"];
-                        NSString *p_idsString = self.orderDitailDic[@"p_ids"];
-                        NSArray *p_idsArray = [p_idsString componentsSeparatedByString:@","];
-                        // 列表
-            
-                        [arr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                            NSDictionary *dic = obj;
-                            for (NSString *st in p_idsArray) {
-                                if ([dic[@"id"] integerValue] == [st integerValue]) {
-                                    [_proSet addObject:dic];
-                                }
-                            }
-                        }];
-                    }
-                }
-        }
-    } failBlock:^(NSError *error) {
-        [SVProgressHUD showErrorWithStatus:@"获取洗车方式网络错误"];
-    }];
+//    
+//    [NetworkHelper postWithAPI:API_Washinfo parameter:nil successBlock:^(id response) {
+//        if (response) {
+//            NSDictionary *responseDic = response;
+//           
+//                if (responseDic!= nil) {
+//                    NSDictionary *resultDic = responseDic[@"result"];
+//                    if (responseDic != nil) {
+//                        if (_proSet == nil) {_proSet = [NSMutableSet set];}
+//                        NSArray *arr = resultDic[@"washinfo"];
+//                        NSString *p_idsString = self.orderDitailDic[@"p_ids"];
+//                        NSArray *p_idsArray = [p_idsString componentsSeparatedByString:@","];
+//                        // 列表
+//            
+//                        [arr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                            NSDictionary *dic = obj;
+//                            for (NSString *st in p_idsArray) {
+//                                if ([dic[@"id"] integerValue] == [st integerValue]) {
+//                                    [_proSet addObject:dic];
+//                                }
+//                            }
+//                        }];
+//                    }
+//                }
+//        }
+//    } failBlock:^(NSError *error) {
+//        [SVProgressHUD showErrorWithStatus:@"获取洗车方式网络错误"];
+//    }];
 }
 
 // 获取产品

@@ -98,7 +98,7 @@
     [priceLabel_1 setFont:[UIFont systemFontOfSize:14.]];
     [barView_back addSubview:priceLabel];
     [barView_back addSubview:nameLabel];
-    
+    barView_back.backgroundColor = XBB_Forground_Color;
 
     [self.view addSubview:barView_back];
 }
@@ -194,6 +194,7 @@
                     {
                         XBBFacialViewController *fa = [[XBBFacialViewController alloc] init];
                         fa.selectFacialArray = @[oder];
+                        fa.washType = 11;
                         [self.navigationController pushViewController:fa animated:YES];
                         //                [self presentViewController:fa animated:YES completion:nil];
                     }

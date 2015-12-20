@@ -258,6 +258,7 @@
 		8EEFCC4D1BF0F2CD00D3D93F /* FacialDIYTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC4C1BF0F2CD00D3D93F /* FacialDIYTableViewCell.m */; };
 		8EEFCC511BF1B39300D3D93F /* XBBBaseImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC501BF1B39300D3D93F /* XBBBaseImageView.m */; };
 		8EEFCC541BF1B3CB00D3D93F /* XBBDIYImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC531BF1B3CB00D3D93F /* XBBDIYImageView.m */; };
+		8EF3B2BD1C265FF2000AEF12 /* XBBCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3B2BC1C265FF2000AEF12 /* XBBCommentViewController.m */; };
 		8F57AC121C251B7800A7B455 /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F57AC101C251B7800A7B455 /* CommentTableViewCell.m */; };
 		8F57AC131C251B7800A7B455 /* CommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F57AC111C251B7800A7B455 /* CommentTableViewCell.xib */; };
 		8F57AC161C25327700A7B455 /* XBBInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F57AC151C25327700A7B455 /* XBBInputView.m */; };
@@ -788,6 +789,8 @@
 		8EEFCC501BF1B39300D3D93F /* XBBBaseImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBBaseImageView.m; path = DIYView/ImageView/XBBBaseImageView.m; sourceTree = "<group>"; };
 		8EEFCC521BF1B3CB00D3D93F /* XBBDIYImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBDIYImageView.h; path = DIYView/ImageView/XBBDIYImageView.h; sourceTree = "<group>"; };
 		8EEFCC531BF1B3CB00D3D93F /* XBBDIYImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBDIYImageView.m; path = DIYView/ImageView/XBBDIYImageView.m; sourceTree = "<group>"; };
+		8EF3B2BB1C265FF2000AEF12 /* XBBCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBCommentViewController.h; path = MyOrder/XBBCommentViewController.h; sourceTree = "<group>"; };
+		8EF3B2BC1C265FF2000AEF12 /* XBBCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBCommentViewController.m; path = MyOrder/XBBCommentViewController.m; sourceTree = "<group>"; };
 		8F57AC0F1C251B7800A7B455 /* CommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommentTableViewCell.h; path = MyOrder/CommentTableViewCell.h; sourceTree = "<group>"; };
 		8F57AC101C251B7800A7B455 /* CommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommentTableViewCell.m; path = MyOrder/CommentTableViewCell.m; sourceTree = "<group>"; };
 		8F57AC111C251B7800A7B455 /* CommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CommentTableViewCell.xib; path = MyOrder/CommentTableViewCell.xib; sourceTree = "<group>"; };
@@ -1767,6 +1770,8 @@
 				8F57AC0F1C251B7800A7B455 /* CommentTableViewCell.h */,
 				8F57AC101C251B7800A7B455 /* CommentTableViewCell.m */,
 				8F57AC111C251B7800A7B455 /* CommentTableViewCell.xib */,
+				8EF3B2BB1C265FF2000AEF12 /* XBBCommentViewController.h */,
+				8EF3B2BC1C265FF2000AEF12 /* XBBCommentViewController.m */,
 			);
 			name = MyOrder;
 			sourceTree = "<group>";
@@ -2251,6 +2256,7 @@
 				188D9A0D1BADCD9A00E68506 /* Order.m in Sources */,
 				188D9A151BADCD9A00E68506 /* RSADataVerifier.m in Sources */,
 				8EAA96F51C1166C100B83CA7 /* XBBDiyObject.m in Sources */,
+				8EF3B2BD1C265FF2000AEF12 /* XBBCommentViewController.m in Sources */,
 				8E79B86E1C1BBD1800EB7518 /* AddCarNumTableViewCell.m in Sources */,
 				188D99B01BADCD9A00E68506 /* AddPlanOrderViewController.m in Sources */,
 				8FDA2D8B1C217BA6005D8188 /* XBBOrderInfoCommentTableViewCell.m in Sources */,
