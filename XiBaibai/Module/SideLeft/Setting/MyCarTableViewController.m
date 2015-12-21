@@ -408,7 +408,7 @@ static NSString *identifier = @"carcell";
         
     }else{
         [cell.btnDefault setTitle:@"设置默认" forState:UIControlStateNormal];
-        cell.btnDefault.tag = carModel.carId;
+        cell.btnDefault.tag = indexPath.section;
         cell.btnDefault.userInteractionEnabled = YES;
         [cell.btnDefault setImage:[UIImage imageNamed:@"常用车辆设为默认"] forState:UIControlStateNormal];
         [cell.btnDefault setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
@@ -419,30 +419,46 @@ static NSString *identifier = @"carcell";
 
 - (void)setdefalutcar:(id)sender{
     UIButton *btn = (UIButton *)sender;
+     MyCarModel *carModel = [self.carArr objectAtIndex:btn.tag];
     if (self.isDownOrder) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"设置默认车辆" message:@"轿车与suv的价格有所不同，确认设置?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        alert.tag = btn.tag;
-        [alert show];
-        return;
+        if (carModel.c_type != [[UserObj shareInstance] carModel].c_type) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"设置默认车辆" message:@"轿车与suv的价格有所不同，确认设置?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+            alert.tag = carModel.carId;
+            [alert show];
+            return;
+        }else
+        {
+            [SVProgressHUD show];
+            NSMutableDictionary *dic = [NSMutableDictionary new];
+            [dic setObject:[NSString stringWithFormat:@"%@",[UserObj shareInstance].uid] forKey:@"uid"];
+            [dic setObject:[NSString stringWithFormat:@"%ld",carModel.carId] forKey:@"id"];
+            [NetworkHelper postWithAPI:API_set_default_car parameter:dic successBlock:^(id response) {
+                [SVProgressHUD showSuccessWithStatus:@"设置成功"];
+                if (self.isDownOrder) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        self.complation();
+                        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+                    });
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:NotificationCarListUpdate object:nil];
+                
+            } failBlock:^(NSError *error) {
+                [SVProgressHUD showErrorWithStatus:@"设置失败"];
+            }];
+            return;
+
+        }
     }
    
     
    
     [SVProgressHUD show];
-    NSLog(@"defalut%ld",btn.tag);
     NSMutableDictionary *dic = [NSMutableDictionary new];
     [dic setObject:[NSString stringWithFormat:@"%@",[UserObj shareInstance].uid] forKey:@"uid"];
-    [dic setObject:[NSString stringWithFormat:@"%ld",btn.tag] forKey:@"id"];
+    [dic setObject:[NSString stringWithFormat:@"%ld",carModel.carId] forKey:@"id"];
     [NetworkHelper postWithAPI:API_set_default_car parameter:dic successBlock:^(id response) {
         [btn setTitle:@"默认车辆" forState:UIControlStateNormal];
         [SVProgressHUD showSuccessWithStatus:@"设置成功"];
-        if (self.isDownOrder) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                self.complation();
-                [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-                
-            });
-        }
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationCarListUpdate object:nil];
         
     } failBlock:^(NSError *error) {
@@ -450,15 +466,7 @@ static NSString *identifier = @"carcell";
     }];
 }
 
-// Override to support conditional editing of the table view.
-//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-//    // Return NO if you do not want the specified item to be editable.
-//    return YES;
-//}
 
-//- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    return UITableViewCellEditingStyleDelete;
-//}
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     

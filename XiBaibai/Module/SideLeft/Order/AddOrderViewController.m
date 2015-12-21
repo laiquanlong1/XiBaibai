@@ -40,7 +40,7 @@
 static NSString *identifier = @"titcell";
 static NSString *identifier_2 = @"tit1cell";
 
-@interface AddOrderViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface AddOrderViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
     UIView *barView;
     XBBListHeadLabel *priceTotalTitle;
@@ -86,6 +86,126 @@ static NSString *identifier_2 = @"tit1cell";
 
 
 @implementation AddOrderViewController
+
+- (void)hiddenCarBar:(BOOL)hiddenCarBar
+{
+    [UIView beginAnimations:@"frameO" context:nil];
+    [UIView setAnimationDuration:0.5];
+    CGRect  frame = carfloatView.frame;
+    if (hiddenCarBar) {
+        frame.origin.y = 24.;
+        carfloatView.alpha = 0.;
+    }else
+    {
+        frame.origin.y = 64.;
+        carfloatView.alpha = 0.7;
+    }
+    carfloatView.frame = frame;
+    [UIView commitAnimations];
+}
+
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    [self hiddenCarBar:NO];
+    DLog(@"")
+}
+//- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+//{
+//      [self hiddenCarBar:NO];
+//}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    DLog(@"")
+    [self hiddenCarBar:YES];
+}
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    DLog(@"")
+//}
+//- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+//{
+//    [self hiddenCarBar:NO];
+//    DLog(@"")
+//}
+
+#pragma mark count
+
+- (void)coutAllPrice
+{
+    
+    if (carType == 1) {
+        // 洗车
+        if (self.selectWashOrderObject) {
+            selectWashPrice = self.selectWashOrderObject.price;
+        }
+        
+        if (self.selectDIYArray.count > 0) {
+            selectDIYPrice = 0;
+            for (XBBOrder *diy in self.selectDIYArray) {
+                selectDIYPrice += diy.price;
+            }
+        }
+        
+        if (self.selectFacialArray.count > 0) {
+            selectFaicalPrice = 0;
+            for (XBBOrder *facial in self.selectFacialArray) {
+                selectFaicalPrice += facial.price;
+            }
+        }
+        
+        if (self.selectCouponModel) {
+            selectCouponPrice = [self.selectCouponModel.coupons_price floatValue];
+        }
+        
+        [self addAllPrice];
+    }else
+    {
+        if (self.selectWashOrderObject) {
+            selectWashPrice = self.selectWashOrderObject.price_2;
+        }
+        
+        if (self.selectDIYArray.count > 0) {
+            selectDIYPrice = 0;
+            for (XBBOrder *diy in self.selectDIYArray) {
+                selectDIYPrice += diy.price_2;
+            }
+        }
+        
+        if (self.selectFacialArray.count > 0) {
+            selectFaicalPrice = 0;
+            for (XBBOrder *facial in self.selectFacialArray) {
+                selectFaicalPrice += facial.price_2;
+            }
+        }
+        if (self.selectCouponModel) {
+            selectCouponPrice = [self.selectCouponModel.coupons_price floatValue];
+        }
+        [self addAllPrice];
+    }
+    
+    
+}
+
+
+- (void)addAllPrice
+{
+    
+    if (self.selectCouponModel) {
+        if ([self.selectCouponModel.coupons_price floatValue] - ( selectDIYPrice + selectWashPrice + selectFaicalPrice) > 0) {
+            selectCouponPrice = selectDIYPrice + selectWashPrice + selectFaicalPrice;
+        }else if (selectDIYPrice + selectWashPrice + selectFaicalPrice == 0) {
+            selectCouponPrice = 0;
+        } else
+        {
+            selectCouponPrice = [self.selectCouponModel.coupons_price floatValue];
+        }
+    }
+    
+    selectAllPrice = selectDIYPrice + selectWashPrice + selectFaicalPrice  - selectCouponPrice;
+    priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",selectAllPrice>0?selectAllPrice:0.00];
+}
 
 #pragma mark dataDispose
 
@@ -357,9 +477,10 @@ static NSString *identifier_2 = @"tit1cell";
 }
 - (void)initUIs
 {
-    [self setNavigationBarControl];
+    
     [self addTabBar];
     [self addtabview];
+    [self setNavigationBarControl];
     [self alphatoZero];
 }
 - (void)setNavigationBarControl
@@ -421,61 +542,6 @@ static NSString *identifier_2 = @"tit1cell";
 }
 
 
-- (void)coutAllPrice
-{
-    
-    if (carType == 1) {
-        // 洗车
-        if (self.selectWashOrderObject) {
-            selectWashPrice = self.selectWashOrderObject.price;
-        }
-        
-        if (self.selectDIYArray.count > 0) {
-            selectDIYPrice = 0;
-            for (XBBOrder *diy in self.selectDIYArray) {
-                selectDIYPrice += diy.price;
-            }
-        }
-        
-        if (self.selectFacialArray.count > 0) {
-            selectFaicalPrice = 0;
-            for (XBBOrder *facial in self.selectFacialArray) {
-                selectFaicalPrice += facial.price;
-            }
-        }
-        
-        if (self.selectCouponModel) {
-            selectCouponPrice = [self.selectCouponModel.coupons_price floatValue];
-        }
-        
-        [self addAllPrice];
-    }else
-    {
-        if (self.selectWashOrderObject) {
-            selectWashPrice = self.selectWashOrderObject.price_2;
-        }
-        
-        if (self.selectDIYArray.count > 0) {
-            selectDIYPrice = 0;
-            for (XBBOrder *diy in self.selectDIYArray) {
-                selectDIYPrice += diy.price_2;
-            }
-        }
-        
-        if (self.selectFacialArray.count > 0) {
-            selectFaicalPrice = 0;
-            for (XBBOrder *facial in self.selectFacialArray) {
-                selectFaicalPrice += facial.price_2;
-            }
-        }
-        if (self.selectCouponModel) {
-            selectCouponPrice = [self.selectCouponModel.coupons_price floatValue];
-        }
-        [self addAllPrice];
-    }
-    
-   
-}
 
 - (void)addtabview
 {
@@ -486,6 +552,7 @@ static NSString *identifier_2 = @"tit1cell";
     self.tableView.separatorColor = XBB_separatorColor;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+
     [self.view addSubview:self.tableView];
     [self initfloatBar];
 }
@@ -510,21 +577,21 @@ static NSString *identifier_2 = @"tit1cell";
     [self.view addSubview:carfloatView];
 }
 
-- (void)hiddenCarBar:(BOOL)hidden
-{
-    [UIView beginAnimations:@"tohiddenBar" context:nil];
-    [UIView setAnimationDuration:0.25];
-    if (hidden)
-    {
-        
-        carfloatView.alpha = 0.;
-        
-    }else
-    {
-        carfloatView.alpha = 0.7;
-    }
-    [UIView commitAnimations];
-}
+//- (void)hiddenCarBar:(BOOL)hidden
+//{
+//    [UIView beginAnimations:@"tohiddenBar" context:nil];
+//    [UIView setAnimationDuration:0.25];
+//    if (hidden)
+//    {
+//        
+//        carfloatView.alpha = 0.;
+//        
+//    }else
+//    {
+//        carfloatView.alpha = 0.7;
+//    }
+//    [UIView commitAnimations];
+//}
 - (void)addNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(upCar) name:NotificationCarListUpdate object:nil];
@@ -829,41 +896,12 @@ static NSString *identifier_2 = @"tit1cell";
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 cell.priceLabel.textColor = XBB_SelectedColor;
             }
-//            if (self.selectArray) {
-//                selectDIYPrice = 0;
-//                for (XBBOrder *oooo in self.selectDIYArray) {
-//                    if (carType == 1) {
-//                        selectDIYPrice += oooo.price;
-//                    }else
-//                    {
-//                        selectDIYPrice += oooo.price_2;
-//                    }
-//                    
-//                }
-//                [self addAllPrice];
-//                self.selectArray = nil;
-//            }
-            
         }
         for (XBBOrder *ooo in [self.dataArray[2] xbbOrders]) {
             if ([ooo isEqual:object]) {
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 cell.priceLabel.textColor = XBB_SelectedColor;
             }
-//            if (self.selectArray) {
-//                selectFaicalPrice = 0;
-//                for (XBBOrder *oooo in self.selectFacialArray) {
-//                    
-//                    if (carType == 1) {
-//                        selectFaicalPrice += oooo.price;
-//                    }else
-//                    {
-//                        selectFaicalPrice += oooo.price_2;
-//                    }
-//                    
-//                }
-//                [self addAllPrice];
-//            }
         }
         
         for (XBBOrder *ooo in [self.dataArray[4] xbbOrders]) {
@@ -906,23 +944,7 @@ static NSString *identifier_2 = @"tit1cell";
 }
 
 
-- (void)addAllPrice
-{
-    
-    if (self.selectCouponModel) {
-        if ([self.selectCouponModel.coupons_price floatValue] - ( selectDIYPrice + selectWashPrice + selectFaicalPrice) > 0) {
-            selectCouponPrice = selectDIYPrice + selectWashPrice + selectFaicalPrice;
-        }else if (selectDIYPrice + selectWashPrice + selectFaicalPrice == 0) {
-            selectCouponPrice = 0;
-        } else
-        {
-            selectCouponPrice = [self.selectCouponModel.coupons_price floatValue];
-        }
-    }
-  
-    selectAllPrice = selectDIYPrice + selectWashPrice + selectFaicalPrice  - selectCouponPrice;
-    priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",selectAllPrice>0?selectAllPrice:0.00];
-}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
@@ -949,8 +971,6 @@ static NSString *identifier_2 = @"tit1cell";
                 cell.selectImageView.image = [UIImage imageNamed:@"noselectImage"];
                 cell.priceLabel.textColor = XBB_NotSelectColor;
                 self.selectWashOrderObject = object;
-                
-                
             }else
             {
                 washType = 22;
@@ -972,10 +992,10 @@ static NSString *identifier_2 = @"tit1cell";
             cell.priceLabel.textColor = XBB_NotSelectColor;
             
         }
-       
+        [self coutAllPrice];
     }
     
-    if ([object isEqual:[[self.dataArray lastObject] xbbOrders][0]]||[object isEqual:[[self.dataArray lastObject] xbbOrders][1]]) {
+    if ([object isEqual:[[self.dataArray lastObject] xbbOrders][0]] || [object isEqual:[[self.dataArray lastObject] xbbOrders][1]]) {
         AddOrderDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         if (cell.tag == 11) {
             cell.tag = 22;
@@ -1040,19 +1060,11 @@ static NSString *identifier_2 = @"tit1cell";
         diy_1.selectArray = object.xbbOrders;
         diy_1.selectObjectsBlock = ^(NSHashTable *selectHashObject){
             NSMutableArray *arr = [NSMutableArray array];
-           selectDIYPrice = 0;
             for (XBBDiyObject *obj in selectHashObject) {
-                
                 XBBOrder *order = [[XBBOrder alloc] init];
                 order.title = obj.proName;
                 order.price = obj.price1;
                 order.price_2 = obj.price2;
-                if (carType == 1) {
-                    selectDIYPrice += order.price;
-                }else
-                {
-                    selectDIYPrice += order.price_2;
-                }
                 order.xbbid = obj.pid;
                 [arr addObject:order];
             }
@@ -1082,23 +1094,20 @@ static NSString *identifier_2 = @"tit1cell";
                 XBBOrder *order = [[XBBOrder alloc] init];
                 order.title = object.proName;
                 order.xbbid = object.pid;
-            
+                
                 order.price = object.price1;
                 order.price_2 = object.price2;
                 order.p_wash_free = object.p_wash_free;
-
+                
                 if (object.p_wash_free==1) {
                     hasWax = YES;
                 }
-                
-            
                 [arr addObject:order];
             }
             hasWaxs = hasWax;
             if (hasWax) {
                 
                 if (washType == 11) {
-                    selectWashPrice = 0;
                     self.selectWashOrderObject = nil;
                     washType = 0;
                     haveSelectWash = YES;
@@ -1136,7 +1145,6 @@ static NSString *identifier_2 = @"tit1cell";
         
     }
     if ([object isEqual:self.dataArray[4]]) {
- 
         XBBAddressSelectViewController *address = [[UIStoryboard storyboardWithName:@"XBBOne" bundle:nil] instantiateViewControllerWithIdentifier:@"XBBAddressSelectViewController"];
         address.navigationTitle = @"选择车辆位置";
         address.selectAddressBlock = ^(XBBAddressModel *model){
@@ -1148,16 +1156,14 @@ static NSString *identifier_2 = @"tit1cell";
                 NSMutableArray *arr = [NSMutableArray array];
                 [arr addObject:order];
                 object.xbbOrders  = arr;
-                [self initUpdateData];
             }else
             {
                 object.xbbOrders = nil;
-                [self initUpdateData];
+                
             }
+            [self initUpdateData];
         };
         [self presentViewController:address animated:YES completion:nil];
-        
-        
     }
 }
 
@@ -1167,9 +1173,7 @@ static NSString *identifier_2 = @"tit1cell";
 {
     NSMutableDictionary *orderDic = [NSMutableDictionary dictionary];
     [orderDic setObject:[UserObj shareInstance].uid forKey:@"uid"];
-
     [orderDic setObject:self.selectAddress.address?self.selectAddress.address:@"" forKey:@"location"];
-    
     [orderDic setObject:self.selectAddress.remarkAddress?self.selectAddress.remarkAddress:@"" forKey:@"remark"];
     [orderDic setObject:[NSString stringWithFormat:@"%f",self.selectAddress.coordinate.latitude] forKey:@"location_lt"];
     [orderDic setObject:[NSString stringWithFormat:@"%f",self.selectAddress.coordinate.longitude] forKey:@"location_lg"];
@@ -1188,8 +1192,6 @@ static NSString *identifier_2 = @"tit1cell";
     }
     if (self.selectDIYArray.count > 0) {
         for (XBBOrder *order in self.selectDIYArray) {
-            DLog(@"%@",order.xbbid)
-            
             NSDictionary *dic = nil;
             if (carType == 1) {
                 dic = @{@"p_info":order.title,@"p_price":@(order.price)};
@@ -1198,7 +1200,6 @@ static NSString *identifier_2 = @"tit1cell";
                 dic = @{@"p_info":order.title,@"p_price":@(order.price_2)};
             }
             [p_proArray addObject:dic];
-            
             [p_ids appendFormat:@"%@,",order.xbbid];
         }
     }
@@ -1212,7 +1213,6 @@ static NSString *identifier_2 = @"tit1cell";
             {
                 dic = @{@"p_info":order.title,@"p_price":@(order.price_2)};
             }
-           
             [p_proArray addObject:dic];
         }
     }
@@ -1242,7 +1242,6 @@ static NSString *identifier_2 = @"tit1cell";
     PayTableViewController *pay = [[PayTableViewController alloc] init];
     pay.dic_prama = orderDic; // 字典参数
     pay.pro_Dics = [p_proArray copy]; // 数组
-
     pay.location = [NSString stringWithFormat:@"%@ %@",self.selectAddress.address?self.selectAddress.address:@"",self.selectAddress.remarkAddress?self.selectAddress.remarkAddress:@""];
     pay.planTime = planTime;
     pay.couponprice = selectCouponPrice;
