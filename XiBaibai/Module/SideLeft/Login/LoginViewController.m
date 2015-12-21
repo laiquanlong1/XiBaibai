@@ -9,6 +9,7 @@
 #import "LoginViewController.h"
 #import "RegisterViewController.h"
 #import "ForgetPwdViewController.h"
+#import "UserObj.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
 {
@@ -427,12 +428,14 @@
     if ([self.txtLogin.text length] == 11) {
         if ([self.txtPWD.text length] >= 6) {
             [NetworkHelper postWithAPI:Login_API parameter:@{@"iphone":self.txtLogin.text,@"pwd":self.txtPWD.text} successBlock:^(id response) {
+                DLog(@"%@",response)
                 if ([response[@"code"] integerValue] == 1) {
                     [SVProgressHUD showSuccessWithStatus:@"登录成功"];
                     NSUserDefaults *isLogin = [NSUserDefaults standardUserDefaults];
                     [isLogin setObject:[[response objectForKey:@"result"] objectForKey:@"iphone"] forKey:@"iphone"];
                     [isLogin setObject:[[response objectForKey:@"result"] objectForKey:@"id"] forKey:@"userid"];
                     [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginSuccessful object:nil];
+                    [UserObj shareInstance].uid = [[response objectForKey:@"result"] objectForKey:@"id"];
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                         [NSThread sleepForTimeInterval:0.5];
                         dispatch_async(dispatch_get_main_queue(), ^{

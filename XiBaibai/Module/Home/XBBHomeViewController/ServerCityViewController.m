@@ -28,11 +28,37 @@
 - (void)toFeathData
 {
     [self feathData:^{
+   
+        [SVProgressHUD dismiss];
         DLog(@"%@",self.currentCity)
     }];
 }
 - (void)feathData:(void(^)(void))complation
 {
+    
+    
+    [NetworkHelper postWithAPI:ServerCity parameter:nil successBlock:^(id response) {
+        DLog(@"%@",response)
+        if ([response[@"code"] integerValue] == 1) {
+            NSArray *citys = response[@"result"];
+            NSMutableArray *arr = [NSMutableArray array];
+            for (NSString *string in citys) {
+                [arr addObject:string];
+            }
+            self.serversCityArray = arr;
+             [SVProgressHUD dismiss];
+            [self.tableView reloadData];
+        }else
+        {
+            [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+        }
+       
+        
+        
+    } failBlock:^(NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"获取失败"];
+    }];
+    
     if (complation) {
         complation();
     }
@@ -88,8 +114,6 @@
     _tableView.dataSource = self;
     _tableView.backgroundColor = XBB_Bg_Color;
     [_tableView setContentInset:XBB_HeadEdge];
-    self.serversCityArray = @[@"dsadas",@"fsfsdfsd"];
-    
     [self.view addSubview:_tableView];
 }
 
@@ -120,20 +144,17 @@
     if (cell==nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
-    cell.textLabel.text = @"dsfd";
-    [cell.textLabel setContentMode:UIViewContentModeCenter];
+    if ([self.serversCityArray[indexPath.row] isEqualToString:self.currentCity]) {
+        [cell.textLabel setTextColor:[UIColor redColor]];
+    }else
+    {
+         [cell.textLabel setTextColor:[UIColor grayColor]];
+    }
+    cell.textLabel.text = self.serversCityArray[indexPath.row];
     return cell;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if (section == 0) {
-        UIView *view = [[UIView alloc] init];
-        view.backgroundColor = XBB_Bg_Color;
-        return view;
-    }
-    return nil;
-}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     if (section == 0) {
@@ -141,6 +162,22 @@
     }
     return 0;
 }
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = XBB_Bg_Color;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, XBB_Screen_width, 30)];
+    label.text = @"我们正在努力为更多城市提供服务";
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [label setTextColor:[UIColor lightGrayColor]];
+    [label setFont:[UIFont systemFontOfSize:13.]];
+    [view addSubview:label];
+    [label setBackgroundColor:[UIColor clearColor]];
+    
+    return view;
+}
+
 #pragma mark system
 - (void)viewDidLoad {
     [super viewDidLoad];

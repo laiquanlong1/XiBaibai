@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "XBBTableViewController.h"
-
+typedef  void(^Complation)(void);
 @interface MyCarTableViewController : XBBTableViewController
-
+@property (nonatomic, assign) BOOL isDownOrder;
+@property (nonatomic, copy) Complation complation;
 @end

@@ -112,6 +112,7 @@ static NSString *identifi = @"cell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    DLog(@"%@",[[UserObj shareInstance] uid])
     [self initNoDataUI];
     [self setNavigationBarControl];
     [self regisCell];
@@ -278,8 +279,9 @@ static NSString *identifi = @"cell";
                 noDataView.alpha = 0;
                 self.orderTableView.alpha = 1;
                 [SVProgressHUD dismiss];
+               
             }
-            
+            [self.orderTableView reloadData];
         } completion:^(BOOL finished) {
             [SVProgressHUD dismiss];
             [self.orderTableView reloadData];

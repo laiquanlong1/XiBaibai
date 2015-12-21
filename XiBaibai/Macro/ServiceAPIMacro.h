@@ -120,15 +120,17 @@
 // 31 首页美容
 #define XBB_Facial_Pro [NSString stringWithFormat:@"%@/diyCospro", APIDomain]
 
-
 // 31 首页diy产品
 #define XBB_Index_Pro [NSString stringWithFormat:@"%@/indexProList", APIDomain]
 
+// 32 零元支付
+#define XBB_Zone_Pay [NSString stringWithFormat:@"%@/directPay", APIDomain]
 
+// 33 服务时间
+#define ServerTime [NSString stringWithFormat:@"%@/serviceTime", APIDomain]
 
-
-
-
+// 34 服务城市
+#define ServerCity [NSString stringWithFormat:@"%@/serviceCity", APIDomain]
 
 
 
@@ -143,8 +145,7 @@
 //确认订单时的订单名称
 #define API_orderName_price [NSString stringWithFormat:@"%@/proName_select",APIDomain]
 
-// 服务时间
-#define ServerTime [NSString stringWithFormat:@"%@/servertime", APIDomain]
+
 
 //用户余额
 #define API_Balance [NSString stringWithFormat:@"%@/pay_select", APIDomain]

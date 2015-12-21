@@ -133,8 +133,7 @@
                 
                 if ([temp[@"state"] integerValue] == 0) {
                 [self.couDoneArr addObject:temp];
-                
-                  }
+                }
                 if (self.couDoneArr == 0) {
                     [SVProgressHUD showErrorWithStatus:@"暂无数据"];
                     [tbView.footer noticeNoMoreData];

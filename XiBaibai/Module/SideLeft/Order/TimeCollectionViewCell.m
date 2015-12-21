@@ -49,9 +49,10 @@
         self.labtime.textColor = [UIColor whiteColor];
         self.labYesNo.textColor = [UIColor whiteColor];
         self.backgroundColor = kUIColorFromRGB(0xfd6b6c);
+        
     } else {
-        self.labtime.textColor = kUIColorFromRGB(0xfd6b6c);
-        self.labYesNo.textColor = kUIColorFromRGB(0xfd6b6c);
+        self.labtime.textColor =  XBB_NavBar_Color;
+        self.labYesNo.textColor = XBB_NavBar_Color;
         self.backgroundColor = kUIColorFromRGB(0xFFFFFF);
     }
     

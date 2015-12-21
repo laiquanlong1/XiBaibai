@@ -97,6 +97,7 @@
     UITableView *searchTableView;
     UIImageView *searchImageView;
     UIButton *searchCannelButton;
+    UIButton *searchSureBtton;
     
     int  currentPage;
     
@@ -139,7 +140,8 @@
         seachBar.frame = CGRectMake(20., 65+10, XBB_Screen_width - 40., 44.);
         self.xbbNavigationBar.alpha = 1.;
         searchImageView.userInteractionEnabled = NO;
-         searchCannelButton.alpha = 0;
+        searchCannelButton.alpha = 0;
+        searchSureBtton.alpha = 0;
     
     }else
     {
@@ -153,17 +155,24 @@
         frame.size.width = XBB_Screen_width;
         
         CGRect frame_one = searchCannelButton.frame;
-        frame_one.origin.x = XBB_Screen_width - 80.;
+        frame_one.origin.x = XBB_Screen_width - 130.;
         searchCannelButton.frame = frame_one;
-          searchCannelButton.alpha = 1;
+        searchCannelButton.alpha = 1;
+        searchSureBtton.alpha = 1;
+        
         seachBar.frame = frame;
         self.xbbNavigationBar.alpha = 0.;
-         searchImageView.userInteractionEnabled = YES;
+        searchImageView.userInteractionEnabled = YES;
+        CGRect frame_two = searchSureBtton.frame;
+        frame_two.origin.x = XBB_Screen_width - 80.;
+        searchSureBtton.frame = frame_two;
     }
     [UIView setAnimationDelay:0.];
     [UIView commitAnimations];
     
 }
+
+
 - (IBAction)cannel:(id)sender
 {
     [searchField resignFirstResponder];
@@ -173,7 +182,7 @@
 - (void)addAddressSeachBar
 {
   
-    seachBar = [[UIView alloc] initWithFrame:CGRectMake(20., 65+10, XBB_Screen_width - 40., 44.)];
+    seachBar = [[UIView alloc] initWithFrame:CGRectMake(20., 65+10, XBB_Screen_width - 120., 44.)];
     seachBar.layer.cornerRadius = 5.;
     seachBar.layer.borderColor = [UIColor groupTableViewBackgroundColor].CGColor;
     seachBar.layer.borderWidth = 0.5;
@@ -181,15 +190,24 @@
     seachBar.backgroundColor = [UIColor whiteColor];
     
     
-    searchCannelButton = [[UIButton alloc] initWithFrame:CGRectMake(seachBar.bounds.size.width - 80, 0, 80, seachBar.bounds.size.height)];
+    searchCannelButton = [[UIButton alloc] initWithFrame:CGRectMake(seachBar.bounds.size.width - 140, 0, 80, seachBar.bounds.size.height)];
     [searchCannelButton.titleLabel setFont:[UIFont systemFontOfSize:14.]];
     [searchCannelButton setTitle:@"取消" forState:UIControlStateNormal];
     [searchCannelButton setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
     [seachBar addSubview:searchCannelButton];
     [searchCannelButton addTarget:self action:@selector(cannel:) forControlEvents:UIControlEventTouchUpInside];
-    searchCannelButton.alpha = 0;
+    searchCannelButton.alpha = 0.;
     
-
+    
+    searchSureBtton = [[UIButton alloc] initWithFrame:CGRectMake(seachBar.bounds.size.width - 80, 0, 80, seachBar.bounds.size.height)];
+    [searchSureBtton.titleLabel setFont:[UIFont systemFontOfSize:14.]];
+    [searchSureBtton setTitle:@"搜索" forState:UIControlStateNormal];
+    [searchSureBtton setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
+    [seachBar addSubview:searchSureBtton];
+    [searchSureBtton addTarget:self action:@selector(toSeach:) forControlEvents:UIControlEventTouchUpInside];
+    searchSureBtton.alpha = 1;
+    
+ 
     [self.view addSubview:seachBar];
     UIImage *seachImage = [UIImage imageNamed:@"搜索"];
     searchImageView= [[UIImageView alloc] initWithFrame:CGRectMake(10, CGRectGetHeight(seachBar.bounds)/2-seachImage.size.height/2, seachImage.size.width, seachImage.size.height)];

@@ -29,12 +29,12 @@
 {
     
     [SVProgressHUD show];
-    DLog(@"%@  %ld  %@",_orderId,startScore,txtView.text)
     [NetworkHelper postWithAPI:API_CommentInsert parameter:@{@"orderid": _orderId, @"evaluate": txtView.text, @"star": @(startScore)} successBlock:^(id response) {
         if ([response[@"code"] integerValue] == 1) {
             [SVProgressHUD showSuccessWithStatus:@"评价成功"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationOrderListUpdate object:nil];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationOrderListUpdate object:@"orderInfo"];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                
                 [self dismissViewControllerAnimated:YES completion:nil];
             });
         } else {

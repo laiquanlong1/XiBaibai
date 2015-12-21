@@ -21,6 +21,7 @@
     UIView *barView;
     XBBListHeadLabel *priceTotalTitle;
     float selectAllPrice;
+    float coupousPrice;
     BOOL isFirstCom;
 }
 
@@ -44,128 +45,57 @@ static NSString *identifier_2 = @"tit1cell";
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
-//        [self performSegueWithIdentifier:@"PayPushPayCallback" sender:nil];
         return;
     }
-    
-    NSLog(@"%ld",buttonIndex);
+
     NSMutableDictionary *orderDic = [NSMutableDictionary dictionaryWithDictionary:self.dic_prama];
     // 下单时间
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
-    DLog(@"%@",currentDateStr);
+
+     NSDate *date = [NSDate date];
+    NSString *currentDateStr = [NSString stringWithFormat:@"%lf",[date timeIntervalSince1970]] ;
+
     [orderDic setObject:currentDateStr?currentDateStr:@"" forKey:@"day"];
-    
     
     if (buttonIndex==0) {
         [SVProgressHUD show];
-//        if (!self.data)
-            [NetworkHelper postWithAPI:OrderInsert_API parameter:orderDic successBlock:^(id response) {
-                if ([response[@"code"] integerValue] == 1) {
-                    self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
-                    self.orderName = response[@"result"][@"order_name"];
-                    selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
-                    self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
-                    [SVProgressHUD showSuccessWithStatus:@"下单成功"];
-                    [self toPay];
-                    self.isDownOrder = YES;
-                    
-                } else {
-                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+        [NetworkHelper postWithAPI:OrderInsert_API parameter:orderDic successBlock:^(id response) {
+            if ([response[@"code"] integerValue] == 1) {
+                self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
+                self.orderName = response[@"result"][@"order_name"];
+                selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
+                self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
+                [SVProgressHUD showSuccessWithStatus:@"下单成功"];
+                
+                if (selectAllPrice == 0) {
+                    [SVProgressHUD show];
+                    [NetworkHelper postWithAPI:XBB_Zone_Pay parameter:@{@"uid":[[UserObj shareInstance] uid],@"orderid":self.orderId} successBlock:^(id response) {
+                        DLog(@"%@",response)
+                        
+                        if ([response[@"code"] integerValue] == 1) {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRecharge object:nil];
+                            [SVProgressHUD showSuccessWithStatus:response[@"msg"]];
+                        }else
+                        {
+                            [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+                        }
+                        
+                    } failBlock:^(NSError *error) {
+                        [SVProgressHUD dismiss];
+                    }];
+                    return;
                 }
-            } failBlock:^(NSError *error) {
-                [SVProgressHUD showErrorWithStatus:@"下单失败"];
-            }];
-//        else {
-//            AFHTTPRequestOperationManager *uploadManager = [AFHTTPRequestOperationManager manager];
-//            uploadManager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-//            [uploadManager POST:OrderInsert_API parameters:orderDic constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-//                [formData appendPartWithFileData:self.data name:[NSString stringWithFormat:@"file"] fileName:[NSString stringWithFormat:@"file.aac"] mimeType:@"file/.aac"];
-//            } success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-//                NSLog(@"%@", responseObject);
-//                id response = responseObject;
-//                if ([response[@"code"] integerValue] == 1) {
-//                    self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
-//                    self.orderName = response[@"result"][@"order_name"];
-//                    selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
-//                    self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
-//                    [SVProgressHUD showSuccessWithStatus:@"下单成功"];
-//                    [self toPay];
-//                    self.isDownOrder = YES;
-//                    
-//                } else {
-//                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
-//                }
-//            } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
-//                [SVProgressHUD showErrorWithStatus:@"下单失败"];
-//            }];
-//        }
-        
+                [self toPay];
+                self.isDownOrder = YES;
+                
+            } else {
+                [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+            }
+        } failBlock:^(NSError *error) {
+            [SVProgressHUD showErrorWithStatus:@"下单失败"];
+        }];
     }
-
+    
 }
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    NSLog(@"%ld",buttonIndex);
-    NSMutableDictionary *orderDic = [NSMutableDictionary dictionaryWithDictionary:self.dic_prama];
-    // 下单时间
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
-    DLog(@"%@",currentDateStr);
-    [orderDic setObject:currentDateStr?currentDateStr:@"" forKey:@"day"];
-    
-    
-    
-    if (buttonIndex==1) {
-        [SVProgressHUD show];
-//        if (!self.data)
-            [NetworkHelper postWithAPI:OrderInsert_API parameter:orderDic successBlock:^(id response) {
-                if ([response[@"code"] integerValue] == 1) {
-                    self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
-                    self.orderName = response[@"result"][@"order_name"];
-                    selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
-                    self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
-                    [SVProgressHUD showSuccessWithStatus:@"下单成功"];
-                    [self toPay];
-                    self.isDownOrder = YES;
-                    
-                } else {
-                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
-                }
-            } failBlock:^(NSError *error) {
-                [SVProgressHUD showErrorWithStatus:@"下单失败"];
-            }];
-//        else {
-//            AFHTTPRequestOperationManager *uploadManager = [AFHTTPRequestOperationManager manager];
-//            uploadManager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-//            [uploadManager POST:OrderInsert_API parameters:orderDic constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-//                [formData appendPartWithFileData:self.data name:[NSString stringWithFormat:@"file"] fileName:[NSString stringWithFormat:@"file.aac"] mimeType:@"file/.aac"];
-//            } success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-//                NSLog(@"%@", responseObject);
-//                id response = responseObject;
-//                if ([response[@"code"] integerValue] == 1) {
-//                    self.orderNO = [[response objectForKey:@"result"] objectForKey:@"order_num"];
-//                    self.orderName = response[@"result"][@"order_name"];
-//                    selectAllPrice = [response[@"result"][@"total_price"] doubleValue];
-//                    self.orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
-//                    [SVProgressHUD showSuccessWithStatus:@"下单成功"];
-//                    [self toPay];
-//                    self.isDownOrder = YES;
-//                    
-//                } else {
-//                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
-//                }
-//            } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
-//                [SVProgressHUD showErrorWithStatus:@"下单失败"];
-//            }];
-//        }
-
-    }
-}
-
 
 
 #pragma mark views
@@ -234,14 +164,14 @@ static NSString *identifier_2 = @"tit1cell";
     barView.layer.borderWidth = 0.5;
     barView.layer.borderColor = XBB_NavBar_Color.CGColor;
     
-    priceTotalTitle = [[XBBListHeadLabel alloc] initWithFrame:CGRectMake(0, 0, (XBB_Screen_width/2) , barView.bounds.size.height)];
+    priceTotalTitle = [[XBBListHeadLabel alloc] initWithFrame:CGRectMake(0, 0, (XBB_Screen_width/3)*2 , barView.bounds.size.height)];
     [priceTotalTitle setTextColor:XBB_NavBar_Color];
     [priceTotalTitle setFont:[UIFont boldSystemFontOfSize:16.]];
     [barView addSubview:priceTotalTitle];
     [priceTotalTitle setTextAlignment:NSTextAlignmentCenter];
     [self addAllPrice];
     priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",selectAllPrice>0?selectAllPrice:0.00];
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width- XBB_Screen_width/2, 0, XBB_Screen_width/2, barView.bounds.size.height)];
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width- XBB_Screen_width/3, 0, XBB_Screen_width/3, barView.bounds.size.height)];
     [button addTarget:self action:@selector(submitPayOnTouch:) forControlEvents:UIControlEventTouchUpInside];
     button.backgroundColor = XBB_NavBar_Color;
     [button setTitle:@"提交" forState:UIControlStateNormal];
@@ -264,7 +194,27 @@ static NSString *identifier_2 = @"tit1cell";
     for (NSDictionary *dic in self.pro_Dics) {
         selectAllPrice += [dic[@"p_price"] floatValue];
     }
-    priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",selectAllPrice - self.couponprice];
+    if (self.couponprice == 0) {
+          priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",selectAllPrice - self.couponprice];
+    }else
+    {
+        NSString *strings = [NSString stringWithFormat:@"已抵扣: ¥%.2f    合计 :¥%.2f",self.couponprice,selectAllPrice - self.couponprice];
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:strings];
+        [str addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:13.],NSForegroundColorAttributeName : [UIColor grayColor]} range:NSMakeRange(0, 14)];
+        [str addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.]} range:NSMakeRange(14, [strings length]-14)];
+        priceTotalTitle.attributedText = str;
+        
+        
+//        NSArray *strings_1A = [strings componentsSeparatedByString:@"   "];
+//        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:[strings_1A firstObject]];
+//        [str addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:13.],NSForegroundColorAttributeName : [UIColor grayColor] } range:[str length]]
+//        NSMutableAttributedString *str_1 = [[NSMutableAttributedString alloc] initWithString:[strings_1A lastObject]];
+        
+        
+    }
+    
+    
+  
 }
 
 - (void)viewDidLoad {
@@ -350,6 +300,18 @@ static NSString *identifier_2 = @"tit1cell";
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         RechargeResultObject *result = sender.object;
+        
+        if (selectAllPrice == 0) {
+            XBBOrderInfoViewController *info = [[XBBOrderInfoViewController alloc] init];
+            info.isPayBack = YES;
+            info.pageController = 1;
+            info.navigationTitle = @"支付成功";
+            info.orderid = self.orderId;
+            [self.navigationController pushViewController:info animated:YES];
+            return ;
+        }
+        
+        
         if (result.isSuccessful) {
             if (self.isRecharge == NO){
                 XBBOrderInfoViewController *info = [[XBBOrderInfoViewController alloc] init];
@@ -471,7 +433,7 @@ static NSString *identifier_2 = @"tit1cell";
                 
             case 2:
             {
-                cell.headImageView.image = [UIImage imageNamed:@"01车辆信息"];
+                cell.headImageView.image = [UIImage imageNamed:@"car5"];
                 cell.titleLabel.text = @"车辆信息";
                 _selectedImgView.alpha = 0;
             }
@@ -495,7 +457,6 @@ static NSString *identifier_2 = @"tit1cell";
                     _payType = indexPath.row + 1;
                     
                 }
-                
                 if (_payType == 1) {
                     _selectedImgView.alpha = 1;
                     cell.tag = 2;
@@ -505,15 +466,9 @@ static NSString *identifier_2 = @"tit1cell";
                     _selectedImgView.alpha = 0;
                     cell.tag = 1;
                 }
-                
-                
                 cell.titleLabel.text = @"支付宝";
                 cell.selectionStyle = UITableViewCellSelectionStyleGray;
-                cell.headImageView.image = [UIImage imageNamed:@"01支付宝"];
-                
-         
-                
-                
+                cell.headImageView.image = [UIImage imageNamed:@"01支付宝"]; 
             }
                 break;
             default:
@@ -568,7 +523,6 @@ static NSString *identifier_2 = @"tit1cell";
                     cell.price2Label.text = [NSString stringWithFormat:@"¥ %.2f" ,[dic[@"p_price"] floatValue]];
                 }
             }
-           
         }
             break;
         case 2:
@@ -667,12 +621,9 @@ static NSString *identifier_2 = @"tit1cell";
     {
         if (_payType == 1) {
             
-            
             UIActionSheet *actionSh = [[UIActionSheet alloc] initWithTitle:@"确认下单" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [actionSh showInView:self.view];
-            
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"确认下单" message:@"是否下单?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//            [alert show];
+
         } else {
             [SVProgressHUD showErrorWithStatus:@"请选择支付方式"];
         }
@@ -691,7 +642,6 @@ static NSString *identifier_2 = @"tit1cell";
                     NSString *orderNO = [[response objectForKey:@"result"] objectForKey:@"recharge_num"];
                     NSString *orderName = response[@"result"][@"recharge_name"];
                     double price = [response[@"result"][@"recharge_price"] doubleValue];
-                    //                        NSString *orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
                     [[RechargeHelper defaultRechargeHelper] payAliWithMoney:price orderNO:orderNO productTitle:orderName productDescription:orderName];
                 } else {
                     [SVProgressHUD showErrorWithStatus:response[@"msg"]];
@@ -716,7 +666,7 @@ static NSString *identifier_2 = @"tit1cell";
                             NSString *orderNO = [[response objectForKey:@"result"] objectForKey:@"recharge_num"];
                             NSString *orderName = response[@"result"][@"recharge_name"];
                             double price = [response[@"result"][@"recharge_price"] doubleValue];
-                            //                        NSString *orderId = [NSString stringWithFormat:@"%@", response[@"result"][@"id"]];
+                            
                             [[RechargeHelper defaultRechargeHelper] payAliWithMoney:price orderNO:orderNO productTitle:orderName productDescription:orderName];
                         } else {
                             [SVProgressHUD showErrorWithStatus:response[@"msg"]];
@@ -732,17 +682,7 @@ static NSString *identifier_2 = @"tit1cell";
     
 }
 
-//- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-//    if (buttonIndex > 0) {
-//        self.priceLabel.text = [NSString stringWithFormat:@"%@", self.priceArr[buttonIndex - 1]];
-//    }
-//}
 
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    if ([segue.identifier isEqualToString:@"PayPushPayCallback"]) {
-//        [segue.destinationViewController setValue:_orderId forKey:@"orderId"];
-//    }
-//}
 
 
 

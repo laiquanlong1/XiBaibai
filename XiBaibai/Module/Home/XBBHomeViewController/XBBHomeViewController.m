@@ -203,7 +203,8 @@ static NSString *identifier_diy = @"diy";
     if (IsLogin) {
         //请求个人头像
         NSMutableDictionary *dicMine=[NSMutableDictionary dictionary];
-        [dicMine setObject:[UserObj shareInstance].uid forKey:@"uid"];
+        [dicMine setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userid"] forKey:@"uid"];
+        [UserObj shareInstance].uid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userid"] ;
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
         [NetworkHelper postWithAPI:Select_user_API parameter:dicMine successBlock:^(id response) {
             if ([response[@"code"] integerValue] == 1) {
@@ -217,7 +218,6 @@ static NSString *identifier_diy = @"diy";
                 user.QQ=[[response objectForKey:@"result"] objectForKey:@"qq"];
                 user.imgstring=[[response objectForKey:@"result"] objectForKey:@"u_img"];
                 user.sex=[[response objectForKey:@"result"] objectForKey:@"sex"];
-                user.uid=[[response objectForKey:@"result"] objectForKey:@"uid"];
                 user.uname=[[response objectForKey:@"result"] objectForKey:@"uname"];
                 user.weixin=[[response objectForKey:@"result"] objectForKey:@"weixin"];
                 NSString *channelId = [BPush getChannelId];
@@ -231,9 +231,6 @@ static NSString *identifier_diy = @"diy";
                     } failBlock:^(NSError *error) {
                         NSLog(@"channelid设置失败");
                     }];
-                
-                
-                
                 [NetworkHelper postWithAPI:car_select parameter:@{@"uid":[UserObj shareInstance].uid} successBlock:^(id response) {
                     
                     DLog(@"%@",response)
@@ -925,6 +922,8 @@ static NSString *identifier_diy = @"diy";
 {
     DLog(@"")
     ServerCityViewController *severCity = [[ServerCityViewController alloc] init];
+    
+    severCity.currentCity = titleCityButton.text;
     [self presentViewController:severCity animated:YES completion:nil];
    
 }

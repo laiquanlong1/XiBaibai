@@ -27,6 +27,8 @@
     NSString *currentTime; // 当前时间
     
     NSString *selectTime;
+    
+    TimeConfigModel *selectTimeConfig;
 
 }
 
@@ -76,7 +78,8 @@
         [SVProgressHUD showErrorWithStatus:@"请选择时间"];
         return;
     }
-    self.planTime(selectTime);
+    NSString *timeString = [NSString stringWithFormat:@"%@,%ld",selectTime,selectTimeConfig.timeConfigId];
+    self.planTime(timeString);
     [self.navigationController popViewControllerAnimated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -170,7 +173,7 @@
         dateBtn.tag = i;
         dateBtn.titleLabel.font = [UIFont systemFontOfSize:15];
         [dateBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-        [dateBtn setTitleColor:kUIColorFromRGB(0xfd6b6c) forState:UIControlStateNormal];
+        [dateBtn setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
         [viewChoseTime addSubview:dateBtn];
         if (i) {
             dateBtn.backgroundColor = [UIColor whiteColor];
@@ -178,7 +181,7 @@
             lineView.backgroundColor = kUIColorFromRGB(0xdfdfdf);
             [dateBtn addSubview:lineView];
         } else {
-            dateBtn.backgroundColor = kUIColorFromRGB(0xfd6b6c);
+            dateBtn.backgroundColor = XBB_NavBar_Color;
             dateBtn.selected = YES;
         }
         [dateBtn addTarget:self action:@selector(dateBtnOnTouch:) forControlEvents:UIControlEventTouchUpInside];
@@ -241,7 +244,7 @@
     }
 
     sender.selected = YES;
-    sender.backgroundColor = kUIColorFromRGB(0xfd6b6c);
+    sender.backgroundColor = XBB_NavBar_Color;
     dateSelectedIndex = (int)sender.tag;
     
     [timeCollectview deselectItemAtIndexPath:_selectedIndexPath animated:YES];
@@ -252,7 +255,6 @@
     long time = [self getTimeStamp:[NSDate date]];
     NSLog(@"---%ld",time);
     [NetworkHelper postWithAPI:Time_select_make_API parameter:@{@"day":[NSString stringWithFormat:@"%ld", time]} successBlock:^(id response) {
-        NSLog(@"response%@",response);
         if ([response[@"code"] integerValue] == 1) {
             [TimeConfigModel setupReplacedKeyFromPropertyName:^NSDictionary *{
                 return @{@"timeConfigId": @"id"};
@@ -276,7 +278,6 @@
             [SVProgressHUD showErrorWithStatus:response[@"msg"]];
         }
     } failBlock:^(NSError *error) {
-        NSLog(@"error%@",error);
         [SVProgressHUD showErrorWithStatus:@"查询失败"];
     }];
 }
@@ -315,7 +316,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 
@@ -374,9 +374,9 @@
     
     switch (dateSelectedIndex) {
         case 0: {
-            
             TimeConfigModel *model = dateDic[@"one"][indexPath.row];
             timeSegementId = model.timeConfigId;
+            selectTimeConfig = model;
             selectTime = [NSString stringWithFormat:@"今天 %@",cell.labtime.text];
         }
             break;
@@ -384,14 +384,16 @@
             TimeConfigModel *model = dateDic[@"two"][indexPath.row];
             timeSegementId = model.timeConfigId;
             selectTime = [NSString stringWithFormat:@"%@ %@",[fmt stringFromDate:[NSDate dateWithTimeIntervalSinceNow:24 * 60 * 60]],cell.labtime.text];
-            cell.backgroundColor = kUIColorFromRGB(0xfd6b6c); // 背景色
+            cell.backgroundColor = XBB_NavBar_Color; // 背景色
+            selectTimeConfig = model;
         }
             break;
         default: {
             TimeConfigModel *model = dateDic[@"three"][indexPath.row];
             timeSegementId = model.timeConfigId;
             selectTime = [NSString stringWithFormat:@"%@ %@",[fmt stringFromDate:[NSDate dateWithTimeIntervalSinceNow:24 * 60 * 60 * 2]],cell.labtime.text];
-            cell.backgroundColor = kUIColorFromRGB(0xfd6b6c); // 背景色
+            cell.backgroundColor = XBB_NavBar_Color; // 背景色
+            selectTimeConfig = model;
         }
             break;
     }
@@ -451,8 +453,6 @@
                      cell.selected = YES;
                     cell.labYesNo.text = @"已选择";
                     self.planTime = nil;
-//                    [collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-                    
                 }
                 
             }
@@ -467,7 +467,6 @@
                     cell.selected = YES;
                     cell.labYesNo.text = @"已选择";
                     self.planTime = nil;
-//                    [collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
                 }
             }
     
@@ -481,7 +480,6 @@
                     cell.selected = YES;
                     cell.labYesNo.text = @"已选择";
                     self.planTime = nil;
-//                    [collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
                 }
             }
             break;

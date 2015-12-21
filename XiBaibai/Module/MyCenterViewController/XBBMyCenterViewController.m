@@ -308,7 +308,7 @@ static NSString *identifier_1 = @"cell_1";
             break;
         case 2:
         {
-            UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"修改性别" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"男" otherButtonTitles:@"女", nil];
+            UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"修改性别" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"男",@"女", nil];
             [sheet showInView:self.view];
         }
             break;
@@ -338,7 +338,7 @@ static NSString *identifier_1 = @"cell_1";
     [NetworkHelper postWithAPI:updateUserInfo parameter:@{@"uid": [UserObj shareInstance].uid, @"sex": @(sex)} successBlock:^(id response) {
         if ([response[@"code"] integerValue] == 1) {
             [SVProgressHUD showSuccessWithStatus:@"修改成功"];
-            [UserObj shareInstance].sex = @"1";
+            [UserObj shareInstance].sex = [NSString stringWithFormat:@"%ld",sex];
             [self.tableView reloadData];
         } else {
             [SVProgressHUD showErrorWithStatus:response[@"msg"]];

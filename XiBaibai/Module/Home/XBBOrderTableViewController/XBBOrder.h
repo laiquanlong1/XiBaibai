@@ -10,6 +10,7 @@
 
 @interface XBBOrder : NSObject
 
+@property (nonatomic, assign) float price_2;
 @property (nonatomic, copy) NSString *xbbid;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, strong) UIImage *iconImage;

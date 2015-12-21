@@ -218,6 +218,7 @@
     [barView addSubview:button];
     
     self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, XBB_Screen_width, XBB_Screen_height-64.-barView.frame.size.height);
+    self.tableView.backgroundColor = XBB_Bg_Color;
     [self alphatoZero];
 }
 
@@ -314,6 +315,21 @@
 }
 
 #pragma mark tableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (section == 0) {
+        return 0;
+    }
+    return 20;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = XBB_Bg_Color;
+    return view;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 60.;
@@ -398,27 +414,27 @@
     }
     XBBDiyObject *object = self.dataSource[indexPath.section][indexPath.row];
     
-    BOOL is_free = NO;
-    for (XBBDiyObject *object_1 in selectHashTable) {
-        if (object_1.p_wash_free == 1) {
-            is_free = YES;
-        }
-    }
-    if (self.washType == 0 && is_free == NO && object.p_wash_free==0) {
-        BOOL isOk = NO;
-        for (XBBDiyObject *o_1 in selectHashTable) {
-            if ([o_1 isEqual:object]) {
-                isOk = YES;
-            }
-        }
-        if (isOk) {
-            
-        }else
-        {
-            [SVProgressHUD showErrorWithStatus:@"此项目必须选择洗车"];
-            return;
-        }
-    }
+//    BOOL is_free = NO;
+//    for (XBBDiyObject *object_1 in selectHashTable) {
+//        if (object_1.p_wash_free == 1) {
+//            is_free = YES;
+//        }
+//    }
+//    if (self.washType == 0 && is_free == NO && object.p_wash_free==0) {
+//        BOOL isOk = NO;
+//        for (XBBDiyObject *o_1 in selectHashTable) {
+//            if ([o_1 isEqual:object]) {
+//                isOk = YES;
+//            }
+//        }
+//        if (isOk) {
+//            
+//        }else
+//        {
+//            [SVProgressHUD showErrorWithStatus:@"此项目必须选择洗车"];
+//            return;
+//        }
+//    }
     if (indexPath.row == 0) {
         
     }else

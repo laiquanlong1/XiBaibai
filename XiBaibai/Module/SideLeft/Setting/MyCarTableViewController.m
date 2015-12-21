@@ -106,7 +106,12 @@ static NSString *identifier = @"carcell";
 
 - (IBAction)backViewController:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.isDownOrder) {
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    }else
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 
@@ -322,6 +327,35 @@ static NSString *identifier = @"carcell";
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    
+    if ([alertView.title isEqualToString:@"设置默认车辆"]) {
+        if (buttonIndex == 1) {
+            [SVProgressHUD show];
+            NSMutableDictionary *dic = [NSMutableDictionary new];
+            [dic setObject:[NSString stringWithFormat:@"%@",[UserObj shareInstance].uid] forKey:@"uid"];
+            [dic setObject:[NSString stringWithFormat:@"%ld",alertView.tag] forKey:@"id"];
+            [NetworkHelper postWithAPI:API_set_default_car parameter:dic successBlock:^(id response) {
+                [SVProgressHUD showSuccessWithStatus:@"设置成功"];
+                if (self.isDownOrder) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        self.complation();
+                        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+                    });
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:NotificationCarListUpdate object:nil];
+                
+            } failBlock:^(NSError *error) {
+                [SVProgressHUD showErrorWithStatus:@"设置失败"];
+            }];
+
+        }
+        
+        
+        return;
+    }
+    
+    
+    
     if (buttonIndex == 1) {
         
         NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:alertView.tag];
@@ -385,6 +419,14 @@ static NSString *identifier = @"carcell";
 
 - (void)setdefalutcar:(id)sender{
     UIButton *btn = (UIButton *)sender;
+    if (self.isDownOrder) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"设置默认车辆" message:@"轿车与suv的价格有所不同，确认设置?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alert.tag = btn.tag;
+        [alert show];
+        return;
+    }
+   
+    
    
     [SVProgressHUD show];
     NSLog(@"defalut%ld",btn.tag);
@@ -392,9 +434,17 @@ static NSString *identifier = @"carcell";
     [dic setObject:[NSString stringWithFormat:@"%@",[UserObj shareInstance].uid] forKey:@"uid"];
     [dic setObject:[NSString stringWithFormat:@"%ld",btn.tag] forKey:@"id"];
     [NetworkHelper postWithAPI:API_set_default_car parameter:dic successBlock:^(id response) {
-        [SVProgressHUD showSuccessWithStatus:@"设置成功"];
         [btn setTitle:@"默认车辆" forState:UIControlStateNormal];
+        [SVProgressHUD showSuccessWithStatus:@"设置成功"];
+        if (self.isDownOrder) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self.complation();
+                [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+                
+            });
+        }
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationCarListUpdate object:nil];
+        
     } failBlock:^(NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"设置失败"];
     }];
@@ -424,7 +474,6 @@ static NSString *identifier = @"carcell";
                 if (isSuccess) {
                     [UserObj shareInstance].c_id = nil;
                     [UserObj shareInstance].carModel = nil;
-                    
                     [self.carArr removeObject:model];
                     if (self.carArr.count == 0) {
                         [UIView animateWithDuration:0.3 animations:^{
@@ -439,6 +488,8 @@ static NSString *identifier = @"carcell";
                                 
                             }
                         } completion:^(BOOL finished) {
+                            
+                            
                         }];
 
                     }
