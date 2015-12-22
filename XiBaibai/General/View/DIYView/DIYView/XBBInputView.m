@@ -25,6 +25,7 @@
         self.textFiled = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, backView.bounds.size.width-10, backView.bounds.size.height)];
         [backView addSubview:self.textFiled];
         self.textFiled.placeholder = place;
+        self.textFiled.delegate = self;
         [self.textFiled setFont:[UIFont systemFontOfSize:13.]];
         self.button = [[UIButton alloc] initWithFrame:CGRectMake(backView.frame.origin.x, backView.frame.origin.y+backView.frame.size.height + 50, backView.frame.size.width, 44.)];
         self.button.layer.borderColor = XBB_NavBar_Color.CGColor;
@@ -36,10 +37,18 @@
         [self.button setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
         [self.button setTitle:buttonName forState:UIControlStateNormal];
         [self addSubview:self.button];
-        
     }
     return self;
 }
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    NSString *string_1 = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    if ([string_1 length] > 15.) {
+        return NO;
+    }
+    return YES;
+}
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

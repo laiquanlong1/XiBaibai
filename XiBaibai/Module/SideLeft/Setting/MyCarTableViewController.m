@@ -395,6 +395,7 @@ static NSString *identifier = @"carcell";
     cell.titleLabel.text = carModel.c_plate_num;
     cell.summaryLabel.text = [NSString stringWithFormat:@"%@  %@  %@", [carModel c_brand], carModel.c_color,[carModel typeString]];//
     
+
     cell.deleteButton.tag = indexPath.section;
     [cell.deleteButton addTarget:self action:@selector(deleteButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [cell.editButton addTarget:self action:@selector(editButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -414,6 +415,11 @@ static NSString *identifier = @"carcell";
         [cell.btnDefault setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [cell.btnDefault addTarget:self action:@selector(setdefalutcar:) forControlEvents:UIControlEventTouchUpInside];
     }
+    if (self.isDownOrder) {
+        cell.editButton.alpha = 0.;
+        cell.deleteButton.alpha = 0.;
+    }
+    
     return cell;
 }
 
@@ -434,7 +440,7 @@ static NSString *identifier = @"carcell";
             [SVProgressHUD show];
             NSMutableDictionary *dic = [NSMutableDictionary new];
             [dic setObject:[NSString stringWithFormat:@"%@",[UserObj shareInstance].uid] forKey:@"uid"];
-            [dic setObject:[NSString stringWithFormat:@"%ld",carModel.carId] forKey:@"id"];
+            [dic setObject:[NSString stringWithFormat:@"%ld",(long)carModel.carId] forKey:@"id"];
             [NetworkHelper postWithAPI:API_set_default_car parameter:dic successBlock:^(id response) {
                 [SVProgressHUD showSuccessWithStatus:@"设置成功"];
                 if (self.isDownOrder) {
@@ -458,7 +464,7 @@ static NSString *identifier = @"carcell";
     [SVProgressHUD show];
     NSMutableDictionary *dic = [NSMutableDictionary new];
     [dic setObject:[NSString stringWithFormat:@"%@",[UserObj shareInstance].uid] forKey:@"uid"];
-    [dic setObject:[NSString stringWithFormat:@"%ld",carModel.carId] forKey:@"id"];
+    [dic setObject:[NSString stringWithFormat:@"%ld",(long)carModel.carId] forKey:@"id"];
     [NetworkHelper postWithAPI:API_set_default_car parameter:dic successBlock:^(id response) {
         [btn setTitle:@"默认车辆" forState:UIControlStateNormal];
         [SVProgressHUD showSuccessWithStatus:@"设置成功"];
@@ -547,7 +553,13 @@ static NSString *identifier = @"carcell";
     
 }
 
-
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.isDownOrder) {
+        return NO;
+    }
+    return YES;
+}
 
 #pragma mark - Navigation
 

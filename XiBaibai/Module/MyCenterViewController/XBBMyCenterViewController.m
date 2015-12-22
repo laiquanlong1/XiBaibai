@@ -32,6 +32,14 @@ static NSString *identifier_1 = @"cell_1";
 @implementation XBBMyCenterViewController
 
 
+#pragma mark inputView
+
+
+
+
+
+#pragma mark action
+
 - (void)exitCurrentCoust
 {
     DLog(@"")
@@ -129,7 +137,7 @@ static NSString *identifier_1 = @"cell_1";
 {
     _inputView = [[XBBInputView alloc] initWithFrame:self.view.bounds placeeholder:@"取个逼格高的昵称吧" buttonName:@"保存" inittag:1];
     [_inputView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toRig:)]];
-    
+//    _inputView.textFiled.text = self;
     [self.view addSubview:_inputView];
     [_inputView.button addTarget:self action:@selector(toSaveNikeName:) forControlEvents:UIControlEventTouchUpInside];
     _inputView.alpha = 0.;

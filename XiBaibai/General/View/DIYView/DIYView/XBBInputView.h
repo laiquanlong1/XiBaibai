@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface XBBInputView : UIView
+@interface XBBInputView : UIView <UITextFieldDelegate>
 
 @property (nonatomic, strong) UITextField *textFiled;
 @property (nonatomic, strong) UIButton *button;

@@ -613,7 +613,7 @@ static NSString *identifier_2 = @"tit1cell";
 //    NSAttributedString *carColor = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_color] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:kUIColorFromRGB(0xf5a623)}];
     
     NSAttributedString *firstString = [[NSAttributedString alloc] initWithString:@"您当前的车辆为 " attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:[UIColor redColor]}];
-    NSAttributedString *lastString = [[NSAttributedString alloc] initWithString:@"    更换" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.],NSForegroundColorAttributeName:[UIColor redColor]}];
+    NSAttributedString *lastString = [[NSAttributedString alloc] initWithString:@"    更换" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.],NSForegroundColorAttributeName:[UIColor grayColor]}];
     
     
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:firstString];
@@ -673,7 +673,7 @@ static NSString *identifier_2 = @"tit1cell";
                         //    NSAttributedString *carColor = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_color] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:kUIColorFromRGB(0xf5a623)}];
                         
                         NSAttributedString *firstString = [[NSAttributedString alloc] initWithString:@"您当前的车辆为 " attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:[UIColor redColor]}];
-                        NSAttributedString *lastString = [[NSAttributedString alloc] initWithString:@"    更换" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.],NSForegroundColorAttributeName:[UIColor redColor]}];
+                        NSAttributedString *lastString = [[NSAttributedString alloc] initWithString:@"    更换" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.],NSForegroundColorAttributeName:[UIColor grayColor]}];
                         
                         
                         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:firstString];

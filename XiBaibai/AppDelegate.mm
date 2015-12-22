@@ -33,6 +33,12 @@
     return app;
 }
 
+
+- (void)toSetRootViewController
+{
+    self.window.rootViewController = [[LoginViewController alloc] init];
+}
+
 /**
  * @brief 程序启动的时候调用
  * @detail 传入的应用
@@ -95,19 +101,65 @@
     
     
     [self.window makeKeyAndVisible];
-    ZWIntroductionViewController *zin = [[ZWIntroductionViewController alloc] init];
-    zin.coverImageNames = @[@"xbb1",@"xbb2",@"xbb3"];
-    self.window.rootViewController = zin;
     
-
-//    if (IsLogin) {
-//        self.window.rootViewController =  drawerController;
-//    }else
-//    {
-//        LoginViewController *login = [[LoginViewController alloc] init];
-//        self.window.rootViewController = login;
-//        
-//    }
+    BOOL isFirstUse = [[NSUserDefaults standardUserDefaults] boolForKey:@"isFirstLogin"];
+    if (isFirstUse == NO) {
+        
+        
+        ZWIntroductionViewController *zin = [[ZWIntroductionViewController alloc] init];
+        if (XBB_IsIphone4s) {
+            zin.coverImageNames = @[@"page14s",@"page24s",@"page34s"];
+            
+        }else
+        {
+            zin.coverImageNames = @[@"page1",@"page2",@"page3"];
+        }
+        zin.didSelectedEnter = ^{
+            [UIView beginAnimations:@"tosetro" context:nil];
+            [UIView setAnimationDuration:0.4];
+            [UIView setAnimationDidStopSelector:@selector(toSetRootViewController)];
+            [UIView setAnimationDelegate:self];
+            
+            for (UIViewController *vc in self.window.rootViewController.childViewControllers) {
+                if ([vc isKindOfClass:[ZWIntroductionViewController class]]) {
+                    CGRect frame = self.window.rootViewController.view.frame;
+                    frame.origin.x -= XBB_Screen_width;
+                    vc.view.frame = frame;
+                }else if ([vc isKindOfClass:[LoginViewController class]])
+                {
+                    vc.view.alpha = 1.;
+                }
+            }
+            [UIView commitAnimations];
+        };
+        UIViewController *controller = [[UIViewController alloc] init];
+        [controller addChildViewController:[[LoginViewController alloc] init]];
+        [controller addChildViewController:zin];
+        for (UIViewController *vc in controller.childViewControllers) {
+            if ([vc isKindOfClass:[ZWIntroductionViewController class]]) {
+                vc.view.alpha = 1.;
+            }
+            else
+            {
+                vc.view.alpha = 0.;
+            }
+            [controller.view addSubview:vc.view];
+        }
+        self.window.rootViewController = controller;
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFirstLogin"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        return YES;
+    }
+    
+    
+    if (IsLogin) {
+        self.window.rootViewController =  drawerController;
+    }else
+    {
+        LoginViewController *login = [[LoginViewController alloc] init];
+        self.window.rootViewController = login;
+        
+    }
     
     
   
