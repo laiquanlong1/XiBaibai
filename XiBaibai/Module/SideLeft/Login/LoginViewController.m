@@ -61,28 +61,6 @@
 //    [self backButton];
 }
 
-//- (void)backButton
-//{
-//    UIButton *back = [[UIButton alloc] init];
-//    
-//    UIImage *backimage = nil;
-//    if (XBB_IsIphone6_6s) {
-//       backimage = [UIImage imageNamed:@"xbb_back_login6"];
-//    }else
-//    {
-//        backimage = [UIImage imageNamed:@"xbb_back_login"];
-//    }
-//    
-//    [back setImage:backimage forState:UIControlStateNormal];
-//    [self.view addSubview:back];
-//    [back addTarget:self action:@selector(fanhui) forControlEvents:UIControlEventTouchUpInside];
-//    [back mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.leading.mas_equalTo(10.f);
-//        make.top.mas_equalTo(20.f);
-//        make.width.mas_equalTo(50.f);
-//        make.height.mas_equalTo(50.f);
-//    }];
-//}
 - (void)setNavigation
 {
     [self.navigationController.navigationBar setHidden:YES];

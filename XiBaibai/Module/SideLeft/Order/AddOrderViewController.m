@@ -139,6 +139,9 @@ static NSString *identifier_2 = @"tit1cell";
         // 洗车
         if (self.selectWashOrderObject) {
             selectWashPrice = self.selectWashOrderObject.price;
+        }else
+        {
+            selectWashPrice = 0;
         }
         
         if (self.selectDIYArray.count > 0) {
@@ -146,6 +149,9 @@ static NSString *identifier_2 = @"tit1cell";
             for (XBBOrder *diy in self.selectDIYArray) {
                 selectDIYPrice += diy.price;
             }
+        }else
+        {
+            selectDIYPrice = 0;
         }
         
         if (self.selectFacialArray.count > 0) {
@@ -153,17 +159,25 @@ static NSString *identifier_2 = @"tit1cell";
             for (XBBOrder *facial in self.selectFacialArray) {
                 selectFaicalPrice += facial.price;
             }
+        }else
+        {
+            selectFaicalPrice = 0;
         }
         
         if (self.selectCouponModel) {
             selectCouponPrice = [self.selectCouponModel.coupons_price floatValue];
+        }else
+        {
+            selectCouponPrice = 0;
         }
         
-        [self addAllPrice];
     }else
     {
         if (self.selectWashOrderObject) {
             selectWashPrice = self.selectWashOrderObject.price_2;
+        }else
+        {
+            selectWashPrice = 0;
         }
         
         if (self.selectDIYArray.count > 0) {
@@ -171,6 +185,9 @@ static NSString *identifier_2 = @"tit1cell";
             for (XBBOrder *diy in self.selectDIYArray) {
                 selectDIYPrice += diy.price_2;
             }
+        }else
+        {
+            selectDIYPrice = 0;
         }
         
         if (self.selectFacialArray.count > 0) {
@@ -178,12 +195,20 @@ static NSString *identifier_2 = @"tit1cell";
             for (XBBOrder *facial in self.selectFacialArray) {
                 selectFaicalPrice += facial.price_2;
             }
+        }else
+        {
+            selectFaicalPrice = 0;
         }
+        
         if (self.selectCouponModel) {
             selectCouponPrice = [self.selectCouponModel.coupons_price floatValue];
+        }else
+        {
+            selectCouponPrice = 0;
         }
-        [self addAllPrice];
+      
     }
+      [self addAllPrice];
     
     
 }
@@ -213,8 +238,10 @@ static NSString *identifier_2 = @"tit1cell";
 {
     [NetworkHelper postWithAPI:ServerTime parameter:nil successBlock:^(id response) {
         DLog(@"%@",response)
-        startServerTime = response[@"reserve_start_time"];
-        stopServerTime = response[@"reserve_end_time"];
+        if ([response[@"code"] integerValue] == 1) {
+            startServerTime = response[@"result"][@"reserve_start_time"];
+            stopServerTime = response[@"result"][@"reserve_end_time"];
+        }
     } failBlock:^(NSError *error) {
     }];
     carType = [UserObj shareInstance].carModel.c_type;
@@ -252,7 +279,9 @@ static NSString *identifier_2 = @"tit1cell";
             NSMutableArray *couponsModels = [NSMutableArray array];
             for (NSDictionary *couponsDic in couponsArray) {
                   DLog(@"%@",couponsDic)
+                
                 if ([couponsDic[@"state"] integerValue] == 0) {
+                    
                     
                     DLog(@"%@",couponsDic)
                     if ([couponsDic[@"type"] integerValue] == 1) {
@@ -394,7 +423,13 @@ static NSString *identifier_2 = @"tit1cell";
     XBBOrder *o_4 = [[XBBOrder alloc] init];
     o_4.title = @"优惠券";
     o_4.hasIndication = YES;
-    o_4.detailString = @"暂无可用优惠券";
+    if (self.allCoupons.count > 0) {
+        o_4.detailString = [NSString stringWithFormat:@"%ld张",self.allCoupons.count];
+    }else
+    {
+        o_4.detailString = @"暂无可用优惠券";
+    }
+    
     o_4.iconImage = [UIImage imageNamed:@"couponIcon"];
     [self.dataArray addObject:o_4];
     
@@ -560,8 +595,8 @@ static NSString *identifier_2 = @"tit1cell";
 - (void)initfloatBar
 {
     carfloatView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, 40)];
-    carfloatView.backgroundColor = XBB_Bg_Color;
-    carfloatView.alpha = 0.6;
+    carfloatView.backgroundColor = XBB_Bg_Color;//kUIColorFromRGB(0xfffaeb); //XBB_Bg_Color;
+    carfloatView.alpha = 0.5;
     carLabel  = [[UILabel alloc] initWithFrame:carfloatView.bounds];
     [carfloatView addSubview:carLabel];
     carLabel.userInteractionEnabled = YES;
@@ -570,28 +605,31 @@ static NSString *identifier_2 = @"tit1cell";
     [carLabel setFont:XBB_CellContentFont];
     [carLabel setTextColor:[UIColor redColor]];
     [carLabel setTextAlignment:NSTextAlignmentCenter];
-     carLabel.text = [NSString stringWithFormat:@"您当前选择的车辆是 : %@  %@",[UserObj shareInstance].carModel.c_plate_num,[UserObj shareInstance].carModel.typeString];
+ 
+    NSAttributedString *carType_1 = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.typeString] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.],NSForegroundColorAttributeName:[UIColor redColor]}];
+    NSAttributedString *carpLAN = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_plate_num] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.],NSForegroundColorAttributeName:[UIColor redColor]}];
+//    NSAttributedString *carpmu = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_brand] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:kUIColorFromRGB(0xf5a623)}];
+//
+//    NSAttributedString *carColor = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_color] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:kUIColorFromRGB(0xf5a623)}];
+    
+    NSAttributedString *firstString = [[NSAttributedString alloc] initWithString:@"您当前的车辆为 " attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:[UIColor redColor]}];
+    NSAttributedString *lastString = [[NSAttributedString alloc] initWithString:@"    更换" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.],NSForegroundColorAttributeName:[UIColor redColor]}];
+    
+    
+    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:firstString];
+    [attr appendAttributedString:carpLAN];
+    [attr appendAttributedString:carType_1];
+//    [attr appendAttributedString:carpmu];
+//    [attr appendAttributedString:carColor];
+    [attr appendAttributedString:lastString];
+    carLabel.attributedText = attr;
     
     
     
     [self.view addSubview:carfloatView];
 }
 
-//- (void)hiddenCarBar:(BOOL)hidden
-//{
-//    [UIView beginAnimations:@"tohiddenBar" context:nil];
-//    [UIView setAnimationDuration:0.25];
-//    if (hidden)
-//    {
-//        
-//        carfloatView.alpha = 0.;
-//        
-//    }else
-//    {
-//        carfloatView.alpha = 0.7;
-//    }
-//    [UIView commitAnimations];
-//}
+
 - (void)addNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(upCar) name:NotificationCarListUpdate object:nil];
@@ -628,7 +666,24 @@ static NSString *identifier_2 = @"tit1cell";
                         model.add_time = [dic[@"add_time"] integerValue];
                         [UserObj shareInstance].carModel = model;
                         [UserObj shareInstance].c_id = dic[@"id"];
-                        [carLabel setText:[NSString stringWithFormat:@"您当前选择的车辆是 : %@  %@",[UserObj shareInstance].carModel.c_plate_num,[UserObj shareInstance].carModel.typeString]];
+                        NSAttributedString *carType_1 = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.typeString] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.],NSForegroundColorAttributeName:[UIColor redColor]}];
+                        NSAttributedString *carpLAN = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_plate_num] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.],NSForegroundColorAttributeName:[UIColor redColor]}];
+                        //    NSAttributedString *carpmu = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_brand] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:kUIColorFromRGB(0xf5a623)}];
+                        //
+                        //    NSAttributedString *carColor = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_color] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:kUIColorFromRGB(0xf5a623)}];
+                        
+                        NSAttributedString *firstString = [[NSAttributedString alloc] initWithString:@"您当前的车辆为 " attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:[UIColor redColor]}];
+                        NSAttributedString *lastString = [[NSAttributedString alloc] initWithString:@"    更换" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.],NSForegroundColorAttributeName:[UIColor redColor]}];
+                        
+                        
+                        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:firstString];
+                        [attr appendAttributedString:carpLAN];
+                        [attr appendAttributedString:carType_1];
+                        //    [attr appendAttributedString:carpmu];
+                        //    [attr appendAttributedString:carColor];
+                        [attr appendAttributedString:lastString];
+                        carLabel.attributedText = attr;
+
                         carType = model.c_type;
                         self.selectCar = model;
                         [self initUpdateData];
@@ -685,10 +740,10 @@ static NSString *identifier_2 = @"tit1cell";
         }
     }
     
-    if (!hasWaxs && self.selectFacialArray.count > 0 && self.selectWashOrderObject == nil) {
-        [SVProgressHUD showErrorWithStatus:@"您选择的美容项目需要洗车才能下单！"];
-        return;
-    }
+//    if (!hasWaxs && self.selectFacialArray.count > 0 && self.selectWashOrderObject == nil) {
+//        [SVProgressHUD showErrorWithStatus:@"您选择的美容项目需要洗车才能下单！"];
+//        return;
+//    }
     
     if (self.selectCouponModel == nil && self.selectDIYArray.count == 0 && self.selectFacialArray.count == 0 && self.selectWashOrderObject == nil) {
         [SVProgressHUD showErrorWithStatus:@"您还没有选择任何服务！"];
@@ -720,16 +775,14 @@ static NSString *identifier_2 = @"tit1cell";
         NSInteger startM = [[startArray lastObject] integerValue];
         NSInteger stopM = [[stopArray lastObject] integerValue];
         
+        
+        
+        
         if (dateH < startH || dateH > stopH || (dateH == startH && dateM<startM) || (dateH == stopH && dateM > stopM)) {
             [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"即刻下单请在 %@ - %@ 之间下单",startServerTime,stopServerTime]];
             return;
         }
-        
-        DLog(@"%@",string)
-        return;
-        
     }
-    
     
     [self packageData];
 }
@@ -774,8 +827,8 @@ static NSString *identifier_2 = @"tit1cell";
         }
         
         if ([object isEqual:self.dataArray[3]]) {
-            if (object.xbbOrders.count > 0) {
-                cell.detailLabel.alpha = 0.;
+            if (self.allCoupons.count > 0) {
+                cell.detailLabel.text = [NSString stringWithFormat:@"%ld张",self.allCoupons.count];
             }
         }
         return cell;

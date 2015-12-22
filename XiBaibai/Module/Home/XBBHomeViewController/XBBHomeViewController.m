@@ -30,7 +30,7 @@
 #import <MJExtension.h>
 #import "MyCarTableViewController.h"
 #import "ServerCityViewController.h"
-
+#import "DMLineView.h"
 #import "StarView.h"
 
 
@@ -59,6 +59,11 @@ static NSString *identifier_diy = @"diy";
     BMKGeoCodeSearch *_geoCodeSearch;//地里编码
     BMKReverseGeoCodeOption *reverseGeoCodeOption;
     NSString *locationString;
+    
+    
+    NSString *_downloadAppAddress;
+    NSTimer *_checkVersionTimer;
+    
 }
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -455,19 +460,8 @@ static NSString *identifier_diy = @"diy";
     
     [self locationData];
     
-//    StarView *star = [StarView starView];
-//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 100, star.frame.size.width, star.frame.size.height)];
-//    [view addSubview:star];
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tosetStar:)];
-//    [star.starOne addGestureRecognizer:tap];
-//    [star.starTwo addGestureRecognizer:tap];
-//    [star.starThree addGestureRecognizer:tap];
-//    [star.starFour addGestureRecognizer:tap];
-//    [star.starFive addGestureRecognizer:tap];
-//    
-//    
-//    star.score = 4;
-//    [self.view addSubview:view];
+    [self checkVerison];
+
    
 }
 - (void)addTableViewHomes
@@ -477,7 +471,7 @@ static NSString *identifier_diy = @"diy";
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
     [self setupRefresh];
-    self.tableView.separatorColor = [UIColor groupTableViewBackgroundColor];
+    self.tableView.separatorColor = XBB_Forground_Color;
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBHomeFacialTableViewCell" bundle:nil] forCellReuseIdentifier:identifier_diy];
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBHomeFacialOneTableViewCell" bundle:nil] forCellReuseIdentifier:identifier_facial];
     self.tableView.alpha = 0;
@@ -585,12 +579,12 @@ static NSString *identifier_diy = @"diy";
     switch (section) {
         case 0:
         {
-           return 243.;
+           return 233.;
         }
             break;
         case 1:
         {
-            return 43.;
+            return 45.;
         }
             break;
         default:
@@ -604,12 +598,12 @@ static NSString *identifier_diy = @"diy";
     switch (indexPath.section) {
         case 0:
         {
-            return 200.;
+            return 180.;
         }
             break;
         case 1:
         {
-            return 135.;
+            return 100.;
         }
             break;
             
@@ -626,7 +620,7 @@ static NSString *identifier_diy = @"diy";
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     
-    return 1;
+    return 5;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -655,22 +649,27 @@ static NSString *identifier_diy = @"diy";
             [button addTarget:self action:@selector(toAddDownOrder:) forControlEvents:UIControlEventTouchUpInside];
             [headView bringSubviewToFront:button];
             
-            UIView *backGou = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height+button.frame.origin.y+10., XBB_Screen_width, 210.-(button.frame.size.height+button.frame.origin.y+10.))];
+            UIView *backGou = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height+button.frame.origin.y+10, XBB_Screen_width,5)];
             backGou.backgroundColor = [UIColor colorWithRed:241./255. green:242/255. blue:243/255. alpha:1.];
             [headView addSubview:backGou];
-            UIImage *linImage = [UIImage imageNamed:@"xbb_line_index"];
-            UIImageView *lineImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,button.frame.size.height+button.frame.origin.y+20., XBB_Screen_width, linImage.size.height)];
-            lineImageView.image = linImage;
-            [headView addSubview:lineImageView];
+
+            DMLineView *lineOne = [[DMLineView alloc] init];
+            lineOne.backgroundColor = XBB_Forground_Color;
+            lineOne.lineWidth = 1;
+            lineOne.lineColor =  kUIColorFromRGB(0xdddddd);
+            [headView addSubview:lineOne];
+            [lineOne setFrame:CGRectMake(0, button.frame.size.height+button.frame.origin.y+40., XBB_Screen_width, 1.)];
             
             
-            areaFirstTitileLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, button.frame.size.height+button.frame.origin.y+20., XBB_Screen_width, 40.)];
+            areaFirstTitileLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0, 70, 30.)];
+            [areaFirstTitileLabel setTextAlignment:NSTextAlignmentCenter];
+            areaFirstTitileLabel.center = lineOne.center;
             areaFirstTitileLabel.backgroundColor = XBB_Forground_Color; //XBB_Bg_Color;
             [headView addSubview:areaFirstTitileLabel];
             
-            [areaFirstTitileLabel setFont:[UIFont systemFontOfSize:15.]];
-            areaFirstTitileLabel.text = @"      深度美容";
-            [areaFirstTitileLabel setTextColor:XBB_NavBar_Color];
+            [areaFirstTitileLabel setFont:[UIFont systemFontOfSize:14.]];
+            areaFirstTitileLabel.text = @"深度美容";
+            [areaFirstTitileLabel setTextColor:[UIColor blackColor]];
             
             return headView;
 
@@ -678,17 +677,26 @@ static NSString *identifier_diy = @"diy";
             break;
         case 1:
         {
-            
-            UIView *back = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, 44.)];
-            back.backgroundColor = [UIColor colorWithRed:241./255. green:242/255. blue:243/255. alpha:1.];
-            areaLastTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0., XBB_Screen_width, 40.)];
-            NSString *format = @"      DIY组合    需要选择洗车哦";
-            NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:format];
-            [string addAttributes:@{NSForegroundColorAttributeName:XBB_NavBar_Color,NSFontAttributeName:[UIFont systemFontOfSize:15.]} range:NSMakeRange(0, [format length]-9)];
-            [string addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.],NSForegroundColorAttributeName:XBB_NavBar_Color} range:NSMakeRange([format length]-9,9)];
-            areaLastTitleLabel.attributedText = string;
-            areaLastTitleLabel.backgroundColor = [UIColor whiteColor];
+         
+            UIView *back = [[UIView alloc]init];
+            back.backgroundColor = XBB_Forground_Color;
+            DMLineView *lineOne = [[DMLineView alloc] init];
+            lineOne.backgroundColor = XBB_Forground_Color;
+            lineOne.lineWidth = 1;
+            lineOne.lineColor =  kUIColorFromRGB(0xdddddd);
+            [back addSubview:lineOne];
+            [lineOne setFrame:CGRectMake(0, 25., XBB_Screen_width, 1.)];
+            NSString *format = @"DIY组合";
+            areaLastTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+            [areaLastTitleLabel setText:format];
+            [areaLastTitleLabel setTextAlignment:NSTextAlignmentCenter];
+            [areaLastTitleLabel setFont:[UIFont systemFontOfSize:14.]];
+            [areaLastTitleLabel setTextColor:[UIColor blackColor]];
+            [areaLastTitleLabel setCenter:lineOne.center];
             [back addSubview:areaLastTitleLabel];
+            [areaLastTitleLabel setBackgroundColor:XBB_Forground_Color];
+            
+
             
             return back;
         }
@@ -812,7 +820,6 @@ static NSString *identifier_diy = @"diy";
             [cell.naturalButton addTarget:self action:@selector(inSPAButtonAction:) forControlEvents:UIControlEventTouchUpInside];
             [cell.engineButton addTarget:self action:@selector(inSPAButtonAction:) forControlEvents:UIControlEventTouchUpInside];
             [cell.cuirButton addTarget:self action:@selector(inSPAButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-
             return cell;
         }
             break;
@@ -822,9 +829,10 @@ static NSString *identifier_diy = @"diy";
             if (cell == nil) {
                 cell = [[XBBHomeFacialTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier_diy];
             }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             XBBProObject *object = self.dataSource[indexPath.row];
-            cell.headImageView.layer.cornerRadius = 5;
-            cell.headImageView.layer.masksToBounds = YES;
+//            cell.headImageView.layer.cornerRadius = 5;
+//            cell.headImageView.layer.masksToBounds = YES;
             [cell.headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ImgDomain,object.imageURL]] placeholderImage:nil];
             cell.pInfoLabel.text = object.p_info;
             cell.pNameLabel.text = object.p_name;
@@ -859,13 +867,8 @@ static NSString *identifier_diy = @"diy";
     [self removeNotifaction];
 }
 
-#pragma mark versiondispose
 
 
-- (NSString *)getVerisonString {
-    NSDictionary *appInfo = [[NSBundle mainBundle] infoDictionary];
-    return appInfo[@"CFBundleShortVersionString"];
-}
 
 
 - (void)didReceiveMemoryWarning {
@@ -907,6 +910,17 @@ static NSString *identifier_diy = @"diy";
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if (alertView.tag == 99) {
+        if (buttonIndex) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_downloadAppAddress]];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                exit(0);
+            });
+        } else {
+            exit(0);
+        }
+        return;
+    }
     if (buttonIndex == 1) {
         MyCarTableViewController *myCar = [[MyCarTableViewController alloc] init];
         [self.navigationController pushViewController:myCar animated:YES];
@@ -950,5 +964,33 @@ static NSString *identifier_diy = @"diy";
     [self.navigationController pushViewController:mapco animated:YES];
     return;
 }
+
+
+#pragma mark version
+
+- (void)checkVerison {
+    [NetworkHelper postWithAPI:API_VersionUpdate parameter:@{@"version_type": @"2"} successBlock:^(id response) {
+        if ([response[@"code"] integerValue] == 1) {
+            DLog(@"%@",response)
+            NSString *currentVersionStr = [self getVerisonString];
+            NSString *serverVersionStr = response[@"result"][@"versionname"];
+            _downloadAppAddress = response[@"result"][@"downloadaddress"];
+            if ([currentVersionStr compare:serverVersionStr] == NSOrderedAscending) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"检测到新版本“%@”，请更新版本！", serverVersionStr] delegate:self cancelButtonTitle:@"退出" otherButtonTitles:@"更新", nil];
+                alert.tag = 99;
+                [alert show];
+            }
+        }
+    } failBlock:^(NSError *error) {
+        
+    }];
+}
+
+- (NSString *)getVerisonString {
+    NSDictionary *appInfo = [[NSBundle mainBundle] infoDictionary];
+    return appInfo[@"CFBundleShortVersionString"];
+}
+
+
 
 @end

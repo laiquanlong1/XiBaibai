@@ -7,11 +7,16 @@
 //
 
 #import "CarTypeTableViewController.h"
+#import "CarTypeTableViewCell.h"
+
 
 @interface CarTypeTableViewController ()
+
+
+
 @property (nonatomic, strong) NSArray *dataArry;
 @end
-
+static NSString *identifier = @"cell";
 @implementation CarTypeTableViewController
 - (void)setTableViewcell
 {
@@ -24,12 +29,13 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = XBB_separatorColor;
+    [self.tableView registerNib:[UINib nibWithNibName:@"CarTypeTableViewCell" bundle:nil] forCellReuseIdentifier:identifier];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setNavigationBarControl];
     [self setTableViewcell];
-    self.dataArry = @[@{@"name":@"轿车",@"type":@"1"},@{@"type":@"2",@"name":@"SUV"},@{@"type":@"3",@"name":@"MPV"}];
+    self.dataArry = @[@{@"name":@"轿车",@"type":@"1",@"introduce":@"普通车型"},@{@"type":@"2",@"name":@"SUV",@"introduce":@"越野、城市越野等"},@{@"type":@"3",@"name":@"MPV",@"introduce":@"商务车，7座以上(含7座)"}];
   
 }
 
@@ -106,19 +112,16 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    CarTypeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell = [[CarTypeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     cell.backgroundColor = XBB_Forground_Color;//[UIColor clearColor];
     cell.backgroundView.backgroundColor = XBB_Forground_Color;
     NSDictionary *dic = self.dataArry[indexPath.row];
-    cell.textLabel.text = dic[@"name"];
-    [cell.textLabel setFont:[UIFont systemFontOfSize:14.]];
-//    [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
-    [cell.textLabel setFrame:CGRectMake(30, 0, 120, cell.contentView.bounds.size.height)];
-    // Configure the cell...
-    
+    cell.nameLabel.text = dic[@"name"];
+    cell.detailProLabel.text = dic[@"introduce"];
+
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

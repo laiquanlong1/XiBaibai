@@ -328,7 +328,7 @@ static NSString *identifier = @"carcell";
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     
-    if ([alertView.title isEqualToString:@"设置默认车辆"]) {
+    if ([alertView.title isEqualToString:@"温馨提示"]) {
         if (buttonIndex == 1) {
             [SVProgressHUD show];
             NSMutableDictionary *dic = [NSMutableDictionary new];
@@ -421,8 +421,11 @@ static NSString *identifier = @"carcell";
     UIButton *btn = (UIButton *)sender;
      MyCarModel *carModel = [self.carArr objectAtIndex:btn.tag];
     if (self.isDownOrder) {
-        if (carModel.c_type != [[UserObj shareInstance] carModel].c_type) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"设置默认车辆" message:@"轿车与suv的价格有所不同，确认设置?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        if ((carModel.c_type == 1 && [[UserObj shareInstance] carModel].c_type != 1 ) || (carModel.c_type != 1 && [[UserObj shareInstance] carModel].c_type == 1 )) {
+          
+            
+            NSString *promart = [NSString stringWithFormat:@"您所选车型为%@,%@与%@对应产品的价格有所不同，是否更改?",carModel.typeString,carModel.typeString,[UserObj shareInstance].carModel.typeString];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:promart delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
             alert.tag = carModel.carId;
             [alert show];
             return;

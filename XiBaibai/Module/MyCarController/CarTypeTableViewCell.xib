@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="CarTypeTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ns-fc-2LX">
+                        <rect key="frame" x="124" y="11" width="176" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EEA-Ru-oN0">
+                        <rect key="frame" x="19" y="11" width="88" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="EEA-Ru-oN0" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="9E1-vr-TCf"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="5ns-fc-2LX" secondAttribute="trailing" constant="12" id="SsM-yp-PKs"/>
+                    <constraint firstItem="5ns-fc-2LX" firstAttribute="width" secondItem="EEA-Ru-oN0" secondAttribute="width" multiplier="2:1" id="UYH-1P-yt7"/>
+                    <constraint firstItem="5ns-fc-2LX" firstAttribute="centerY" secondItem="EEA-Ru-oN0" secondAttribute="centerY" id="W6V-Og-vGt"/>
+                    <constraint firstItem="EEA-Ru-oN0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="11" id="jIK-zx-3cZ"/>
+                    <constraint firstItem="5ns-fc-2LX" firstAttribute="height" secondItem="EEA-Ru-oN0" secondAttribute="height" id="l5L-6q-aks"/>
+                    <constraint firstItem="5ns-fc-2LX" firstAttribute="leading" secondItem="EEA-Ru-oN0" secondAttribute="trailing" constant="17" id="nSc-v5-BBK"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="detailProLabel" destination="5ns-fc-2LX" id="yUb-Cz-ylO"/>
+                <outlet property="nameLabel" destination="EEA-Ru-oN0" id="s4m-rj-7pR"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

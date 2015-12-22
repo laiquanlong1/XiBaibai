@@ -1,76 +1,90 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="135" id="KGk-i7-Jjw" customClass="XBBHomeFacialTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="135"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="95" id="KGk-i7-Jjw" customClass="XBBHomeFacialTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="95"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="134.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="94"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="精致水晶油蜡" translatesAutoresizingMaskIntoConstraints="NO" id="EDH-pu-t64">
-                        <rect key="frame" x="22" y="17" width="110" height="100"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="100" id="PcC-f6-i7K"/>
-                            <constraint firstAttribute="width" constant="110" id="mP0-BL-Lhy"/>
-                        </constraints>
-                    </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="金属条上光" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Dd-hc-u2T">
-                        <rect key="frame" x="147" y="17" width="89" height="16"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <rect key="frame" x="98" y="-2" width="103" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="¥ 9" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hat-AX-cME">
-                        <rect key="frame" x="236" y="17" width="64" height="16"/>
+                        <rect key="frame" x="201" y="-2" width="103" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="金属条上光" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ykO-ps-otk">
+                        <rect key="frame" x="98" y="25" width="206" height="53"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="金属条上光" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ykO-ps-otk">
-                        <rect key="frame" x="147" y="46" width="143" height="71"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G6S-fe-pIQ" customClass="DMLineView">
+                        <rect key="frame" x="8" y="88" width="324" height="1"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="143" id="Rac-KW-eT0"/>
-                            <constraint firstAttribute="height" constant="71" id="hz6-Tx-uNC"/>
+                            <constraint firstAttribute="height" constant="1" id="Ud5-TG-NC3"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                        <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
+                                <color key="value" red="0.83529411764705885" green="0.83529411764705885" blue="0.83529411764705885" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="lineWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="精致水晶油蜡" translatesAutoresizingMaskIntoConstraints="NO" id="EDH-pu-t64">
+                        <rect key="frame" x="8" y="-2" width="80" height="80"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="80" id="0ps-oB-SJh"/>
+                            <constraint firstAttribute="height" constant="80" id="zGX-MU-IMs"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="ykO-ps-otk" firstAttribute="leading" secondItem="EDH-pu-t64" secondAttribute="trailing" constant="15" id="7zU-Z9-bee"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="hat-AX-cME" secondAttribute="trailing" constant="12" id="IhQ-Q7-3zA"/>
-                    <constraint firstItem="5Dd-hc-u2T" firstAttribute="leading" secondItem="EDH-pu-t64" secondAttribute="trailing" constant="15" id="Jq3-QL-6lU"/>
-                    <constraint firstItem="5Dd-hc-u2T" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="9" id="Lv5-HW-Kh2"/>
-                    <constraint firstItem="5Dd-hc-u2T" firstAttribute="top" secondItem="EDH-pu-t64" secondAttribute="top" id="MPb-sV-s3I"/>
-                    <constraint firstItem="hat-AX-cME" firstAttribute="width" secondItem="5Dd-hc-u2T" secondAttribute="width" multiplier="5:7" id="ORW-TP-iu7"/>
-                    <constraint firstItem="hat-AX-cME" firstAttribute="height" secondItem="5Dd-hc-u2T" secondAttribute="height" id="SLI-xC-alo"/>
-                    <constraint firstItem="EDH-pu-t64" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="14" id="bGa-6R-Sbo"/>
-                    <constraint firstItem="hat-AX-cME" firstAttribute="leading" secondItem="5Dd-hc-u2T" secondAttribute="trailing" id="eFO-vk-VbC"/>
-                    <constraint firstItem="ykO-ps-otk" firstAttribute="bottom" secondItem="EDH-pu-t64" secondAttribute="bottom" id="mw5-XT-jmv"/>
-                    <constraint firstItem="hat-AX-cME" firstAttribute="top" secondItem="5Dd-hc-u2T" secondAttribute="top" id="y0h-QC-Vgc"/>
-                    <constraint firstItem="EDH-pu-t64" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="yU0-xq-pJz"/>
+                    <constraint firstItem="hat-AX-cME" firstAttribute="leading" secondItem="5Dd-hc-u2T" secondAttribute="trailing" id="1ZM-vu-heN"/>
+                    <constraint firstItem="ykO-ps-otk" firstAttribute="bottom" secondItem="EDH-pu-t64" secondAttribute="bottom" id="8Px-O8-sdl"/>
+                    <constraint firstItem="ykO-ps-otk" firstAttribute="top" secondItem="5Dd-hc-u2T" secondAttribute="bottom" constant="10" id="FZO-gK-nTO"/>
+                    <constraint firstItem="ykO-ps-otk" firstAttribute="leading" secondItem="5Dd-hc-u2T" secondAttribute="leading" id="L2h-fz-NW6"/>
+                    <constraint firstItem="hat-AX-cME" firstAttribute="centerY" secondItem="5Dd-hc-u2T" secondAttribute="centerY" id="LqC-0X-IIK"/>
+                    <constraint firstAttribute="leadingMargin" secondItem="G6S-fe-pIQ" secondAttribute="leading" id="QD4-kx-tB1"/>
+                    <constraint firstItem="hat-AX-cME" firstAttribute="height" secondItem="5Dd-hc-u2T" secondAttribute="height" id="WlC-X0-nOW"/>
+                    <constraint firstItem="5Dd-hc-u2T" firstAttribute="leading" secondItem="EDH-pu-t64" secondAttribute="trailing" constant="10" id="XIr-kr-two"/>
+                    <constraint firstItem="5Dd-hc-u2T" firstAttribute="top" secondItem="EDH-pu-t64" secondAttribute="top" id="ZiY-oV-f6L"/>
+                    <constraint firstItem="hat-AX-cME" firstAttribute="width" secondItem="5Dd-hc-u2T" secondAttribute="width" id="bWf-Uw-wce"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="G6S-fe-pIQ" secondAttribute="trailing" constant="-20" id="dJK-TA-TnV"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="hat-AX-cME" secondAttribute="trailing" constant="8" id="eF4-Bx-rOs"/>
+                    <constraint firstItem="ykO-ps-otk" firstAttribute="trailing" secondItem="hat-AX-cME" secondAttribute="trailing" id="f7B-ny-PaG"/>
+                    <constraint firstItem="EDH-pu-t64" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="ogw-Z1-LbY"/>
+                    <constraint firstAttribute="topMargin" secondItem="EDH-pu-t64" secondAttribute="top" constant="10" id="wWw-yV-fOz"/>
+                    <constraint firstItem="G6S-fe-pIQ" firstAttribute="top" secondItem="EDH-pu-t64" secondAttribute="bottom" constant="10" id="wtX-pN-aFc"/>
                 </constraints>
             </tableViewCellContentView>
+            <inset key="separatorInset" minX="145" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
                 <outlet property="headImageView" destination="EDH-pu-t64" id="bXL-fb-3OX"/>
                 <outlet property="pInfoLabel" destination="ykO-ps-otk" id="Kj8-4F-pN0"/>
                 <outlet property="pNameLabel" destination="5Dd-hc-u2T" id="al6-Q2-CeL"/>
                 <outlet property="priceLabel" destination="hat-AX-cME" id="KLN-pP-jLG"/>
             </connections>
-            <point key="canvasLocation" x="265" y="243.5"/>
+            <point key="canvasLocation" x="264" y="220.5"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="精致水晶油蜡" width="35" height="34"/>
+        <image name="精致水晶油蜡" width="64" height="61"/>
     </resources>
 </document>

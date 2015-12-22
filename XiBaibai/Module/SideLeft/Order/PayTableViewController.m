@@ -174,7 +174,7 @@ static NSString *identifier_2 = @"tit1cell";
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width- XBB_Screen_width/3, 0, XBB_Screen_width/3, barView.bounds.size.height)];
     [button addTarget:self action:@selector(submitPayOnTouch:) forControlEvents:UIControlEventTouchUpInside];
     button.backgroundColor = XBB_NavBar_Color;
-    [button setTitle:@"提交" forState:UIControlStateNormal];
+    [button setTitle:@"确定" forState:UIControlStateNormal];
     [button setTitleColor:XBB_Bg_Color forState:UIControlStateNormal];
     [barView addSubview:button];
     

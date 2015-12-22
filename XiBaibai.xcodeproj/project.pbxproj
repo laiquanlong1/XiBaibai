@@ -267,6 +267,8 @@
 		8FDA2D8B1C217BA6005D8188 /* XBBOrderInfoCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FDA2D891C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.m */; };
 		8FDA2D8C1C217BA6005D8188 /* XBBOrderInfoCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FDA2D8A1C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.xib */; };
 		8FDF480E1C242C3800D5A046 /* XBBNotDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FDF480D1C242C3800D5A046 /* XBBNotDataView.m */; };
+		8FE344AF1C2952A1007B968B /* CarTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE344AD1C2952A1007B968B /* CarTypeTableViewCell.m */; };
+		8FE344B01C2952A1007B968B /* CarTypeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FE344AE1C2952A1007B968B /* CarTypeTableViewCell.xib */; };
 		8FED7E881C24FB9800B36C47 /* ServerCityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FED7E871C24FB9800B36C47 /* ServerCityViewController.m */; };
 		DF67B4B92478E96DD8EF7E5C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 970BC71EB779C2A0ED120862 /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -804,6 +806,9 @@
 		8FDA2D8A1C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XBBOrderInfoCommentTableViewCell.xib; path = MyOrder/XBBOrderInfoCommentTableViewCell.xib; sourceTree = "<group>"; };
 		8FDF480C1C242C3800D5A046 /* XBBNotDataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBNotDataView.h; path = DIYView/DIYView/XBBNotDataView.h; sourceTree = "<group>"; };
 		8FDF480D1C242C3800D5A046 /* XBBNotDataView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBNotDataView.m; path = DIYView/DIYView/XBBNotDataView.m; sourceTree = "<group>"; };
+		8FE344AC1C2952A1007B968B /* CarTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CarTypeTableViewCell.h; path = MyCarController/CarTypeTableViewCell.h; sourceTree = "<group>"; };
+		8FE344AD1C2952A1007B968B /* CarTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CarTypeTableViewCell.m; path = MyCarController/CarTypeTableViewCell.m; sourceTree = "<group>"; };
+		8FE344AE1C2952A1007B968B /* CarTypeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CarTypeTableViewCell.xib; path = MyCarController/CarTypeTableViewCell.xib; sourceTree = "<group>"; };
 		8FED7E861C24FB9800B36C47 /* ServerCityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServerCityViewController.h; path = XBBHomeViewController/ServerCityViewController.h; sourceTree = "<group>"; };
 		8FED7E871C24FB9800B36C47 /* ServerCityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ServerCityViewController.m; path = XBBHomeViewController/ServerCityViewController.m; sourceTree = "<group>"; };
 		970BC71EB779C2A0ED120862 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1675,6 +1680,9 @@
 				1893932C1BAF0C9B00AF5E01 /* CarListTableViewController.m */,
 				8EEFCC011BEF189300D3D93F /* CarTypeTableViewController.h */,
 				8EEFCC021BEF189300D3D93F /* CarTypeTableViewController.m */,
+				8FE344AC1C2952A1007B968B /* CarTypeTableViewCell.h */,
+				8FE344AD1C2952A1007B968B /* CarTypeTableViewCell.m */,
+				8FE344AE1C2952A1007B968B /* CarTypeTableViewCell.xib */,
 				188D98B31BADCD9A00E68506 /* MyCarTableViewController.h */,
 				188D98B41BADCD9A00E68506 /* MyCarTableViewController.m */,
 				8E79B8681C1BB7BD00EB7518 /* XBBAddCarViewController.h */,
@@ -2044,6 +2052,7 @@
 				188D9A001BADCD9A00E68506 /* sounds1.png in Resources */,
 				188D99E61BADCD9A00E68506 /* 1@shezhi_17_p@2x.png in Resources */,
 				188D99DD1BADCD9A00E68506 /* 1@icon_starred.png in Resources */,
+				8FE344B01C2952A1007B968B /* CarTypeTableViewCell.xib in Resources */,
 				188D99FB1BADCD9A00E68506 /* NowLocation@2x.png in Resources */,
 				188D99EB1BADCD9A00E68506 /* addMoren@3x.png in Resources */,
 				188D99CD1BADCD9A00E68506 /* 1@icon_11@2x.png in Resources */,
@@ -2245,6 +2254,7 @@
 				188D9A111BADCD9A00E68506 /* MD5DataSigner.m in Sources */,
 				188D99901BADCD9A00E68506 /* MyOrderTableViewCell.m in Sources */,
 				188D999A1BADCD9A00E68506 /* RechargeHelper.m in Sources */,
+				8FE344AF1C2952A1007B968B /* CarTypeTableViewCell.m in Sources */,
 				8E86A3EA1C1E88D20040CE45 /* MyOrderMouldTableViewCell.m in Sources */,
 				188D999C1BADCD9A00E68506 /* CommentModel.m in Sources */,
 				188D98051BADCD6100E68506 /* AppDelegate.mm in Sources */,

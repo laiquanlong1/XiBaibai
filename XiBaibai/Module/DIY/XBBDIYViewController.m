@@ -38,7 +38,6 @@
 {
     carType = [UserObj shareInstance].carModel.c_type;
     [NetworkHelper postWithAPI:XBB_DIY_Pro parameter:nil successBlock:^(id response) {
-        DLog(@"%@",response);
         NSDictionary *dic = response;
        
         if ([dic[@"code"] integerValue] == 1) {
@@ -57,6 +56,7 @@
                     subO_1.proName = dic_pro_1[@"p_name"];
                     subO_1.price1 = [dic_pro_1[@"p_price"] floatValue];
                     subO_1.price2 = [dic_pro_1[@"p_price2"] floatValue];
+                    subO_1.urlString = dic_pro_1[@"detailurl"];
                     
                     NSDictionary *dic_pro_2 = grouDic[@"all"];
                     XBBDiyObject *subO_2 = [[XBBDiyObject alloc] init];
@@ -64,6 +64,7 @@
                     subO_2.proName = dic_pro_2[@"p_name"];
                     subO_2.price1 = [dic_pro_2[@"p_price"] floatValue];
                     subO_2.price2 = [dic_pro_2[@"p_price2"] floatValue];
+                    subO_2.urlString = dic_pro_2[@"detailurl"];
 
                     NSMutableArray *subArray = [NSMutableArray array];
                     
@@ -86,15 +87,12 @@
                 object.pid = proDic[@"id"];
                 object.price1 = [proDic[@"p_price"] floatValue];
                 object.price2 = [proDic[@"p_price2"] floatValue];
+                object.urlString = proDic[@"detailurl"];
                 [commonTempArray addObject:object];
             }
             
             [gropTempArrayAll addObject:commonTempArray];
             self.dataSource = [gropTempArrayAll copy];
-            for (XBBDiyObject *ob in self.dataSource) {
-                DLog(@"%@",ob);
-            }
-            DLog(@"%@",self.dataSource);
         }
         [self inita];
         [self alphaToOne];
@@ -248,11 +246,23 @@
     UITapGestureRecognizer *tap = (UITapGestureRecognizer *)sender;
     UILabel *label = (UILabel *)tap.view;
     if (label.tag != 11111) {
-        NSString *urlString = [NSString stringWithFormat:@"http://xbbwx.marnow.com/Weixin/Diy/index?p_id=%ld",label.tag];
-        WebViewController *web = [[WebViewController alloc] init];
-        web.navigationTitle = label.text;
-        web.urlString = urlString;
-        [self presentViewController:web animated:YES completion:nil];
+        DLog(@"%@",self.dataSource)
+        for (NSArray *arrays in self.dataSource) {
+            for (XBBDiyObject *object in arrays) {
+                DLog(@" %@   %ld",object.pid , label.tag)
+                if ([object.pid integerValue] == label.tag) {
+                    NSString *urlString = object.urlString;
+                    WebViewController *web = [[WebViewController alloc] init];
+                    web.navigationTitle = label.text;
+                    web.urlString = urlString;
+                    [self presentViewController:web animated:YES completion:nil];
+                    
+                }
+            }
+            
+            
+        
+        }
     }
     
 

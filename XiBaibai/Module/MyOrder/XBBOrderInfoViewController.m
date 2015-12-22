@@ -137,11 +137,15 @@ static NSString *hascomment = @"hascomment";
                     self.onsectionArray = arr_0;
                 }
                
-                
-                actually_price = total_price - coupon_price;
                 XBBOrder *endOrder_1 = [[XBBOrder alloc] init];
-                endOrder_1.title = @"实际支付";
-                endOrder_1.price = actually_price;
+                if (state == 0) {
+                    endOrder_1.title = @"应支付";
+                }else
+                {
+                    endOrder_1.title = @"实际支付";
+                }
+                
+                endOrder_1.price = [model.total_price floatValue]; //actually_price;
                 [arr_0 addObject:endOrder_1];
                 self.onsectionArray = arr_0;
                 
@@ -760,7 +764,7 @@ static NSString *hascomment = @"hascomment";
 //                    [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
                     [cell.priceLabel setTextColor:[UIColor orangeColor]];
                 }
-                if ([order.title isEqualToString:@"实际支付"]) {
+                if ([order.title isEqualToString:@"实际支付"] || [order.title isEqualToString:@"应支付"]) {
                     [cell.priceLabel setFont:[UIFont systemFontOfSize:18.]];
                     [cell.priceLabel setTextColor:[UIColor redColor]];
                 }
@@ -804,7 +808,7 @@ static NSString *hascomment = @"hascomment";
 //                    [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
                     [cell.priceLabel setTextColor:[UIColor orangeColor]];
                 }
-                if ([order.title isEqualToString:@"实际支付"]) {
+                if ([order.title isEqualToString:@"实际支付"] || [order.title isEqualToString:@"应支付"]) {
                     [cell.priceLabel setFont:[UIFont systemFontOfSize:18.]];
                     [cell.priceLabel setTextColor:[UIColor redColor]];
                 }   

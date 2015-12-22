@@ -16,6 +16,7 @@
 #import "VendorMacro.h"
 #import "BPush.h"
 #import "XBBHomeViewController.h"
+#import "ZWIntroductionViewController.h"
 
 @interface AppDelegate () <BMKGeneralDelegate>
 
@@ -92,17 +93,24 @@
     drawerController.closeDrawerGestureModeMask = MMCloseDrawerGestureModeAll;
     drawerController.shouldStretchDrawer = NO;
     
-    if (IsLogin) {
-        self.window.rootViewController =  drawerController;
-    }else
-    {
-        LoginViewController *login = [[LoginViewController alloc] init];
-        self.window.rootViewController = login;
-        
-    }
-    
     
     [self.window makeKeyAndVisible];
+    ZWIntroductionViewController *zin = [[ZWIntroductionViewController alloc] init];
+    zin.coverImageNames = @[@"xbb1",@"xbb2",@"xbb3"];
+    self.window.rootViewController = zin;
+    
+
+//    if (IsLogin) {
+//        self.window.rootViewController =  drawerController;
+//    }else
+//    {
+//        LoginViewController *login = [[LoginViewController alloc] init];
+//        self.window.rootViewController = login;
+//        
+//    }
+    
+    
+  
     return YES;
 }
 

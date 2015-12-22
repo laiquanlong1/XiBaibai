@@ -46,35 +46,42 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self addBackgroundViews]; // 添加背景视图
-    self.pagingScrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];// 添加滚动视图
-    self.pagingScrollView.delegate = self;
-    self.pagingScrollView.pagingEnabled = YES; // 打开page
-    self.pagingScrollView.showsHorizontalScrollIndicator = NO;// 关闭水平滚动
+    UIImage *image = [UIImage imageNamed:@"xbb1"];
+    UIImageView *imageView =[[UIImageView alloc] initWithFrame:self.view.bounds];
+    imageView.image = image;
+    [self.view addSubview:imageView];
     
-    [self.view addSubview:self.pagingScrollView];// 将滚动视图添加到视图
     
-    self.pageControl = [[UIPageControl alloc] initWithFrame:[self frameOfPageControl]]; // 初始化page控制器
-    self.pageControl.pageIndicatorTintColor = [UIColor grayColor]; // 设置控制器的指示器颜色
-    [self.view addSubview:self.pageControl]; //将控制器添加到视图
     
-    /**
-     * @brief 创建进入button
-     * @detail 创建进入按钮
-     **/
-    if (!self.enterButton) {
-        self.enterButton = [UIButton new];
-        [self.enterButton setTitle:NSLocalizedString(@"Enter", nil) forState:UIControlStateNormal];
-        self.enterButton.layer.borderWidth = 0.5;
-        self.enterButton.layer.borderColor = [UIColor blueColor].CGColor;
-    }
-    
-    [self.enterButton addTarget:self action:@selector(enter:) forControlEvents:UIControlEventTouchUpInside];
-    self.enterButton.frame = [self frameOfEnterButton];
-    self.enterButton.alpha = 0;
-    [self.view addSubview:self.enterButton];
-    
-    [self reloadPages];
+//    [self addBackgroundViews]; // 添加背景视图
+//    self.pagingScrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];// 添加滚动视图
+//    self.pagingScrollView.delegate = self;
+//    self.pagingScrollView.pagingEnabled = YES; // 打开page
+//    self.pagingScrollView.showsHorizontalScrollIndicator = NO;// 关闭水平滚动
+//    
+//    [self.view addSubview:self.pagingScrollView];// 将滚动视图添加到视图
+//    
+//    self.pageControl = [[UIPageControl alloc] initWithFrame:[self frameOfPageControl]]; // 初始化page控制器
+//    self.pageControl.pageIndicatorTintColor = [UIColor grayColor]; // 设置控制器的指示器颜色
+//    [self.view addSubview:self.pageControl]; //将控制器添加到视图
+//    
+//    /**
+//     * @brief 创建进入button
+//     * @detail 创建进入按钮
+//     **/
+//    if (!self.enterButton) {
+//        self.enterButton = [UIButton new];
+//        [self.enterButton setTitle:NSLocalizedString(@"Enter", nil) forState:UIControlStateNormal];
+//        self.enterButton.layer.borderWidth = 0.5;
+//        self.enterButton.layer.borderColor = [UIColor blueColor].CGColor;
+//    }
+//    
+//    [self.enterButton addTarget:self action:@selector(enter:) forControlEvents:UIControlEventTouchUpInside];
+//    self.enterButton.frame = [self frameOfEnterButton];
+//    self.enterButton.alpha = 0;
+//    [self.view addSubview:self.enterButton];
+//    [self reloadPages];
+
 }
 
 /**
@@ -83,7 +90,7 @@
  **/
 - (void)addBackgroundViews
 {
-    CGRect frame = self.view.bounds;
+    CGRect frame = XBB_Screen_bounds;
     NSMutableArray *tmpArray = [NSMutableArray new];
     
     /**
@@ -110,8 +117,8 @@
     [[self scrollViewPages] enumerateObjectsUsingBlock:^(UIView *obj, NSUInteger idx, BOOL *stop) {
         obj.frame = CGRectOffset(obj.frame, x, 0);
         [self.pagingScrollView addSubview:obj];
-        
         x += obj.frame.size.width;
+        
     }];
 
     // fix enterButton can not presenting if ScrollView have only one page
@@ -153,9 +160,7 @@
             [v setAlpha:alpha];
         }
     }
-    
     self.pageControl.currentPage = scrollView.contentOffset.x / (scrollView.contentSize.width / [self numberOfPagesInPagingScrollView]);
-    
     [self pagingScrollViewDidChangePages:scrollView];
 }
 
@@ -220,7 +225,7 @@
 - (UIImageView*)scrollViewPage:(NSString*)imageName
 {
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    imageView.contentMode = UIViewContentModeCenter;
     CGSize size = {[[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height};
     imageView.frame = CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y, size.width, size.height);
     return imageView;
@@ -236,9 +241,10 @@
         return _scrollViewPages;
     }
     
-    NSMutableArray *tmpArray = [NSMutableArray new];
+    NSMutableArray *tmpArray = [NSMutableArray array];
+    DLog(@"%@",self.coverImageNames)
     [self.coverImageNames enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        
+        DLog(@"%@",obj)
         UIImageView *v = [self scrollViewPage:obj];
         [tmpArray addObject:v];
         

@@ -12,7 +12,7 @@
 #import "UserObj.h"
 #import <MJRefresh.h>
 #import <MJExtension.h>
-#import "CouponsUseRuleViewController.h"
+#import "WebViewController.h"
 #import "AddOrderViewController.h"
 #import "MyWallViewController.h"
 
@@ -20,6 +20,8 @@
     UITableView *tbView;
     UIImageView *imgViewguize;
     XBBNotDataView *noDataView;
+    NSString *ruleURL;
+    UIButton  *_ruleButton;
 }
 @property (strong, nonatomic) NSMutableArray *couDoneArr;
 
@@ -111,34 +113,34 @@
 
 - (void)couponsUseRule
 {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"CouponsUseRule" ofType:@"txt"];
-    NSURL *url = [NSURL fileURLWithPath:path];
-    CouponsUseRuleViewController *vc = [[CouponsUseRuleViewController alloc] init];
-    vc.url = url;
-    vc.titleNav = @"优惠券使用规则";
-    [self.navigationController pushViewController:vc animated:YES];
+    NSString *path = ruleURL; //[[NSBundle mainBundle] pathForResource:@"CouponsUseRule" ofType:@"txt"];
+
+    WebViewController *vc = [[WebViewController alloc] init];
+    vc.urlString = path;
+    vc.navigationTitle = @"优惠券使用规则";
+//    [self.navigationController pushViewController:vc animated:YES];
+    [self presentViewController:vc animated:YES completion:nil];
     
 }
 
 
 - (void)fetchYouhuiFromWeb:(void (^)())callback {
+
     [SVProgressHUD show];
-    
     [NetworkHelper postWithAPI:XBB_Coupons_select parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
-       
+        
         self.couDoneArr = [NSMutableArray array];
-        NSLog(@"dic%@",response);
         if ([response[@"code"] integerValue] == 1) {
             for (NSDictionary *temp in response[@"result"]) {
-                
                 if ([temp[@"state"] integerValue] == 0) {
-                [self.couDoneArr addObject:temp];
+                    ruleURL = temp[@"ruleUrl"];
+                    [self.couDoneArr addObject:temp];
                 }
                 if (self.couDoneArr == 0) {
                     [SVProgressHUD showErrorWithStatus:@"暂无数据"];
                     [tbView.footer noticeNoMoreData];
                 } else {
-                   
+                    
                     [SVProgressHUD dismiss];
                 }
             }
@@ -162,8 +164,6 @@
 }
 
 
-
-
 - (void)initNoDataUI
 {
     noDataView = [[XBBNotDataView alloc] initWithFrame:self.view.bounds withImage:[UIImage imageNamed:@"43我的优惠券无数据"] withString:@"您还没有优惠券信息哦" ];
@@ -178,10 +178,7 @@
     [tbView registerNib:[UINib nibWithNibName:@"MyCouponsTableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     self.couDoneArr = [NSMutableArray array];
     
-//      NSDictionary *dic = @{@"coupons_price":@"34234",@"coupons_name":@"dsad",@"expired_time":@"123232412412"};
-//     NSDictionary *dic_q = @{@"coupons_price":@"34234",@"coupons_name":@"dsad",@"expired_time":@"123232412412"};
-//    [self.couDoneArr addObject:dic];
-//    [self.couDoneArr addObject:dic_q];
+
     [self fetchYouhuiFromWeb:^{
         if (self.couDoneArr.count == 0 || self.couDoneArr == nil) {
             tbView.alpha = 0;
@@ -190,6 +187,7 @@
         {
             tbView.alpha = 1;
             noDataView.alpha = 0;
+            
         }
         
         
@@ -210,7 +208,30 @@
 }
 
 #pragma mark - tableviewDelegate
-
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view  = [[UIView alloc] init];
+    _ruleButton = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width- 100, 5, 80, 30)];
+    [view addSubview:_ruleButton];
+    [_ruleButton setImage:[UIImage imageNamed:@"问号"] forState:UIControlStateNormal];
+    [_ruleButton setTintColor:XBB_NavBar_Color];
+    [_ruleButton setTitle:@"使用规则" forState:UIControlStateNormal];
+    [_ruleButton addTarget:self action:@selector(guize) forControlEvents:UIControlEventTouchUpInside];
+    [_ruleButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [_ruleButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 20, 0, 0)];
+    [_ruleButton.titleLabel setFont:[UIFont systemFontOfSize:10.]];
+    
+    
+    view.backgroundColor = XBB_Bg_Color;
+    return view;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0) {
+        return 30.;
+    }
+    return 0;
+}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
