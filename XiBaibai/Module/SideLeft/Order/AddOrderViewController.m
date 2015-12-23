@@ -108,27 +108,14 @@ static NSString *identifier_2 = @"tit1cell";
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     [self hiddenCarBar:NO];
-    DLog(@"")
 }
-//- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
-//{
-//      [self hiddenCarBar:NO];
-//}
+
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    DLog(@"")
     [self hiddenCarBar:YES];
 }
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-//{
-//    DLog(@"")
-//}
-//- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
-//{
-//    [self hiddenCarBar:NO];
-//    DLog(@"")
-//}
+
 
 #pragma mark count
 
@@ -570,7 +557,7 @@ static NSString *identifier_2 = @"tit1cell";
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width- XBB_Screen_width/2, 0, XBB_Screen_width/2, barView.bounds.size.height)];
     [button addTarget:self action:@selector(submit:) forControlEvents:UIControlEventTouchUpInside];
     button.backgroundColor = XBB_NavBar_Color;
-    [button setTitle:@"提交" forState:UIControlStateNormal];
+    [button setTitle:@"提交订单" forState:UIControlStateNormal];
     [button setTitleColor:XBB_Bg_Color forState:UIControlStateNormal];
     [barView addSubview:button];
    
@@ -596,7 +583,7 @@ static NSString *identifier_2 = @"tit1cell";
 {
     carfloatView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, 40)];
     carfloatView.backgroundColor = XBB_Bg_Color;//kUIColorFromRGB(0xfffaeb); //XBB_Bg_Color;
-    carfloatView.alpha = 0.5;
+    carfloatView.alpha = 0.7;
     carLabel  = [[UILabel alloc] initWithFrame:carfloatView.bounds];
     [carfloatView addSubview:carLabel];
     carLabel.userInteractionEnabled = YES;
@@ -606,24 +593,8 @@ static NSString *identifier_2 = @"tit1cell";
     [carLabel setTextColor:[UIColor redColor]];
     [carLabel setTextAlignment:NSTextAlignmentCenter];
  
-    NSAttributedString *carType_1 = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.typeString] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.],NSForegroundColorAttributeName:[UIColor redColor]}];
-    NSAttributedString *carpLAN = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_plate_num] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.],NSForegroundColorAttributeName:[UIColor redColor]}];
-//    NSAttributedString *carpmu = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_brand] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:kUIColorFromRGB(0xf5a623)}];
-//
-//    NSAttributedString *carColor = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_color] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:kUIColorFromRGB(0xf5a623)}];
-    
-    NSAttributedString *firstString = [[NSAttributedString alloc] initWithString:@"您当前的车辆为 " attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:[UIColor redColor]}];
-    NSAttributedString *lastString = [[NSAttributedString alloc] initWithString:@"    更换" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.],NSForegroundColorAttributeName:[UIColor grayColor]}];
-    
-    
-    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:firstString];
-    [attr appendAttributedString:carpLAN];
-    [attr appendAttributedString:carType_1];
-//    [attr appendAttributedString:carpmu];
-//    [attr appendAttributedString:carColor];
-    [attr appendAttributedString:lastString];
-    carLabel.attributedText = attr;
-    
+
+    [carLabel setText:[ NSString stringWithFormat:@"您当前车辆为  %@  %@",[UserObj shareInstance].carModel.c_plate_num,[UserObj shareInstance].carModel.typeString] ];
     
     
     [self.view addSubview:carfloatView];
@@ -640,10 +611,14 @@ static NSString *identifier_2 = @"tit1cell";
     [self addNotifications];
     [self initUIs];
     [self initDatas];
- 
-    
-
 }
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [SVProgressHUD dismiss];
+}
+
 
 #pragma mark actions
 
@@ -666,24 +641,26 @@ static NSString *identifier_2 = @"tit1cell";
                         model.add_time = [dic[@"add_time"] integerValue];
                         [UserObj shareInstance].carModel = model;
                         [UserObj shareInstance].c_id = dic[@"id"];
-                        NSAttributedString *carType_1 = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.typeString] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.],NSForegroundColorAttributeName:[UIColor redColor]}];
-                        NSAttributedString *carpLAN = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_plate_num] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.],NSForegroundColorAttributeName:[UIColor redColor]}];
-                        //    NSAttributedString *carpmu = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_brand] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:kUIColorFromRGB(0xf5a623)}];
-                        //
-                        //    NSAttributedString *carColor = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_color] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:kUIColorFromRGB(0xf5a623)}];
                         
-                        NSAttributedString *firstString = [[NSAttributedString alloc] initWithString:@"您当前的车辆为 " attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:[UIColor redColor]}];
-                        NSAttributedString *lastString = [[NSAttributedString alloc] initWithString:@"    更换" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.],NSForegroundColorAttributeName:[UIColor grayColor]}];
-                        
-                        
-                        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:firstString];
-                        [attr appendAttributedString:carpLAN];
-                        [attr appendAttributedString:carType_1];
-                        //    [attr appendAttributedString:carpmu];
-                        //    [attr appendAttributedString:carColor];
-                        [attr appendAttributedString:lastString];
-                        carLabel.attributedText = attr;
+//                        NSAttributedString *carType_1 = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.typeString] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.],NSForegroundColorAttributeName:[UIColor redColor]}];
+//                        NSAttributedString *carpLAN = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_plate_num] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.],NSForegroundColorAttributeName:[UIColor redColor]}];
+//                        //    NSAttributedString *carpmu = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_brand] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:kUIColorFromRGB(0xf5a623)}];
+//                        //
+//                        //    NSAttributedString *carColor = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  ",[UserObj shareInstance].carModel.c_color] attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:kUIColorFromRGB(0xf5a623)}];
+//                        
+//                        NSAttributedString *firstString = [[NSAttributedString alloc] initWithString:@"您当前的车辆为 " attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.],NSForegroundColorAttributeName:[UIColor redColor]}];
+//                        NSAttributedString *lastString = [[NSAttributedString alloc] initWithString:@"    更换" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.],NSForegroundColorAttributeName:[UIColor grayColor]}];
+//                        
+//                        
+//                        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:firstString];
+//                        [attr appendAttributedString:carpLAN];
+//                        [attr appendAttributedString:carType_1];
+//                        //    [attr appendAttributedString:carpmu];
+//                        //    [attr appendAttributedString:carColor];
+//                        [attr appendAttributedString:lastString];
+//                        carLabel.attributedText = attr;
 
+                        [carLabel setText:[ NSString stringWithFormat:@"您当前车辆为  %@  %@",[UserObj shareInstance].carModel.c_plate_num,[UserObj shareInstance].carModel.typeString] ];
                         carType = model.c_type;
                         self.selectCar = model;
                         [self initUpdateData];
@@ -1283,7 +1260,7 @@ static NSString *identifier_2 = @"tit1cell";
 
     }
     [orderDic setObject:planId ? planId:@"" forKey:@"p_order_time_cid"];
-    
+    [orderDic setObject:planTime ? planTime:@"" forKey:@"plan_time"];
       NSString *carId = nil;
     if (self.selectCar) {
         carId = [NSString stringWithFormat:@"%ld",self.selectCar.carId];

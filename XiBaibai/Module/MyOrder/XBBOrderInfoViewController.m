@@ -493,7 +493,11 @@ static NSString *hascomment = @"hascomment";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ((state == 5|| state == 6) && indexPath.section == 3 && indexPath.row == 1) {
-        return 80;
+       
+        if (state == 6) {
+            return 150;
+        }
+         return 80;
     }
     return 44.;
 }
@@ -731,8 +735,7 @@ static NSString *hascomment = @"hascomment";
             if (cell == nil) {
                 cell = [[CommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:hascomment];
             }
-            
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             StarView *star = [StarView starView];
             DLog(@"%ld",order.star_num)
             star.score =order.star_num; //(double)order.star_num;

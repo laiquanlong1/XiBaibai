@@ -21,12 +21,11 @@
 
 - (void)initViewDidLoadDatas
 {
-    if ([[UserObj shareInstance] homeAddress] == nil || [[UserObj shareInstance] companyAddress] == nil) {
-        [self fetchAddressFromWeb:^{
-            [SVProgressHUD dismiss];
-            
-        }];
-    }
+    [self fetchAddressFromWeb:^{
+        [SVProgressHUD dismiss];
+        
+    }];
+    
 }
 
 - (void)hiddenTableView:(BOOL)hidden
@@ -46,12 +45,17 @@
 - (void)fetchAddressFromWeb:(void (^)())callback {
     
     [SVProgressHUD show];
+    [UserObj shareInstance].homeAddress = nil;
+    [UserObj shareInstance].homeDetailAddress = nil;
+    [UserObj shareInstance].companyAddress = nil;
+    [UserObj shareInstance].companyDetailAddress = nil;
     [NetworkHelper postWithAPI:API_AddressSelect parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
         if ([response[@"code"] integerValue] == 1) {
             NSArray *result = response[@"result"][@"list"];
             for (NSDictionary *temp in result) {
                 if ([temp[@"address_type"] integerValue] == 0) {
-                    [UserObj shareInstance].homeAddress = temp[@"address"];                    [UserObj shareInstance].homeDetailAddress = temp[@"address_info"];
+                    [UserObj shareInstance].homeAddress = temp[@"address"];
+                    [UserObj shareInstance].homeDetailAddress = temp[@"address_info"];
                     [UserObj shareInstance].homeCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);
                 } else if ([temp[@"address_type"] integerValue] == 1) {
                     [UserObj shareInstance].companyAddress = temp[@"address"];

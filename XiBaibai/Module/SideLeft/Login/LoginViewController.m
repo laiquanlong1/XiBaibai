@@ -337,11 +337,9 @@
 
 - (IBAction)setRootController:(id)sender
 {
-    
     [UIView animateWithDuration:0.25 animations:^{
         self.view.alpha = 0;
     } completion:^(BOOL finished) {
-        
         MMDrawerController *drawerController = [[MMDrawerController alloc] initWithCenterViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MyNavigationController"] leftDrawerViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"LeftSideBarViewController"]];
         drawerController.maximumLeftDrawerWidth = 240.;
         drawerController.showsShadow = NO;

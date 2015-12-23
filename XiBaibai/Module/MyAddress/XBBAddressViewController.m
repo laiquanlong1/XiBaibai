@@ -27,6 +27,12 @@ static NSString *identifi = @"cell";
 
 - (void)fetchAddressFromWeb:(void (^)())callback {
     [SVProgressHUD show];
+    
+    [UserObj shareInstance].homeAddress = nil;
+    [UserObj shareInstance].homeDetailAddress = nil;
+    [UserObj shareInstance].companyAddress = nil;
+    [UserObj shareInstance].companyDetailAddress = nil;
+    
     [NetworkHelper postWithAPI:API_AddressSelect parameter:@{@"uid": [UserObj shareInstance].uid} successBlock:^(id response) {
         
         if ([response[@"code"] integerValue] == 1) {
@@ -35,7 +41,6 @@ static NSString *identifi = @"cell";
             for (NSDictionary *temp in result) {
                 if ([temp[@"address_type"] integerValue] == 0) {
                     //家
-                    
                     [UserObj shareInstance].homeAddress = temp[@"address"];
                     [UserObj shareInstance].homeDetailAddress = temp[@"address_info"];
                     [UserObj shareInstance].homeCoordinate = CLLocationCoordinate2DMake([temp[@"address_lt"] doubleValue], [temp[@"address_lg"] doubleValue]);

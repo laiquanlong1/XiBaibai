@@ -20,7 +20,6 @@
 //#define ImgDomain @"http://192.168.1.113/xbb"
 
 
-
 // 01 发送验证码
 #define sendCode_API [NSString stringWithFormat:@"%@/authCode", APIDomain]
 
@@ -144,8 +143,6 @@
 
 //确认订单时的订单名称
 #define API_orderName_price [NSString stringWithFormat:@"%@/proName_select",APIDomain]
-
-
 
 //用户余额
 #define API_Balance [NSString stringWithFormat:@"%@/pay_select", APIDomain]

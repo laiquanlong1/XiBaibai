@@ -312,7 +312,7 @@ static NSString *identifier_1 = @"cell_1";
     NSLog(@"%@",userInfo.age);
     labAgeT.text=userInfo.age;
     labiPhone.text=userInfo.iphone;
-    if ([userInfo.sex isEqualToString:@"1"]) {
+    if (userInfo.sex == 1) {
         labSexT.text = @"男";
     }else{
         labSexT.text = @"女";

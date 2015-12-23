@@ -36,7 +36,6 @@
 		188D98051BADCD6100E68506 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 188D98041BADCD6100E68506 /* AppDelegate.mm */; };
 		188D98081BADCD6100E68506 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D98071BADCD6100E68506 /* ViewController.m */; };
 		188D980D1BADCD6100E68506 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 188D980C1BADCD6100E68506 /* Assets.xcassets */; };
-		188D98101BADCD6100E68506 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 188D980E1BADCD6100E68506 /* LaunchScreen.storyboard */; };
 		188D981B1BADCD6100E68506 /* XiBaibaiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D981A1BADCD6100E68506 /* XiBaibaiTests.m */; };
 		188D98261BADCD6100E68506 /* XiBaibaiUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D98251BADCD6100E68506 /* XiBaibaiUITests.m */; };
 		188D99881BADCD9A00E68506 /* ZWIntroductionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D98361BADCD9A00E68506 /* ZWIntroductionViewController.m */; };
@@ -259,6 +258,8 @@
 		8EEFCC511BF1B39300D3D93F /* XBBBaseImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC501BF1B39300D3D93F /* XBBBaseImageView.m */; };
 		8EEFCC541BF1B3CB00D3D93F /* XBBDIYImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC531BF1B3CB00D3D93F /* XBBDIYImageView.m */; };
 		8EF3B2BD1C265FF2000AEF12 /* XBBCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3B2BC1C265FF2000AEF12 /* XBBCommentViewController.m */; };
+		8F52BEE71C2A4721005CAD58 /* LaunchpadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F52BEE51C2A4721005CAD58 /* LaunchpadViewController.m */; };
+		8F52BEE81C2A4721005CAD58 /* LaunchpadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F52BEE61C2A4721005CAD58 /* LaunchpadViewController.xib */; };
 		8F57AC121C251B7800A7B455 /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F57AC101C251B7800A7B455 /* CommentTableViewCell.m */; };
 		8F57AC131C251B7800A7B455 /* CommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F57AC111C251B7800A7B455 /* CommentTableViewCell.xib */; };
 		8F57AC161C25327700A7B455 /* XBBInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F57AC151C25327700A7B455 /* XBBInputView.m */; };
@@ -354,7 +355,6 @@
 		188D98061BADCD6100E68506 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		188D98071BADCD6100E68506 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		188D980C1BADCD6100E68506 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		188D980F1BADCD6100E68506 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		188D98111BADCD6100E68506 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		188D98161BADCD6100E68506 /* XiBaibaiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XiBaibaiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		188D981A1BADCD6100E68506 /* XiBaibaiTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XiBaibaiTests.m; sourceTree = "<group>"; };
@@ -793,6 +793,9 @@
 		8EEFCC531BF1B3CB00D3D93F /* XBBDIYImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBDIYImageView.m; path = DIYView/ImageView/XBBDIYImageView.m; sourceTree = "<group>"; };
 		8EF3B2BB1C265FF2000AEF12 /* XBBCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBCommentViewController.h; path = MyOrder/XBBCommentViewController.h; sourceTree = "<group>"; };
 		8EF3B2BC1C265FF2000AEF12 /* XBBCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBCommentViewController.m; path = MyOrder/XBBCommentViewController.m; sourceTree = "<group>"; };
+		8F52BEE41C2A4721005CAD58 /* LaunchpadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LaunchpadViewController.h; path = XiBaibai/LaunchpadViewController.h; sourceTree = SOURCE_ROOT; };
+		8F52BEE51C2A4721005CAD58 /* LaunchpadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LaunchpadViewController.m; path = XiBaibai/LaunchpadViewController.m; sourceTree = SOURCE_ROOT; };
+		8F52BEE61C2A4721005CAD58 /* LaunchpadViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LaunchpadViewController.xib; path = XiBaibai/LaunchpadViewController.xib; sourceTree = SOURCE_ROOT; };
 		8F57AC0F1C251B7800A7B455 /* CommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommentTableViewCell.h; path = MyOrder/CommentTableViewCell.h; sourceTree = "<group>"; };
 		8F57AC101C251B7800A7B455 /* CommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommentTableViewCell.m; path = MyOrder/CommentTableViewCell.m; sourceTree = "<group>"; };
 		8F57AC111C251B7800A7B455 /* CommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CommentTableViewCell.xib; path = MyOrder/CommentTableViewCell.xib; sourceTree = "<group>"; };
@@ -972,12 +975,14 @@
 				188D990E1BADCD9A00E68506 /* Vendors */,
 				188D98031BADCD6100E68506 /* AppDelegate.h */,
 				188D98041BADCD6100E68506 /* AppDelegate.mm */,
+				8F52BEE41C2A4721005CAD58 /* LaunchpadViewController.h */,
+				8F52BEE51C2A4721005CAD58 /* LaunchpadViewController.m */,
+				8F52BEE61C2A4721005CAD58 /* LaunchpadViewController.xib */,
 				188D98061BADCD6100E68506 /* ViewController.h */,
 				188D98071BADCD6100E68506 /* ViewController.m */,
 				188D980C1BADCD6100E68506 /* Assets.xcassets */,
 				188D9A1C1BADCDBE00E68506 /* Main.storyboard */,
 				8ECE5B791C17D58900208998 /* XBBOne.storyboard */,
-				188D980E1BADCD6100E68506 /* LaunchScreen.storyboard */,
 				188D98111BADCD6100E68506 /* Info.plist */,
 				188D98001BADCD6100E68506 /* Supporting Files */,
 			);
@@ -2048,7 +2053,6 @@
 				188D99D01BADCD9A00E68506 /* 1@icon_16@2x.png in Resources */,
 				188D99E71BADCD9A00E68506 /* 1x_11.png in Resources */,
 				188D99F21BADCD9A00E68506 /* map_fast_1@2x.png in Resources */,
-				188D98101BADCD6100E68506 /* LaunchScreen.storyboard in Resources */,
 				188D9A001BADCD9A00E68506 /* sounds1.png in Resources */,
 				188D99E61BADCD9A00E68506 /* 1@shezhi_17_p@2x.png in Resources */,
 				188D99DD1BADCD9A00E68506 /* 1@icon_starred.png in Resources */,
@@ -2092,6 +2096,7 @@
 				188D9A061BADCD9A00E68506 /* xi1.png in Resources */,
 				188D9A051BADCD9A00E68506 /* xbb_diyselected@2x.png in Resources */,
 				188D99D81BADCD9A00E68506 /* 1@icon_Mall.png in Resources */,
+				8F52BEE81C2A4721005CAD58 /* LaunchpadViewController.xib in Resources */,
 				188D99F61BADCD9A00E68506 /* mc1.png in Resources */,
 				8E79B8631C1B102E00EB7518 /* MyCarTableViewCell.xib in Resources */,
 				188D99E81BADCD9A00E68506 /* add_car@2x.png in Resources */,
@@ -2259,6 +2264,7 @@
 				188D999C1BADCD9A00E68506 /* CommentModel.m in Sources */,
 				188D98051BADCD6100E68506 /* AppDelegate.mm in Sources */,
 				188D99BD1BADCD9A00E68506 /* CarportTableViewController.m in Sources */,
+				8F52BEE71C2A4721005CAD58 /* LaunchpadViewController.m in Sources */,
 				8EAA96C21C10472B00B83CA7 /* XBBBannerObject.m in Sources */,
 				8E7E49D81BF5AA70008517DC /* OrderPayUserInfoTableViewCell.m in Sources */,
 				8F73782B1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.m in Sources */,
@@ -2384,17 +2390,6 @@
 			targetProxy = 188D98221BADCD6100E68506 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		188D980E1BADCD6100E68506 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				188D980F1BADCD6100E68506 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		188D98281BADCD6100E68506 /* Debug */ = {

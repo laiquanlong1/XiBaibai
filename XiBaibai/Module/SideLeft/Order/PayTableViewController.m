@@ -50,10 +50,10 @@ static NSString *identifier_2 = @"tit1cell";
 
     NSMutableDictionary *orderDic = [NSMutableDictionary dictionaryWithDictionary:self.dic_prama];
     // 下单时间
-
-     NSDate *date = [NSDate date];
+    
+    NSDate *date = [NSDate date];
     NSString *currentDateStr = [NSString stringWithFormat:@"%lf",[date timeIntervalSince1970]] ;
-
+    
     [orderDic setObject:currentDateStr?currentDateStr:@"" forKey:@"day"];
     
     if (buttonIndex==0) {
@@ -174,7 +174,7 @@ static NSString *identifier_2 = @"tit1cell";
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width- XBB_Screen_width/3, 0, XBB_Screen_width/3, barView.bounds.size.height)];
     [button addTarget:self action:@selector(submitPayOnTouch:) forControlEvents:UIControlEventTouchUpInside];
     button.backgroundColor = XBB_NavBar_Color;
-    [button setTitle:@"确定" forState:UIControlStateNormal];
+    [button setTitle:@"支付订单" forState:UIControlStateNormal];
     [button setTitleColor:XBB_Bg_Color forState:UIControlStateNormal];
     [barView addSubview:button];
     
@@ -204,13 +204,6 @@ static NSString *identifier_2 = @"tit1cell";
         [str addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.]} range:NSMakeRange(14, [strings length]-14)];
         priceTotalTitle.attributedText = str;
         
-        
-//        NSArray *strings_1A = [strings componentsSeparatedByString:@"   "];
-//        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:[strings_1A firstObject]];
-//        [str addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:13.],NSForegroundColorAttributeName : [UIColor grayColor] } range:[str length]]
-//        NSMutableAttributedString *str_1 = [[NSMutableAttributedString alloc] initWithString:[strings_1A lastObject]];
-        
-        
     }
     
     
@@ -229,10 +222,6 @@ static NSString *identifier_2 = @"tit1cell";
             if ([response[@"code"] integerValue] == 1) {
                 self.location = response[@"result"][@"location"];
                 self.planTime = response[@"result"][@"servicetime"];
-//                cell.addressLabel.text = dic[@"p_info"];
-//                NSString *string = dic[@"p_price"];
-//                DLog(@"%@",string);
-//                cell.price2Label.text = [NSString stringWithFormat:@"¥ %.2f" ,[dic[@"p_price"] floatValue]];
                 NSArray *proArr = response[@"result"][@"prolist"];
                 NSMutableArray *arr = [NSMutableArray array];
                 for (NSDictionary *dci in proArr) {
@@ -247,45 +236,20 @@ static NSString *identifier_2 = @"tit1cell";
             {
                 [SVProgressHUD showErrorWithStatus:response[@"msg"]];
             }
-            
-            DLog(@"respose %@",response)
         } failBlock:^(NSError *error) {
             [SVProgressHUD showErrorWithStatus:@"网络错误"];
             self.tableView.alpha = 0;
         }];
     }else
     {
-        
-        
-        
         [self addAllPrice];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOfPay:) name:NotificationRecharge object:nil];
-//        self.priceArr = @[@"10", @"20", @"30", @"50", @"100"];
-
-        
-        //请求产品标题
-//        if (self.dic) {
-//            [NetworkHelper postWithAPI:API_orderName_price parameter:@{@"p_ids":[self.dic objectForKey:@"p_ids"]} successBlock:^(id response) {
-//                [SVProgressHUD dismiss];
-//                self.orderName = response[@"result"][@"order_name"];
-//                NSLog(@"pro %@",response);
-//                selectAllPrice = [[NSString stringWithFormat:@"%@",response[@"result"][@"order_price"]] doubleValue];
-//                self.orderNameLabel.text = self.orderName;
-//                self.priceLabel.text = [NSString stringWithFormat:@"%@", @(selectAllPrice)];
-//            } failBlock:^(NSError *error) {
-//                [SVProgressHUD showErrorWithStatus:@"信息有误"];
-//                [self.navigationController popViewControllerAnimated:YES];
-//            }];
-//        }
-        
-        
     }
     
     
     self.orderNameLabel.text = self.orderName;
     self.priceLabel.text = [NSString stringWithFormat:@"%@", @(selectAllPrice)];
     _selectedImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"xbb_168"]];
-    // 是否是有订单
     if (self.orderNO)
     {
         self.isDownOrder = YES;
@@ -621,7 +585,7 @@ static NSString *identifier_2 = @"tit1cell";
     {
         if (_payType == 1) {
             
-            UIActionSheet *actionSh = [[UIActionSheet alloc] initWithTitle:@"确认下单" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            UIActionSheet *actionSh = [[UIActionSheet alloc] initWithTitle:@"确认支付" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [actionSh showInView:self.view];
 
         } else {

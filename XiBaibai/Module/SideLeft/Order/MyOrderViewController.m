@@ -471,7 +471,12 @@ static NSString *identifi = @"cell";
     cell.carCaseLabel.text = [NSString stringWithFormat:@"下单时间:   %@",order.p_order_time?order.p_order_time:@""];
     cell.CarNumLabel.text = [NSString stringWithFormat:@"订单号码:   %@",order.order_num?order.order_num:@""];
     
-    cell.priceLabel.text = [NSString stringWithFormat:@"实付 : ¥ %.2f",order.total_price?order.total_price:0];
+    if (order.order_state == 0) {
+         cell.priceLabel.text = [NSString stringWithFormat:@"待付 : ¥ %.2f",order.total_price?order.total_price:0];
+    }else
+    {
+         cell.priceLabel.text = [NSString stringWithFormat:@"实付 : ¥ %.2f",order.total_price?order.total_price:0];
+    }
 
     cell.oneButton.alpha = 0;
     cell.twoButton.alpha = 0;

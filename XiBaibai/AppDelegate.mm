@@ -17,6 +17,8 @@
 #import "BPush.h"
 #import "XBBHomeViewController.h"
 #import "ZWIntroductionViewController.h"
+#import "LaunchpadViewController.h"
+
 
 @interface AppDelegate () <BMKGeneralDelegate>
 
@@ -37,6 +39,76 @@
 - (void)toSetRootViewController
 {
     self.window.rootViewController = [[LoginViewController alloc] init];
+}
+
+- (void)tosetOnerootViewController
+{
+    MMDrawerController *drawerController = [[MMDrawerController alloc] initWithCenterViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MyNavigationController"] leftDrawerViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"LeftSideBarViewController"]];
+    drawerController.maximumLeftDrawerWidth = XBB_Screen_width - 60.;//240.;
+    drawerController.showsShadow = NO;
+    //    drawerController.animationVelocity = 0.1;
+    drawerController.closeDrawerGestureModeMask = MMCloseDrawerGestureModeAll;
+    drawerController.shouldStretchDrawer = NO;
+    
+    BOOL isFirstUse = [[NSUserDefaults standardUserDefaults] boolForKey:@"isFirstLogin"];
+    if (isFirstUse == NO) {
+        
+        
+        ZWIntroductionViewController *zin = [[ZWIntroductionViewController alloc] init];
+        if (XBB_IsIphone4s) {
+            zin.coverImageNames = @[@"page14s",@"page24s",@"page34s"];
+            
+        }else
+        {
+            zin.coverImageNames = @[@"page1",@"page2",@"page3"];
+        }
+        zin.didSelectedEnter = ^{
+            [UIView beginAnimations:@"tosetro" context:nil];
+            [UIView setAnimationDuration:0.4];
+            [UIView setAnimationDidStopSelector:@selector(toSetRootViewController)];
+            [UIView setAnimationDelegate:self];
+            
+            for (UIViewController *vc in self.window.rootViewController.childViewControllers) {
+                if ([vc isKindOfClass:[ZWIntroductionViewController class]]) {
+                    CGRect frame = self.window.rootViewController.view.frame;
+                    frame.origin.x -= XBB_Screen_width;
+                    vc.view.frame = frame;
+                }else if ([vc isKindOfClass:[LoginViewController class]])
+                {
+                    vc.view.alpha = 1.;
+                }
+            }
+            [UIView commitAnimations];
+        };
+        UIViewController *controller = [[UIViewController alloc] init];
+        [controller addChildViewController:[[LoginViewController alloc] init]];
+        [controller addChildViewController:zin];
+        for (UIViewController *vc in controller.childViewControllers) {
+            if ([vc isKindOfClass:[ZWIntroductionViewController class]]) {
+                vc.view.alpha = 1.;
+            }
+            else
+            {
+                vc.view.alpha = 0.;
+            }
+            [controller.view addSubview:vc.view];
+        }
+        self.window.rootViewController = controller;
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFirstLogin"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        return;
+    }
+    
+    
+    if (IsLogin) {
+        self.window.rootViewController =  drawerController;
+    }else
+    {
+        LoginViewController *login = [[LoginViewController alloc] init];
+        self.window.rootViewController = login;
+        
+    }
+
 }
 
 /**
@@ -92,77 +164,15 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
-    MMDrawerController *drawerController = [[MMDrawerController alloc] initWithCenterViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MyNavigationController"] leftDrawerViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"LeftSideBarViewController"]];
-    drawerController.maximumLeftDrawerWidth = XBB_Screen_width - 60.;//240.;
-    drawerController.showsShadow = NO;
-//    drawerController.animationVelocity = 0.1;
-    drawerController.closeDrawerGestureModeMask = MMCloseDrawerGestureModeAll;
-    drawerController.shouldStretchDrawer = NO;
+
     
     
     [self.window makeKeyAndVisible];
+    self.window.rootViewController = [[LaunchpadViewController alloc] init];
     
-    BOOL isFirstUse = [[NSUserDefaults standardUserDefaults] boolForKey:@"isFirstLogin"];
-    if (isFirstUse == NO) {
-        
-        
-        ZWIntroductionViewController *zin = [[ZWIntroductionViewController alloc] init];
-        if (XBB_IsIphone4s) {
-            zin.coverImageNames = @[@"page14s",@"page24s",@"page34s"];
-            
-        }else
-        {
-            zin.coverImageNames = @[@"page1",@"page2",@"page3"];
-        }
-        zin.didSelectedEnter = ^{
-            [UIView beginAnimations:@"tosetro" context:nil];
-            [UIView setAnimationDuration:0.4];
-            [UIView setAnimationDidStopSelector:@selector(toSetRootViewController)];
-            [UIView setAnimationDelegate:self];
-            
-            for (UIViewController *vc in self.window.rootViewController.childViewControllers) {
-                if ([vc isKindOfClass:[ZWIntroductionViewController class]]) {
-                    CGRect frame = self.window.rootViewController.view.frame;
-                    frame.origin.x -= XBB_Screen_width;
-                    vc.view.frame = frame;
-                }else if ([vc isKindOfClass:[LoginViewController class]])
-                {
-                    vc.view.alpha = 1.;
-                }
-            }
-            [UIView commitAnimations];
-        };
-        UIViewController *controller = [[UIViewController alloc] init];
-        [controller addChildViewController:[[LoginViewController alloc] init]];
-        [controller addChildViewController:zin];
-        for (UIViewController *vc in controller.childViewControllers) {
-            if ([vc isKindOfClass:[ZWIntroductionViewController class]]) {
-                vc.view.alpha = 1.;
-            }
-            else
-            {
-                vc.view.alpha = 0.;
-            }
-            [controller.view addSubview:vc.view];
-        }
-        self.window.rootViewController = controller;
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isFirstLogin"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        return YES;
-    }
-    
-    
-    if (IsLogin) {
-        self.window.rootViewController =  drawerController;
-    }else
-    {
-        LoginViewController *login = [[LoginViewController alloc] init];
-        self.window.rootViewController = login;
-        
-    }
-    
-    
-  
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+         [self tosetOnerootViewController];
+    });
     return YES;
 }
 

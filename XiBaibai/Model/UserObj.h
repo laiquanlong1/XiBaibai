@@ -19,7 +19,7 @@
 @property (copy, nonatomic) NSString *profession;
 @property (copy, nonatomic) NSString *QQ;
 @property (copy, nonatomic) NSString *imgstring;
-@property (copy, nonatomic) NSString *sex;
+@property (assign, nonatomic) NSInteger sex;
 @property (copy, nonatomic) NSString *uid;
 @property (copy, nonatomic) NSString *uname;
 @property (copy, nonatomic) NSString *weixin;

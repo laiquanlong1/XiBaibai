@@ -222,7 +222,7 @@ static NSString *identifier_diy = @"diy";
                 user.profession=[[response objectForKey:@"result"] objectForKey:@"profession"];
                 user.QQ=[[response objectForKey:@"result"] objectForKey:@"qq"];
                 user.imgstring=[[response objectForKey:@"result"] objectForKey:@"u_img"];
-                user.sex=[[response objectForKey:@"result"] objectForKey:@"sex"];
+                user.sex=[[[response objectForKey:@"result"] objectForKey:@"sex"] integerValue];
                 user.uname=[[response objectForKey:@"result"] objectForKey:@"uname"];
                 user.weixin=[[response objectForKey:@"result"] objectForKey:@"weixin"];
                 NSString *channelId = [BPush getChannelId];
@@ -236,6 +236,8 @@ static NSString *identifier_diy = @"diy";
                     } failBlock:^(NSError *error) {
                         NSLog(@"channelid设置失败");
                     }];
+                [UserObj shareInstance].carModel = nil;
+                [UserObj shareInstance].c_id = nil;
                 [NetworkHelper postWithAPI:car_select parameter:@{@"uid":[UserObj shareInstance].uid} successBlock:^(id response) {
                     
                     DLog(@"%@",response)
@@ -480,6 +482,7 @@ static NSString *identifier_diy = @"diy";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [SVProgressHUD dismiss];
 }
 
 - (void)viewWillAppear:(BOOL)animated

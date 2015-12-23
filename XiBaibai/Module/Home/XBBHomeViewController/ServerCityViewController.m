@@ -151,6 +151,7 @@
          [cell.textLabel setTextColor:[UIColor grayColor]];
     }
     cell.textLabel.text = self.serversCityArray[indexPath.row];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
@@ -174,7 +175,6 @@
     [label setFont:[UIFont systemFontOfSize:13.]];
     [view addSubview:label];
     [label setBackgroundColor:[UIColor clearColor]];
-    
     return view;
 }
 

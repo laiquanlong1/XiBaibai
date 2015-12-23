@@ -57,8 +57,8 @@
     [self.view addSubview:self.pagingScrollView];// 将滚动视图添加到视图
     
     self.pageControl = [[UIPageControl alloc] initWithFrame:[self frameOfPageControl]]; // 初始化page控制器
-    self.pageControl.pageIndicatorTintColor = [UIColor greenColor]; // 设置控制器的指示器颜色
-    self.pageControl.currentPageIndicatorTintColor = [UIColor redColor];
+    self.pageControl.pageIndicatorTintColor = kUIColorFromRGB(0xedf7fe); //[UIColor greenColor]; // 设置控制器的指示器颜色
+    self.pageControl.currentPageIndicatorTintColor = kUIColorFromRGB(0xb4e0fc); //[UIColor redColor];
     [self.view addSubview:self.pageControl]; //将控制器添加到视图
     
     

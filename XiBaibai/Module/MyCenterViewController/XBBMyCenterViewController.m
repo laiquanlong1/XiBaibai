@@ -261,7 +261,7 @@ static NSString *identifier_1 = @"cell_1";
         case 2:
         {
             cell.nameLabel.text = @"性别";
-            switch ([[UserObj shareInstance].sex integerValue]) {
+            switch ([UserObj shareInstance].sex) {
                 case 0:
                 {
                      cell.decelLabel.text = @"未设置";
@@ -346,7 +346,7 @@ static NSString *identifier_1 = @"cell_1";
     [NetworkHelper postWithAPI:updateUserInfo parameter:@{@"uid": [UserObj shareInstance].uid, @"sex": @(sex)} successBlock:^(id response) {
         if ([response[@"code"] integerValue] == 1) {
             [SVProgressHUD showSuccessWithStatus:@"修改成功"];
-            [UserObj shareInstance].sex = [NSString stringWithFormat:@"%ld",sex];
+            [UserObj shareInstance].sex = sex;
             [self.tableView reloadData];
         } else {
             [SVProgressHUD showErrorWithStatus:response[@"msg"]];
