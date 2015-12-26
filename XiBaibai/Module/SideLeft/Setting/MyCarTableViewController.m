@@ -327,9 +327,9 @@ static NSString *identifier = @"carcell";
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    
+    DLog(@"%ld",buttonIndex)
     if ([alertView.title isEqualToString:@"温馨提示"]) {
-        if (buttonIndex == 1) {
+        if (buttonIndex == 0) {
             [SVProgressHUD show];
             NSMutableDictionary *dic = [NSMutableDictionary new];
             [dic setObject:[NSString stringWithFormat:@"%@",[UserObj shareInstance].uid] forKey:@"uid"];
@@ -430,8 +430,8 @@ static NSString *identifier = @"carcell";
         if ((carModel.c_type == 1 && [[UserObj shareInstance] carModel].c_type != 1 ) || (carModel.c_type != 1 && [[UserObj shareInstance] carModel].c_type == 1 )) {
           
             
-            NSString *promart = [NSString stringWithFormat:@"您所选车型为%@,%@与%@对应产品的价格有所不同，是否更改?",carModel.typeString,carModel.typeString,[UserObj shareInstance].carModel.typeString];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:promart delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+            NSString *promart = [NSString stringWithFormat:@"您所选车型为%@,%@与%@对应产品的价格有所不同，我们将重新计算您所选产品价格",carModel.typeString,carModel.typeString,[UserObj shareInstance].carModel.typeString];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:promart delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             alert.tag = carModel.carId;
             [alert show];
             return;
@@ -450,7 +450,6 @@ static NSString *identifier = @"carcell";
                     });
                 }
                 [[NSNotificationCenter defaultCenter] postNotificationName:NotificationCarListUpdate object:nil];
-                
             } failBlock:^(NSError *error) {
                 [SVProgressHUD showErrorWithStatus:@"设置失败"];
             }];

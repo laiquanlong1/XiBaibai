@@ -318,7 +318,7 @@ static NSString *identifi = @"cell";
 - (void)fetchOrderFromWeb:(void (^)())callback {
     [SVProgressHUD show];
     [NetworkHelper postWithAPI:XBB_orderSelect parameter:@{@"uid": [UserObj shareInstance].uid,@"p":@(page)} successBlock:^(id response) {
-   
+        DLog(@"%@",response)
         if (self.orderArr == nil) {
             self.orderArr = [NSMutableArray array];
         }
@@ -426,10 +426,8 @@ static NSString *identifi = @"cell";
 
 #pragma mark tableViewDelegate
 
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-  
     return self.orderArr.count;
 }
 
@@ -451,10 +449,7 @@ static NSString *identifi = @"cell";
     
     return 6.0;
 }
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-//{
-//    return 6.;
-//}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     XBBOrderObject *order = self.orderArr[indexPath.section];
@@ -473,6 +468,8 @@ static NSString *identifi = @"cell";
     
     if (order.order_state == 0) {
          cell.priceLabel.text = [NSString stringWithFormat:@"待付 : ¥ %.2f",order.total_price?order.total_price:0];
+    }else if (order.order_state == 7) {
+        cell.priceLabel.text = [NSString stringWithFormat:@"合计 : ¥ %.2f",order.total_price?order.total_price:0];
     }else
     {
          cell.priceLabel.text = [NSString stringWithFormat:@"实付 : ¥ %.2f",order.total_price?order.total_price:0];
@@ -581,56 +578,7 @@ static NSString *identifi = @"cell";
     
     cell.oneButton.tag = indexPath.section;
     cell.twoButton.tag = indexPath.section;
-    
-    
-//    cell.carCaseLabel.text = [NSString stringWithFormat:@"车辆信息: %@",order.];
-//    MyOrderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyOrderTableViewCell" forIndexPath:indexPath];
-   
-//
-//    self.orderDoneArr[indexPath.row];
-//    cell.topView.priceLabel.text = [NSString stringWithFormat:@"￥%@", order.total_price ? order.total_price : @""];
-//    NSString *str=order.p_order_time;//时间戳
-//    NSTimeInterval time=[str doubleValue];//因为时差问题要加8小时 == 28800 sec
-//    NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
-//    NSLog(@"date:%@",[detaildate description]);
-//    //实例化一个NSDateFormatter对象
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    dateFormatter.timeZone = [NSTimeZone localTimeZone];
-//    //设定时间格式,这里可以设置成自己需要的格式
-//    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//     NSString *currentDateStr = [dateFormatter stringFromDate: detaildate];
-//    cell.topView.dateLabel.text = currentDateStr;
-//    cell.topView.addressLabel.text = order.location ? order.location : @"";
-//   
-//    cell.topView.modelLabel.text = [NSString stringWithFormat:@"%@ %@ %@", order.c_brand?order.c_brand : @"", order.c_color ? order.c_color : @"", order.c_plate_num? order.c_plate_num: @""];
-//    cell.topView.orderNO.text = order.order_num ? order.order_num : @"";
-//    cell.topView.orderState.text = [order orderStateString];
-//    cell.topView.titleLabel.text = order.order_name ? order.order_name : @"";
-//    [cell.avatarImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", ImgDomain, order.emp_img]]];
-//    cell.nameLabel.text = order.emp_name;
-//    cell.summaryLabel.text = [NSString stringWithFormat:@"%@", @(order.order_reg_id)];
-//    [cell.scoreView setScore:[order.star floatValue]];
-//    cell.scoreLabel.text = [NSString stringWithFormat:@"%@分", @([order.star floatValue])];
-//
-//    if (self.doingButton.selected) {
-//        [cell.locationButton setTitle:@"工作人员位置" forState:UIControlStateNormal];
-//        [cell.locationButton setImage:[UIImage imageNamed:@"1@icon_16"] forState:UIControlStateNormal];
-//        cell.locationButton.backgroundColor = [UIColor colorWithRed:0.08 green:0.8 blue:0.62 alpha:1];
-//        [cell.cancelButton setTitle:@"取消订单" forState:UIControlStateNormal];
-//        [cell.cancelButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
-//    }
-//    if (self.completionButton.selected) {
-//        [cell.locationButton setTitle:@"评价" forState:UIControlStateNormal];
-//        [cell.locationButton setImage:[UIImage imageNamed:@"1@icon_16"] forState:UIControlStateNormal];
-//        cell.locationButton.backgroundColor = [UIColor orangeColor];
-//        [cell.cancelButton setTitle:@"投诉" forState:UIControlStateNormal];
-//        [cell.cancelButton setImage:[UIImage imageNamed:@"xbb_165"] forState:UIControlStateNormal];
-//    }
-//    cell.locationButton.tag = indexPath.row;
-//    cell.cancelButton.tag = indexPath.row;
-//    [cell.locationButton addTarget:self action:@selector(leftBtnOnTouch:) forControlEvents:UIControlEventTouchUpInside];
-//    [cell.cancelButton addTarget:self action:@selector(rightBtnOnTouch:) forControlEvents:UIControlEventTouchUpInside];
-    
+
     return cell;
 }
 
@@ -646,6 +594,54 @@ static NSString *identifi = @"cell";
     info.orderName = object.order_name;
     
     [self.navigationController pushViewController:info animated:YES];
+    
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    /**
+     * 0未付款
+     * 1派单中
+     * 2已派单
+     
+     * 3在路上
+     * 4进行中
+     
+     * 5未评价
+     * 6已评价
+     * 7已取消
+     */
+    XBBOrderObject *order = self.orderArr[indexPath.section];
+    if (order.order_state == 0 || order.order_state == 6 || order.order_state == 7) {
+        return YES;
+    }
+    return NO;
+}
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+         XBBOrderObject *order = self.orderArr[indexPath.section];
+        [NetworkHelper postWithAPI:DeleteOrder parameter:@{@"uid":[UserObj shareInstance].uid,@"orderid":order.order_id} successBlock:^(id response) {
+            DLog(@"%@",response)
+            if ([response[@"code"] integerValue] == 1) {
+                [self.orderArr removeObject:order];
+                NSIndexSet *set = [[NSIndexSet alloc] initWithIndex:indexPath.section];
+                [tableView deleteSections:set withRowAnimation:UITableViewRowAnimationLeft];
+            }else
+            {
+                [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+            }
+        } failBlock:^(NSError *error) {
+            [SVProgressHUD showErrorWithStatus:@"删除失败"];
+        }];
+        
+       
+    }
     
 }
 

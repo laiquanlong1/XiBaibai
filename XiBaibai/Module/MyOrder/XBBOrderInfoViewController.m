@@ -144,8 +144,13 @@ static NSString *hascomment = @"hascomment";
                 {
                     endOrder_1.title = @"实际支付";
                 }
+                if (state == 0) {
+                    endOrder_1.price = [model.total_price floatValue]; //actually_price;
+                }else
+                {
+                    endOrder_1.price = (float)model.pay_num; //actually_price;
+                }
                 
-                endOrder_1.price = [model.total_price floatValue]; //actually_price;
                 [arr_0 addObject:endOrder_1];
                 self.onsectionArray = arr_0;
                 
@@ -477,15 +482,14 @@ static NSString *hascomment = @"hascomment";
 {
     if (self.isPayBack) {
         if (section == 1) {
-       
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, 60.)];
-        UIImage *image = [UIImage imageNamed:@"确定"];
-        UIButton *bacButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 66/2-10, XBB_Screen_width-40., 44.)];
-        [view addSubview:bacButton];
-        [bacButton setBackgroundImage:image forState:UIControlStateNormal];
-        [bacButton setTitle:@"确定" forState:UIControlStateNormal];
-        [bacButton addTarget:self action:@selector(toBackAction:) forControlEvents:UIControlEventTouchUpInside];
-        return view;
+            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width, 60.)];
+            UIImage *image = [UIImage imageNamed:@"确定"];
+            UIButton *bacButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 66/2-10, XBB_Screen_width-40., 44.)];
+            [view addSubview:bacButton];
+            [bacButton setBackgroundImage:image forState:UIControlStateNormal];
+            [bacButton setTitle:@"确定" forState:UIControlStateNormal];
+            [bacButton addTarget:self action:@selector(toBackAction:) forControlEvents:UIControlEventTouchUpInside];
+            return view;
         }
     }
     return nil;
@@ -493,11 +497,11 @@ static NSString *hascomment = @"hascomment";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ((state == 5|| state == 6) && indexPath.section == 3 && indexPath.row == 1) {
-       
+        
         if (state == 6) {
             return 150;
         }
-         return 80;
+        return 80;
     }
     return 44.;
 }
@@ -517,7 +521,6 @@ static NSString *hascomment = @"hascomment";
      * 6已评价
      * 7已取消
      */
-    
     
     if (self.isPayBack) {
       

@@ -341,7 +341,7 @@
         self.view.alpha = 0;
     } completion:^(BOOL finished) {
         MMDrawerController *drawerController = [[MMDrawerController alloc] initWithCenterViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MyNavigationController"] leftDrawerViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"LeftSideBarViewController"]];
-        drawerController.maximumLeftDrawerWidth = 240.;
+        drawerController.maximumLeftDrawerWidth = XBB_Screen_width - 60.;
         drawerController.showsShadow = NO;
         drawerController.closeDrawerGestureModeMask = MMCloseDrawerGestureModeAll;
         drawerController.shouldStretchDrawer = NO;

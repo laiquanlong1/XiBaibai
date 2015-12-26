@@ -131,6 +131,10 @@
 // 34 服务城市
 #define ServerCity [NSString stringWithFormat:@"%@/serviceCity", APIDomain]
 
+// 35 删除订单
+#define DeleteOrder [NSString stringWithFormat:@"%@/deleteOrder", APIDomain]
+
+
 
 
 
@@ -171,19 +175,8 @@
 
 
 
-
-
-
-
-
-
-
-
-
 //上传文件接口
 #define API_UploadFile [NSString stringWithFormat:@"%@/UploadFile", APIDomain]
-
-
 
 //百度推送设置channel id到服务器 chanelid_insert
 #define API_ChannelIdInsert [NSString stringWithFormat:@"%@/chanelid_insert", APIDomain]
