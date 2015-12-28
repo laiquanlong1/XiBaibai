@@ -36,7 +36,7 @@
             imgView.image = [UIImage imageNamed:@"1@icon_starredhui.png"];
         } else {
             UIImageView *imgView = starArr[i];
-            imgView.image = [UIImage imageNamed:@"1@icon_starhui.png"];
+            imgView.image = [UIImage imageNamed:@"星星未选择"];
  
         }
     }

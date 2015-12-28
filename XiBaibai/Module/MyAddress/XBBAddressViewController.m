@@ -178,7 +178,7 @@ static NSString *identifi = @"cell";
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     if (section == 1) {
-        return 200.;
+        return 100.;
     }
     return 6.;
 }

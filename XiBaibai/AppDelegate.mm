@@ -53,7 +53,6 @@
     BOOL isFirstUse = [[NSUserDefaults standardUserDefaults] boolForKey:@"isFirstLogin"];
     if (isFirstUse == NO) {
         
-        
         ZWIntroductionViewController *zin = [[ZWIntroductionViewController alloc] init];
         if (XBB_IsIphone4s) {
             zin.coverImageNames = @[@"page14s",@"page24s",@"page34s"];

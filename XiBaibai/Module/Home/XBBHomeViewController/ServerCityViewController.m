@@ -71,6 +71,7 @@
     [self setNavigationBarControl];
     [self initTableView];
 }
+
 - (void)setNavigationBarControl
 {
     self.showNavigation = YES;
@@ -89,7 +90,6 @@
         make.width.mas_equalTo(50);
         make.height.mas_equalTo(50);
     }];
-    
     UILabel *titelLabel = [[UILabel alloc] init];
     [titelLabel setTextColor:[UIColor whiteColor]];
     [titelLabel setBackgroundColor:[UIColor clearColor]];
@@ -109,7 +109,6 @@
 - (void)initTableView
 {
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 65, XBB_Screen_width, XBB_Screen_height-65)];
-    
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.backgroundColor = XBB_Bg_Color;
@@ -144,7 +143,7 @@
     if (cell==nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
-    if ([self.serversCityArray[indexPath.row] isEqualToString:self.currentCity]) {
+    if ([[self.serversCityArray[indexPath.row] substringWithRange:NSMakeRange(0, [self.currentCity length])]isEqualToString:self.currentCity]) {
         [cell.textLabel setTextColor:[UIColor redColor]];
     }else
     {
@@ -178,7 +177,9 @@
     return view;
 }
 
+
 #pragma mark system
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];

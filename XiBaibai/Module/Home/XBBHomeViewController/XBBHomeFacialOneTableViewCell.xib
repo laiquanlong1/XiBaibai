@@ -62,7 +62,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="164" height="103"/>
                                 <color key="backgroundColor" red="0.99328358569999997" green="1" blue="0.99493492449999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <inset key="titleEdgeInsets" minX="-47" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="73" minY="0.0" maxX="0.0" maxY="-16"/>
+                                <inset key="imageEdgeInsets" minX="73" minY="0.0" maxX="0.0" maxY="-10"/>
                                 <state key="normal" image="精致水晶油蜡">
                                     <attributedString key="attributedTitle"/>
                                 </state>
@@ -178,7 +178,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3pC-2D-HM6">
                                 <rect key="frame" x="0.0" y="0.0" width="109" height="103"/>
                                 <color key="backgroundColor" red="0.99328358569999997" green="1" blue="0.99493492449999998" alpha="1" colorSpace="calibratedRGB"/>
-                                <inset key="imageEdgeInsets" minX="40" minY="0.0" maxX="0.0" maxY="-40"/>
+                                <inset key="imageEdgeInsets" minX="40" minY="0.0" maxX="0.0" maxY="-38"/>
                                 <state key="normal" image="天然植物油蜡"/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eym-B2-1Bp">
@@ -347,8 +347,8 @@
     <resources>
         <image name="内饰SPA" width="54" height="44"/>
         <image name="发动机舱干洗" width="45" height="31"/>
-        <image name="天然植物油蜡" width="43" height="39"/>
+        <image name="天然植物油蜡" width="42" height="41"/>
         <image name="皮革上光镀膜" width="45" height="33"/>
-        <image name="精致水晶油蜡" width="64" height="61"/>
+        <image name="精致水晶油蜡" width="63" height="61"/>
     </resources>
 </document>

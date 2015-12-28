@@ -146,9 +146,12 @@ static NSString *hascomment = @"hascomment";
                 }
                 if (state == 0) {
                     endOrder_1.price = [model.total_price floatValue]; //actually_price;
+                    actually_price = [model.total_price floatValue];
+
                 }else
                 {
                     endOrder_1.price = (float)model.pay_num; //actually_price;
+                    actually_price = (float)model.pay_num;
                 }
                 
                 [arr_0 addObject:endOrder_1];
@@ -176,29 +179,29 @@ static NSString *hascomment = @"hascomment";
                 [arr_1 addObject:order_1];
                 
                 XBBOrder *order_1_1 = [[XBBOrder alloc] init];
-                order_1_1.title = [NSString stringWithFormat: @"服务时间:    %@",model.servicetime];
+                order_1_1.title = [NSString stringWithFormat: @"服务时间:    %@",model.servicetime?model.servicetime:@""];
                 [arr_1 addObject:order_1_1];
                 
                 XBBOrder *order_1_2 = [[XBBOrder alloc] init];
-                order_1_2.title = [NSString stringWithFormat:@"订单号码:    %@",model.order_num];
+                order_1_2.title = [NSString stringWithFormat:@"订单号码:    %@",model.order_num?model.order_num:@""];
                 [arr_1 addObject:order_1_2];
                 
                 XBBOrder *order_1_4 = [[XBBOrder alloc] init];
-                order_1_4.title =[NSString stringWithFormat:@"下单时间:    %@", model.p_order_time];
+                order_1_4.title =[NSString stringWithFormat:@"下单时间:    %@", model.p_order_time? model.p_order_time:@""];
                 [arr_1 addObject:order_1_4];
                 
                 if (state != 0) {
                     XBBOrder *order_1_5 = [[XBBOrder alloc] init];
-                    order_1_5.title =[NSString stringWithFormat:@"支付方式:    %@", model.pay_type];
+                    order_1_5.title =[NSString stringWithFormat:@"支付方式:    %@", model.pay_type?model.pay_type:@""];
                     [arr_1 addObject:order_1_5];
 
                 }
                 XBBOrder *order_1_3 = [[XBBOrder alloc] init];
-                order_1_3.title = [NSString stringWithFormat:@"车主名称:    %@",model.uname];
+                order_1_3.title = [NSString stringWithFormat:@"车主名称:    %@",model.uname?model.uname:@""];
                 [arr_1 addObject:order_1_3];
                 
                 XBBOrder *order_1_6 = [[XBBOrder alloc] init];
-                order_1_6.title = [NSString stringWithFormat:@"车辆信息:    %@",model.carinfo];
+                order_1_6.title = [NSString stringWithFormat:@"车辆信息:    %@",model.carinfo?model.carinfo:@""];
                 [arr_1 addObject:order_1_6];
                 
                 XBBOrder *order_1_9 = [[XBBOrder alloc] init];
@@ -207,17 +210,15 @@ static NSString *hascomment = @"hascomment";
                 
                 
                 XBBOrder *order_1_7 = [[XBBOrder alloc] init];
-                order_1_7.title = [NSString stringWithFormat:@"车       型:    %@",model.cartype];
+                order_1_7.title = [NSString stringWithFormat:@"车       型:    %@",model.cartype?model.cartype:@""];
                 [arr_1 addObject:order_1_7];
                 
                 XBBOrder *order_1_8 = [[XBBOrder alloc] init];
-                order_1_8.title = [NSString stringWithFormat:@"车辆位置:    %@",model.location];
+                order_1_8.title = [NSString stringWithFormat:@"车辆位置:    %@",model.location?model.location:@""];
                 [arr_1 addObject:order_1_8];
                 
                 self.twoSectionArray = arr_1;
-                
-                DLog(@"%@",self.twoSectionArray)
-                
+
                 NSMutableArray *conA = [NSMutableArray array];
                 
                 
@@ -306,8 +307,6 @@ static NSString *hascomment = @"hascomment";
 - (void)initTabView
 {
     if (self.isPayBack == NO) {
-        
-        
         backView = [[UIView alloc] initWithFrame:CGRectMake(0, XBB_Screen_height-66., XBB_Screen_width, 44.)];
         backView.backgroundColor = [UIColor clearColor];
         [self.view addSubview:backView];

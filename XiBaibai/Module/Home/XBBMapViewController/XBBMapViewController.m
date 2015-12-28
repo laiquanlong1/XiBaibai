@@ -181,7 +181,6 @@
 
 - (void)addAddressSeachBar
 {
-  
     seachBar = [[UIView alloc] initWithFrame:CGRectMake(20., 65+10, XBB_Screen_width - 120., 44.)];
     seachBar.layer.cornerRadius = 5.;
     seachBar.layer.borderColor = [UIColor groupTableViewBackgroundColor].CGColor;
@@ -242,14 +241,12 @@
             cannelbutton.transform = CGAffineTransformRotate(cannelbutton.transform, -M_PI);
             
         }];
-        
     }else
     {
         [UIView animateWithDuration:0.25 animations:^{
             markBackView.alpha = 0.7;
             cannelbutton.transform = CGAffineTransformRotate(cannelbutton.transform, M_PI);
         }];
-        
     }
 }
 
@@ -814,6 +811,7 @@
 //    markButton.backgroundColor = [UIColor blackColor];
     [markButton setBackgroundImage:maekButtonimage forState:UIControlStateNormal];
     [markButton setTitle:@"备注" forState:UIControlStateNormal];
+    [markButton setTitleColor:XBB_NavBar_Color forState:UIControlStateNormal];
     [markButton.titleLabel setFont:[UIFont systemFontOfSize:12.]];
     [markButton addTarget:self action:@selector(markAction:) forControlEvents:UIControlEventTouchUpInside];
     [imgViewCurrent addSubview:markButton];
@@ -1285,8 +1283,6 @@
     markBackView.backgroundColor = [UIColor blackColor];
     markBackView.alpha = 0.8;
     [self.view addSubview:markBackView];
-    
-    
     
     markBackControlView = [[UIView alloc] initWithFrame:markBackView.bounds];
     [markBackView addSubview:markBackControlView];

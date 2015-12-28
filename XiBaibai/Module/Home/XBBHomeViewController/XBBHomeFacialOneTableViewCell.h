@@ -16,7 +16,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *inSPAButton;
 
 
-
 @property (weak, nonatomic) IBOutlet UILabel *crystalOilNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *crystalOilPriceLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *crystalImgeLabel;

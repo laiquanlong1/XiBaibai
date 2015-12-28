@@ -436,7 +436,6 @@ static NSString *identifier_diy = @"diy";
     bmlocation = [[BMKUserLocation alloc] init];  // 百度地图位置
     _locService = [[BMKLocationService alloc]init]; // 初始化BMKLocationService
     _locService.delegate = self;
-    
     //启动LocationService
     [_locService startUserLocationService];
     //初始化逆地理编码类
@@ -444,7 +443,6 @@ static NSString *identifier_diy = @"diy";
     //注意：必须初始化地理编码类
     _geoCodeSearch = [[BMKGeoCodeSearch alloc]init];
     _geoCodeSearch.delegate = self;
-    
 }
 
 - (IBAction)tosetStar:(id)sender
@@ -452,19 +450,13 @@ static NSString *identifier_diy = @"diy";
     DLog(@"")
 }
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
-    
     [self addTableViewHomes];
     [self feachDatas];
     [self initUI];
     [self addNotification];
-    
     [self locationData];
-    
     [self checkVerison];
-
-   
 }
 - (void)addTableViewHomes
 {
@@ -524,7 +516,7 @@ static NSString *identifier_diy = @"diy";
     [self.xbbNavigationBar addSubview:leftNavigationBotton];
     
     
-    UIImage *image = [UIImage imageNamed:@"xbb_log"];
+    UIImage *image = [UIImage imageNamed:@"xbb_log1"];
     UIImageView *titleImageView = [[UIImageView alloc] initWithFrame:CGRectMake(XBB_Screen_width/2-image.size.width/2-10, 32.-image.size.height/2+10, image.size.width, image.size.height)];
     [self.xbbNavigationBar addSubview:titleImageView];
     titleImageView.image = image;
@@ -534,6 +526,11 @@ static NSString *identifier_diy = @"diy";
     
     titleCityButton = [[UILabel alloc] initWithFrame:CGRectMake(titleImageView.frame.size.width+titleImageView.frame.origin.x+2, titleImageView.frame.origin.y + 8, 80, 12)];
     [titleCityButton setTextColor:[UIColor whiteColor]];
+    if (XBB_IsIphone6P_6SPlus) {
+        CGRect frame =  titleCityButton.frame;
+        frame.origin.y += 5;
+        titleCityButton.frame = frame;
+    }
 
     [titleCityButton setFont:[UIFont systemFontOfSize:13.]];
     [titleCityButton setTextAlignment:NSTextAlignmentLeft];
@@ -623,7 +620,7 @@ static NSString *identifier_diy = @"diy";
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     
-    return 5;
+    return 5.;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -638,13 +635,14 @@ static NSString *identifier_diy = @"diy";
             headView = [[UIView alloc] init];
             headView.backgroundColor = XBB_Forground_Color; //XBB_Bg_Color;
             UIImage *image = [UIImage imageNamed:@"xbb_twoBai"];
-            UIImage *buttonImage = [UIImage imageNamed:@"xbb_One_Button"];
+            UIImage *buttonImage = [UIImage imageNamed:@"一键洗车背景5"];
             UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height)];
+            [button setContentMode:UIViewContentModeCenter];
             button.center = CGPointMake(XBB_Screen_width/2, XBB_Size_w_h(346.));
             UIImageView *imageV = [[UIImageView alloc] initWithFrame:CGRectMake(button.bounds.size.width - image.size.width-XBB_Size_w_h(10), -image.size.height+button.bounds.size.height+XBB_Size_w_h(5), image.size.width, image.size.height)];
             imageV.image = image;
             [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            [button setTitle:@"一键洗车" forState:UIControlStateNormal];
+            [button setTitle:@"一键下单" forState:UIControlStateNormal];
             [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
             [button addSubview:imageV];
             [button setBackgroundImage:buttonImage forState:UIControlStateNormal];
@@ -897,7 +895,7 @@ static NSString *identifier_diy = @"diy";
     {
         if ([[UserObj shareInstance] carModel] != nil) {
             AddOrderViewController *diy = [[AddOrderViewController alloc] init];
-            diy.navigationTitle = @"一键洗车";
+            diy.navigationTitle = @"一键下单";
             [self.navigationController pushViewController:diy animated:YES];
             
         }else

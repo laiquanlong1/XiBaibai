@@ -214,9 +214,9 @@ static NSString *identifier_2 = @"tit1cell";
             selectCouponPrice = [self.selectCouponModel.coupons_price floatValue];
         }
     }
-    
     selectAllPrice = selectDIYPrice + selectWashPrice + selectFaicalPrice  - selectCouponPrice;
     priceTotalTitle.text = [NSString stringWithFormat:@"合计: ¥ %.2f",selectAllPrice>0?selectAllPrice:0.00];
+    
 }
 
 #pragma mark dataDispose
@@ -952,17 +952,21 @@ static NSString *identifier_2 = @"tit1cell";
                     if (carType == 1) {
                         if (ob.price > selectDIYPrice + selectWashPrice + selectFaicalPrice) {
                             selectCouponPrice = selectDIYPrice + selectWashPrice + selectFaicalPrice;
-                            [self addAllPrice];
+                        }else if (selectFaicalPrice + selectDIYPrice + selectWashPrice == 0)
+                        {
+                            selectCouponPrice = 0.;
                         }
                     }else
                     {
                         if (ob.price_2 > selectDIYPrice + selectWashPrice + selectFaicalPrice) {
                             selectCouponPrice = selectDIYPrice + selectWashPrice + selectFaicalPrice;
-                            [self addAllPrice];
+                        }else if (selectFaicalPrice + selectDIYPrice + selectWashPrice == 0)
+                        {
+                            selectCouponPrice = 0.;
                         }
                     }
                     cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f", selectCouponPrice == 0 ?selectCouponPrice : - selectCouponPrice];
-                    
+                    [cell.priceLabel setTextColor:[UIColor orangeColor]];
                     cell.selectImageView.alpha = 0;
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 }
@@ -1105,6 +1109,7 @@ static NSString *identifier_2 = @"tit1cell";
             
         };
         [self presentViewController:diy_1 animated:YES completion:nil];
+        [self.tableView reloadData];
         return;
         
     }
@@ -1148,6 +1153,7 @@ static NSString *identifier_2 = @"tit1cell";
             [self initUpdateData];
         };
         [self presentViewController:fa animated:YES completion:nil];
+        [self.tableView reloadData];
         return;
 
     }
@@ -1195,6 +1201,7 @@ static NSString *identifier_2 = @"tit1cell";
         };
         [self presentViewController:address animated:YES completion:nil];
     }
+    [self.tableView reloadData];
 }
 
 #pragma mark packageDataToJumpNextPayPage
