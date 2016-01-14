@@ -134,6 +134,13 @@
 // 35 删除订单
 #define DeleteOrder [NSString stringWithFormat:@"%@/deleteOrder", APIDomain]
 
+// 36 获取开通城市数据
+#define OpenCityData [NSString stringWithFormat:@"%@/openArea", APIDomain]
+
+// 37 扫描二维码
+#define ZbarPtoP @"http://xbbwx.marnow.com/Api/V201/app"   //[NSString stringWithFormat:@"%@/openArea", APIDomain]
+
+
 
 
 
@@ -175,11 +182,15 @@
 
 
 
+
+
+
+
 //上传文件接口
 #define API_UploadFile [NSString stringWithFormat:@"%@/UploadFile", APIDomain]
 
 //百度推送设置channel id到服务器 chanelid_insert
-#define API_ChannelIdInsert [NSString stringWithFormat:@"%@/chanelid_insert", APIDomain]
+#define API_ChannelIdInsert [NSString stringWithFormat:@"%@/pushdemo", APIDomain]
 
 //申请提现applyfor
 #define API_ApplyFor [NSString stringWithFormat:@"%@/applyfor", APIDomain]

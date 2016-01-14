@@ -16,6 +16,7 @@
 @interface XBBAddressViewController () <UITableViewDataSource, UITableViewDelegate,SetCarAddsViewControllerDelegate,SetCarAddsInfoViewControllerDelegate>
 {
     UILabel  *nofoundLabel;
+    UILabel  *promptLabel;
 }
 @property (nonatomic, strong) UITableView *tableView;
 @end
@@ -186,6 +187,15 @@ static NSString *identifi = @"cell";
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView *view = [[UIView alloc] init];
+    if (section == 1) {
+        promptLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, XBB_Screen_width-40, 50.)];
+        promptLabel.numberOfLines = 0;
+        [view addSubview:promptLabel];
+        [promptLabel setFont:[UIFont systemFontOfSize:13.]];
+        [promptLabel setTextColor:[UIColor redColor]];
+        promptLabel.text = [UserObj shareInstance].openAerea;
+        
+    }
     view.backgroundColor = XBB_Bg_Color;
     return view;
 }

@@ -53,7 +53,6 @@ static NSString *identifier_2 = @"tit1cell";
     
     NSDate *date = [NSDate date];
     NSString *currentDateStr = [NSString stringWithFormat:@"%lf",[date timeIntervalSince1970]] ;
-    
     [orderDic setObject:currentDateStr?currentDateStr:@"" forKey:@"day"];
     
     if (buttonIndex==0) {

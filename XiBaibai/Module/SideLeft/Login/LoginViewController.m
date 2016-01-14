@@ -105,18 +105,35 @@
 - (void)setUpIconsUI
 {
     UIImage *_iconsImage =  nil;
+    
+    
+#ifdef ISFIRSTSHOW
+    if (XBB_IsIphone6_6s) {
+        _iconsImage = [UIImage imageNamed:@"xbb_logo_login_6s"];
+    }else{
+        _iconsImage = [UIImage imageNamed:@"xbb_logo_login_4_5"];
+    }
+#else
     if (XBB_IsIphone6_6s) {
         _iconsImage = [UIImage imageNamed:@"xbb_login_icons_6_6s"];
     }else{
         _iconsImage = [UIImage imageNamed:@"xbb_login_icons_4_5"];
     }
+#endif
+    
     _iconsImageView = [[UIImageView alloc] initWithImage:_iconsImage];
     
+    
+    
+#ifdef ISFIRSTSHOW 
+  
+#else
     _iconsImageView.layer.shadowColor = [UIColor whiteColor].CGColor;
     _iconsImageView.layer.shadowOpacity = 0.5;
     _iconsImageView.layer.shadowOffset = CGSizeMake(0.5, 0.5);
     _iconsImageView.layer.masksToBounds = YES;
-    
+#endif
+
     [_controlScrollView addSubview:_iconsImageView];
     [_iconsImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(_controlScrollView);

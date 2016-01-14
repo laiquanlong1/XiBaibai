@@ -15,14 +15,15 @@
 #import "UserObj.h"
 @interface XBBAddCarViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 {
-    UIView  *barView;
-    CarBrandModel *selectCarbrand;
-    NSDictionary  *selectCarType;
-    NSString      *selectNumber;
-    NSString    *selectColor;
+    UIView          *barView;
+    CarBrandModel   *selectCarbrand;
+    NSDictionary    *selectCarType;
+    NSString        *selectNumber;
+    NSString        *selectColor;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
 @end
 
 
@@ -72,7 +73,12 @@ static NSString *identifier = @"cell";
 
 - (void)sureOnClick:(id)sender
 {
-
+    
+   AddCarNumTableViewCell *cell =  [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]];
+  [cell.nameTextFile resignFirstResponder];
+    
+    
+    
     if (selectNumber == nil || [selectNumber length] == 0) {
         [SVProgressHUD showErrorWithStatus:@"请输入车牌号"];
     } else if ([selectNumber length] != 7) {
@@ -85,7 +91,8 @@ static NSString *identifier = @"cell";
         [SVProgressHUD showErrorWithStatus:@"请输入颜色"];
     } else {
         
-        if (self.carModel) {
+        if (self.carModel)
+        {
             [self updateOnTouch:nil];
         }else
         {

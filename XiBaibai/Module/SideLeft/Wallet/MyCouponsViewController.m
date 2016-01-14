@@ -15,6 +15,8 @@
 #import "WebViewController.h"
 #import "AddOrderViewController.h"
 #import "MyWallViewController.h"
+#import "XBBScanViewController.h"
+
 
 @interface MyCouponsViewController ()<UITableViewDelegate,UITableViewDataSource>{
     UITableView *tbView;
@@ -70,11 +72,21 @@
         make.left.mas_equalTo(50);
         make.width.mas_equalTo(XBB_Screen_width-100);
     }];
+    
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width-100, 30, 100, 30)];
+    [button setTitle:@"扫一扫" forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(pushPanViewController:) forControlEvents:UIControlEventTouchUpInside];
+    [self.xbbNavigationBar addSubview:button];
 }
 
+- (IBAction)pushPanViewController:(id)sender
+{
+    XBBScanViewController *scan = [[XBBScanViewController alloc] init];
+    [self.navigationController pushViewController:scan animated:YES];
+}
 
 - (void)initView{
-    tbView=[UITableView new];
+    tbView = [UITableView new];
     tbView.frame = CGRectMake(0, 65, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-64);
     tbView.dataSource=self;
     tbView.delegate=self;
@@ -170,6 +182,7 @@
     [self.view addSubview:noDataView];
     noDataView.alpha = 0;
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initNoDataUI];
@@ -177,8 +190,6 @@
     tbView.backgroundColor = XBB_Bg_Color;
     [tbView registerNib:[UINib nibWithNibName:@"MyCouponsTableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     self.couDoneArr = [NSMutableArray array];
-    
-
     [self fetchYouhuiFromWeb:^{
         if (self.couDoneArr.count == 0 || self.couDoneArr == nil) {
             tbView.alpha = 0;
@@ -187,10 +198,7 @@
         {
             tbView.alpha = 1;
             noDataView.alpha = 0;
-            
         }
-        
-        
     }];
 }
 

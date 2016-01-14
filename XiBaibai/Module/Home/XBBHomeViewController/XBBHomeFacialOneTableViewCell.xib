@@ -348,7 +348,7 @@
         <image name="内饰SPA" width="54" height="44"/>
         <image name="发动机舱干洗" width="45" height="31"/>
         <image name="天然植物油蜡" width="42" height="41"/>
-        <image name="皮革上光镀膜" width="45" height="33"/>
+        <image name="皮革上光镀膜" width="44" height="33"/>
         <image name="精致水晶油蜡" width="63" height="61"/>
     </resources>
 </document>

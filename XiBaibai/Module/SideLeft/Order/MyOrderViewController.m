@@ -120,7 +120,7 @@ static NSString *identifi = @"cell";
     page = 1;
     self.orderTableView.alpha = 0;
     [self fetchOrderFromWeb:^{
-       
+        
         [UIView animateWithDuration:0.3 animations:^{
             if (self.orderArr.count == 0) {
                 [SVProgressHUD showErrorWithStatus:@"暂无数据"];

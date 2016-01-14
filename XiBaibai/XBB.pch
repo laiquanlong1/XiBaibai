@@ -31,5 +31,5 @@
 #import "XBBInputView.h"
 #import "XBBViewController.h"
 #import "XBBTableViewController.h"
-
+#import "NSString+MD5.h"
 #endif

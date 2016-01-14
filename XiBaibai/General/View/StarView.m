@@ -33,7 +33,7 @@
             imgView.image = [UIImage imageNamed:@"星星已选择"];
         } else if (i < ceil(_score)) {
             UIImageView *imgView = starArr[i];
-            imgView.image = [UIImage imageNamed:@"1@icon_starredhui.png"];
+            imgView.image = [UIImage imageNamed:@"星星未选择"];
         } else {
             UIImageView *imgView = starArr[i];
             imgView.image = [UIImage imageNamed:@"星星未选择"];

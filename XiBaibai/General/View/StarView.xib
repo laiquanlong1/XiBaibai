@@ -11,23 +11,23 @@
             <rect key="frame" x="0.0" y="0.0" width="95" height="14"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="1@icon_starhui.png" translatesAutoresizingMaskIntoConstraints="NO" id="cgg-Cb-l24">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="星星未选择" translatesAutoresizingMaskIntoConstraints="NO" id="cgg-Cb-l24">
                     <rect key="frame" x="0.0" y="0.0" width="15" height="14"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="15" id="UA9-3R-okS"/>
                         <constraint firstAttribute="height" constant="14" id="WOf-0n-5BZ"/>
                     </constraints>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="1@icon_starhui.png" translatesAutoresizingMaskIntoConstraints="NO" id="iCB-4w-qXH">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="星星未选择" translatesAutoresizingMaskIntoConstraints="NO" id="iCB-4w-qXH">
                     <rect key="frame" x="20" y="0.0" width="15" height="14"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="1@icon_starhui.png" translatesAutoresizingMaskIntoConstraints="NO" id="TkZ-dU-F18">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="星星未选择" translatesAutoresizingMaskIntoConstraints="NO" id="TkZ-dU-F18">
                     <rect key="frame" x="40" y="0.0" width="15" height="14"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="1@icon_starhui.png" translatesAutoresizingMaskIntoConstraints="NO" id="iI8-VX-N1m">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="星星未选择" translatesAutoresizingMaskIntoConstraints="NO" id="iI8-VX-N1m">
                     <rect key="frame" x="60" y="0.0" width="15" height="14"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="1@icon_starhui.png" translatesAutoresizingMaskIntoConstraints="NO" id="nmy-JA-8CZ">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="星星未选择" translatesAutoresizingMaskIntoConstraints="NO" id="nmy-JA-8CZ">
                     <rect key="frame" x="80" y="0.0" width="15" height="14"/>
                 </imageView>
             </subviews>
@@ -48,6 +48,6 @@
         </view>
     </objects>
     <resources>
-        <image name="1@icon_starhui.png" width="29" height="27"/>
+        <image name="星星未选择" width="14" height="13"/>
     </resources>
 </document>

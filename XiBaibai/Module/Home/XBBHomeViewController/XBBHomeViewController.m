@@ -33,7 +33,6 @@
 #import "DMLineView.h"
 #import "StarView.h"
 
-
 static NSString *identifier_facial = @"facial_cell";
 static NSString *identifier_diy = @"diy";
 
@@ -53,10 +52,10 @@ static NSString *identifier_diy = @"diy";
     BOOL            isDisconnection;
     
     
-    BMKUserLocation *bmlocation;  // 位置信息
+    BMKUserLocation *bmlocation;
     BMKLocationService *_locService;
     NSString *cityName;
-    BMKGeoCodeSearch *_geoCodeSearch;//地里编码
+    BMKGeoCodeSearch *_geoCodeSearch;
     BMKReverseGeoCodeOption *reverseGeoCodeOption;
     NSString *locationString;
     
@@ -73,24 +72,19 @@ static NSString *identifier_diy = @"diy";
 
 @implementation XBBHomeViewController
 
-#pragma mark didUpdate
+#pragma mark didUpdateCity
 
 - (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
 {
-     [_locService stopUserLocationService];
-     bmlocation=userLocation;
+    [_locService stopUserLocationService];
+    bmlocation=userLocation;
     reverseGeoCodeOption.reverseGeoPoint = bmlocation.location.coordinate;
     [_geoCodeSearch reverseGeoCode:reverseGeoCodeOption];
-//     [map updateLocationData:userLocation];
-//     [map setCenterCoordinate:bmlocation.location.coordinate animated:NO];
-
-    
 }
 
 - (void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error{
     
     cityName = result.addressDetail.city;
-  
     if ([cityName length]>1) {
         if ([[cityName substringWithRange:NSMakeRange([cityName length]-1, 1)] isEqualToString:@"市"]) {
             cityName = [cityName substringWithRange:NSMakeRange(0, [cityName length]-1)];
@@ -105,18 +99,6 @@ static NSString *identifier_diy = @"diy";
 
 #pragma mark featchData
 
-
-- (void)fetchDatas:(void(^)(void))block
-{
-    if (block) {
-        block();
-    }
-    [self feachBannerData];
-    [self feachFacialDatas];
-    [self feachProDatas];
-    
-}
-
 - (void)setupRefresh
 {
     WS(weakSelf)
@@ -127,6 +109,18 @@ static NSString *identifier_diy = @"diy";
         }];
     }];
 }
+
+- (void)fetchDatas:(void(^)(void))block
+{
+    if (block) {
+        block();
+    }
+    [self feachBannerData];
+    [self feachFacialDatas];
+    [self feachDIYProDatas];
+}
+
+
 
 - (void)feachFacialDatas
 {
@@ -160,7 +154,7 @@ static NSString *identifier_diy = @"diy";
 }
 
 
-- (void)feachProDatas
+- (void)feachDIYProDatas
 {
     [NetworkHelper postWithAPI:XBB_Index_Pro parameter:nil successBlock:^(id response) {
         if (response == nil) {
@@ -184,7 +178,6 @@ static NSString *identifier_diy = @"diy";
             }
             self.dataSource = arr;
             [self feachFacialDatas];
-            
         }else
         {
             [SVProgressHUD showErrorWithStatus:response[@"msg"]];
@@ -194,11 +187,22 @@ static NSString *identifier_diy = @"diy";
     }];
 }
 
+- (void)feachArea
+{
+    [NetworkHelper postWithAPI:OpenCityData parameter:nil successBlock:^(id response) {
+        if ([response[@"code"] integerValue] == 1) {
+            NSDictionary *dic = response[@"result"];
+            [UserObj shareInstance].openAerea = dic[@"area"];
+        }
+    } failBlock:^(NSError *error) {
+        [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"%@",[error description]]];
+    }];
+}
+
 - (void)feachDatas
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self feachProDatas];
-    });
+    [self feachDIYProDatas];
+    [self feachArea];
 }
 
 - (void)initData{
@@ -227,7 +231,7 @@ static NSString *identifier_diy = @"diy";
                 user.weixin=[[response objectForKey:@"result"] objectForKey:@"weixin"];
                 NSString *channelId = [BPush getChannelId];
                 if (channelId)
-                    [NetworkHelper postWithAPI:API_ChannelIdInsert parameter:@{@"uid": user.uid, @"channelid": channelId} successBlock:^(id response) {
+                    [NetworkHelper postWithAPI:API_ChannelIdInsert parameter:@{@"uid": user.uid, @"channel_id": channelId,@"user_id":[BPush getUserId],@"device":@"2"} successBlock:^(id response) {
                         if ([response[@"code"] integerValue] == 1) {
                             NSLog(@"channelid设置成功");
                         } else {
@@ -239,8 +243,6 @@ static NSString *identifier_diy = @"diy";
                 [UserObj shareInstance].carModel = nil;
                 [UserObj shareInstance].c_id = nil;
                 [NetworkHelper postWithAPI:car_select parameter:@{@"uid":[UserObj shareInstance].uid} successBlock:^(id response) {
-                    
-                    DLog(@"%@",response)
                     if ([response[@"code"] integerValue] == 1) {
                         if ([response[@"result"][@"default"] integerValue] != 0) {
                             NSArray *list = response[@"result"][@"list"];
@@ -279,7 +281,6 @@ static NSString *identifier_diy = @"diy";
         }];
  
     }else{
-
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
     }
 }
@@ -302,7 +303,6 @@ static NSString *identifier_diy = @"diy";
                     ob.title = dic_1[@"title"];
                     [objects addObject:ob];
                 }
-                
                 bannerArrayData = [objects copy];
                 [self addBannerWithModels:bannerArrayData];
             }else
@@ -312,14 +312,11 @@ static NSString *identifier_diy = @"diy";
                 });
                 
             }
-            DLog(@"%@",response);
-            
         } failBlock:^(NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [SVProgressHUD showErrorWithStatus:@"获取轮播网络错误"];
             });
         }];
-        
     }
 }
 
@@ -348,7 +345,6 @@ static NSString *identifier_diy = @"diy";
 
 - (void)changeNetStatusHaveDisconnection
 {
-   DLog(@"")
     isDisconnection = YES;
 }
 - (void)changeNetStatusHaveConnection
@@ -362,14 +358,6 @@ static NSString *identifier_diy = @"diy";
         [self feachDatas];
     }
     isDisconnection = NO;
-    
-//    if (banner == nil) {
-//        [self feachBannerData];
-//    }
-//    if (self.dataSource == nil) {
-//        [self feachDatas];
-//    }
-   DLog(@"")
 }
 
 #pragma mark notifaction
@@ -383,8 +371,6 @@ static NSString *identifier_diy = @"diy";
 {
     if ([UserObj shareInstance].carModel == nil) {
         [NetworkHelper postWithAPI:car_select parameter:@{@"uid":[UserObj shareInstance].uid} successBlock:^(id response) {
-            
-            DLog(@"%@",response)
             if ([response[@"code"] integerValue] == 1) {
                 if ([response[@"result"][@"default"] integerValue] != 0) {
                     NSArray *list = response[@"result"][@"list"];
@@ -414,8 +400,8 @@ static NSString *identifier_diy = @"diy";
 - (void)removeNotifaction
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
 }
+
 #pragma mark view disposed
 
 - (void)alphaToZone
@@ -475,17 +461,16 @@ static NSString *identifier_diy = @"diy";
 {
     [super viewDidAppear:animated];
     [SVProgressHUD dismiss];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    _locService.delegate=self;
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self feachBannerData];
         [self initData];
     });
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    _locService.delegate=self;
+   
     
 }
 -(void)viewWillDisappear:(BOOL)animated
@@ -696,9 +681,7 @@ static NSString *identifier_diy = @"diy";
             [areaLastTitleLabel setCenter:lineOne.center];
             [back addSubview:areaLastTitleLabel];
             [areaLastTitleLabel setBackgroundColor:XBB_Forground_Color];
-            
 
-            
             return back;
         }
             break;
@@ -739,17 +722,13 @@ static NSString *identifier_diy = @"diy";
     web.navigationTitle = object.p_name;
     web.proObject = object;
     [self.navigationController pushViewController:web animated:YES];
-//    [self presentViewController:web animated:YES completion:nil];
-
     DLog(@"%ld",button.tag)
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     switch (indexPath.section) {
         case 0:
         {
-            
             XBBHomeFacialOneTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier_facial];
             if (cell == nil) {
                 cell = [[XBBHomeFacialOneTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier_diy];
@@ -832,8 +811,6 @@ static NSString *identifier_diy = @"diy";
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             XBBProObject *object = self.dataSource[indexPath.row];
-//            cell.headImageView.layer.cornerRadius = 5;
-//            cell.headImageView.layer.masksToBounds = YES;
             [cell.headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ImgDomain,object.imageURL]] placeholderImage:nil];
             cell.pInfoLabel.text = object.p_info;
             cell.pNameLabel.text = object.p_name;
@@ -859,7 +836,6 @@ static NSString *identifier_diy = @"diy";
         web.urlString = object.urlString;
         web.proObject = object;
          [self.navigationController pushViewController:web animated:YES];
-//        [self presentViewController:web animated:YES completion:nil];
     }
 }
 
@@ -867,10 +843,6 @@ static NSString *identifier_diy = @"diy";
 {
     [self removeNotifaction];
 }
-
-
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

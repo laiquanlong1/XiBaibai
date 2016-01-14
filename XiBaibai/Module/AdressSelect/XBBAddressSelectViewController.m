@@ -12,6 +12,9 @@
 #import "XBBMapViewController.h"
 
 @interface XBBAddressSelectViewController ()<UITableViewDataSource,UITableViewDelegate>
+{
+    UILabel  *promptLabel;
+}
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 
@@ -86,6 +89,22 @@
 
 #pragma mark tableViewDelegate
 
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] init];
+    if (section == 2) {
+        promptLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, XBB_Screen_width-40, 50.)];
+        promptLabel.numberOfLines = 0;
+        [view addSubview:promptLabel];
+        [promptLabel setFont:[UIFont systemFontOfSize:13.]];
+        [promptLabel setTextColor:[UIColor redColor]];
+        promptLabel.text = [UserObj shareInstance].openAerea;
+        
+    }
+    view.backgroundColor = XBB_Bg_Color;
+    return view;
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 20.;

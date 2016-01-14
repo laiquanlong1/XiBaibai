@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "XBBViewController.h"
 #import "MyCouponsModel.h"
+
 typedef void(^MyCouponsViewControllerBlock)(MyCouponsModel *model);
 @interface MyCouponsViewController : XBBViewController
+
 @property (copy, nonatomic) MyCouponsViewControllerBlock couponsBlock;
 @property (nonatomic, assign) BOOL isAddoder;
 

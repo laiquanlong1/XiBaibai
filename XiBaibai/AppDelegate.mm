@@ -17,7 +17,7 @@
 #import "BPush.h"
 #import "XBBHomeViewController.h"
 #import "ZWIntroductionViewController.h"
-#import "LaunchpadViewController.h"
+#import "LuanchViewController.h"
 
 
 @interface AppDelegate () <BMKGeneralDelegate>
@@ -27,8 +27,8 @@
 @implementation AppDelegate
 
 /**
- * @brief 获取UIApplicationDelegate
- * @detail 获取唯一的UIApplicationDelegate
+ * @brief 获取 UIApplicationDelegate
+ * @detail 获取唯一的 UIApplicationDelegate
  **/
 + (AppDelegate *)shareMonsouAppDelegate {
     AppDelegate *app=(AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -41,6 +41,7 @@
     self.window.rootViewController = [[LoginViewController alloc] init];
 }
 
+
 - (void)tosetOnerootViewController
 {
     MMDrawerController *drawerController = [[MMDrawerController alloc] initWithCenterViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MyNavigationController"] leftDrawerViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"LeftSideBarViewController"]];
@@ -52,11 +53,9 @@
     
     BOOL isFirstUse = [[NSUserDefaults standardUserDefaults] boolForKey:@"isFirstLogin"];
     if (isFirstUse == NO) {
-        
         ZWIntroductionViewController *zin = [[ZWIntroductionViewController alloc] init];
         if (XBB_IsIphone4s) {
             zin.coverImageNames = @[@"page14s",@"page24s",@"page34s"];
-            
         }else
         {
             zin.coverImageNames = @[@"page1",@"page2",@"page3"];
@@ -66,7 +65,6 @@
             [UIView setAnimationDuration:0.4];
             [UIView setAnimationDidStopSelector:@selector(toSetRootViewController)];
             [UIView setAnimationDelegate:self];
-            
             for (UIViewController *vc in self.window.rootViewController.childViewControllers) {
                 if ([vc isKindOfClass:[ZWIntroductionViewController class]]) {
                     CGRect frame = self.window.rootViewController.view.frame;
@@ -98,17 +96,15 @@
         return;
     }
     
-    
     if (IsLogin) {
         self.window.rootViewController =  drawerController;
     }else
     {
         LoginViewController *login = [[LoginViewController alloc] init];
         self.window.rootViewController = login;
-        
     }
-
 }
+
 
 /**
  * @brief 程序启动的时候调用
@@ -129,7 +125,6 @@
     // iOS8 下需要使用新的 API（注册推送）
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
         UIUserNotificationType myTypes = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-        
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:myTypes categories:nil];
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     }else {
@@ -143,7 +138,7 @@
      * @param  apiKey:key值  pushMode: 推送环境 
      * @returnType void
      **/
-    [BPush registerChannel:launchOptions apiKey:Baidu_AK pushMode:BPushModeDevelopment withFirstAction:nil withSecondAction:nil withCategory:nil isDebug:YES];
+    [BPush registerChannel:launchOptions apiKey:Baidu_Push pushMode:BPushModeDevelopment withFirstAction:nil withSecondAction:nil withCategory:nil isDebug:YES];
     NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if (userInfo) {
         [BPush handleNotification:userInfo];
@@ -167,7 +162,7 @@
     
     
     [self.window makeKeyAndVisible];
-    self.window.rootViewController = [[LaunchpadViewController alloc] init];
+    self.window.rootViewController = [[LuanchViewController alloc] init];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
          [self tosetOnerootViewController];
@@ -220,7 +215,7 @@
      *     none
      */
     [BPush bindChannelWithCompleteHandler:^(id result, NSError *error) {
-        
+        DLog(@"%@",result)
     }];
     
 }
@@ -279,27 +274,27 @@
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
     
-    
     if ([url.host isEqualToString:@"safepay"]) {
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
             NSLog(@"result = %@",resultDic);
             [RechargeHelper handleWithAliCallbackDic:resultDic];
         }];
     }
+    
     return YES;
 }
 
 /**
- *返回网络错误
- *@param iError 错误号
+ * 返回网络错误
+ * @param iError 错误号
  */
 - (void)onGetNetworkState:(int)iError{
     NSLog(@"onGetNetworkState:%d",iError);
 }
 
 /**
- *返回授权验证错误
- *@param iError 错误号 : 为0时验证通过，具体参加BMKPermissionCheckResultCode
+ * 返回授权验证错误
+ * @param iError 错误号 : 为0时验证通过，具体参加BMKPermissionCheckResultCode
  */
 - (void)onGetPermissionState:(int)iError{
     NSLog(@"onGetPermissionState:%d",iError);

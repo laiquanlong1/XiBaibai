@@ -43,4 +43,8 @@
 
 #define XBB_SelectedColor [UIColor redColor]
 #define XBB_NotSelectColor [UIColor grayColor]
+
+
+
+
 #endif /* APPUIMacro_h */

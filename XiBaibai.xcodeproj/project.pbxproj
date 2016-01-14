@@ -258,8 +258,9 @@
 		8EEFCC511BF1B39300D3D93F /* XBBBaseImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC501BF1B39300D3D93F /* XBBBaseImageView.m */; };
 		8EEFCC541BF1B3CB00D3D93F /* XBBDIYImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEFCC531BF1B3CB00D3D93F /* XBBDIYImageView.m */; };
 		8EF3B2BD1C265FF2000AEF12 /* XBBCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3B2BC1C265FF2000AEF12 /* XBBCommentViewController.m */; };
-		8F52BEE71C2A4721005CAD58 /* LaunchpadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F52BEE51C2A4721005CAD58 /* LaunchpadViewController.m */; };
-		8F52BEE81C2A4721005CAD58 /* LaunchpadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F52BEE61C2A4721005CAD58 /* LaunchpadViewController.xib */; };
+		8F55C4561C47342C008F488C /* LuanchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F55C4541C47342C008F488C /* LuanchViewController.m */; };
+		8F55C4571C47342C008F488C /* LuanchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F55C4551C47342C008F488C /* LuanchViewController.xib */; };
+		8F55C4821C477143008F488C /* XBBScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F55C4811C477143008F488C /* XBBScanViewController.m */; };
 		8F57AC121C251B7800A7B455 /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F57AC101C251B7800A7B455 /* CommentTableViewCell.m */; };
 		8F57AC131C251B7800A7B455 /* CommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F57AC111C251B7800A7B455 /* CommentTableViewCell.xib */; };
 		8F57AC161C25327700A7B455 /* XBBInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F57AC151C25327700A7B455 /* XBBInputView.m */; };
@@ -270,6 +271,8 @@
 		8FDF480E1C242C3800D5A046 /* XBBNotDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FDF480D1C242C3800D5A046 /* XBBNotDataView.m */; };
 		8FE344AF1C2952A1007B968B /* CarTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE344AD1C2952A1007B968B /* CarTypeTableViewCell.m */; };
 		8FE344B01C2952A1007B968B /* CarTypeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FE344AE1C2952A1007B968B /* CarTypeTableViewCell.xib */; };
+		8FE3A8FD1C479454006A3AE5 /* XBBbBarcodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE3A8FC1C479454006A3AE5 /* XBBbBarcodeViewController.m */; };
+		8FE3A9001C47A72D006A3AE5 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE3A8FF1C47A72D006A3AE5 /* NSString+MD5.m */; };
 		8FED7E881C24FB9800B36C47 /* ServerCityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FED7E871C24FB9800B36C47 /* ServerCityViewController.m */; };
 		DF67B4B92478E96DD8EF7E5C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 970BC71EB779C2A0ED120862 /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -793,9 +796,11 @@
 		8EEFCC531BF1B3CB00D3D93F /* XBBDIYImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBDIYImageView.m; path = DIYView/ImageView/XBBDIYImageView.m; sourceTree = "<group>"; };
 		8EF3B2BB1C265FF2000AEF12 /* XBBCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBCommentViewController.h; path = MyOrder/XBBCommentViewController.h; sourceTree = "<group>"; };
 		8EF3B2BC1C265FF2000AEF12 /* XBBCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBCommentViewController.m; path = MyOrder/XBBCommentViewController.m; sourceTree = "<group>"; };
-		8F52BEE41C2A4721005CAD58 /* LaunchpadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LaunchpadViewController.h; path = XiBaibai/LaunchpadViewController.h; sourceTree = SOURCE_ROOT; };
-		8F52BEE51C2A4721005CAD58 /* LaunchpadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LaunchpadViewController.m; path = XiBaibai/LaunchpadViewController.m; sourceTree = SOURCE_ROOT; };
-		8F52BEE61C2A4721005CAD58 /* LaunchpadViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LaunchpadViewController.xib; path = XiBaibai/LaunchpadViewController.xib; sourceTree = SOURCE_ROOT; };
+		8F55C4531C47342C008F488C /* LuanchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuanchViewController.h; sourceTree = "<group>"; };
+		8F55C4541C47342C008F488C /* LuanchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LuanchViewController.m; sourceTree = "<group>"; };
+		8F55C4551C47342C008F488C /* LuanchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LuanchViewController.xib; sourceTree = "<group>"; };
+		8F55C4801C477143008F488C /* XBBScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBScanViewController.h; path = MyCoupons/XBBScanViewController.h; sourceTree = "<group>"; };
+		8F55C4811C477143008F488C /* XBBScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBScanViewController.m; path = MyCoupons/XBBScanViewController.m; sourceTree = "<group>"; };
 		8F57AC0F1C251B7800A7B455 /* CommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommentTableViewCell.h; path = MyOrder/CommentTableViewCell.h; sourceTree = "<group>"; };
 		8F57AC101C251B7800A7B455 /* CommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommentTableViewCell.m; path = MyOrder/CommentTableViewCell.m; sourceTree = "<group>"; };
 		8F57AC111C251B7800A7B455 /* CommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CommentTableViewCell.xib; path = MyOrder/CommentTableViewCell.xib; sourceTree = "<group>"; };
@@ -812,6 +817,10 @@
 		8FE344AC1C2952A1007B968B /* CarTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CarTypeTableViewCell.h; path = MyCarController/CarTypeTableViewCell.h; sourceTree = "<group>"; };
 		8FE344AD1C2952A1007B968B /* CarTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CarTypeTableViewCell.m; path = MyCarController/CarTypeTableViewCell.m; sourceTree = "<group>"; };
 		8FE344AE1C2952A1007B968B /* CarTypeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CarTypeTableViewCell.xib; path = MyCarController/CarTypeTableViewCell.xib; sourceTree = "<group>"; };
+		8FE3A8FB1C479454006A3AE5 /* XBBbBarcodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBbBarcodeViewController.h; path = MyCoupons/XBBbBarcodeViewController.h; sourceTree = "<group>"; };
+		8FE3A8FC1C479454006A3AE5 /* XBBbBarcodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBbBarcodeViewController.m; path = MyCoupons/XBBbBarcodeViewController.m; sourceTree = "<group>"; };
+		8FE3A8FE1C47A72D006A3AE5 /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
+		8FE3A8FF1C47A72D006A3AE5 /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
 		8FED7E861C24FB9800B36C47 /* ServerCityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServerCityViewController.h; path = XBBHomeViewController/ServerCityViewController.h; sourceTree = "<group>"; };
 		8FED7E871C24FB9800B36C47 /* ServerCityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ServerCityViewController.m; path = XBBHomeViewController/ServerCityViewController.m; sourceTree = "<group>"; };
 		970BC71EB779C2A0ED120862 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -975,9 +984,9 @@
 				188D990E1BADCD9A00E68506 /* Vendors */,
 				188D98031BADCD6100E68506 /* AppDelegate.h */,
 				188D98041BADCD6100E68506 /* AppDelegate.mm */,
-				8F52BEE41C2A4721005CAD58 /* LaunchpadViewController.h */,
-				8F52BEE51C2A4721005CAD58 /* LaunchpadViewController.m */,
-				8F52BEE61C2A4721005CAD58 /* LaunchpadViewController.xib */,
+				8F55C4531C47342C008F488C /* LuanchViewController.h */,
+				8F55C4541C47342C008F488C /* LuanchViewController.m */,
+				8F55C4551C47342C008F488C /* LuanchViewController.xib */,
 				188D98061BADCD6100E68506 /* ViewController.h */,
 				188D98071BADCD6100E68506 /* ViewController.m */,
 				188D980C1BADCD6100E68506 /* Assets.xcassets */,
@@ -1073,6 +1082,8 @@
 				188D98571BADCD9A00E68506 /* NetworkHelper.m */,
 				188D98581BADCD9A00E68506 /* RechargeHelper.h */,
 				188D98591BADCD9A00E68506 /* RechargeHelper.m */,
+				8FE3A8FE1C47A72D006A3AE5 /* NSString+MD5.h */,
+				8FE3A8FF1C47A72D006A3AE5 /* NSString+MD5.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1730,6 +1741,10 @@
 				8E79B87F1C1C754100EB7518 /* MyCouponsTableViewCell.xib */,
 				188D98C51BADCD9A00E68506 /* MyCouponsViewController.h */,
 				188D98C61BADCD9A00E68506 /* MyCouponsViewController.m */,
+				8F55C4801C477143008F488C /* XBBScanViewController.h */,
+				8F55C4811C477143008F488C /* XBBScanViewController.m */,
+				8FE3A8FB1C479454006A3AE5 /* XBBbBarcodeViewController.h */,
+				8FE3A8FC1C479454006A3AE5 /* XBBbBarcodeViewController.m */,
 			);
 			name = MyCoupons;
 			sourceTree = "<group>";
@@ -2000,6 +2015,9 @@
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
+							com.apple.Push = {
+								enabled = 0;
+							};
 						};
 					};
 					188D98151BADCD6100E68506 = {
@@ -2096,7 +2114,6 @@
 				188D9A061BADCD9A00E68506 /* xi1.png in Resources */,
 				188D9A051BADCD9A00E68506 /* xbb_diyselected@2x.png in Resources */,
 				188D99D81BADCD9A00E68506 /* 1@icon_Mall.png in Resources */,
-				8F52BEE81C2A4721005CAD58 /* LaunchpadViewController.xib in Resources */,
 				188D99F61BADCD9A00E68506 /* mc1.png in Resources */,
 				8E79B8631C1B102E00EB7518 /* MyCarTableViewCell.xib in Resources */,
 				188D99E81BADCD9A00E68506 /* add_car@2x.png in Resources */,
@@ -2105,6 +2122,7 @@
 				188D99921BADCD9A00E68506 /* OrderTopView.xib in Resources */,
 				188D99F51BADCD9A00E68506 /* mark@2x.png in Resources */,
 				188D99D71BADCD9A00E68506 /* 1@icon_jifen.png in Resources */,
+				8F55C4571C47342C008F488C /* LuanchViewController.xib in Resources */,
 				8ECE5B7A1C17D58900208998 /* XBBOne.storyboard in Resources */,
 				188D9A041BADCD9A00E68506 /* xbb_diygogounselected@2x.png in Resources */,
 				8E41D11C1C1AC95F00735CEA /* XBBMyCenterInfoTableViewCell.xib in Resources */,
@@ -2200,6 +2218,7 @@
 				188D99CA1BADCD9A00E68506 /* CustamViewController.m in Sources */,
 				186A2A3E1BAEA98600645069 /* MWGridCell.m in Sources */,
 				8EAA96BF1C1039A600B83CA7 /* XBBHomeViewController.m in Sources */,
+				8FE3A8FD1C479454006A3AE5 /* XBBbBarcodeViewController.m in Sources */,
 				8ECE5B861C18038F00208998 /* XBBAddressModel.m in Sources */,
 				188D9A0A1BADCD9A00E68506 /* APAuthV2Info.m in Sources */,
 				188D999F1BADCD9A00E68506 /* MyCouponsModel.m in Sources */,
@@ -2231,6 +2250,7 @@
 				8EEFCC0D1BEF510600D3D93F /* XBBBaseLabel.m in Sources */,
 				188D99A51BADCD9A00E68506 /* AllCommentViewController.m in Sources */,
 				8EB5489B1C0EA37200FFB086 /* AddOrderTableViewCell.m in Sources */,
+				8FE3A9001C47A72D006A3AE5 /* NSString+MD5.m in Sources */,
 				188D99C91BADCD9A00E68506 /* MyWallViewController.m in Sources */,
 				188D9A1A1BADCD9A00E68506 /* JSONKit.m in Sources */,
 				188D98081BADCD6100E68506 /* ViewController.m in Sources */,
@@ -2264,7 +2284,6 @@
 				188D999C1BADCD9A00E68506 /* CommentModel.m in Sources */,
 				188D98051BADCD6100E68506 /* AppDelegate.mm in Sources */,
 				188D99BD1BADCD9A00E68506 /* CarportTableViewController.m in Sources */,
-				8F52BEE71C2A4721005CAD58 /* LaunchpadViewController.m in Sources */,
 				8EAA96C21C10472B00B83CA7 /* XBBBannerObject.m in Sources */,
 				8E7E49D81BF5AA70008517DC /* OrderPayUserInfoTableViewCell.m in Sources */,
 				8F73782B1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.m in Sources */,
@@ -2286,6 +2305,7 @@
 				8E7E49D31BF5AA2F008517DC /* OrderPaySigleTableViewCell.m in Sources */,
 				188D99C11BADCD9A00E68506 /* SetCarAddsViewController.m in Sources */,
 				8E86A3F11C1FC3630040CE45 /* XBBOrderInfoViewController.m in Sources */,
+				8F55C4821C477143008F488C /* XBBScanViewController.m in Sources */,
 				8E41D11B1C1AC95F00735CEA /* XBBMyCenterInfoTableViewCell.m in Sources */,
 				188D999E1BADCD9A00E68506 /* MyCarModel.m in Sources */,
 				189393301BAF0EE900AF5E01 /* CarBrandModel.m in Sources */,
@@ -2337,6 +2357,7 @@
 				8E86A3F51C1FC3B50040CE45 /* XBBOrderInfoOneCell.m in Sources */,
 				1893932D1BAF0C9B00AF5E01 /* CarListTableViewController.m in Sources */,
 				8E79B87D1C1C0BE200EB7518 /* XBBCashViewController.m in Sources */,
+				8F55C4561C47342C008F488C /* LuanchViewController.m in Sources */,
 				8E1CC4F61C153BDC0043ECD5 /* XBBHomeFacialTableViewCell.m in Sources */,
 				188D99C51BADCD9A00E68506 /* SystemMsgViewController.m in Sources */,
 				8EAA96F21C115A4100B83CA7 /* XBBFacialViewController.m in Sources */,
@@ -2485,8 +2506,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Linhu Lv (HRH57BRBE9)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Linhu Lv (HRH57BRBE9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2494,6 +2515,11 @@
 					"$(PROJECT_DIR)/XiBaibai/Vendors/Baidu",
 				);
 				GCC_PREFIX_HEADER = XiBaibai/XBB.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					ISFIRSTSHOW,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -2510,7 +2536,7 @@
 					"$(PROJECT_DIR)/XiBaibai/Vendors/AliSDK",
 				);
 				INFOPLIST_FILE = XiBaibai/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2530,8 +2556,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Linhu Lv (HRH57BRBE9)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Linhu Lv (HRH57BRBE9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2539,6 +2565,11 @@
 					"$(PROJECT_DIR)/XiBaibai/Vendors/Baidu",
 				);
 				GCC_PREFIX_HEADER = XiBaibai/XBB.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					ISFIRSTSHOW,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -2555,7 +2586,7 @@
 					"$(PROJECT_DIR)/XiBaibai/Vendors/AliSDK",
 				);
 				INFOPLIST_FILE = XiBaibai/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

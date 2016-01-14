@@ -25,6 +25,7 @@
 @property (copy, nonatomic) NSString *weixin;
 @property (copy, nonatomic) MyCarModel *carModel;
 @property (copy, nonatomic) UIImage  *headImage;
+@property (copy, nonatomic) NSString *openAerea;
 
 //保存其他一些用户信息
 @property (copy, nonatomic) NSString *homeAddress, *homeDetailAddress, *companyAddress, *companyDetailAddress,*currentAddress,*currentAddressDetail;

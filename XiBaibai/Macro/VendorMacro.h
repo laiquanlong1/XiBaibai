@@ -10,6 +10,8 @@
 #define XBB_VendorMacro_h
 
 //#define Baidu_AK @"xNuphSGIGuuNqqCKK5ffpmgL" //com.mingle.xbb
+
 #define Baidu_AK @"0x9XbXVicGBmNcSGiKmdl3nk"   //com.marnow.xbb
+#define Baidu_Push @"g7X7Fi2GH9emrbGOXLHWbv6i" 
 
 #endif

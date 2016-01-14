@@ -687,6 +687,8 @@ static NSString *identifier_2 = @"tit1cell";
 }
 
 - (IBAction)backViewController:(id)sender {
+
+//    [self.navigationController popViewControllerAnimated:YES];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -1270,7 +1272,7 @@ static NSString *identifier_2 = @"tit1cell";
     [orderDic setObject:planTime ? planTime:@"" forKey:@"plan_time"];
       NSString *carId = nil;
     if (self.selectCar) {
-        carId = [NSString stringWithFormat:@"%ld",self.selectCar.carId];
+        carId = [NSString stringWithFormat:@"%d",self.selectCar.carId];
     }else
     {
         carId = @"";
