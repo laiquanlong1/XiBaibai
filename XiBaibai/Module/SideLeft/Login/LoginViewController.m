@@ -187,6 +187,7 @@
     self.txtLogin.tintColor = [UIColor whiteColor];
     self.txtLogin.textColor = [UIColor whiteColor];
     self.txtLogin.keyboardAppearance = UIKeyboardAppearanceLight;
+    self.txtLogin.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"iphone"];
     
     self.txtLogin.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"手机号" attributes:@{NSForegroundColorAttributeName:kUIColorFromRGB_alpha(0xdddddd,0.6f),NSFontAttributeName:XBB_Prompt_Font}];
     self.txtLogin.clearButtonMode = UITextFieldViewModeAlways;
@@ -237,6 +238,7 @@
     self.txtPWD.tintColor = [UIColor whiteColor];
     self.txtPWD.textColor = [UIColor whiteColor];
     self.txtPWD.delegate = self;
+    [self.txtPWD setReturnKeyType:UIReturnKeyDone];
     self.txtPWD.clearButtonMode = UITextFieldViewModeAlways;
     self.txtPWD.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"密码" attributes:@{NSForegroundColorAttributeName:kUIColorFromRGB_alpha(0xdddddd,0.6f),NSFontAttributeName:XBB_Prompt_Font}];
     [_controlScrollView addSubview:self.txtPWD];
@@ -364,8 +366,6 @@
         drawerController.shouldStretchDrawer = NO;
         self.view.window.rootViewController = drawerController;
     }];
-    
-    
 }
 - (IBAction)taptoloseFristResponse:(id)sender
 {
@@ -485,6 +485,7 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    [self login];
     [textField resignFirstResponder];
     return YES;
 }

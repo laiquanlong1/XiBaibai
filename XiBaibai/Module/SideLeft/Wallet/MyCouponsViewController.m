@@ -72,11 +72,13 @@
         make.left.mas_equalTo(50);
         make.width.mas_equalTo(XBB_Screen_width-100);
     }];
-    
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width-100, 30, 100, 30)];
-    [button setTitle:@"扫一扫" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(pushPanViewController:) forControlEvents:UIControlEventTouchUpInside];
-    [self.xbbNavigationBar addSubview:button];
+    if (!self.isAddoder) {
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(XBB_Screen_width-100, 30, 100, 30)];
+        [button setTitle:@"扫一扫" forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(pushPanViewController:) forControlEvents:UIControlEventTouchUpInside];
+        [self.xbbNavigationBar addSubview:button];
+    }
+   
 }
 
 - (IBAction)pushPanViewController:(id)sender
@@ -190,6 +192,12 @@
     tbView.backgroundColor = XBB_Bg_Color;
     [tbView registerNib:[UINib nibWithNibName:@"MyCouponsTableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     self.couDoneArr = [NSMutableArray array];
+ 
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    tbView.alpha = 0;
     [self fetchYouhuiFromWeb:^{
         if (self.couDoneArr.count == 0 || self.couDoneArr == nil) {
             tbView.alpha = 0;
@@ -202,10 +210,16 @@
     }];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+ 
+}
 
 - (void)viewDidDisappear:(BOOL)animated{
     [imgViewguize removeFromSuperview];
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -290,10 +304,8 @@
         if (self.couponselectDic) {
             self.couponselectDic = nil;
         }
-        
         NSDictionary *dic = self.couDoneArr[indexPath.row];
         self.couponselectDic = dic;
-        DLog(@"dic");
         MyCouponsModel *model = [[MyCouponsModel alloc] init];
         model.coupons_name = dic[@"coupons_name"];
         model.coupons_price = dic[@"coupons_price"];
@@ -308,10 +320,7 @@
         model.uid = dic[@"uid"];
         self.couponsBlock(model);
         [self dismissViewControllerAnimated:YES completion:nil];
-        
     }
-    
-
 }
 
 @end

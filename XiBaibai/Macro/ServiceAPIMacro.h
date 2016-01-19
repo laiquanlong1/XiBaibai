@@ -10,14 +10,17 @@
 #define XBB_ServiceAPIMacro_h
 
 
-//#define APIDomain @"http://captainoak.cn/Api/V3"
+#define APIDomain @"http://xbbwx.marnow.com/Api/V201"
 //#define ImgDomain @"http://captainoak.cn"
 
-#define APIDomain @"http://xbbwx.marnow.com/Api/V3"
+//#define APIDomain @"http://xbbwx.marnow.com/Api/V3"
 #define ImgDomain @"http://xbbwx.marnow.com"
 
 //#define APIDomain @"http://xbbwx.marnow.com//Api/V3"
 //#define ImgDomain @"http://192.168.1.113/xbb"
+
+
+#define AddUrl(url) [NSString stringWithFormat:@"%@/%@", APIDomain,url]
 
 
 // 01 发送验证码
@@ -138,13 +141,13 @@
 #define OpenCityData [NSString stringWithFormat:@"%@/openArea", APIDomain]
 
 // 37 扫描二维码
-#define ZbarPtoP @"http://xbbwx.marnow.com/Api/V201/app"   //[NSString stringWithFormat:@"%@/openArea", APIDomain]
+#define ZbarPtoP  AddUrl(@"app")  //@"http://xbbwx.marnow.com/Api/V201/app"
 
+// 38 优惠码
+#define CouponCode  AddUrl(@"exchangeCoupon")
 
-
-
-
-
+// 38 时间轴
+#define API_TimeAxis  AddUrl(@"timeAxis")
 
 
 
@@ -178,12 +181,6 @@
 
 //充值
 #define API_Recharge [NSString stringWithFormat:@"%@/recharge", APIDomain]
-
-
-
-
-
-
 
 
 //上传文件接口

@@ -264,6 +264,9 @@
 		8F57AC121C251B7800A7B455 /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F57AC101C251B7800A7B455 /* CommentTableViewCell.m */; };
 		8F57AC131C251B7800A7B455 /* CommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F57AC111C251B7800A7B455 /* CommentTableViewCell.xib */; };
 		8F57AC161C25327700A7B455 /* XBBInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F57AC151C25327700A7B455 /* XBBInputView.m */; };
+		8F662EE01C4DD62C00DD0225 /* XBBSelectStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F662EDF1C4DD62C00DD0225 /* XBBSelectStateView.m */; };
+		8F662EE41C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F662EE21C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.m */; };
+		8F662EE51C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F662EE31C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.xib */; };
 		8F73782B1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F7378291C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.m */; };
 		8F73782C1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F73782A1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.xib */; };
 		8FDA2D8B1C217BA6005D8188 /* XBBOrderInfoCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FDA2D891C217BA5005D8188 /* XBBOrderInfoCommentTableViewCell.m */; };
@@ -806,6 +809,11 @@
 		8F57AC111C251B7800A7B455 /* CommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CommentTableViewCell.xib; path = MyOrder/CommentTableViewCell.xib; sourceTree = "<group>"; };
 		8F57AC141C25327700A7B455 /* XBBInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBInputView.h; path = DIYView/DIYView/XBBInputView.h; sourceTree = "<group>"; };
 		8F57AC151C25327700A7B455 /* XBBInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBInputView.m; path = DIYView/DIYView/XBBInputView.m; sourceTree = "<group>"; };
+		8F662EDE1C4DD62C00DD0225 /* XBBSelectStateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBSelectStateView.h; path = MyOrder/XBBSelectStateView.h; sourceTree = "<group>"; };
+		8F662EDF1C4DD62C00DD0225 /* XBBSelectStateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBSelectStateView.m; path = MyOrder/XBBSelectStateView.m; sourceTree = "<group>"; };
+		8F662EE11C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBOrderStateTableViewCell.h; path = MyOrder/XBBOrderStateTableViewCell.h; sourceTree = "<group>"; };
+		8F662EE21C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBOrderStateTableViewCell.m; path = MyOrder/XBBOrderStateTableViewCell.m; sourceTree = "<group>"; };
+		8F662EE31C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XBBOrderStateTableViewCell.xib; path = MyOrder/XBBOrderStateTableViewCell.xib; sourceTree = "<group>"; };
 		8F7378281C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBBOrderInfoTwoTableViewCell.h; sourceTree = "<group>"; };
 		8F7378291C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBBOrderInfoTwoTableViewCell.m; sourceTree = "<group>"; };
 		8F73782A1C2107D800984A20 /* XBBOrderInfoTwoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XBBOrderInfoTwoTableViewCell.xib; sourceTree = "<group>"; };
@@ -1800,6 +1808,11 @@
 				8F57AC111C251B7800A7B455 /* CommentTableViewCell.xib */,
 				8EF3B2BB1C265FF2000AEF12 /* XBBCommentViewController.h */,
 				8EF3B2BC1C265FF2000AEF12 /* XBBCommentViewController.m */,
+				8F662EDE1C4DD62C00DD0225 /* XBBSelectStateView.h */,
+				8F662EDF1C4DD62C00DD0225 /* XBBSelectStateView.m */,
+				8F662EE11C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.h */,
+				8F662EE21C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.m */,
+				8F662EE31C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.xib */,
 			);
 			name = MyOrder;
 			sourceTree = "<group>";
@@ -2111,6 +2124,7 @@
 				188D99D21BADCD9A00E68506 /* 1@icon_27@2x.png in Resources */,
 				188D99CF1BADCD9A00E68506 /* 1@icon_14.png in Resources */,
 				8E7996BA1BFB28C700A25D87 /* CouponsUseRule.txt in Resources */,
+				8F662EE51C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.xib in Resources */,
 				188D9A061BADCD9A00E68506 /* xi1.png in Resources */,
 				188D9A051BADCD9A00E68506 /* xbb_diyselected@2x.png in Resources */,
 				188D99D81BADCD9A00E68506 /* 1@icon_Mall.png in Resources */,
@@ -2306,6 +2320,7 @@
 				188D99C11BADCD9A00E68506 /* SetCarAddsViewController.m in Sources */,
 				8E86A3F11C1FC3630040CE45 /* XBBOrderInfoViewController.m in Sources */,
 				8F55C4821C477143008F488C /* XBBScanViewController.m in Sources */,
+				8F662EE01C4DD62C00DD0225 /* XBBSelectStateView.m in Sources */,
 				8E41D11B1C1AC95F00735CEA /* XBBMyCenterInfoTableViewCell.m in Sources */,
 				188D999E1BADCD9A00E68506 /* MyCarModel.m in Sources */,
 				189393301BAF0EE900AF5E01 /* CarBrandModel.m in Sources */,
@@ -2331,6 +2346,7 @@
 				8E488B621C06B212007FC881 /* XBBViewController.m in Sources */,
 				188D99A11BADCD9A00E68506 /* MyPointsModel.m in Sources */,
 				8E86A3EE1C1EC00C0040CE45 /* XBBOrderObject.m in Sources */,
+				8F662EE41C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.m in Sources */,
 				188D9A181BADCD9A00E68506 /* UITableView+FDTemplateLayoutCell.m in Sources */,
 				8E79B8721C1BCEAA00EB7518 /* XBBAddCarTableViewCell.m in Sources */,
 				188D9A131BADCD9A00E68506 /* openssl_wrapper.m in Sources */,

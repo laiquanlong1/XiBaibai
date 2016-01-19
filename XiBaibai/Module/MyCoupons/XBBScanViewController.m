@@ -9,7 +9,7 @@
 #import "XBBScanViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "XBBbBarcodeViewController.h"
-
+#import "UserObj.h"
 
 @interface XBBScanViewController ()<AVCaptureMetadataOutputObjectsDelegate>
 
@@ -30,10 +30,14 @@
 
 @implementation XBBScanViewController
 
+
+
 #pragma mark back
 
 - (IBAction)backViewController:(id)sender
 {
+    [self.timer invalidate];
+    [_capturetureSession stopRunning];
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (void)setNavigationBarControl
@@ -111,13 +115,10 @@
     
     self.captureImageView = [[UIImageView alloc] initWithFrame:self.scanPanView.bounds];
      [_captureVideoPreviewLayer setFrame:self.view.bounds];
-//    [_captureVideoPreviewLayer setFrame:CGRectMake(2, 2, self.captureImageView.bounds.size.width-4, self.captureImageView.bounds.size.height-4)];
     [self.view.layer addSublayer:_captureVideoPreviewLayer];
     [self.view addSubview:self.scanPanView];
-//    [self.scanPanView.layer addSublayer:_captureVideoPreviewLayer];
     [self.scanPanView addSubview:self.captureImageView];
     self.captureImageView.image = [UIImage imageNamed:@"扫描框"];
-//    captureMetadataOutput.rectOfInterest =  CGRectMake(100, 100, 220, 220) ;//self.scanPanView.frame;//CGRectMake(0.2f, 0.2f, 0.8f, 0.8f);
     [captureMetadataOutput setRectOfInterest:CGRectMake((124)/XBB_Screen_height,((ScreenWidth-220)/2)/ScreenWidth,220/XBB_Screen_height,220/ScreenWidth)];
     
     UIImage *image = [UIImage imageNamed:@"扫描条"];
@@ -125,7 +126,7 @@
     self.lineImageView.image = image;
     [self.scanPanView addSubview:self.lineImageView];
     self.timer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(lineFreme:) userInfo:nil repeats:YES];
-//    self.scanPanView.layer.masksToBounds = YES;
+    self.scanPanView.layer.masksToBounds = YES;
     
     self.promtLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.scanPanView.frame.origin.y+self.scanPanView.frame.size.height+10, XBB_Screen_width, 30.)];
     [self.view addSubview:self.promtLabel];
@@ -146,7 +147,7 @@
     
     [self.inputCodeButton addTarget:self action:@selector(toBarCodeViewController:) forControlEvents:UIControlEventTouchUpInside];
 
-    
+    [self.view bringSubviewToFront:self.xbbNavigationBar];
     [_capturetureSession startRunning];
     
     return YES;
@@ -164,32 +165,28 @@
     //判断是否有数据
     if (metadataObjects != nil && [metadataObjects count] > 0) {
         AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
-        [self.timer invalidate];
-        NSString *s = @"";
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSDate* dat = [NSDate dateWithTimeIntervalSinceNow:0];
-            NSTimeInterval a=[dat timeIntervalSince1970];
-            NSString *timeString = [NSString stringWithFormat:@"%f", a];
-            DLog(@"%@",timeString)
-            NSDateFormatter *fo = [[NSDateFormatter alloc] init];
-            [fo setDateFormat:@"yyyy-MM-dd HH-mm-ss"];
-            
-            NSDate *dd = [fo dateFromString:timeString];
-            NSString *st =  [fo stringFromDate:dd];
-            DLog(@"%@",st)
-            
-            NSString *string = @"channel=ios&tim";
-
-//            [NetworkHelper postWithAPI:ZbarPtoP parameter:@{@"sign":} successBlock:<#^(id response)success#> failBlock:<#^(NSError *error)fail#>]
-            
-            
-            
-            
-            
-            
+            NSDate *nowDate = [NSDate date];
+            NSString *timeSp = [NSString stringWithFormat:@"%ld",(long)[nowDate timeIntervalSince1970]];
+            NSString *stringURL = [NSString stringWithFormat:@"channel=ios&timeline=%@&uid=%@&url=%@cap123",timeSp,[[UserObj shareInstance] uid],metadataObj.stringValue];
+            NSString *ne =  [stringURL md5];
+            [NetworkHelper postWithAPI:ZbarPtoP parameter:@{@"sign":ne,@"channel":@"ios",@"timeline":timeSp,@"uid":[UserObj shareInstance].uid,@"url":metadataObj.stringValue} successBlock:^(id response) {
+                if ([response[@"code"] integerValue] == 1) {
+                    [self.timer invalidate];
+                    [_capturetureSession stopRunning];
+                    [SVProgressHUD showSuccessWithStatus:response[@"msg"]];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }else
+                {
+                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+                }
+               
+            } failBlock:^(NSError *error) {
+                [SVProgressHUD showErrorWithStatus:[error description]];
+            }];
         });
-        [_capturetureSession stopRunning];
+        
         
     }
 }
@@ -208,15 +205,4 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

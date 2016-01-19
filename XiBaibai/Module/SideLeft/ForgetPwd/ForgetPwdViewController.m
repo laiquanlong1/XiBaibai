@@ -314,10 +314,7 @@
     }];
 }
 
-//    else
-//    {
-//        [SVProgressHUD showInfoWithStatus:@"手机号不正确"];
-//    }
+
 
 
 - (IBAction)backViewController:(id)sender{

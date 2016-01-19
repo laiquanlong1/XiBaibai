@@ -7,7 +7,5 @@
 //
 
 #import "XBBViewController.h"
-
 @interface XBBScanViewController : XBBViewController
-
 @end

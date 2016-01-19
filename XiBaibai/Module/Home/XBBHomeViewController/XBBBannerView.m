@@ -31,7 +31,6 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    DLog(@"%f",scrollView.contentOffset.x)
     if (scrollView.contentOffset.x - offsetX >= 0) {
         isPanToRight = NO;
     }else

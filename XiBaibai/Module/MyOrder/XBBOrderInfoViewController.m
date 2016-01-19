@@ -19,9 +19,11 @@
 #import "CommentTableViewCell.h"
 #import "StarView.h"
 #import "XBBCommentViewController.h"
+#import "XBBSelectStateView.h"
+#import "XBBOrderStateTableViewCell.h"
 
 
-@interface XBBOrderInfoViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
+@interface XBBOrderInfoViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,XBBSelectStateViewDelegate>
 {
     NSInteger state;
     UIView *backView;
@@ -30,7 +32,10 @@
     float actually_price;
     UIButton *backButton;
     NSString *empPhone;
+    XBBSelectStateView *_selectStateView;
+    UIImageView *backlineImageView;
 }
+
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *prolist;
 @property (nonatomic, strong) NSDictionary *washimgDic;
@@ -42,6 +47,8 @@
 @property (nonatomic, strong) NSMutableArray *empArrays; //emp
 @property (nonatomic, strong) NSMutableArray *commentArray;
 
+@property (nonatomic, strong) NSMutableArray *timesArray; // 时间轴数组
+
 
 
 
@@ -49,10 +56,9 @@
 
 static NSString *titleCell = @"titleCell";
 static NSString *orderInfo = @"orderInfo";
-//static NSString *oprationMessage = @"opreationMessage";
-//static NSString *orderContent = @"orderContent";
 static NSString *mycomment = @"mycomment";
 static NSString *hascomment = @"hascomment";
+static NSString *stateCell = @"cell_1";
 
 @implementation XBBOrderInfoViewController
 
@@ -72,13 +78,30 @@ static NSString *hascomment = @"hascomment";
 }
 
 #pragma datas
+
+- (void)fetchTimeState
+{
+    [NetworkHelper postWithAPI:API_TimeAxis parameter:@{@"orderid":self.orderid} successBlock:^(id response) {
+        DLog(@"%@",response)
+        if ([response[@"code"] integerValue] == 1) {
+            self.timesArray = [response[@"result"] mutableCopy];
+        }else
+        {
+            [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+        }
+    } failBlock:^(NSError *error) {
+        [SVProgressHUD showErrorWithStatus:[error description]];
+    }];
+}
+
+
 - (void)feathOrderInfo
 {
     [SVProgressHUD show];
     [NetworkHelper postWithAPI:OrderSelect_detail_API parameter:@{@"uid":[[UserObj shareInstance] uid],@"orderid":self.orderid} successBlock:^(id response) {
         if ([response[@"code"] integerValue] == 1) {
             if (response[@"result"]) {
-                DLog(@"%@",response)
+//                DLog(@"%@",response)
                 [MyOrderModel setupReplacedKeyFromPropertyName:^NSDictionary *{
                     return @{@"order_id": @"id"};
                 }];
@@ -88,7 +111,7 @@ static NSString *hascomment = @"hascomment";
                 coupon_price = model.coupons_price;
                 // 获取产品数组
                 NSArray *proArray = response[@"result"][@"prolist"];
-                DLog(@"%@   %ld",proArray,proArray.count)
+//                DLog(@"%@   %ld",proArray,proArray.count)
                 state = [response[@"result"][@"order_state"] integerValue];
                 
                 /**
@@ -259,6 +282,11 @@ static NSString *hascomment = @"hascomment";
     }];
 }
 
+
+
+
+
+
 #pragma mark UI
 
 /**
@@ -284,11 +312,12 @@ static NSString *hascomment = @"hascomment";
 - (IBAction)upData:(id)sender
 {
     [self feathOrderInfo];
+    [self fetchTimeState];
 }
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self feathOrderInfo];
+    [self upData:nil];
 }
 
 - (void)viewDidLoad {
@@ -368,9 +397,25 @@ static NSString *hascomment = @"hascomment";
 }
 - (void)addTableView
 {
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, XBB_Screen_height-64)];
+    if (!self.isPayBack) {
+        _selectStateView = [[XBBSelectStateView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, 44) withStates:@[@"订单详情",@"订单状态"]];
+        _selectStateView.delegate = self;
+        [self.view addSubview:_selectStateView];
+         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64+47, XBB_Screen_width, XBB_Screen_height-64-47) style:UITableViewStyleGrouped];
+        [self.tableView setContentInset:UIEdgeInsetsMake(-40, 0,-30, 0)];
+        backlineImageView = [[UIImageView alloc] initWithFrame:CGRectMake(22, 0, 3, self.tableView.bounds.size.height)];
+        [backlineImageView setContentMode:UIViewContentModeScaleAspectFit];
+        [backlineImageView setImage:[UIImage imageNamed:@"xbb_orderStateLine"]];
+        UIView *ba = [[UIView alloc] initWithFrame:self.view.bounds];
+        self.tableView.backgroundView = ba;
+        [self.tableView.backgroundView addSubview:backlineImageView];
+    }else
+    {
+         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, XBB_Screen_height-64)];
+    }
+   
+    
     [self.view addSubview:self.tableView];
-    self.tableView.backgroundView = nil;
     self.tableView.backgroundColor = XBB_Bg_Color;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -379,8 +424,14 @@ static NSString *hascomment = @"hascomment";
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBOrderInfoTwoTableViewCell" bundle:nil] forCellReuseIdentifier:orderInfo];
     [self.tableView registerNib:[UINib nibWithNibName:@"XBBOrderInfoCommentTableViewCell" bundle:nil] forCellReuseIdentifier:mycomment];
     [self.tableView registerNib:[UINib nibWithNibName:@"CommentTableViewCell" bundle:nil] forCellReuseIdentifier:hascomment];
+    [self.tableView registerNib:[UINib nibWithNibName:@"XBBOrderStateTableViewCell" bundle:nil] forCellReuseIdentifier:stateCell];
 }
-
+#pragma mark SelectIndexDelegate
+- (void)changeSelectIndex:(NSUInteger)index
+{
+    [self.tableView reloadData];
+    DLog(@"%ld   %ld",index,_selectStateView.selectIndex)
+}
 #pragma mark action
 
 - (IBAction)toBackAction:(id)sender
@@ -456,8 +507,21 @@ static NSString *hascomment = @"hascomment";
 
 #pragma mark tableViewDelegate
 
+
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+  
+    if (self.isPayBack) {
+        UIView *view = [[UIView alloc] init];
+        view.backgroundColor = XBB_Bg_Color;
+        return view;
+    }
+    if (_selectStateView.selectIndex == 0) {
+        UIView *view = [[UIView alloc] init];
+        view.backgroundColor = XBB_Bg_Color;
+        return view;
+    }
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = XBB_Bg_Color;
     return view;
@@ -465,6 +529,12 @@ static NSString *hascomment = @"hascomment";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    if (self.isPayBack) {
+        return 6.0;
+    }
+    if (_selectStateView.selectIndex == 0) {
+        return 6.0;
+    }
     return 6.0;
 }
 
@@ -474,6 +544,12 @@ static NSString *hascomment = @"hascomment";
         if (section == 1) {
             return 66.;
         }
+    }
+    if (_selectStateView.selectIndex == 0) {
+        
+        
+        
+        return 0;
     }
     return 0;
 }
@@ -491,68 +567,79 @@ static NSString *hascomment = @"hascomment";
             return view;
         }
     }
+
+    if (_selectStateView.selectIndex == 0) {
+        
+        
+    }
     return nil;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((state == 5|| state == 6) && indexPath.section == 3 && indexPath.row == 1) {
-        
-        if (state == 6) {
-            return 150;
-        }
-        return 80;
+    if (self.isPayBack) {
+          return 44.;
+   
     }
-    return 44.;
+    if (_selectStateView.selectIndex == 0) {
+        if ((state == 5|| state == 6) && indexPath.section == 3 && indexPath.row == 1) {
+            
+            if (state == 6) {
+                return 150;
+            }
+            return 80;
+        }
+        return 44.;
+    }else if (_selectStateView.selectIndex == 1)
+    {
+        return 100.;
+    }
+    return 0;
 }
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    /**
-     * 0未付款
-     * 1派单中
-     * 2已派单
-     * 3在路上
-     
-     * 4进行中
-     
-     * 5未评价
-     * 6已评价
-     * 7已取消
-     */
-    
+   
     if (self.isPayBack) {
-      
+        
         return 2;
     }
     
-    
-    if (state == 3 || state == 4) {
-        return 3;
-    }else if (state == 5 || state == 6){
-        return 4;
+    if (_selectStateView.selectIndex == 0) {
+         self.tableView.separatorColor = XBB_separatorColor;
+        self.tableView.backgroundView.alpha = 0;
+        /**
+         * 0未付款
+         * 1派单中
+         * 2已派单
+         * 3在路上
+         * 4进行中
+         * 5未评价
+         * 6已评价
+         * 7已取消
+         */
+
+        
+        if (state == 3 || state == 4) {
+            return 3;
+        }else if (state == 5 || state == 6){
+            return 4;
+        }
+        else
+        {
+            return 2;
+        }
+    }else if (_selectStateView.selectIndex == 1){
+        self.tableView.separatorColor =  [UIColor clearColor];
+        self.tableView.backgroundView.alpha = 1;
+        return 1;
     }
-    else
-    {
-         return 2;
-    }
-    
     return 0;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    /**
-     * 0未付款
-     * 1派单中
-     * 2已派单
-     * 3在路上
-     * 4进行中
-     * 5未评价
-     * 6已评价
-     * 7已取消
-     */
     if (self.isPayBack) {
         switch (section) {
             case 0:
@@ -566,72 +653,85 @@ static NSString *hascomment = @"hascomment";
         }
     }
     
-    
-    if (state == 3 || state == 4) {
-        switch (section) {
-            case 0:
-            {
-                return self.onsectionArray.count;
+    if (_selectStateView.selectIndex == 0) {
+        /**
+         * 0未付款
+         * 1派单中
+         * 2已派单
+         * 3在路上
+         * 4进行中
+         * 5未评价
+         * 6已评价
+         * 7已取消
+         */
+        if (state == 3 || state == 4) {
+            switch (section) {
+                case 0:
+                {
+                    return self.onsectionArray.count;
+                }
+                    break;
+                case 1:
+                {
+                    return self.empArrays.count;
+                }
+                    break;
+                case 2:
+                {
+                    return self.twoSectionArray.count;
+                }
+                    break;
+                    
+                default:
+                    break;
             }
-                break;
-            case 1:
-            {
-                return self.empArrays.count;
+        }else if(state == 5 || state == 6){
+            switch (section) {
+                case 0:
+                {
+                    return self.onsectionArray.count;
+                }
+                    break;
+                case 1:
+                {
+                    return self.empArrays.count;
+                }
+                    break;
+                case 2:
+                {
+                    return self.twoSectionArray.count;
+                }
+                    break;
+                    
+                case 3:
+                {
+                    return self.commentArray.count;
+                }
+                    break;
+                    
+                default:
+                    break;
             }
-                break;
-            case 2:
-            {
-                return self.twoSectionArray.count;
+        }else
+        {
+            switch (section) {
+                case 0:
+                {
+                    return self.onsectionArray.count;
+                }
+                    break;
+                case 1:
+                {
+                    return self.twoSectionArray.count;
+                }
+                    break;
+                    
+                default:
+                    break;
             }
-                break;
-                
-            default:
-                break;
         }
-    }else if(state == 5 || state == 6){
-        switch (section) {
-            case 0:
-            {
-                return self.onsectionArray.count;
-            }
-                break;
-            case 1:
-            {
-                return self.empArrays.count;
-            }
-                break;
-            case 2:
-            {
-                return self.twoSectionArray.count;
-            }
-                break;
-                
-            case 3:
-            {
-                return self.commentArray.count;
-            }
-                break;
-                
-            default:
-                break;
-        }
-    }else
-    {
-        switch (section) {
-            case 0:
-            {
-                return self.onsectionArray.count;
-            }
-                break;
-            case 1:
-            {
-                return self.twoSectionArray.count;
-            }
-                break;
-                
-            default:
-                break;
-        }
+    }else if (_selectStateView.selectIndex == 1){
+        return self.timesArray.count;
     }
     return 0;
 }
@@ -640,390 +740,237 @@ static NSString *hascomment = @"hascomment";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    /**
-     * 0未付款
-     * 1派单中
-     * 2已派单
-     
-     * 3在路上
-     * 4进行中
-     * 5未评价
-     * 6已评价
-     * 7已取消
-     */
-    
-    XBBOrder *order = nil;
-    
-    if (self.isPayBack) {
-        switch (indexPath.section) {
-            case 0:
-            {
-                order = self.twoSectionArray[indexPath.row];
-            }
-                break;
-            case 1:
-            {
-                order = self.onsectionArray[indexPath.row];
-            }
-                break;
-            default:
-                break;
-        }
+    if (_selectStateView.selectIndex == 0 || self.isPayBack) {
         
-    }else{
-        
-        
-        switch (indexPath.section) {
-            case 0:
-            {
-                order = self.onsectionArray[indexPath.row];
-            }
-                break;
-            case 1:
-            {
-                if (state == 0 || state == 1 || state == 2 || state == 7) {
-                    order = self.twoSectionArray[indexPath.row];
-                }else
-                {
-                    order = self.empArrays[indexPath.row];
-                }
-            }
-                break;
-            case 2:
-            {
-                if (state == 0 || state == 1 || state == 2 || state == 7) {
-                    
-                }else
-                {
-                    order = self.twoSectionArray[indexPath.row];
-                }
-            }
-                break;
-            case 3:
-            {
-                order = self.commentArray[indexPath.row];
-            }
-                break;
-                
-            default:
-                break;
-        }
-    }
-    
-    if (indexPath.row == 0) {
-        XBBOrderInfoOneCell *cell = [tableView dequeueReusableCellWithIdentifier:titleCell];
-        if (cell== nil) {
-            cell = [[XBBOrderInfoOneCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:titleCell];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.titleLabel.text = order.title;
-        return cell;
-        
-    }else
-    {
-        
-        
-        if (indexPath.section == 3 && state == 5) {
-            XBBOrderInfoCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:mycomment];
-            if (cell == nil) {
-                cell = [[XBBOrderInfoCommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:mycomment];
-            }
-            [cell.toCommentButton addTarget:self action:@selector(toCommentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.toCommentButton setTitle:order.title forState:UIControlStateNormal];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            return cell;
-        }else if (indexPath.section == 3 && state == 6) {
-            CommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:hascomment];
-            if (cell == nil) {
-                cell = [[CommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:hascomment];
-            }
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            StarView *star = [StarView starView];
-            DLog(@"%ld",order.star_num)
-            star.score =order.star_num; //(double)order.star_num;
-            [cell.commentStar addSubview:star];
-            cell.commentContent.text = order.title;
-            return cell;
-        }
-        
-        
-        XBBOrderInfoTwoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:orderInfo];
-        if (cell == nil) {
-            cell = [[XBBOrderInfoTwoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:orderInfo];
-        }
-        cell.phoneButton.hidden = YES;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell.priceLabel setFont:[UIFont systemFontOfSize:14.]];
-        
+        /**
+         * 0未付款
+         * 1派单中
+         * 2已派单
+         
+         * 3在路上
+         * 4进行中
+         * 5未评价
+         * 6已评价
+         * 7已取消
+         */
+        XBBOrder *order = nil;
         
         if (self.isPayBack) {
-            if (indexPath.section != 0) {
-                cell.titLabel.hidden = YES;
-                cell.twoTitleLabel.hidden = NO;
-                cell.priceLabel.hidden = NO;
-                cell.twoTitleLabel.text = order.title;
-                cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",order.price];
-                [cell.twoTitleLabel setTextColor:[UIColor darkGrayColor]];
-                [cell.priceLabel setTextColor:[UIColor darkGrayColor]];
-                if ([order.title isEqualToString:@"优惠金额"]) {
-//                    [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
-                    [cell.priceLabel setTextColor:[UIColor orangeColor]];
-                }
-                if ([order.title isEqualToString:@"实际支付"] || [order.title isEqualToString:@"应支付"]) {
-                    [cell.priceLabel setFont:[UIFont systemFontOfSize:18.]];
-                    [cell.priceLabel setTextColor:[UIColor redColor]];
-                }
-                
-                
-                
-            }else
-            {
-                
-                cell.phoneButton.hidden = YES;
-                if (indexPath.section == 1 && (state == 3 || state == 4 || state == 6 || state == 5)) {
-                    cell.phoneButton.hidden = NO;
-                    [cell.phoneButton addTarget:self action:@selector(toCallPhone:) forControlEvents:UIControlEventTouchUpInside];
-                }else
+            switch (indexPath.section) {
+                case 0:
                 {
-                    cell.phoneButton.hidden = YES;
+                    order = self.twoSectionArray[indexPath.row];
                 }
-                
-                [cell.twoTitleLabel setTextColor:[UIColor darkGrayColor]];
-                [cell.priceLabel setTextColor:[UIColor darkGrayColor]];
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                cell.titLabel.hidden = YES;
-                cell.twoTitleLabel.hidden = NO;
-                cell.priceLabel.hidden = YES;
-                cell.twoTitleLabel.text = order.title;
-                
+                    break;
+                case 1:
+                {
+                    order = self.onsectionArray[indexPath.row];
+                }
+                    break;
+                default:
+                    break;
             }
-
+            
+        }else{
+            
+            
+            switch (indexPath.section) {
+                case 0:
+                {
+                    order = self.onsectionArray[indexPath.row];
+                }
+                    break;
+                case 1:
+                {
+                    if (state == 0 || state == 1 || state == 2 || state == 7) {
+                        order = self.twoSectionArray[indexPath.row];
+                    }else
+                    {
+                        order = self.empArrays[indexPath.row];
+                    }
+                }
+                    break;
+                case 2:
+                {
+                    if (state == 0 || state == 1 || state == 2 || state == 7) {
+                        
+                    }else
+                    {
+                        order = self.twoSectionArray[indexPath.row];
+                    }
+                }
+                    break;
+                case 3:
+                {
+                    order = self.commentArray[indexPath.row];
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
+        if (indexPath.row == 0) {
+            XBBOrderInfoOneCell *cell = [tableView dequeueReusableCellWithIdentifier:titleCell];
+            if (cell== nil) {
+                cell = [[XBBOrderInfoOneCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:titleCell];
+            }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.titleLabel.text = order.title;
+            return cell;
+            
         }else
         {
             
-            if (indexPath.section == 0) {
-                cell.titLabel.hidden = YES;
-                cell.twoTitleLabel.hidden = NO;
-                cell.priceLabel.hidden = NO;
-                cell.twoTitleLabel.text = order.title;
-                cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",order.price];
-                [cell.twoTitleLabel setTextColor:[UIColor darkGrayColor]];
-                [cell.priceLabel setTextColor:[UIColor darkGrayColor]];
-                if ([order.title isEqualToString:@"优惠金额"]) {
-//                    [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
-                    [cell.priceLabel setTextColor:[UIColor orangeColor]];
+            
+            if (indexPath.section == 3 && state == 5) {
+                XBBOrderInfoCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:mycomment];
+                if (cell == nil) {
+                    cell = [[XBBOrderInfoCommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:mycomment];
                 }
-                if ([order.title isEqualToString:@"实际支付"] || [order.title isEqualToString:@"应支付"]) {
-                    [cell.priceLabel setFont:[UIFont systemFontOfSize:18.]];
-                    [cell.priceLabel setTextColor:[UIColor redColor]];
-                }   
+                [cell.toCommentButton addTarget:self action:@selector(toCommentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                [cell.toCommentButton setTitle:order.title forState:UIControlStateNormal];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                return cell;
+            }else if (indexPath.section == 3 && state == 6) {
+                CommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:hascomment];
+                if (cell == nil) {
+                    cell = [[CommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:hascomment];
+                }
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                StarView *star = [StarView starView];
+                DLog(@"%ld",order.star_num)
+                star.score =order.star_num; //(double)order.star_num;
+                [cell.commentStar addSubview:star];
+                cell.commentContent.text = order.title;
+                return cell;
+            }
+            
+            
+            XBBOrderInfoTwoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:orderInfo];
+            if (cell == nil) {
+                cell = [[XBBOrderInfoTwoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:orderInfo];
+            }
+            cell.phoneButton.hidden = YES;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell.priceLabel setFont:[UIFont systemFontOfSize:14.]];
+            
+            
+            if (self.isPayBack) {
+                if (indexPath.section != 0) {
+                    cell.titLabel.hidden = YES;
+                    cell.twoTitleLabel.hidden = NO;
+                    cell.priceLabel.hidden = NO;
+                    cell.twoTitleLabel.text = order.title;
+                    cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",order.price];
+                    [cell.twoTitleLabel setTextColor:[UIColor darkGrayColor]];
+                    [cell.priceLabel setTextColor:[UIColor darkGrayColor]];
+                    if ([order.title isEqualToString:@"优惠金额"]) {
+                        //                    [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
+                        [cell.priceLabel setTextColor:[UIColor orangeColor]];
+                    }
+                    if ([order.title isEqualToString:@"实际支付"] || [order.title isEqualToString:@"应支付"]) {
+                        [cell.priceLabel setFont:[UIFont systemFontOfSize:18.]];
+                        [cell.priceLabel setTextColor:[UIColor redColor]];
+                    }
+                    
+                    
+                    
+                }else
+                {
+                    
+                    cell.phoneButton.hidden = YES;
+                    if (indexPath.section == 1 && (state == 3 || state == 4 || state == 6 || state == 5)) {
+                        cell.phoneButton.hidden = NO;
+                        [cell.phoneButton addTarget:self action:@selector(toCallPhone:) forControlEvents:UIControlEventTouchUpInside];
+                    }else
+                    {
+                        cell.phoneButton.hidden = YES;
+                    }
+                    
+                    [cell.twoTitleLabel setTextColor:[UIColor darkGrayColor]];
+                    [cell.priceLabel setTextColor:[UIColor darkGrayColor]];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    cell.titLabel.hidden = YES;
+                    cell.twoTitleLabel.hidden = NO;
+                    cell.priceLabel.hidden = YES;
+                    cell.twoTitleLabel.text = order.title;
+                    
+                }
+                
             }else
             {
                 
-                cell.phoneButton.hidden = YES;
-                if (indexPath.section == 1 && (state == 3 || state == 4 || state == 6 || state == 5)) {
-                    cell.phoneButton.hidden = NO;
-                    [cell.phoneButton addTarget:self action:@selector(toCallPhone:) forControlEvents:UIControlEventTouchUpInside];
+                if (indexPath.section == 0) {
+                    cell.titLabel.hidden = YES;
+                    cell.twoTitleLabel.hidden = NO;
+                    cell.priceLabel.hidden = NO;
+                    cell.twoTitleLabel.text = order.title;
+                    cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",order.price];
+                    [cell.twoTitleLabel setTextColor:[UIColor darkGrayColor]];
+                    [cell.priceLabel setTextColor:[UIColor darkGrayColor]];
+                    if ([order.title isEqualToString:@"优惠金额"]) {
+                        //                    [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
+                        [cell.priceLabel setTextColor:[UIColor orangeColor]];
+                    }
+                    if ([order.title isEqualToString:@"实际支付"] || [order.title isEqualToString:@"应支付"]) {
+                        [cell.priceLabel setFont:[UIFont systemFontOfSize:18.]];
+                        [cell.priceLabel setTextColor:[UIColor redColor]];
+                    }
                 }else
                 {
+                    
                     cell.phoneButton.hidden = YES;
+                    if (indexPath.section == 1 && (state == 3 || state == 4 || state == 6 || state == 5)) {
+                        cell.phoneButton.hidden = NO;
+                        [cell.phoneButton addTarget:self action:@selector(toCallPhone:) forControlEvents:UIControlEventTouchUpInside];
+                    }else
+                    {
+                        cell.phoneButton.hidden = YES;
+                    }
+                    
+                    [cell.twoTitleLabel setTextColor:[UIColor darkGrayColor]];
+                    [cell.priceLabel setTextColor:[UIColor darkGrayColor]];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    cell.titLabel.hidden = YES;
+                    cell.twoTitleLabel.hidden = NO;
+                    cell.priceLabel.hidden = YES;
+                    cell.twoTitleLabel.text = order.title;
+                    
                 }
                 
-                [cell.twoTitleLabel setTextColor:[UIColor darkGrayColor]];
-                [cell.priceLabel setTextColor:[UIColor darkGrayColor]];
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                cell.titLabel.hidden = YES;
-                cell.twoTitleLabel.hidden = NO;
-                cell.priceLabel.hidden = YES;
-                cell.twoTitleLabel.text = order.title;
-                
             }
+            
+            
+            return cell;
+        }
 
+    }else if (_selectStateView.selectIndex == 1){
+        XBBOrderStateTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:stateCell];
+        if (cell == nil) {
+            cell = [[XBBOrderStateTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:stateCell];
+           
         }
         
+        NSDictionary *dic = self.timesArray[indexPath.row];
+        if ([[self.timesArray lastObject] isEqualToDictionary:dic]) {
+            cell.bgimageView.image = [UIImage imageNamed:@"xbb_currentField"];
+            cell.pointImageView.image = [UIImage imageNamed:@"xbb_current"];
+        }else
+        {
+          
+            cell.bgimageView.image = [UIImage imageNamed:@"xbb_oldField"];
+            cell.pointImageView.image = [UIImage imageNamed:@"xbb_old"];
+        }
+        cell.mainTitleLabel.text = dic[@"msg"];
+        cell.timeLabel.text = dic[@"time"];
         
-        
-        
-        
-        
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         return cell;
     }
-    
-    
-    
-    
-    
-//    
-//    
-//    if (state == 3 || state == 4) {
-//        switch (indexPath.section) {
-//            case 0:
-//            {
-//                XBBOrder *order = self.onsectionArray[indexPath.row];
-//                if (indexPath.row == 0) {
-//                    XBBOrderInfoOneCell *cell = [tableView dequeueReusableCellWithIdentifier:titleCell];
-//                    if (cell== nil) {
-//                        cell = [[XBBOrderInfoOneCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:titleCell];
-//                    }
-//                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//                    cell.titleLabel.text = order.title;
-//                    return cell;
-//                }else{
-//                    
-//                    XBBOrderInfoTwoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:orderInfo];
-//                    if (cell == nil) {
-//                        cell = [[XBBOrderInfoTwoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:orderInfo];
-//                    }
-//                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//                    cell.titLabel.hidden = YES;
-//                    cell.twoTitleLabel.hidden = NO;
-//                    cell.priceLabel.hidden = NO;
-//                    cell.twoTitleLabel.text = order.title;
-//                    cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",order.price];
-//                    [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
-//                    [cell.priceLabel setTextColor:[UIColor blackColor]];
-//                    if ([order.title isEqualToString:@"优惠金额"]) {
-//                        [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
-//                        [cell.priceLabel setTextColor:[UIColor orangeColor]];
-//                    }
-//                    
-//                    
-//                    return cell;
-//                    
-//                    
-//                }
-//            }
-//                break;
-//                
-//                
-//            case 1:
-//            case 2:
-//            {
-//                 XBBOrder *order = self.twoSectionArray[indexPath.row];
-//                if (indexPath.section == 1) {
-//                    order = self.empArrays[indexPath.row];
-//                }else
-//                {
-//                  
-//                }
-//                
-//                
-//                if (indexPath.row == 0) {
-//                    XBBOrderInfoOneCell *cell = [tableView dequeueReusableCellWithIdentifier:titleCell];
-//                    if (cell== nil) {
-//                        cell = [[XBBOrderInfoOneCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:titleCell];
-//                    }
-//                    
-//                    cell.titleLabel.text = order.title;
-//                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//                    return cell;
-//                }else{
-//                    
-//                    XBBOrderInfoTwoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:orderInfo];
-//                    if (cell == nil) {
-//                        cell = [[XBBOrderInfoTwoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:orderInfo];
-//                    }
-//                    [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
-//                    [cell.priceLabel setTextColor:[UIColor blackColor]];
-//                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//                    cell.titLabel.hidden = YES;
-//                    cell.twoTitleLabel.hidden = NO;
-//                    cell.priceLabel.hidden = YES;
-//                    cell.twoTitleLabel.text = order.title;
-//
-//                    return cell;
-//                    
-//                    
-//                }
-//            }
-//                break;
-//                
-//            default:
-//                break;
-//        }
-//        
-//    }else
-//    {
-//        switch (indexPath.section) {
-//            case 0:
-//            {
-//                XBBOrder *order = self.onsectionArray[indexPath.row];
-//                if (indexPath.row == 0) {
-//                    XBBOrderInfoOneCell *cell = [tableView dequeueReusableCellWithIdentifier:titleCell];
-//                    if (cell== nil) {
-//                        cell = [[XBBOrderInfoOneCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:titleCell];
-//                    }
-//                    
-//                    cell.titleLabel.text = order.title;
-//                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//                    return cell;
-//                }else{
-//                    
-//                    XBBOrderInfoTwoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:orderInfo];
-//                    if (cell == nil) {
-//                        cell = [[XBBOrderInfoTwoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:orderInfo];
-//                    }
-//                    cell.titLabel.hidden = YES;
-//                    cell.twoTitleLabel.hidden = NO;
-//                    cell.priceLabel.hidden = NO;
-//                    cell.twoTitleLabel.text = order.title;
-//                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//                    cell.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",order.price];
-//                    [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
-//                    [cell.priceLabel setTextColor:[UIColor blackColor]];
-//                    
-//                    if ([order.title isEqualToString:@"优惠金额"]) {
-//                        [cell.twoTitleLabel setTextColor:[UIColor orangeColor]];
-//                        [cell.priceLabel setTextColor:[UIColor orangeColor]];
-//                    }
-//                    
-//                    return cell;
-//                    
-//                    
-//                }
-//            }
-//                break;
-//            case 1:
-//            {
-//                XBBOrder *order = self.twoSectionArray[indexPath.row];
-//                
-//                if (indexPath.row == 0) {
-//                    XBBOrderInfoOneCell *cell = [tableView dequeueReusableCellWithIdentifier:titleCell];
-//                    if (cell== nil) {
-//                        cell = [[XBBOrderInfoOneCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:titleCell];
-//                    }
-//                    
-//                    cell.titleLabel.text = order.title;
-//                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//                    return cell;
-//                }else{
-//                    
-//                    XBBOrderInfoTwoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:orderInfo];
-//                    if (cell == nil) {
-//                        cell = [[XBBOrderInfoTwoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:orderInfo];
-//                    }
-//                    
-//                    [cell.twoTitleLabel setTextColor:[UIColor blackColor]];
-//                    [cell.priceLabel setTextColor:[UIColor blackColor]];
-//                    cell.titLabel.hidden = YES;
-//                    cell.twoTitleLabel.hidden = NO;
-//                    cell.priceLabel.hidden = YES;
-//                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//                    cell.twoTitleLabel.text = order.title;
-//                    
-//                    return cell;
-//                    
-//                    
-//                }
-//            }
-//                break;
-//                
-//            default:
-//                break;
-//        }
-//    }
+
     return nil;
 }
 

@@ -44,7 +44,7 @@
                 <outlet property="starThree" destination="TkZ-dU-F18" id="xDX-h1-idP"/>
                 <outlet property="starTwo" destination="iCB-4w-qXH" id="l84-3J-BBw"/>
             </connections>
-            <point key="canvasLocation" x="130" y="183"/>
+            <point key="canvasLocation" x="161.5" y="260"/>
         </view>
     </objects>
     <resources>

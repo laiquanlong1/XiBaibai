@@ -214,6 +214,7 @@ static NSString *identifier_diy = @"diy";
         NSMutableDictionary *dicMine=[NSMutableDictionary dictionary];
         [dicMine setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userid"] forKey:@"uid"];
         [UserObj shareInstance].uid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userid"] ;
+        DLog(@"%@",[UserObj shareInstance].uid)
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationLoginFailed object:nil];
         [NetworkHelper postWithAPI:Select_user_API parameter:dicMine successBlock:^(id response) {
             if ([response[@"code"] integerValue] == 1) {
@@ -470,6 +471,8 @@ static NSString *identifier_diy = @"diy";
 {
     [super viewWillAppear:animated];
     _locService.delegate=self;
+    
+    
    
     
 }

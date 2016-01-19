@@ -251,6 +251,7 @@ static NSString *identifier = @"cell";
                 cell.nameTextFile.text = self.carModel.c_plate_num;
                 selectNumber = self.carModel.c_plate_num;
             }
+            cell.nameTextFile.returnKeyType = UIReturnKeyDone;
             return cell;
         }
             break;
@@ -293,6 +294,7 @@ static NSString *identifier = @"cell";
              cell.nameTextFile.tag = indexPath.row;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.nameTextFile.placeholder = @"请输入爱车的颜色";
+            cell.nameTextFile.returnKeyType = UIReturnKeyDone;
             if (self.carModel) {
                 selectColor = self.carModel.c_color;
                 cell.nameTextFile.text = self.carModel.c_color;
@@ -355,6 +357,12 @@ static NSString *identifier = @"cell";
 
 
 #pragma mark textFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self sureOnClick:nil];
+    return YES;
+}
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {

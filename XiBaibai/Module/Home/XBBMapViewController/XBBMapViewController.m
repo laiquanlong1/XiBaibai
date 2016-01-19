@@ -996,7 +996,7 @@
 
 //更新用户头像信息
 - (void)updateUserSuccessfulIndex:(NSNotification *)sender{
-    UserObj *userInfo = [UserObj shareInstance];
+     UserObj *userInfo = [UserObj shareInstance];
     [img_view sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", ImgDomain, userInfo.imgstring]] placeholderImage:[UIImage imageNamed:@"nav1"]];
    
 }
