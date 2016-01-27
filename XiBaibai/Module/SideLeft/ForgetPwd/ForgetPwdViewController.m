@@ -114,6 +114,7 @@
     
     self.txtPhone = [self setUpUIWithView:self.xbbNavigationBar  plaorText:@"手机号" space:XBB_Size_w_h(180.f) imageName:@"xbb_register_phone"];
     self.txtPhone.keyboardType = UIKeyboardTypeNumberPad;
+    self.txtPhone.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"iphone"];
     self.txtCode = [self setUpUIWithView:self.txtPhone plaorText:@"验证码" space:XBB_Size_w_h(120.f) imageName:@"xbb_register_verify"];
     self.txtCode.clearButtonMode = UITextFieldViewModeNever;
     self.txtPWD = [self setUpUIWithView:self.txtCode plaorText:@"密码" space:XBB_Size_w_h(120.f) imageName:@"xbb_register_pwd"];
@@ -129,7 +130,15 @@
     ima = [ima resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
     [self.btnsendCode setBackgroundImage:ima forState:UIControlStateNormal];
     [self.btnsendCode.titleLabel setFont:XBB_Prompt_Font];
-    [self.btnsendCode setTitleColor:kUIColorFromRGB(0xc6c6c6) forState:UIControlStateNormal];
+    
+    if ([self.txtPhone.text length] == 11) {
+        [self.btnsendCode setTitleColor:kUIColorFromRGB(0x61b42c) forState:UIControlStateNormal];
+    }else
+    {
+        [self.btnsendCode setTitleColor:kUIColorFromRGB(0xc6c6c6) forState:UIControlStateNormal];
+    }
+    
+    
     [self.btnsendCode addTarget:self action:@selector(sendcode) forControlEvents:UIControlEventTouchUpInside];
     [self.btnsendCode setTitle:@"发送验证码" forState:UIControlStateNormal];
     [_controlScrollView addSubview:self.btnsendCode];
@@ -147,10 +156,11 @@
         make.width.mas_equalTo(140);
         
     }];
-    
     self.txtCode.userInteractionEnabled = NO;
     self.txtPWD.userInteractionEnabled = NO;
     self.txtPWDOK.userInteractionEnabled = NO;
+
+   
     
     registerButton= [[UIButton alloc] init];
     [registerButton setTitle:@"确定" forState:UIControlStateNormal];

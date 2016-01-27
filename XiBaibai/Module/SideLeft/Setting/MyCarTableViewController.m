@@ -383,7 +383,11 @@ static NSString *identifier = @"carcell";
     [self.navigationController pushViewController:car animated:YES];
     
 }
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    MyCarTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [self setdefalutcar:cell.btnDefault];
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MyCarTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {
@@ -424,8 +428,10 @@ static NSString *identifier = @"carcell";
 }
 
 - (void)setdefalutcar:(id)sender{
+   
     UIButton *btn = (UIButton *)sender;
-     MyCarModel *carModel = [self.carArr objectAtIndex:btn.tag];
+    MyCarModel * carModel = [self.carArr objectAtIndex:btn.tag];
+    
     if (self.isDownOrder) {
         if ((carModel.c_type == 1 && [[UserObj shareInstance] carModel].c_type != 1 ) || (carModel.c_type != 1 && [[UserObj shareInstance] carModel].c_type == 1 )) {
           

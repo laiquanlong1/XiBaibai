@@ -398,9 +398,12 @@ static NSString *stateCell = @"cell_1";
 - (void)addTableView
 {
     if (!self.isPayBack) {
-        _selectStateView = [[XBBSelectStateView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, 44) withStates:@[@"订单详情",@"订单状态"]];
-        _selectStateView.delegate = self;
-        [self.view addSubview:_selectStateView];
+        if (_selectStateView == nil) {
+           _selectStateView = [[XBBSelectStateView alloc] initWithFrame:CGRectMake(0, 64, XBB_Screen_width, 44) withStates:@[@"订单详情",@"订单状态"]];
+            _selectStateView.delegate = self;
+            [self.view addSubview:_selectStateView];
+        }
+       
          self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64+47, XBB_Screen_width, XBB_Screen_height-64-47) style:UITableViewStyleGrouped];
         [self.tableView setContentInset:UIEdgeInsetsMake(-40, 0,-30, 0)];
         backlineImageView = [[UIImageView alloc] initWithFrame:CGRectMake(22, 0, 3, self.tableView.bounds.size.height)];
@@ -965,6 +968,7 @@ static NSString *stateCell = @"cell_1";
         }
         cell.mainTitleLabel.text = dic[@"msg"];
         cell.timeLabel.text = dic[@"time"];
+        cell.infoLabel.text = dic[@"desc"];
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         

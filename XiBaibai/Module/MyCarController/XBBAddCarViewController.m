@@ -244,6 +244,7 @@ static NSString *identifier = @"cell";
         case 0:
         {
             AddCarNumTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierNum forIndexPath:indexPath];
+            cell.nameTextFile.placeholder = @"请输入您的车牌号(如川AL911Q)";
             cell.nameTextFile.delegate = self;
             cell.nameTextFile.tag = indexPath.row;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -360,6 +361,7 @@ static NSString *identifier = @"cell";
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    [textField resignFirstResponder];
     [self sureOnClick:nil];
     return YES;
 }
@@ -426,6 +428,9 @@ static NSString *identifier = @"cell";
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+
+    if ([string isEqualToString:@" "])
+        return NO;
 
     AddCarNumTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]];
     NSString *string_1 = [textField.text stringByReplacingCharactersInRange:range withString:string];

@@ -38,6 +38,7 @@ static NSString *identifier_diy = @"diy";
 
 @interface XBBHomeViewController ()<XBBBannerViewDelegate,UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate>{
     UIView         *headView;
+    UIView         *back;
     UIImageView    *leftNavigationBotton;
     UILabel       *titleCityButton;
     XBBBannerView  *banner;
@@ -462,10 +463,9 @@ static NSString *identifier_diy = @"diy";
 {
     [super viewDidAppear:animated];
     [SVProgressHUD dismiss];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self feachBannerData];
-        [self initData];
-    });
+    [self feachBannerData];
+    [self initData];
+    
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -667,7 +667,10 @@ static NSString *identifier_diy = @"diy";
         case 1:
         {
          
-            UIView *back = [[UIView alloc]init];
+            if (back) {
+                return back;
+            }
+            back = [[UIView alloc]init];
             back.backgroundColor = XBB_Forground_Color;
             DMLineView *lineOne = [[DMLineView alloc] init];
             lineOne.backgroundColor = XBB_Forground_Color;

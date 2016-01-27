@@ -795,6 +795,7 @@ static NSString *identifier_2 = @"tit1cell";
         if (cell == nil) {
             cell = [[AddOrderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
         }
+        [cell.titleLabel setTextColor:[UIColor blackColor]];
         cell.titleLabel.text = object.title;
         cell.indicationImage.alpha = object.hasIndication?1.:0.;
         cell.detailLabel.text = [object.detailString length] > 0?object.detailString:@"";

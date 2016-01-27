@@ -10,19 +10,17 @@
 #import <AVFoundation/AVFoundation.h>
 #import "XBBbBarcodeViewController.h"
 #import "UserObj.h"
-
-@interface XBBScanViewController ()<AVCaptureMetadataOutputObjectsDelegate>
+#import "XBBMaskView.h"
+@interface XBBScanViewController ()<AVCaptureMetadataOutputObjectsDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) AVCaptureSession *capturetureSession;
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *captureVideoPreviewLayer;
-
 @property (nonatomic, strong) UIImageView *captureImageView;
 @property (nonatomic, strong) UIImageView *lineImageView;
 @property (nonatomic, strong) UIView      *scanPanView;
 @property (nonatomic, strong) NSTimer     *timer;
 
 @property (nonatomic, strong) UILabel *promtLabel;
-
 @property (nonatomic, strong) UIButton *inputCodeButton;
 
 
@@ -63,7 +61,7 @@
     UILabel *titelLabel = [[UILabel alloc] init];
     [titelLabel setTextColor:[UIColor whiteColor]];
     [titelLabel setBackgroundColor:[UIColor clearColor]];
-    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"二维码/优惠券"];
+    [titelLabel setText:self.navigationTitle?self.navigationTitle:@"二维码/优惠码"];
     [titelLabel setFont:XBB_NavBar_Font];
     [titelLabel setTextAlignment:NSTextAlignmentCenter];
     [self.xbbNavigationBar addSubview:titelLabel];
@@ -88,13 +86,34 @@
 }
 
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 11) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }else if (alertView.tag == 22) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
 - (BOOL)initViewS
 {
     NSError *error;
     AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:captureDevice error:&error];
+    if (error.code == -11852) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"权限设置" message:@"请去设置->洗白白->相机打开您的相机使用权限" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        alert.tag = 11;
+        [alert show];
+        return NO;
+    }
+    if (error.code == -11814) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"设备不正确" message:@"您使用的不是移动设备" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        alert.tag = 22;
+        [alert show];
+        return NO;
+    }
     if (!input) {
-        DLog(@"%@",[error debugDescription])
+        [SVProgressHUD showErrorWithStatus:[error description]];
         return NO;
     }
     
@@ -110,7 +129,7 @@
     
     _captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_capturetureSession];
     [_captureVideoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
-    self.scanPanView = [[UIView alloc] initWithFrame:CGRectMake(XBB_Screen_width/4, XBB_Screen_height/10+64, XBB_Screen_width/4*2, XBB_Screen_width/4*2)];
+    self.scanPanView = [[UIView alloc] initWithFrame:CGRectMake(XBB_Screen_width/6, XBB_Screen_height/10+64, XBB_Screen_width/6*4, XBB_Screen_width/6*4)];
     
     
     self.captureImageView = [[UIImageView alloc] initWithFrame:self.scanPanView.bounds];
@@ -118,8 +137,12 @@
     [self.view.layer addSublayer:_captureVideoPreviewLayer];
     [self.view addSubview:self.scanPanView];
     [self.scanPanView addSubview:self.captureImageView];
+
     self.captureImageView.image = [UIImage imageNamed:@"扫描框"];
-    [captureMetadataOutput setRectOfInterest:CGRectMake((124)/XBB_Screen_height,((ScreenWidth-220)/2)/ScreenWidth,220/XBB_Screen_height,220/ScreenWidth)];
+    
+
+//      [captureMetadataOutput setRectOfInterest:CGRectMake((124)/XBB_Screen_height,((ScreenWidth-220)/2)/ScreenWidth,220/XBB_Screen_height,220/ScreenWidth)];
+    [captureMetadataOutput setRectOfInterest:CGRectMake((XBB_Screen_height/10+64)/XBB_Screen_height,XBB_Screen_width/6/ScreenWidth,XBB_Screen_width/6*4/XBB_Screen_height,XBB_Screen_width/6*4/ScreenWidth)];
     
     UIImage *image = [UIImage imageNamed:@"扫描条"];
     self.lineImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, self.scanPanView.bounds.size.width, image.size.height)];
@@ -148,46 +171,82 @@
     [self.inputCodeButton addTarget:self action:@selector(toBarCodeViewController:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view bringSubviewToFront:self.xbbNavigationBar];
+    
+    XBBMaskView *view = [[XBBMaskView alloc] initWithFrame:self.view.bounds];
+    view.backgroundColor = [UIColor clearColor];
+    [self.view insertSubview:view aboveSubview:self.scanPanView];
+    
+    
     [_capturetureSession startRunning];
     
     return YES;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (_capturetureSession.running == YES) {
+        return;
+    }
+    [_capturetureSession startRunning];
+}
 - (IBAction)toBarCodeViewController:(id)sender
 {
     XBBbBarcodeViewController *bar = [[XBBbBarcodeViewController alloc] init];
     [self.navigationController pushViewController:bar animated:YES];
 }
 
+- (void)changeNetStatusHaveConnection
+{
+    if (_capturetureSession.running == YES) {
+        return;
+    }
+    [_capturetureSession startRunning];
+}
+- (void)changeNetStatusHaveDisconnection
+{
+    if (_capturetureSession.running == YES) {
+        [SVProgressHUD showErrorWithStatus:@"请检查您的网络链接!"];
+    }
+}
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
 {
-    //判断是否有数据
-    if (metadataObjects != nil && [metadataObjects count] > 0) {
-        AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSDate *nowDate = [NSDate date];
-            NSString *timeSp = [NSString stringWithFormat:@"%ld",(long)[nowDate timeIntervalSince1970]];
-            NSString *stringURL = [NSString stringWithFormat:@"channel=ios&timeline=%@&uid=%@&url=%@cap123",timeSp,[[UserObj shareInstance] uid],metadataObj.stringValue];
-            NSString *ne =  [stringURL md5];
-            [NetworkHelper postWithAPI:ZbarPtoP parameter:@{@"sign":ne,@"channel":@"ios",@"timeline":timeSp,@"uid":[UserObj shareInstance].uid,@"url":metadataObj.stringValue} successBlock:^(id response) {
-                if ([response[@"code"] integerValue] == 1) {
+    if (self.haveConnection) {
+        //判断是否有数据
+        if (metadataObjects != nil && [metadataObjects count] > 0) {
+            AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
+            DLog(@"%@",metadataObj.stringValue)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.inputCodeButton setUserInteractionEnabled:NO];
+                NSDate *nowDate = [NSDate date];
+                NSString *timeSp = [NSString stringWithFormat:@"%ld",(long)[nowDate timeIntervalSince1970]];
+                NSString *stringURL = [NSString stringWithFormat:@"channel=ios&timeline=%@&uid=%@&url=%@cap123",timeSp,[[UserObj shareInstance] uid],metadataObj.stringValue];
+                NSString *ne =  [stringURL md5];
+                [_capturetureSession stopRunning];
+                [NetworkHelper postWithAPI:ZbarPtoP parameter:@{@"sign":ne,@"channel":@"ios",@"timeline":timeSp,@"uid":[UserObj shareInstance].uid,@"url":metadataObj.stringValue} successBlock:^(id response) {
+                    if ([response[@"code"] integerValue] == 1) {
+                        [SVProgressHUD showSuccessWithStatus:response[@"msg"]];
+                    }else
+                    {
+                        [SVProgressHUD showErrorWithStatus:response[@"msg"]];
+                    }
                     [self.timer invalidate];
-                    [_capturetureSession stopRunning];
-                    [SVProgressHUD showSuccessWithStatus:response[@"msg"]];
-                    [self.navigationController popViewControllerAnimated:YES];
-                }else
-                {
-                    [SVProgressHUD showErrorWithStatus:response[@"msg"]];
-                }
-               
-            } failBlock:^(NSError *error) {
-                [SVProgressHUD showErrorWithStatus:[error description]];
-            }];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [self.navigationController popViewControllerAnimated:YES];
+                    });
+                    
+                } failBlock:^(NSError *error) {
+                    [_capturetureSession startRunning];
+                    [SVProgressHUD showErrorWithStatus:[error description]];
+                }];
+            });
+        }
+    }else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD showErrorWithStatus:@"请检查您的网络链接!"];
         });
-        
-        
     }
 }
 

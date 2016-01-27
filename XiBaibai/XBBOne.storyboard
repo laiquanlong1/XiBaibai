@@ -435,10 +435,10 @@
                                         <variation key="heightClass=regular-widthClass=compact" constant="33"/>
                                     </constraint>
                                 </constraints>
-                                <state key="normal" title="提交" backgroundImage="确定">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="提交" backgroundImage="xbb_800001">
+                                    <color key="titleColor" red="0.058823529411764705" green="0.3411764705882353" blue="0.64313725490196083" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <state key="highlighted" title="提交" backgroundImage="xbb_800002"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="zLX-f2-aaU"/>
@@ -1153,10 +1153,11 @@
     </scenes>
     <resources>
         <image name="park_fast_1.png" width="66" height="66"/>
+        <image name="xbb_800001" width="300" height="40"/>
+        <image name="xbb_800002" width="300" height="40"/>
         <image name="大加号5" width="13" height="17"/>
         <image name="小加号5" width="17" height="17"/>
         <image name="直线" width="309" height="1"/>
-        <image name="确定" width="94" height="24"/>
         <image name="问号" width="10" height="10"/>
     </resources>
 </document>

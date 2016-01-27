@@ -155,12 +155,8 @@
      * @brief 手机号输入框
      **/
     UIImage *phonelineImage = nil;
-    if (XBB_IsIphone6_6s) {
-        phonelineImage = [UIImage imageNamed:@"XBBLoginLine_6"];
-    }else
-    {
-        phonelineImage = [UIImage imageNamed:@"XBBLoginLine"];
-    }
+    phonelineImage = [UIImage imageNamed:@"xbb_100001"];
+
     UIImageView *phoneLine = [[UIImageView alloc] initWithImage:phonelineImage];
     [_controlScrollView addSubview:phoneLine];
     [phoneLine mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -205,12 +201,8 @@
      * @brief 密码输入框
      **/
     UIImage *pwdlineImage = nil;
-    if (XBB_IsIphone6_6s) {
-        pwdlineImage = [UIImage imageNamed:@"XBBLoginLine_6"];
-    }else
-    {
-        pwdlineImage = [UIImage imageNamed:@"XBBLoginLine"];
-    }
+    pwdlineImage = [UIImage imageNamed:@"xbb_100001"];
+
     UIImageView *pwdImageView = [[UIImageView alloc] initWithImage:pwdlineImage];
     [_controlScrollView addSubview:pwdImageView];
     [pwdImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -291,21 +283,11 @@
     UIButton *loginButton = [[UIButton alloc] init];
     [loginButton setTitle:@"登录" forState:UIControlStateNormal];
     UIImage *loginNoselectImage = nil;
-    if (XBB_IsIphone6_6s) {
-        loginNoselectImage = [UIImage imageNamed:@"xbb_noSelect_login6"];
-    }else
-    {
-        loginNoselectImage = [UIImage imageNamed:@"xbb_noSelect_login"];
-    }
+    loginNoselectImage = [UIImage imageNamed:@"xbb_100002"];
+    
     UIImage *imageLoginSelect = nil;
-    if (XBB_IsIphone6_6s) {
-        imageLoginSelect = [UIImage imageNamed:@"xbb_login_select6"];
+    imageLoginSelect = [UIImage imageNamed:@"xbb_100003"];
 
-    }else
-    {
-        imageLoginSelect = [UIImage imageNamed:@"xbb_login_select"];
-
-    }
     [loginButton setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
     [loginButton setBackgroundImage:loginNoselectImage forState:UIControlStateNormal];
     [loginButton setBackgroundImage:imageLoginSelect forState:UIControlStateHighlighted];
@@ -324,23 +306,11 @@
     [registerButton setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
     [registerButton addTarget:self action:@selector(rigisters) forControlEvents:UIControlEventTouchUpInside];
     UIImage *registerButtonNoselectImage = nil;
-    if (XBB_IsIphone6_6s) {
-        registerButtonNoselectImage = [UIImage imageNamed:@"xbb_noSelect_login6"];
-    }else
-    {
-        registerButtonNoselectImage = [UIImage imageNamed:@"xbb_noSelect_login"];
-    }
-    
+
+    registerButtonNoselectImage = [UIImage imageNamed:@"xbb_100002"];
     UIImage *imageregisterButtonSelect = nil;
-    if (XBB_IsIphone6_6s) {
-        imageregisterButtonSelect = [UIImage imageNamed:@"xbb_login_select6"];
-        
-    }else
-    {
-        imageregisterButtonSelect = [UIImage imageNamed:@"xbb_login_select"];
-        
-    }
-    
+    imageregisterButtonSelect = [UIImage imageNamed:@"xbb_100003"];
+
     [registerButton setBackgroundImage:registerButtonNoselectImage forState:UIControlStateNormal];
     [registerButton setBackgroundImage:imageregisterButtonSelect forState:UIControlStateHighlighted];
     [_controlScrollView addSubview:registerButton];

@@ -159,7 +159,7 @@
                 }
             }
         } else {
-            [SVProgressHUD showErrorWithStatus:@"查询失败"];
+            [SVProgressHUD showErrorWithStatus:response[@"msg"]];
         }
         if (self.couDoneArr.count > 0) {
             [tbView reloadData];
@@ -173,7 +173,7 @@
     } failBlock:^(NSError *error) {
         if (callback)
             callback();
-        [SVProgressHUD showErrorWithStatus:@"查询失败"];
+        [SVProgressHUD showErrorWithStatus:[error description]];
     }];
 }
 

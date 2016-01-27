@@ -24,7 +24,8 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [self sureButtonAction:nil];
+    [textField resignFirstResponder];
+//    [self sureButtonAction:nil];
     
     return YES;
 }
@@ -91,7 +92,7 @@
     titleLabel.text = @"请输入优惠码";
     inputTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, XBB_Screen_width-40., 44.)];
     [self.view addSubview:inputTextField];
-    inputTextField.returnKeyType = UIReturnKeyGo;
+    inputTextField.returnKeyType = UIReturnKeyDone;
     inputTextField.delegate = self;
     [inputTextField setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
     changeButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, (XBB_Screen_width-40)/2-10, 44.)];
@@ -139,10 +140,13 @@
     NSString *stringURL = [NSString stringWithFormat:@"exchangecode=%@&timeline=%@&uid=%@cap123",inputTextField.text,timeSp,[[UserObj shareInstance] uid]];
     NSString *ne =  [stringURL md5];
     DLog(@"%@",CouponCode)
+    
     [NetworkHelper postWithAPI:CouponCode parameter:@{@"exchangecode":inputTextField.text,@"uid":[[UserObj shareInstance] uid],@"sign":ne,@"timeline":timeSp} successBlock:^(id response) {
         if ([response[@"code"] integerValue] == 1) {
             [SVProgressHUD showSuccessWithStatus:response[@"msg"]];
-            //[self backViewController:nil];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                 [self backViewController:nil];
+            });
         }else
         {
             [SVProgressHUD showErrorWithStatus:response[@"msg"]];

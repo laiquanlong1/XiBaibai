@@ -11,16 +11,14 @@
 
 
 #define APIDomain @"http://xbbwx.marnow.com/Api/V201"
-//#define ImgDomain @"http://captainoak.cn"
-
-//#define APIDomain @"http://xbbwx.marnow.com/Api/V3"
 #define ImgDomain @"http://xbbwx.marnow.com"
+#define AddUrl(url) [NSString stringWithFormat:@"%@/%@", APIDomain,url]
+//#define ImgDomain @"http://captainoak.cn"
+//#define APIDomain @"http://xbbwx.marnow.com/Api/V3"
 
 //#define APIDomain @"http://xbbwx.marnow.com//Api/V3"
 //#define ImgDomain @"http://192.168.1.113/xbb"
 
-
-#define AddUrl(url) [NSString stringWithFormat:@"%@/%@", APIDomain,url]
 
 
 // 01 发送验证码

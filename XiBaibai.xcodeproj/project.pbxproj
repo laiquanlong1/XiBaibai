@@ -264,6 +264,7 @@
 		8F57AC121C251B7800A7B455 /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F57AC101C251B7800A7B455 /* CommentTableViewCell.m */; };
 		8F57AC131C251B7800A7B455 /* CommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F57AC111C251B7800A7B455 /* CommentTableViewCell.xib */; };
 		8F57AC161C25327700A7B455 /* XBBInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F57AC151C25327700A7B455 /* XBBInputView.m */; };
+		8F5F58331C521BC800B26A00 /* XBBMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5F58321C521BC800B26A00 /* XBBMaskView.m */; };
 		8F662EE01C4DD62C00DD0225 /* XBBSelectStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F662EDF1C4DD62C00DD0225 /* XBBSelectStateView.m */; };
 		8F662EE41C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F662EE21C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.m */; };
 		8F662EE51C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F662EE31C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.xib */; };
@@ -809,6 +810,8 @@
 		8F57AC111C251B7800A7B455 /* CommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CommentTableViewCell.xib; path = MyOrder/CommentTableViewCell.xib; sourceTree = "<group>"; };
 		8F57AC141C25327700A7B455 /* XBBInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBInputView.h; path = DIYView/DIYView/XBBInputView.h; sourceTree = "<group>"; };
 		8F57AC151C25327700A7B455 /* XBBInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBInputView.m; path = DIYView/DIYView/XBBInputView.m; sourceTree = "<group>"; };
+		8F5F58311C521BC800B26A00 /* XBBMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBMaskView.h; path = DIYView/DIYView/XBBMaskView.h; sourceTree = "<group>"; };
+		8F5F58321C521BC800B26A00 /* XBBMaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBMaskView.m; path = DIYView/DIYView/XBBMaskView.m; sourceTree = "<group>"; };
 		8F662EDE1C4DD62C00DD0225 /* XBBSelectStateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBSelectStateView.h; path = MyOrder/XBBSelectStateView.h; sourceTree = "<group>"; };
 		8F662EDF1C4DD62C00DD0225 /* XBBSelectStateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBBSelectStateView.m; path = MyOrder/XBBSelectStateView.m; sourceTree = "<group>"; };
 		8F662EE11C4DF6FC00DD0225 /* XBBOrderStateTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBBOrderStateTableViewCell.h; path = MyOrder/XBBOrderStateTableViewCell.h; sourceTree = "<group>"; };
@@ -1940,6 +1943,8 @@
 				8FDF480D1C242C3800D5A046 /* XBBNotDataView.m */,
 				8F57AC141C25327700A7B455 /* XBBInputView.h */,
 				8F57AC151C25327700A7B455 /* XBBInputView.m */,
+				8F5F58311C521BC800B26A00 /* XBBMaskView.h */,
+				8F5F58321C521BC800B26A00 /* XBBMaskView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2280,6 +2285,7 @@
 				186A2A631BAEA9A700645069 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
 				188D99C21BADCD9A00E68506 /* SettingTableViewController.m in Sources */,
 				186A2A641BAEA9A700645069 /* PSTCollectionView.m in Sources */,
+				8F5F58331C521BC800B26A00 /* XBBMaskView.m in Sources */,
 				8E79B8771C1C016100EB7518 /* MyLiCouponViewController.m in Sources */,
 				8EEFCC111BEF52B000D3D93F /* XBBListHeadLabel.m in Sources */,
 				188D99B21BADCD9A00E68506 /* ComplaintViewController.m in Sources */,
